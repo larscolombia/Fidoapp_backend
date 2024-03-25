@@ -1,8 +1,7 @@
-
 <x-auth-layout>
-  <x-slot name="title">
-    @lang('Forgot password')
-  </x-slot>
+    <x-slot name="title">
+        @lang('Forgot password')
+    </x-slot>
 
     <x-auth-card>
         <x-slot name="logo">
@@ -12,7 +11,7 @@
         </x-slot>
 
         <div class="my-4">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+            {{ __('¿Olvidaste tu contraseña? No hay problema. Solo indícanos tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña. Este enlace te permitirá elegir una nueva contraseña.') }}
         </div>
 
         <!-- Session Status -->
@@ -28,14 +27,14 @@
             <div>
                 <x-label for="email" :value="__('Email')" />
 
-                <x-input id="email" class="mt-1" type="email" name="email" :value="old('email')" required autofocus />
+                <x-input id="email" class="mt-1" type="email" name="email" :value="old('email')" required
+                    autofocus />
             </div>
 
             <div class="d-flex align-items-center justify-content-center mt-4">
                 <x-button class="w-100">
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
+                    {{ __('Enviar') }} </x-button>
             </div>
         </form>
     </x-auth-card>
-  </x-auth-card>
+    </x-auth-card>

@@ -1,12 +1,10 @@
 <?php
 
 return [
-    'lbl_language' => 'Language Option',
-    'lbl_file' => 'Select File to be translate',
-    'lbl_key' => 'Key',
-    'lbl_value' => 'Value',
-    'lbl_timezone' => 'TimeZone',
-    'lbl_data_table_limit' => 'DataTable Limits',
-
-    
+    'lbl_language' => 'Opción de idioma',
+    'lbl_file' => 'Seleccionar archivo a traducir',
+    'lbl_key' => 'Clave',
+    'lbl_value' => 'Valor',
+    'lbl_timezone' => 'Zona horaria',
+    'lbl_data_table_limit' => 'Límite de DataTable',
 ];

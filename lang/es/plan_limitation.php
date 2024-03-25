@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'Plan Limitation',
-    'lbl_name' => 'Name',
-    'lbl_status' => 'Status',
-    'lbl_set_limit' => 'Set Limit',
+    'title' => 'Limitación del Plan',
+    'lbl_name' => 'Nombre',
+    'lbl_status' => 'Estado',
+    'lbl_set_limit' => 'Establecer Límite',
 ];

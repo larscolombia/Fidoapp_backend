@@ -12,36 +12,34 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    'title_daily_report' => 'Daily Bookings Report',
+    'title_daily_report' => 'Informe Diario de Reservas',
     'lbl_no' => 'No.',
-    'lbl_date' => 'Booking Date',
-    'lbl_no_booking' => 'No. Booking',
-    'lbl_no_services' => 'No. Services',
-    'lbl_service_amount'=>'Service Amount',
-    'lbl_tax_amt' => 'Tax Amount',
-    'lbl_tips_amt' => 'Tips Amount',
-    'lbl_final_amt' => 'Final Amount',
+    'lbl_date' => 'Fecha de Reserva',
+    'lbl_no_booking' => 'No. de Reservas',
+    'lbl_no_services' => 'No. de Servicios',
+    'lbl_service_amount' => 'Monto del Servicio',
+    'lbl_tax_amt' => 'Monto del Impuesto',
+    'lbl_tips_amt' => 'Monto de las Propinas',
+    'lbl_final_amt' => 'Monto Final',
 
-    'title_overall_report' => 'Overall Bookings Report',
-    'lbl_booking_date' => 'Booking Date',
-    'lbl_inv_id'=>'Inv ID',
-    'lbl_staff' => 'Staff',
-    'lbl_tot_service' => 'Total Service',
-    'lbl_tot_service_amt'=>'Total Service Amount',
-    'lbl_taxes' => 'Taxes',
-    'lbl_tips' => 'Tips',
-    'lbl_tot_amt'=>'Total Amount',
+    'title_overall_report' => 'Informe General de Reservas',
+    'lbl_booking_date' => 'Fecha de Reserva',
+    'lbl_inv_id' => 'ID de Factura',
+    'lbl_staff' => 'Empleado',
+    'lbl_tot_service' => 'Total de Servicios',
+    'lbl_tot_service_amt' => 'Monto Total de Servicios',
+    'lbl_taxes' => 'Impuestos',
+    'lbl_tips' => 'Propinas',
+    'lbl_tot_amt' => 'Monto Total',
 
-    'title_staff_report' => 'Employee Payout Report',
-    'lbl_payment_date' => 'Payment Date',
-    'lbl_commission_amt' => 'Commission Amount',
-    'lbl_payment_type'=>'Payment Type',
-    'lbl_tot_pay' => 'Total Pay',
+    'title_staff_report' => 'Informe de Pago a Empleados',
+    'lbl_payment_date' => 'Fecha de Pago',
+    'lbl_commission_amt' => 'Monto de Comisión',
+    'lbl_payment_type' => 'Tipo de Pago',
+    'lbl_tot_pay' => 'Pago Total',
 
-    'title_staff_service_report' => 'Staffs Services Reports',
-    'lbl_commissions_earn' => 'Commissions Earn',
-    'lbl_tips_earn' => 'Tips Earn',
-    'lbl_total_earning'=>'Total Earning'
-
+    'title_staff_service_report' => 'Informes de Servicios de Empleados',
+    'lbl_commissions_earn' => 'Comisiones Ganadas',
+    'lbl_tips_earn' => 'Propinas Ganadas',
+    'lbl_total_earning' => 'Ganancia Total'
 ];
-

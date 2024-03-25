@@ -19,55 +19,53 @@ class GenerateMenus
     {
         return \Menu::make('menu', function ($menu) {
 
-     if(auth()->user()->hasRole('admin')|| auth()->user()->hasRole('demo_admin')){
+            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
 
-          $this->staticMenu($menu, ['title' => 'MAIN', 'order' => 0]);
+                $this->staticMenu($menu, ['title' => 'INICIO', 'order' => 0]);
 
-           // main
-            $this->mainRoute($menu, [
-                'icon' => 'icon-dashboard',
-                'title' => __('menu.dashboard'),
-                'route' => 'backend.home',
-                'active' => ['app', 'app/dashboard'],
-                'order' => 0,
-            ]);
+                // main
+                $this->mainRoute($menu, [
+                    'icon' => 'icon-dashboard',
+                    'title' => __('menu.dashboard'),
+                    'route' => 'backend.home',
+                    'active' => ['app', 'app/dashboard'],
+                    'order' => 0,
+                ]);
 
-            //Petcare
-            $this->mainRoute($menu, [
-                'icon' => 'icon-all-booking',
-                'title' => __('menu.bookings'),
-                'route' => 'backend.booking.datatable_view',
-                'active' => ['app/booking-table-view'],
-                'permission' => 'view_booking',
-                'order' => 0,
-                'url_name' => 'petcenter',
-            ]);
+                //Petcare
+                $this->mainRoute($menu, [
+                    'icon' => 'icon-all-booking',
+                    'title' => __('menu.bookings'),
+                    'route' => 'backend.booking.datatable_view',
+                    'active' => ['app/booking-table-view'],
+                    'permission' => 'view_booking',
+                    'order' => 0,
+                    'url_name' => 'petcenter',
+                ]);
+            }
 
-        }
+            if (auth()->user()->hasRole('pet_sitter')) {
 
-    if(auth()->user()->hasRole('pet_sitter')){
+                $this->mainRoute($menu, [
+                    'icon' => 'icon-Employee-Services',
+                    'title' => __('menu.profile'),
+                    'url' => 'app/my-profile',
+                    'active' => ['app', 'app/my-profile'],
+                    'order' => 0,
+                ]);
+            }
 
-        $this->mainRoute($menu, [
-            'icon' => 'icon-Employee-Services',
-            'title' => __('menu.profile'),
-            'url' => 'app/my-profile', 
-            'active' => ['app', 'app/my-profile'],
-            'order' => 0,
-        ]);
 
-    }
-
-            
 
             $permissionsToCheck = [
-                'view_boarding','view_boarding_booking','view_boarder', 'view_facility','view_veterinary',
-                'view_veterinary_booking','view_veterinarian','view_veterinary_category','view_veterinary_service', 'view_grooming',
-                'view_grooming_booking','view_groomer','view_grooming_category','view_grooming_service','view_traning',
-                'view_training_booking','view_trainer','view_training_type','view_traning_duration','view_walking',
-                'view_walking_booking','view_walker','view_walking_duration','view_daycare','view_daycare_booking','view_care_taker',
-                'view_pet_sitter','view_booking_request'
+                'view_boarding', 'view_boarding_booking', 'view_boarder', 'view_facility', 'view_veterinary',
+                'view_veterinary_booking', 'view_veterinarian', 'view_veterinary_category', 'view_veterinary_service', 'view_grooming',
+                'view_grooming_booking', 'view_groomer', 'view_grooming_category', 'view_grooming_service', 'view_traning',
+                'view_training_booking', 'view_trainer', 'view_training_type', 'view_traning_duration', 'view_walking',
+                'view_walking_booking', 'view_walker', 'view_walking_duration', 'view_daycare', 'view_daycare_booking', 'view_care_taker',
+                'view_pet_sitter', 'view_booking_request'
             ];
-            
+
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->hasPermission($permission))) {
                 $this->staticMenu($menu, ['title' => __('sidebar.services'), 'order' => 0]);
             }
@@ -327,8 +325,8 @@ class GenerateMenus
                 ]);
             }
 
-             //Pet Sitter
-             $this->mainRoute($menu, [
+            //Pet Sitter
+            $this->mainRoute($menu, [
                 'icon' => 'icon-Employee',
                 'title' => __('menu.pet_sitter_list'),
                 'permission' => 'view_tag',
@@ -338,15 +336,16 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
-         
+
             // if (auth()->user()->can(['view_product', 'view_brand', 'view_product_category', 'view_product_subcategory', 'view_unit','view_tag','view_unit','view_product_variation','view_supply','view_logistics','view_shipping_zones'])) {
             //     $this->staticMenu($menu, ['title' => __('sidebar.shop'), 'order' => 0]);
             // }
 
             $permissionsToCheck = [
-                'view_product','view_brand','view_product_category', 'view_product_subcategory','view_unit',
-                'view_tag','view_product_variation','view_supply','view_logistics', 'view_shipping_zones'];
-            
+                'view_product', 'view_brand', 'view_product_category', 'view_product_subcategory', 'view_unit',
+                'view_tag', 'view_product_variation', 'view_supply', 'view_logistics', 'view_shipping_zones'
+            ];
+
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->hasPermission($permission))) {
                 $this->staticMenu($menu, ['title' => __('sidebar.shop'), 'order' => 0]);
             }
@@ -462,11 +461,11 @@ class GenerateMenus
 
 
 
-         $permissionsToCheck = ['view_employees','view_pending_employees','view_owners', 'view_review'];
+            $permissionsToCheck = ['view_employees', 'view_pending_employees', 'view_owners', 'view_review'];
 
-          if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
-              $this->staticMenu($menu, ['title' => 'USERS', 'order' => 0]);
-          }
+            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+                $this->staticMenu($menu, ['title' => 'USUARIO', 'order' => 0]);
+            }
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Employee',
@@ -511,7 +510,7 @@ class GenerateMenus
             $permissionsToCheck = ['view_tax', 'view_employee_earning'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
-                $this->staticMenu($menu, ['title' => 'FINANCE', 'order' => 0]);
+                $this->staticMenu($menu, ['title' => 'FINANZAS', 'order' => 0]);
             }
 
             $this->mainRoute($menu, [
@@ -535,7 +534,7 @@ class GenerateMenus
             $permissionsToCheck = ['view_daily_bookings', 'view_overall_bookings', 'view_employee_payout', 'view_order_reports'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
-                $this->staticMenu($menu, ['title' => 'REPORTS', 'order' => 0]);
+                $this->staticMenu($menu, ['title' => 'REPORTES', 'order' => 0]);
             }
 
             $this->mainRoute($menu, [
@@ -579,9 +578,9 @@ class GenerateMenus
             $permissionsToCheck = ['view_events', 'view_blogs'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
-                $this->staticMenu($menu, ['title' => 'OTHER', 'order' => 0]);
-              }
-          
+                $this->staticMenu($menu, ['title' => 'OTROS', 'order' => 0]);
+            }
+
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Daily-Bookings',
@@ -603,13 +602,13 @@ class GenerateMenus
 
             // System Static
             $permissionsToCheck = [
-                'view_setting','view_location','view_syetem_service','view_pet', 'view_page', 
-                'view_notification','view_app_banner','view_app_banner','view_constant', 
-                'view_permission','view_modules'
+                'view_setting', 'view_location', 'view_syetem_service', 'view_pet', 'view_page',
+                'view_notification', 'view_app_banner', 'view_app_banner', 'view_constant',
+                'view_permission', 'view_modules'
             ];
-            
+
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
-                $this->staticMenu($menu, ['title' => 'SYSTEM', 'order' => 0]);
+                $this->staticMenu($menu, ['title' => 'SISTEMA', 'order' => 0]);
             }
 
             $this->mainRoute($menu, [
@@ -658,7 +657,7 @@ class GenerateMenus
                 'order' => 0,
                 'icon' => 'icon-Filter',
             ]);
-             
+
 
             //system service
             $this->mainRoute($menu, [

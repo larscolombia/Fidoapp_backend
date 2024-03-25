@@ -1,15 +1,14 @@
 <?php
-
 return [
     'title' => 'Blogs',
-    'date' => 'Date',
-    'description' => 'Description',
-    'tags' => 'Tags',
-    'status' => 'Status',
-    'action' => 'Action',
-    'lbl_blog_image' => 'Image',
-    'lbl_blog_name' => 'Blog Name',
-    'lbl_tags' => "Tags",
-    'lbl_description' => 'Description',
-    'lbl_status' => 'Status',
+    'date' => 'Fecha',
+    'description' => 'Descripción',
+    'tags' => 'Etiquetas',
+    'status' => 'Estado',
+    'action' => 'Acción',
+    'lbl_blog_image' => 'Imagen',
+    'lbl_blog_name' => 'Nombre del Blog',
+    'lbl_tags' => "Etiquetas",
+    'lbl_description' => 'Descripción',
+    'lbl_status' => 'Estado',
 ];

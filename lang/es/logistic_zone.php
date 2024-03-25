@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'title' => 'Shipping Zone',
-    'lbl_name' => 'Name',
-    'logistic' => 'Logistic',
-    'cities' => 'Cities',
-    'state' => 'State',
-    'country' => 'Country',
-    'standard_delivery_charge' => 'Standard Delivery Charge',
-    'standard_delivery_time' => 'Standard Delivery Time',
+    'title' => 'Zona de Envío',
+    'lbl_name' => 'Nombre',
+    'logistic' => 'Logística',
+    'cities' => 'Ciudades',
+    'state' => 'Estado',
+    'country' => 'País',
+    'standard_delivery_charge' => 'Cargo de Envío Estándar',
+    'standard_delivery_time' => 'Tiempo de Entrega Estándar',
 ];

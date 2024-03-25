@@ -1,7 +1,7 @@
 <?php
 return [
-    'title' => 'Cities',
-    'singular_title' => 'City',
-    'state_name' => 'State Name',
-    'state' => 'State',
+    'title' => 'Ciudades',
+    'singular_title' => 'Ciudad',
+    'state_name' => 'Nombre del Estado',
+    'state' => 'Estado',
 ];

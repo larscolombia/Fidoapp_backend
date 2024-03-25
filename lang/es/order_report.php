@@ -1,6 +1,5 @@
 <?php
 
 return [
-    'title' => 'Order Report'
+    'title' => 'Informe de Pedidos',
 ];
-?>

@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'title' => 'Users',
-    'account_crdential' => 'Account Credentials Sent to User.',
-    'user_created' => 'User Created Successfully.',
-    'lbl_email' => 'Email',
-    'lbl_role' => 'Role',
-    'lbl_status' => 'Status',
-    'lbl_action' => 'Action',
+    'title' => 'Usuarios',
+    'account_crdential' => 'Credenciales de la cuenta enviadas al usuario.',
+    'user_created' => 'Usuario creado exitosamente.',
+    'lbl_email' => 'Correo electrónico',
+    'lbl_role' => 'Rol',
+    'lbl_status' => 'Estado',
+    'lbl_action' => 'Acción',
 
-    'lbl_old_password' => 'Old Password',
-    'lbl_new_password' => 'New Password',
-    'lbl_confirm_password' => 'Confirm Password',
+    'lbl_old_password' => 'Contraseña anterior',
+    'lbl_new_password' => 'Nueva contraseña',
+    'lbl_confirm_password' => 'Confirmar contraseña',
 ];

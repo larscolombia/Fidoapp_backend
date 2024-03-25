@@ -1,5 +1,7 @@
 <?php
+
+
 return [
-    'title' => 'Countries',
-    'singular_title' => 'Country'
+    'title' => 'Países',
+    'singular_title' => 'País'
 ];

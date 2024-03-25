@@ -1,8 +1,8 @@
 <?php
 return [
-    'title' => 'Brands',
-    'singular_title' => 'Brand',
-    'name' => 'Name',
-    'updated_at' => 'Updated At',
-    'brand_list'=>'Brand List'
+    'title' => 'Marcas',
+    'singular_title' => 'Marca',
+    'name' => 'Nombre',
+    'updated_at' => 'Actualizado en',
+    'brand_list' => 'Lista de Marcas'
 ];

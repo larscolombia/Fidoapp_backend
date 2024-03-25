@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'lbl_email' => 'Email (email)',
-    'lbl_driver' => 'Mail Driver',
-    'lbl_host' => 'Mail Host',
-    'lbl_port' => 'Mail Port',
-    'lbl_encryption' => 'Mail Encryption',
-    'lbl_username' => 'Mail Username',
-    'lbl_password' => 'password',
-    'lbl_mail' => 'Mail From',
-    'lbl_from_name' => 'From Name',
+    'lbl_email' => 'Correo electrónico (email)',
+    'lbl_driver' => 'Controlador de correo',
+    'lbl_host' => 'Host de correo',
+    'lbl_port' => 'Puerto de correo',
+    'lbl_encryption' => 'Cifrado de correo',
+    'lbl_username' => 'Nombre de usuario de correo',
+    'lbl_password' => 'Contraseña',
+    'lbl_mail' => 'Correo desde',
+    'lbl_from_name' => 'Nombre del remitente',
 ];

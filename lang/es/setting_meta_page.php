@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'lbl_site_name' => 'Meta Site Name (meta_site_name)',
-    'lbl_description' => 'Meta Description (meta_description)',
-    'lbl_keyword' => 'Meta Keyword (meta_keyword)',
-    'lbl_image' => 'Meta Image (meta_image)',
-    'lbl_fb_app_id' => 'Meta Facebook App Id (meta_fb_app_id)',
-    'lbl_twitter_site' => 'Meta Twitter Site Account (meta_twitter_site)',
-    'lbl_twitter_creator' => 'Meta Twitter Creator Account (meta_twitter_creator)',
+    'lbl_site_name' => 'Nombre del sitio (meta_site_name)',
+    'lbl_description' => 'Descripción del sitio (meta_description)',
+    'lbl_keyword' => 'Palabras clave del sitio (meta_keyword)',
+    'lbl_image' => 'Imagen del sitio (meta_image)',
+    'lbl_fb_app_id' => 'ID de la aplicación de Facebook (meta_fb_app_id)',
+    'lbl_twitter_site' => 'Cuenta de Twitter del sitio (meta_twitter_site)',
+    'lbl_twitter_creator' => 'Cuenta de creador de Twitter (meta_twitter_creator)',
 ];

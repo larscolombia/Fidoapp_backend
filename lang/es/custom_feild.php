@@ -1,18 +1,17 @@
 <?php
 
 return [
-    'lbl_add' => 'Add CustomField',
-    'lbl_edit' => 'Edit CustomField Data',
-    'lbl_module' => 'Module',
-    'lbl_label' => 'Label',
-    'lbl_type' => 'Type',
-    'lbl_is_required' => 'Is Required',
-    'lbl_allow_table_view'=>'Allow export in table view',
-    'lbl_show_table_view'=>'Show in table view',
-    'lbl_sr_no'=>'Sr.No',
-    'lbl_modules'=>'Modules',
-    'lbl_field_lable'=>'Field Label',
-    'lbl_action'=>'Action',
-    'lbl_is_value'=>'Value'
-
+    'lbl_add' => 'Agregar Campo Personalizado',
+    'lbl_edit' => 'Editar Datos del Campo Personalizado',
+    'lbl_module' => 'Módulo',
+    'lbl_label' => 'Etiqueta',
+    'lbl_type' => 'Tipo',
+    'lbl_is_required' => 'Es Requerido',
+    'lbl_allow_table_view' => 'Permitir exportación en vista de tabla',
+    'lbl_show_table_view' => 'Mostrar en vista de tabla',
+    'lbl_sr_no' => 'Núm.',
+    'lbl_modules' => 'Módulos',
+    'lbl_field_lable' => 'Etiqueta del Campo',
+    'lbl_action' => 'Acción',
+    'lbl_is_value' => 'Valor'
 ];

@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'title' => 'Settings',
-    'save_setting' => 'Setting Updated!',
+    'title' => 'Configuraciones',
+    'save_setting' => '¡Configuración actualizada!',
 ];

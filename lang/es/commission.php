@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'lbl_title' => 'Title',
-    'lbl_value' => 'Commission Value',
-    'lbl_type' => 'Commission Type',
-    'lbl_add_commission' => 'Add Commission',
-    'lbl_edit_commission' => 'Edit Commission Data',
-    'lbl_sr_no'=>'Sr.No',
-    'lbl_action'=>'Action'
+    'lbl_title' => 'Título',
+    'lbl_value' => 'Valor de Comisión',
+    'lbl_type' => 'Tipo de Comisión',
+    'lbl_add_commission' => 'Agregar Comisión',
+    'lbl_edit_commission' => 'Editar Datos de Comisión',
+    'lbl_sr_no' => 'Núm.',
+    'lbl_action' => 'Acción'
 ];
