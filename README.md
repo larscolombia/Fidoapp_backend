@@ -1,93 +1,139 @@
-# BALANCE DOG Admin Panel
+# Salon Web Admin App (Laravel 9.2)
+
+#### Run Below Command For PHP Code Styling
+- "pre-commit": "./vendor/bin/pint"
+## Setup Steps
+- ``cp .env.example .env``
+- ``composer install``
+- ``npm install``
+- ``npm run prod`` or ``npm run dev``
+- ``APP_URL=http://127.0.0.1`` || ``MIX_ASSET_URL=http://127.0.0.1`` path should be change in .env
+
+## Database Setup
+- configure db config in .env file 
+    - ``DB_DATABASE=salon``
+    - ``DB_USERNAME``
+    - ``DB_PASSWORD`` 
+- Run `php artisan migrate:fresh --seed` command for add all tables to your database
+##### Seprate Command
+- ``php artisan migrate``
+- ``php artisan db:seed`` (get error when data already inserted)
+- ``php artisan migrate:fresh`` (existing database fresh table)
+
+After Setup DB then run below project run command
+## Project Run
+- ``php artisan serve``
+
+## Features
+- Branch Based
+- Services
+- Subscription Module
+- Product Inventory Feature Used With Bagisto
+- Fork Starter Kit By nasirkhan/laravel-starter
+- Design System Used With Hope UI Pro
+- Font Awsome Icon 
+- Moduler Code
+- Api Based All Modules
+- Test Cases
+- Setup Wizard
+- Vue Based Form In Frontent
+- React Based Future Plan
+
+## (Saas System)
+- Company Based Setting
+- Company Based Login
+- Company Based All tables & there recoreds
+
+## Figma
+- DFD Diagram
+- ERD Diagram
+- App Design
+- Typography
+
+## Plugins
+- Datatable
+- Flatpicker
+- Bootstrap
+- Vue
+    - Vee Validate
+    - Pinia
+    - Vue Store
 
 
 
-## Getting started
+## Calender
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+eventSources: [{events: function() {
+    console.log('fetching...');
+    return [];
+}}]
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+function invokeMethod() {
+    ec.refetchEvents();
+}
 
-## Add your files
+onClick="invokeMethod"
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+removeEventById( id )
+addEvent( event )
+updateEvent( event )
+{
+    id: 1,
+    resourceIds: 1,
+    start: 00:00,
+    end: 00:00,
+    title: 'Event Title 1',
+    editable: true,
+    backgroundColor: '',
+    color: '',
+    extendedProps: {}
+}
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/larssoftware/balance-dog-admin-panel.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+## Resources When You Are creating api
+https://laravel.com/docs/9.x/eloquent-resources
 
-- [ ] [Set up project integrations](https://gitlab.com/larssoftware/balance-dog-admin-panel/-/settings/integrations)
+## Module Generator
 
-## Collaborate with your team
+https://github.com/nasirkhan/laravel-starter
+php artisan module:build NotificationTemplates
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Single File Creation
+https://docs.laravelmodules.com/v9/artisan-commands
 
-## Test and Deploy
+## How to use store
+// Store
+import { useCounterStore } from  '../store/booking'
+const store = useCounterStore()
 
-Use the built-in continuous integration in GitLab.
+const doubleValue = computed(() => store.doubleCount)
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+setInterval(() => {
+  store.increment()
+}, 500);
 
-***
 
-# Editing this README
+Translation In PHP File
+__('save_form')
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+__('constant.title']
 
-## Suggestions for a good README
+Blade
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+@lang('are_you_sure?') change to {{ __('constant.title') }}
 
-## Name
-Choose a self-explaining name for your project.
+Vue
+$t('constant.lbl_type')
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+vue props
+:label="$t('constant.lbl_type')"
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+{{ $t('constant.lbl_type') }}
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+"husky": {
+        "hooks": {
+            "pre-push": "php artisan test"
+        }
+    }
