@@ -15,13 +15,16 @@
                                 <div class="mb-0 nav nav-tabs" id="nav-tab" role="tablist">
                                     <button class="nav-link active d-flex align-items-center p-0" id="nav-overview-tab"
                                         data-bs-toggle="tab" data-bs-target="#nav-overview" type="button" role="tab"
-                                        aria-controls="nav-overview" aria-selected="true">{{ __('dashboard.overview') }}</button>
+                                        aria-controls="nav-overview"
+                                        aria-selected="true">{{ __('dashboard.overview') }}</button>
                                     <button class="nav-link p-0 ms-5" id="nav-reports-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-reports" type="button" role="tab"
-                                        aria-controls="nav-reports" aria-selected="false">{{ __('dashboard.reports') }}</button>
+                                        aria-controls="nav-reports"
+                                        aria-selected="false">{{ __('dashboard.reports') }}</button>
                                     <button class="nav-link  p-0 ms-5" id="nav-appointments-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-appointments" type="button" role="tab"
-                                        aria-controls="nav-appointments" aria-selected="false">{{ __('dashboard.bookings') }}</button>
+                                        aria-controls="nav-appointments"
+                                        aria-selected="false">{{ __('dashboard.bookings') }}</button>
                                 </div>
                             </nav>
                         </div>
@@ -135,7 +138,8 @@
                                 <div class="card-body ">
                                     <div class="d-flex justify-content-between align-items-center mb-4">
                                         <h5 class="card-title mb-0">{{ __('dashboard.recently_booking') }}</h5>
-                                        <a href="{{ route('backend.booking.datatable_view') }}" class="">{{ __('dashboard.view_all') }}</a>
+                                        <a href="{{ route('backend.booking.datatable_view') }}"
+                                            class="">{{ __('dashboard.view_all') }}</a>
                                     </div>
                                     <ul class="list-unstyled mb-0">
                                         @foreach ($data['recent_booking'] as $recent_booking)
@@ -148,13 +152,17 @@
                                                                 href="{{ route('backend.bookings.bookingShow', ['id' => $recent_booking->id]) }}">#{{ $recent_booking->id }}</a>
                                                         </h6>
                                                         @if ($recent_booking->status == 'completed')
-                                                            <small class="text-success">{{ __('dashboard.complete') }}</small>
+                                                            <small
+                                                                class="text-success">{{ __('dashboard.complete') }}</small>
                                                         @elseif($recent_booking->status == 'rejected')
-                                                            <small class="text-danger">{{ __('dashboard.rejected') }}</small>
+                                                            <small
+                                                                class="text-danger">{{ __('dashboard.rejected') }}</small>
                                                         @elseif($recent_booking->status == 'pending')
-                                                            <small class="text-warning">{{ __('dashboard.pending') }}</small>
+                                                            <small
+                                                                class="text-warning">{{ __('dashboard.pending') }}</small>
                                                         @elseif($recent_booking->status == 'confirmed')
-                                                            <small class="text-primary">{{ __('dashboard.accepted') }}</small>
+                                                            <small
+                                                                class="text-primary">{{ __('dashboard.accepted') }}</small>
                                                         @else
                                                             <small class="text-if">{{ __('dashboard.cancelled') }}</small>
                                                         @endif
@@ -182,30 +190,40 @@
                                     <div class="row justify-content-between">
                                         <div id="chart-02" class="col-md-7 col-lg-7"></div>
                                         <div class="col-md-5 col-lg-5">
-                                        @php
-                                        $legendColors = ['#9D67EF', '#CEADFF', '#E6D6FF', '#F0F0F0','#CEADFF','#9D67EF'];
-                                        $colorIndex = 0;
-                                        @endphp   
-                                        @foreach ($data['top_product'] as $topproduct)
-                                            <div class="d-flex align-items-center mb-4">
-
-                                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="6" cy="6" r="6" fill="{{ $legendColors[$colorIndex % count($legendColors)] }}" />
-                                                </svg>
-                                                <div class="ms-2 d-flex align-items-center">
-                                                
-                                                   <h6 class="mb-0">{{ number_format($topproduct->total_sale_count * 100 /$data['total_sale_product'],2) }}%</h6> <small class="ms-2"> {{$topproduct->name}}</small>
-                                             
-                                                </div>
-                                          
-                                            </div>
                                             @php
+                                                $legendColors = [
+                                                    '#9D67EF',
+                                                    '#CEADFF',
+                                                    '#E6D6FF',
+                                                    '#F0F0F0',
+                                                    '#CEADFF',
+                                                    '#9D67EF',
+                                                ];
+                                                $colorIndex = 0;
+                                            @endphp
+                                            @foreach ($data['top_product'] as $topproduct)
+                                                <div class="d-flex align-items-center mb-4">
 
-                                        $colorIndex++;
-                                        @endphp
-                                        @endforeach   
-                                           
+                                                    <svg width="12" height="12" viewBox="0 0 12 12"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6" cy="6" r="6"
+                                                            fill="{{ $legendColors[$colorIndex % count($legendColors)] }}" />
+                                                    </svg>
+                                                    <div class="ms-2 d-flex align-items-center">
+
+                                                        <h6 class="mb-0">
+                                                            {{ number_format(($topproduct->total_sale_count * 100) / $data['total_sale_product'], 2) }}%
+                                                        </h6> <small class="ms-2"> {{ $topproduct->name }}</small>
+
+                                                    </div>
+
+                                                </div>
+                                                @php
+
+                                                    $colorIndex++;
+                                                @endphp
+                                            @endforeach
+
                                         </div>
                                     </div>
                                 </div>
@@ -226,7 +244,8 @@
                                                     class="ms-3 w-100 d-flex align-items-center justify-content-between flex-wrap">
                                                     <div class="">
                                                         <h6 class="mb-1">{{ $employee->full_name }}</h6>
-                                                        <small>{{ $employee->employee_booking_count }} {{ __('dashboard.comstomer_served') }}</small>
+                                                        <small>{{ $employee->employee_booking_count }}
+                                                            {{ __('dashboard.comstomer_served') }}</small>
                                                     </div>
                                                     <small class="text-primary">{{ __('dashboard.since') }}
                                                         {{ date('Y', strtotime($employee->created_at)) }}</small>
@@ -247,27 +266,35 @@
                                     <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
                                         <h5 class="card-title mb-0">{{ __('dashboard.profit_graph') }}</h5>
                                         <div class="d-flex align-items-center mt-md-0 mt-3">
-                                           
-                                           <div class="dropdown">
-                                            <a href="#" class="btn btn-primary dropdown-toggle monthly_booking profit_chart"
-                                                id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-expanded="false">
-                                                {{ __('dashboard.year') }}
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-end"
-                                                aria-labelledby="dropdownMenuButton5" style="">
-                                                <li><a class="dropdown-item" onclick="getprofitChartData('week')">{{ __('dashboard.this') }} {{ __('dashboard.week') }}</a></li>
-                                                <li><a class="dropdown-item" onclick="getprofitChartData('month')">{{ __('dashboard.this') }} {{ __('dashboard.month') }}</a></li>
-                                                <li><a class="dropdown-item" onclick="getprofitChartData('year')">{{ __('dashboard.this') }} {{ __('dashboard.year') }}</a></li>
-                                            </ul>
-                                        </div>
-                                         
+
+                                            <div class="dropdown">
+                                                <a href="#"
+                                                    class="btn btn-primary dropdown-toggle monthly_booking profit_chart"
+                                                    id="dropdownMenuButton5" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    {{ __('dashboard.year') }}
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-end"
+                                                    aria-labelledby="dropdownMenuButton5" style="">
+                                                    <li><a class="dropdown-item"
+                                                            onclick="getprofitChartData('week')">{{ __('dashboard.this') }}
+                                                            {{ __('dashboard.week') }}</a></li>
+                                                    <li><a class="dropdown-item"
+                                                            onclick="getprofitChartData('month')">{{ __('dashboard.this') }}
+                                                            {{ __('dashboard.month') }}</a></li>
+                                                    <li><a class="dropdown-item"
+                                                            onclick="getprofitChartData('year')">{{ __('dashboard.this') }}
+                                                            {{ __('dashboard.year') }}</a></li>
+                                                </ul>
+                                            </div>
+
                                         </div>
                                     </div>
-                                    
+
                                     <div id="booking_loader" style="display: none;">
-                                            processing.....
-                                        </div>
-                                    
+                                        processing.....
+                                    </div>
+
                                     <div id="chart-03"></div>
                                 </div>
                             </div>
@@ -288,10 +315,10 @@
                                         <div>
 
                                             @php
-                                                
+
                                                 $integerPart = floor($data['averageRating']);
                                                 $decimalPart = $data['averageRating'] - $integerPart;
-                                                
+
                                             @endphp
 
                                             @for ($i = 1; $i <= $integerPart; $i++)
@@ -322,7 +349,8 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <p class="mb-5 mt-2">{{ __('dashboard.overall_rating') }} {{ $data['totalCustomer'] }} {{ __('dashboard.customers') }}</p>
+                                    <p class="mb-5 mt-2">{{ __('dashboard.overall_rating') }}
+                                        {{ $data['totalCustomer'] }} {{ __('dashboard.customers') }}</p>
 
 
 
@@ -429,8 +457,10 @@
                         <div class="col-xl-6 col-lg-12">
                             <div class="card card-block card-stretch card-height">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0">{{ __('dashboard.top') }} {{ __('dashboard.customers') }}</h5>
-                                    <a href="{{ route('backend.pets.index') }}" class="text-primary"><u>{{ __('dashboard.view_all') }}</u></a>
+                                    <h5 class="card-title mb-0">{{ __('dashboard.top') }} {{ __('dashboard.customers') }}
+                                    </h5>
+                                    <a href="{{ route('backend.pets.index') }}"
+                                        class="text-primary"><u>{{ __('dashboard.view_all') }}</u></a>
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-unstyled mb-0">
@@ -440,7 +470,8 @@
                                                     alt="01" class="rounded-pill avatar avatar-50" loading="lazy">
                                                 <div class="ms-3">
                                                     <h6 class="mb-0">{{ $customer->full_name }}</h6>
-                                                    <small>{{ $customer->booking_count }} {{ __('dashboard.visit_time') }}</small>
+                                                    <small>{{ $customer->booking_count }}
+                                                        {{ __('dashboard.visit_time') }}</small>
                                                 </div>
                                             </li>
                                         @endforeach
@@ -510,15 +541,21 @@
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end"
                                                 aria-labelledby="dropdownMenuButton5" style="">
-                                                <li><a class="dropdown-item" onclick="getBookingChartData('week')">{{ __('dashboard.this') }} {{ __('dashboard.week') }}</a></li>
-                                                <li><a class="dropdown-item" onclick="getBookingChartData('month')">{{ __('dashboard.this') }} {{ __('dashboard.month') }}</a></li>
-                                                <li><a class="dropdown-item" onclick="getBookingChartData('year')">{{ __('dashboard.this') }} {{ __('dashboard.year') }}</a></li>
+                                                <li><a class="dropdown-item"
+                                                        onclick="getBookingChartData('week')">{{ __('dashboard.this') }}
+                                                        {{ __('dashboard.week') }}</a></li>
+                                                <li><a class="dropdown-item"
+                                                        onclick="getBookingChartData('month')">{{ __('dashboard.this') }}
+                                                        {{ __('dashboard.month') }}</a></li>
+                                                <li><a class="dropdown-item"
+                                                        onclick="getBookingChartData('year')">{{ __('dashboard.this') }}
+                                                        {{ __('dashboard.year') }}</a></li>
                                             </ul>
                                         </div>
                                     </div>
-                                     <div id="booking_loader" style="display: none;">
-                                            processing.....
-                                        </div>
+                                    <div id="booking_loader" style="display: none;">
+                                        processing.....
+                                    </div>
                                     <div id="chart-04"></div>
                                 </div>
                             </div>
@@ -534,9 +571,15 @@
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton6"
                                             style="">
-                                            <li><a class="dropdown-item" onclick="getBookingstatusData('week')">{{ __('dashboard.this') }} {{ __('dashboard.week') }}</a></li>
-                                            <li><a class="dropdown-item" onclick="getBookingstatusData('month')">{{ __('dashboard.this') }} {{ __('dashboard.month') }}</a></li>
-                                            <li><a class="dropdown-item" onclick="getBookingstatusData('year')">{{ __('dashboard.this') }} {{ __('dashboard.year') }}</a></li>
+                                            <li><a class="dropdown-item"
+                                                    onclick="getBookingstatusData('week')">{{ __('dashboard.this') }}
+                                                    {{ __('dashboard.week') }}</a></li>
+                                            <li><a class="dropdown-item"
+                                                    onclick="getBookingstatusData('month')">{{ __('dashboard.this') }}
+                                                    {{ __('dashboard.month') }}</a></li>
+                                            <li><a class="dropdown-item"
+                                                    onclick="getBookingstatusData('year')">{{ __('dashboard.this') }}
+                                                    {{ __('dashboard.year') }}</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -544,56 +587,66 @@
                                     <div class="row justify-content-between">
                                         <div id="chart-05" class="col-md-6 col-lg-12 col-xxl-6"></div>
                                         <div class="col-md-6 col-lg-12 col-xxl-6">
-                                      
+
                                             <div class="d-flex align-items-center mb-4">
-                                            
+
                                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="6" cy="6" r="6"
-                                                        fill="#9D67EF" />
+                                                    <circle cx="6" cy="6" r="6" fill="#9D67EF" />
                                                 </svg>
-                                                <strong><div id="booking_count_0" class="m-1"></div></strong>
-                                                <small class="mb-0 ms-2">{{ __('dashboard.pending') }} {{ __('dashboard.bookings') }} </small>
+                                                <strong>
+                                                    <div id="booking_count_0" class="m-1"></div>
+                                                </strong>
+                                                <small class="mb-0 ms-2">{{ __('dashboard.pending') }}
+                                                    {{ __('dashboard.bookings') }} </small>
                                             </div>
                                             <div class="d-flex align-items-center mb-4">
-                                            
+
                                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="6" cy="6" r="6"
-                                                        fill="#CEADFF" />
+                                                    <circle cx="6" cy="6" r="6" fill="#CEADFF" />
                                                 </svg>
-                                                  <strong><div id="booking_count_1" class="m-1"></div></strong>
-                                                <small class="mb-0 ms-2"> {{ __('dashboard.confirmed') }} {{ __('dashboard.bookings') }}</small>
+                                                <strong>
+                                                    <div id="booking_count_1" class="m-1"></div>
+                                                </strong>
+                                                <small class="mb-0 ms-2"> {{ __('dashboard.confirmed') }}
+                                                    {{ __('dashboard.bookings') }}</small>
                                             </div>
                                             <div class="d-flex align-items-center mb-4">
-                                            
+
                                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="6" cy="6" r="6"
-                                                        fill="#E6D6FF" />
+                                                    <circle cx="6" cy="6" r="6" fill="#E6D6FF" />
                                                 </svg>
-                                                  <strong><div id="booking_count_2" class="m-1"></div></strong>
-                                                <small class="mb-0 ms-2"> {{ __('dashboard.cancelled') }} {{ __('dashboard.bookings') }}</small>
+                                                <strong>
+                                                    <div id="booking_count_2" class="m-1"></div>
+                                                </strong>
+                                                <small class="mb-0 ms-2"> {{ __('dashboard.cancelled') }}
+                                                    {{ __('dashboard.bookings') }}</small>
                                             </div>
                                             <div class="d-flex align-items-center mb-4">
-                                           
+
                                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="6" cy="6" r="6"
-                                                        fill="#F0F0F0" />
+                                                    <circle cx="6" cy="6" r="6" fill="#F0F0F0" />
                                                 </svg>
-                                                  <strong><div id="booking_count_3" class="m-1"></div></strong>
-                                                <small class="mb-0 ms-2">{{ __('dashboard.rejected') }} {{ __('dashboard.bookings') }}</small>
+                                                <strong>
+                                                    <div id="booking_count_3" class="m-1"></div>
+                                                </strong>
+                                                <small class="mb-0 ms-2">{{ __('dashboard.rejected') }}
+                                                    {{ __('dashboard.bookings') }}</small>
                                             </div>
                                             <div class="d-flex align-items-center">
-                                            
+
                                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="6" cy="6" r="6"
-                                                        fill="#ECE0FF" />
+                                                    <circle cx="6" cy="6" r="6" fill="#ECE0FF" />
                                                 </svg>
-                                                  <strong><div id="booking_count_4" class="m-1"></div></strong>
-                                                <small class="mb-0 ms-2">{{ __('dashboard.complete') }} {{ __('dashboard.bookings') }}</small>
+                                                <strong>
+                                                    <div id="booking_count_4" class="m-1"></div>
+                                                </strong>
+                                                <small class="mb-0 ms-2">{{ __('dashboard.complete') }}
+                                                    {{ __('dashboard.bookings') }}</small>
                                             </div>
                                         </div>
                                     </div>
@@ -621,10 +674,11 @@
                                                             <div>
 
                                                                 @php
-                                                                    
+
                                                                     $integerPart = floor($doctor['average_rating']);
-                                                                    $decimalPart = $doctor['average_rating'] - $integerPart;
-                                                                    
+                                                                    $decimalPart =
+                                                                        $doctor['average_rating'] - $integerPart;
+
                                                                 @endphp
 
                                                                 @for ($i = 1; $i <= $integerPart; $i++)
@@ -672,44 +726,49 @@
                         <div class="col-xl-4 col-lg-6">
                             <div class="card card-block card-stretch card-height">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">{{ __('dashboard.top') }} {{ __('dashboard.services') }}</h5>
+                                    <h5 class="card-title mb-0">{{ __('dashboard.top') }}
+                                        {{ __('dashboard.services') }}</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="row justify-content-between">
                                         <div id="chart-06" class="col-md-5 col-lg-12 col-xxl-5"></div>
                                         <div class="col-md-7 col-lg-12 col-xxl-7">
-                                               
-                                        @php
-                                        $legendColors = ['#FD866E', '#FFAA99', '#FFD5CC', '#F0F0F0'];
-                                        $colorIndex = 0;
-                                        @endphp
 
-                                        @foreach ($data['topservice'] as $topservice)
-                                        <div class="d-flex align-items-center mb-1">
-                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="6" cy="6" r="6" fill="{{ $legendColors[$colorIndex % count($legendColors)] }}" />
-                                            </svg>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <h6 class="mb-0 ms-2">{{ number_format($topservice->count * 100 / $data['totalservice'], 2)  }}%</h6>
-                                                <h6 class="ms-2 mb-0 line-count-1">{{ $topservice->service->name }}</h6>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="ms-5 mb-3 ">
-                                                <small>{{ $topservice->count }} Total Service Booked Till Now</small>
-                                            </div>
-                                        @php
-                                        $colorIndex++;
-                                        @endphp
-                                        
-                                        @endforeach
-                                         
+                                            @php
+                                                $legendColors = ['#FD866E', '#FFAA99', '#FFD5CC', '#F0F0F0'];
+                                                $colorIndex = 0;
+                                            @endphp
+
+                                            @foreach ($data['topservice'] as $topservice)
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <svg width="12" height="12" viewBox="0 0 12 12"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6" cy="6" r="6"
+                                                            fill="{{ $legendColors[$colorIndex % count($legendColors)] }}" />
+                                                    </svg>
+                                                    <div class="ms-2 d-flex align-items-center">
+                                                        <h6 class="mb-0 ms-2">
+                                                            {{ number_format(($topservice->count * 100) / $data['totalservice'], 2) }}%
+                                                        </h6>
+                                                        <h6 class="ms-2 mb-0 line-count-1">
+                                                            {{ $topservice->service->name }}</h6>
+                                                    </div>
+
+                                                </div>
+                                                <div class="ms-5 mb-3 ">
+                                                    <small>{{ $topservice->count }} Total Service Booked Till Now</small>
+                                                </div>
+                                                @php
+                                                    $colorIndex++;
+                                                @endphp
+                                            @endforeach
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -782,11 +841,11 @@
             /*---------------------------------------------------------------------
                           Chart
             -----------------------------------------------------------------------*/
-          //////////////////////////////// chart-1 //////////////////////////////////////////
+            //////////////////////////////// chart-1 //////////////////////////////////////////
 
             revanue_chart('year');
 
-         //////////////////////////////// chart-2 //////////////////////////////////////////
+            //////////////////////////////// chart-2 //////////////////////////////////////////
 
             if (document.querySelectorAll('#chart-02').length) {
                 const variableColors = IQUtils.getVariableColor();
@@ -796,8 +855,8 @@
                 const total_sale_count = [];
 
                 top_product.forEach(product => {
-                    name.push(product.name); 
-                    total_sale_count.push(product.total_sale_count); 
+                    name.push(product.name);
+                    total_sale_count.push(product.total_sale_count);
                 });
 
                 const minTotalSaleCount = 1;
@@ -806,7 +865,7 @@
                 }
 
                 var options = {
-                
+
                     series: total_sale_count,
                     chart: {
                         type: 'donut',
@@ -839,36 +898,36 @@
                     }]
                 };
 
-               
+
 
 
                 const chart = new ApexCharts(document.querySelector("#chart-02"), options);
                 chart.render();
             }
 
-        //////////////////////////////// chart-3 //////////////////////////////////////////   
+            //////////////////////////////// chart-3 //////////////////////////////////////////   
 
 
-           getprofitChartData('year');
+            getprofitChartData('year');
 
-          
 
-        //////////////////////////////// chart-4 //////////////////////////////////////////
+
+            //////////////////////////////// chart-4 //////////////////////////////////////////
 
             getBookingChartData('year');
 
-        ///////////////////////////// chart-5 ///////////////////////////////////////////////
+            ///////////////////////////// chart-5 ///////////////////////////////////////////////
 
-           getBookingstatusData('year')
+            getBookingstatusData('year')
 
-         ///////////////////////////// chart-6 ///////////////////////////////////////////////   
+            ///////////////////////////// chart-6 ///////////////////////////////////////////////   
 
 
             if (document.querySelectorAll('#chart-06').length) {
                 const variableColors = IQUtils.getVariableColor();
                 const colors = [variableColors.secondary, variableColors.primary];
                 const topservice = <?php echo json_encode($data['topservice']); ?>;
-                
+
                 console.log(topservice);
                 const counts = [];
                 const service_ids = [];
@@ -916,15 +975,15 @@
         })
 
         var chart = null;
-        var booking_chart=null;
-        var booking_status_chart=null;
-        var profit_chart=null;
+        var booking_chart = null;
+        var booking_status_chart = null;
+        var profit_chart = null;
 
         function revanue_chart(type) {
 
-            var Base_url="{{ url('/') }}";
+            var Base_url = "{{ url('/') }}";
 
-            var url = Base_url+"/app/get_revnue_chart_data/" + type;
+            var url = Base_url + "/app/get_revnue_chart_data/" + type;
 
             $("#loader").show();
 
@@ -954,7 +1013,7 @@
                                 data: monthlyTotals
                             }],
                             chart: {
-                                fontFamily: '"Inter", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                                fontFamily: '"Inter", "Kumbh Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
                                 height: 283,
                                 type: 'area',
                                 toolbar: {
@@ -977,20 +1036,20 @@
                                 show: true,
                             },
                             yaxis: {
-                                 labels: {
-                                     formatter: function (value) {
-                                         return formatCurrencyVue(value); 
-                                     }
-                                 }
-                             },
-                           
+                                labels: {
+                                    formatter: function(value) {
+                                        return formatCurrencyVue(value);
+                                    }
+                                }
+                            },
+
                             xaxis: {
                                 labels: {
                                     minHeight: 22,
                                     maxHeight: 22,
                                     show: true,
                                 },
-                                 
+
                                 lines: {
                                     show: false //or just here to disable only x axis grids
                                 },
@@ -1045,9 +1104,9 @@
 
         function getBookingChartData(type) {
 
-             var Base_url="{{ url('/') }}";
+            var Base_url = "{{ url('/') }}";
 
-            var url =Base_url+"/app/get_booking_chart_data/" + type;
+            var url = Base_url + "/app/get_booking_chart_data/" + type;
 
             $("#booking_loader").show();
 
@@ -1057,8 +1116,8 @@
                 method: "GET",
                 success: function(response) {
 
-                      const monthlyBookings = response.data.chartData;
-                        const category = response.data.category;
+                    const monthlyBookings = response.data.chartData;
+                    const category = response.data.category;
 
                     $("#booking_loader").hide();
 
@@ -1090,7 +1149,7 @@
                                 function({
                                     value,
                                 }) {
-                                    if(value < 8) {
+                                    if (value < 8) {
                                         return '#FD866E'
                                     } else {
                                         return '#FD866E'
@@ -1131,7 +1190,7 @@
                                 enabled: true,
                             },
                             xaxis: {
-                                categories:category,
+                                categories: category,
                                 labels: {
                                     minHeight: 22,
                                     maxHeight: 22
@@ -1151,7 +1210,7 @@
                                 axisTicks: {
                                     show: false,
                                 },
-                                
+
                                 labels: {
                                     minWidth: 20,
                                     maxWidth: 20,
@@ -1181,14 +1240,14 @@
 
         }
 
-        function getBookingstatusData(type){
+        function getBookingstatusData(type) {
 
 
-             var Base_url="{{ url('/') }}";
+            var Base_url = "{{ url('/') }}";
 
-              var url =Base_url+"/app/get_booking_status_chart_data/" + type;
+            var url = Base_url + "/app/get_booking_status_chart_data/" + type;
 
-          //  $("#loader").show();
+            //  $("#loader").show();
 
             $.ajax({
 
@@ -1199,64 +1258,64 @@
                     $(".booking_status").text(type);
 
 
-            if (document.querySelectorAll('#chart-05').length) {
+                    if (document.querySelectorAll('#chart-05').length) {
 
-                const variableColors = IQUtils.getVariableColor();
-                const colors = [variableColors.secondary, variableColors.primary];
+                        const variableColors = IQUtils.getVariableColor();
+                        const colors = [variableColors.secondary, variableColors.primary];
 
-                 const total_bookings_status = response.data;
-                 
-                 total_bookings_status.forEach((status, index) => {
-    const divId = `booking_count_${index}`;
-    const statusText = status; 
+                        const total_bookings_status = response.data;
+
+                        total_bookings_status.forEach((status, index) => {
+                            const divId = `booking_count_${index}`;
+                            const statusText = status;
 
 
-    $(`#${divId}`).text(statusText);
-});
-                var options = {
-                    series: total_bookings_status,
-                    chart: {
-                        width: '100%',
-                        height: 233,
-                        type: 'pie',
-                    },
-                    theme: {
-                        monochrome: {
-                            enabled: true,
-                            color: '#9D67EF',
-                            shadeTo: 'light',
-                            shadeIntensity: 0.9
-                        }
-                    },
-                    plotOptions: {
-                        pie: {
-                            dataLabels: {
-                                offset: -5
+                            $(`#${divId}`).text(statusText);
+                        });
+                        var options = {
+                            series: total_bookings_status,
+                            chart: {
+                                width: '100%',
+                                height: 233,
+                                type: 'pie',
+                            },
+                            theme: {
+                                monochrome: {
+                                    enabled: true,
+                                    color: '#9D67EF',
+                                    shadeTo: 'light',
+                                    shadeIntensity: 0.9
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    dataLabels: {
+                                        offset: -5
+                                    }
+                                }
+                            },
+                            legend: {
+                                show: false
                             }
-                        }
-                    },
-                    legend: {
-                        show: false
-                    }
-                };
+                        };
 
-                  if (booking_status_chart != null) {
+                        if (booking_status_chart != null) {
                             booking_status_chart.destroy();
                         }
-                  booking_status_chart = new ApexCharts(document.querySelector("#chart-05"), options);
-                 booking_status_chart.render();
-                }
+                        booking_status_chart = new ApexCharts(document.querySelector("#chart-05"), options);
+                        booking_status_chart.render();
+                    }
 
 
                 }
             });
         }
 
-        function getprofitChartData(type){
+        function getprofitChartData(type) {
 
-              var Base_url="{{ url('/') }}";
+            var Base_url = "{{ url('/') }}";
 
-            var url = Base_url+"/app/get_profit_chart_data/" + type;
+            var url = Base_url + "/app/get_profit_chart_data/" + type;
 
             $("#loader").show();
 
@@ -1270,76 +1329,76 @@
 
                     $(".profit_chart").text(type);
 
-                      if (document.querySelectorAll('#chart-03').length) {
-                        
-                const variableColors = IQUtils.getVariableColor();
-                const colors = [variableColors.secondary, variableColors.primary];
-                  const monthlyTotals = response.data.chartData;
+                    if (document.querySelectorAll('#chart-03').length) {
+
+                        const variableColors = IQUtils.getVariableColor();
+                        const colors = [variableColors.secondary, variableColors.primary];
+                        const monthlyTotals = response.data.chartData;
                         const category = response.data.category;
 
-                var options = {
-                    series: [{
-                        name: 'Profit By Service',
-                        data: monthlyTotals
-                    }],
-                    chart: {
-                        type: 'bar',
-                        height: 300,
-                        toolbar: {
-                            show: false
-                        }
-                    },
-                    colors: colors,
-                    plotOptions: {
-                        bar: {
-                            horizontal: false,
-                            columnWidth: '28%',
-                            borderRadius: 5,
-                            endingShape: 'rounded'
-                        },
-                    },
-                    grid: {
-                        show: true,
-                        strokeDashArray: 3,
-                    },
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    xaxis: {
-                        categories:category,
-                        labels: {
-                            show: true,
-                        }
-                    },
-                   
-                    fill: {
-                        opacity: 1
-                    },
-                      yaxis: {
-                                 labels: {
-                                     formatter: function (value) {
-                                         return value.toFixed(2); 
-                                     }
-                                 }
-                             },
-                           
-                    tooltip: {
-                        y: {
-                             formatter: function (value) {
-                                return  formatCurrencyVue(value); 
-                             }
-                        }
-                    },
-                    responsive: [{
-                        breakpoint: 480,
-                        options: {
+                        var options = {
+                            series: [{
+                                name: 'Profit By Service',
+                                data: monthlyTotals
+                            }],
                             chart: {
-                                height: 250
-                            }
-                        }
-                    }]
+                                type: 'bar',
+                                height: 300,
+                                toolbar: {
+                                    show: false
+                                }
+                            },
+                            colors: colors,
+                            plotOptions: {
+                                bar: {
+                                    horizontal: false,
+                                    columnWidth: '28%',
+                                    borderRadius: 5,
+                                    endingShape: 'rounded'
+                                },
+                            },
+                            grid: {
+                                show: true,
+                                strokeDashArray: 3,
+                            },
+                            dataLabels: {
+                                enabled: false,
+                            },
+                            xaxis: {
+                                categories: category,
+                                labels: {
+                                    show: true,
+                                }
+                            },
 
-                };
+                            fill: {
+                                opacity: 1
+                            },
+                            yaxis: {
+                                labels: {
+                                    formatter: function(value) {
+                                        return value.toFixed(2);
+                                    }
+                                }
+                            },
+
+                            tooltip: {
+                                y: {
+                                    formatter: function(value) {
+                                        return formatCurrencyVue(value);
+                                    }
+                                }
+                            },
+                            responsive: [{
+                                breakpoint: 480,
+                                options: {
+                                    chart: {
+                                        height: 250
+                                    }
+                                }
+                            }]
+
+                        };
 
 
                         if (profit_chart != null) {
@@ -1348,8 +1407,8 @@
 
                         profit_chart = new ApexCharts(document.querySelector("#chart-03"), options);
                         profit_chart.render();
-                    
-                  }
+
+                    }
 
                 }
             });
@@ -1357,11 +1416,10 @@
 
 
         const formatCurrencyVue = (value) => {
-           if (window.currencyFormat !== undefined) {
-             return window.currencyFormat(value)
-           }
-           return value
+            if (window.currencyFormat !== undefined) {
+                return window.currencyFormat(value)
+            }
+            return value
         }
-
     </script>
 @endpush

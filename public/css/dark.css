@@ -113,14 +113,14 @@ body {
   background-color: rgba(33, 204, 106, 0.15) !important;
 }
 .dark .bg-soft-info {
-  background-color: rgba(10, 224, 235, 0.1) !important;
+  background-color: rgba(204, 88, 0, 0.1) !important;
 }
 .dark a.bg-soft-info:hover, .dark a.bg-soft-info:focus,
 .dark button.bg-soft-info:hover,
 .dark button.bg-soft-info:focus {
   cursor: pointer;
-  color: #056b71;
-  background-color: rgba(10, 224, 235, 0.15) !important;
+  color: #361700;
+  background-color: rgba(204, 88, 0, 0.15) !important;
 }
 .dark .bg-soft-warning {
   background-color: rgba(244, 137, 75, 0.1) !important;
@@ -192,7 +192,7 @@ body {
   color: #1aa053 !important;
 }
 .dark .text-info {
-  color: #08B1BA !important;
+  color: #823800 !important;
 }
 .dark .text-warning {
   color: #f16a1b !important;
@@ -373,20 +373,20 @@ body {
   box-shadow: unset;
 }
 .dark .btn-soft-info {
-  --bs-btn-color: #39c1c8;
-  --bs-btn-bg: rgba(8, 177, 186, 0.1);
-  --bs-btn-border-color: rgba(8, 177, 186, 0);
-  --bs-btn-hover-color: #52c8cf;
-  --bs-btn-hover-bg: rgba(8, 177, 186, 0.2);
-  --bs-btn-hover-border-color: rgba(8, 177, 186, 0.2);
-  --bs-btn-focus-shadow-rgb: 57, 193, 200;
-  --bs-btn-active-color: #08b1ba;
-  --bs-btn-active-bg: rgba(8, 177, 186, 0.3);
-  --bs-btn-active-border-color: rgba(8, 177, 186, 0.2);
+  --bs-btn-color: #9b6033;
+  --bs-btn-bg: rgba(130, 56, 0, 0.1);
+  --bs-btn-border-color: rgba(130, 56, 0, 0);
+  --bs-btn-hover-color: #a8744d;
+  --bs-btn-hover-bg: rgba(130, 56, 0, 0.2);
+  --bs-btn-hover-border-color: rgba(130, 56, 0, 0.2);
+  --bs-btn-focus-shadow-rgb: 155, 96, 51;
+  --bs-btn-active-color: #823800;
+  --bs-btn-active-bg: rgba(130, 56, 0, 0.3);
+  --bs-btn-active-border-color: rgba(130, 56, 0, 0.2);
   --bs-btn-active-shadow: 0 0px 0px rgba(0, 0, 0, 0);
   --bs-btn-disabled-color: #000;
-  --bs-btn-disabled-bg: #84d8dd;
-  --bs-btn-disabled-border-color: rgba(8, 177, 186, 0);
+  --bs-btn-disabled-bg: #c19c80;
+  --bs-btn-disabled-border-color: rgba(130, 56, 0, 0);
   box-shadow: unset;
 }
 .dark .btn-soft-warning {
@@ -597,12 +597,12 @@ body {
   filter: invert(1) grayscale(100%) brightness(200%);
 }
 .dark .alert-info {
-  --bs-alert-color: #39c1c8;
-  --bs-alert-bg: #03474a;
-  --bs-alert-border-color: #08b1ba;
+  --bs-alert-color: #9b6033;
+  --bs-alert-bg: #341600;
+  --bs-alert-border-color: #823800;
 }
 .dark .alert-info .alert-link {
-  color: #2e9aa0;
+  color: #7c4d29;
 }
 .dark .alert-info .btn-close {
   filter: invert(1) grayscale(100%) brightness(200%);
@@ -708,8 +708,8 @@ body {
 }
 .dark .alert-solid.alert-info {
   --bs-alert-color: #fff;
-  --bs-alert-bg: #08B1BA;
-  --bs-alert-border-color: #08B1BA;
+  --bs-alert-bg: #823800;
+  --bs-alert-border-color: #823800;
 }
 .dark .alert-solid.alert-info .alert-link {
   color: #cccccc;
@@ -793,7 +793,7 @@ body {
   border-color: #1aa053;
 }
 .dark .alert-left.alert-info {
-  border-color: #08B1BA;
+  border-color: #823800;
 }
 .dark .alert-left.alert-warning {
   border-color: #f16a1b;
@@ -823,7 +823,7 @@ body {
   border-color: #1aa053;
 }
 .dark .alert-top.alert-info {
-  border-color: #08B1BA;
+  border-color: #823800;
 }
 .dark .alert-top.alert-warning {
   border-color: #f16a1b;
@@ -853,7 +853,7 @@ body {
   border-color: #1aa053;
 }
 .dark .alert-right.alert-info {
-  border-color: #08B1BA;
+  border-color: #823800;
 }
 .dark .alert-right.alert-warning {
   border-color: #f16a1b;
@@ -883,7 +883,7 @@ body {
   border-color: #1aa053;
 }
 .dark .alert-bottom.alert-info {
-  border-color: #08B1BA;
+  border-color: #823800;
 }
 .dark .alert-bottom.alert-warning {
   border-color: #f16a1b;
@@ -1143,12 +1143,12 @@ body {
   color: #1aa053;
 }
 .dark .list-group .list-group-item.list-group-item-action.list-group-item-info {
-  background-color: rgba(8, 177, 186, 0.1);
+  background-color: rgba(130, 56, 0, 0.1);
   color: #fff;
 }
 .dark .list-group .list-group-item.list-group-item-action.list-group-item-info:hover {
-  background-color: rgba(8, 177, 186, 0.05);
-  color: #08B1BA;
+  background-color: rgba(130, 56, 0, 0.05);
+  color: #823800;
 }
 .dark .list-group .list-group-item.list-group-item-action.list-group-item-warning {
   background-color: rgba(241, 106, 27, 0.1);

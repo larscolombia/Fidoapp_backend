@@ -1,46 +1,46 @@
-.dark .iq-header-img{
-    background-color: #313131 !important;
+.dark .iq-header-img {
+  background-color: #313131 !important;
 }
-.dark .table-striped > tbody > tr:nth-of-type(even) > *{
-    --bs-table-accent-bg: #181818 !important;
+.dark .table-striped > tbody > tr:nth-of-type(even) > * {
+  --bs-table-accent-bg: #181818 !important;
 }
 .multiselect-option.is-selected {
-	background: #975DEE !important ;
+  background: #ff4931 !important ;
 }
-.multiselect-tag:hover{
-    background: #975DEE !important;
+.multiselect-tag:hover {
+  background: #ff4931 !important;
 }
-.multiselect-tag{
-    background: #975DEE !important;
+.multiselect-tag {
+  background: #ff4931 !important;
 }
-.multiselect:focus{
-    box-shadow:none !important;
+.multiselect:focus {
+  box-shadow: none !important;
 }
-.multiselect.is-active{
-    box-shadow: none !important;
+.multiselect.is-active {
+  box-shadow: none !important;
 }
 .multiselect-option.is-pointed {
-    background: #975DEE !important;
-    color: #fff !important;
+  background: #ff4931 !important;
+  color: #fff !important;
 }
 ::selection {
-    background: #975DEE !important;
-    color: #fff !important;
+  background: #ff4931 !important;
+  color: #fff !important;
 }
 
 ::-moz-selection {
-    background: #975DEE !important;
-    color: #fff !important;
+  background: #ff4931 !important;
+  color: #fff !important;
 }
 
 *::-moz-selection {
-    background:#975DEE !important;
-    color: #fff !important;
+  background: #ff4931 !important;
+  color: #fff !important;
 }
 
 .form-disabled {
   pointer-events: none;
-  opacity: .4;
+  opacity: 0.4;
 }
 
 .sorting_disabled.sorting_asc::after,
@@ -51,19 +51,18 @@
 .sorting_disabled.sorting_asc {
   width: 1% !important;
 }
-.h-4{
+.h-4 {
   height: 4rem;
 }
 
 /* vue-tel-input*/
 
-.vue-tel-input{
-    border: 1px solid var(--bs-border-color) !important;
-    box-shadow: none !important;
+.vue-tel-input {
+  border: 1px solid var(--bs-border-color) !important;
+  box-shadow: none !important;
 }
-.vti__input:focus{
-    border: 1px solid var(--bs-primary) !important;
-
+.vti__input:focus {
+  border: 1px solid var(--bs-primary) !important;
 }
 
 .ec-week .ec-toolbar {
@@ -92,7 +91,7 @@
   min-width: 160px;
 }
 
-.dropdown-sticky{
+.dropdown-sticky {
   background-color: var(--bs-white);
   box-shadow: 0px -2px 3px rgba(0, 0, 0, 0.2);
   position: fixed;
@@ -101,38 +100,36 @@
   left: 0;
 }
 
-.dropdown-sticky:hover{
+.dropdown-sticky:hover {
   background-color: var(--bs-primary-shade-10);
 }
-  .text-primary {
-    color : var(--bs-white) !important;
-  }
+.text-primary {
+  color: var(--bs-white) !important;
+}
 
-
-.iq-dropdown  .dropdown-menu{
+.iq-dropdown .dropdown-menu {
   border-radius: 0.6rem !important;
 }
 
 /* select 2 */
-.multiselect-tags{
+.multiselect-tags {
   flex-wrap: unset !important;
   overflow: auto;
 }
-.multiselect-tags .multiselect-tags-search-wrapper{
-    margin: 8px;
-  }
+.multiselect-tags .multiselect-tags-search-wrapper {
+  margin: 8px;
+}
 
-
-.dark .text-black{
-  color:#fff !important;
+.dark .text-black {
+  color: #fff !important;
 }
 @media only screen and (max-width: 1280px) {
   .ec-header {
-    overflow-x:scroll;
+    overflow-x: scroll;
   }
 }
 
-.iq-branch-dropdown:hover{
+.iq-branch-dropdown:hover {
   background-color: unset !important;
 }
 
@@ -149,10 +146,11 @@
   display: block;
 }
 
-.flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n+1)), .flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n+1)), .flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n+1)) {
-  box-shadow: -10px 0 0 rgba(var(--bs-primary-rgb), .8);
+.flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n + 1)),
+.flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n + 1)),
+.flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n + 1)) {
+  box-shadow: -10px 0 0 rgba(var(--bs-primary-rgb), 0.8);
 }
-
 
 .breed_list.i.fa-solid.fa-plus.p-0 {
   color: white;
@@ -180,7 +178,7 @@ legend {
   color: white;
 }
 .offcanvas {
-  --ms-border-color: var(--bs-border-color)
+  --ms-border-color: var(--bs-border-color);
 }
 
 .dark .multiselect-tags-search {

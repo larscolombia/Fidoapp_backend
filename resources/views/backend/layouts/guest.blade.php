@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" dir="{{ language_direction() }}" class="theme-fs-sm">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,22 +28,22 @@
     <link rel="stylesheet" href="{{ asset('css/dark.css') }}">
     <link rel="stylesheet" href="{{ asset('custom-css/dashboard.css') }}">
 
-    @if(language_direction() == 'rtl')
-      <link rel="stylesheet" href="{{ asset('css/rtl.css') }}">
+    @if (language_direction() == 'rtl')
+        <link rel="stylesheet" href="{{ asset('css/rtl.css') }}">
     @endif
 
     <link rel="stylesheet" href="{{ asset('css/customizer.css') }}">
 
 
     <style>
-        :root{
-          <?php
+        :root {
+            <?php
             $rootColors = setting('root_colors'); // Assuming the setting() function retrieves the JSON string
-
+            
             // Check if the JSON string is not empty and can be decoded
             if (!empty($rootColors) && is_string($rootColors)) {
                 $colors = json_decode($rootColors, true);
-
+            
                 // Check if decoding was successful and the colors array is not empty
                 if (json_last_error() === JSON_ERROR_NONE && is_array($colors) && count($colors) > 0) {
                     foreach ($colors as $key => $value) {
@@ -53,7 +54,6 @@
                 }
             }
             ?>
-
         }
     </style>
 
@@ -62,18 +62,18 @@
         $currentLang = App::currentLocale();
         $langFolderPath = base_path("lang/$currentLang");
         $filePaths = \File::files($langFolderPath);
-      @endphp
+    @endphp
 
     @foreach ($filePaths as $filePath)
-      @php
-        $fileName = pathinfo($filePath, PATHINFO_FILENAME);
-      @endphp
-      <script>
-        window.localMessagesUpdate = {
-          ...window.localMessagesUpdate,
-          "{{ $fileName }}": @json(require($filePath))
-        }
-      </script>
+        @php
+            $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+        @endphp
+        <script>
+            window.localMessagesUpdate = {
+                ...window.localMessagesUpdate,
+                "{{ $fileName }}": @json(require $filePath)
+            }
+        </script>
     @endforeach
 
 
@@ -81,17 +81,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
 
     <style>
         body {
-            font-family: Inter, Arial, Helvetica, sans-serif
+            font-family: Inter, Kumbh Sans, Arial, Helvetica, sans-serif
         }
     </style>
 
     @stack('after-styles')
 
     <style>
-      {!! setting('custom_css_block') !!}
+        {!! setting('custom_css_block') !!}
     </style>
 
 </head>
@@ -131,7 +132,7 @@
     <!-- / Scripts -->
 
     <script>
-      {!! setting('custom_js_block') !!}
+        {!! setting('custom_js_block') !!}
     </script>
 
 </body>

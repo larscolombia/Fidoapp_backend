@@ -76,4 +76,9 @@ return [
     'walking_booking_request' => 'Solicitud de Reserva',
 
     'pending_employee' => 'Empleado Pendiente',
+
+
+
+  
+
 ];

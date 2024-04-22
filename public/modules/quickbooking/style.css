@@ -722,13 +722,13 @@
   }
 }
 .booking-wizard .multiselect-option.is-selected {
-  background: #975DEE !important;
+  background: #FF4931 !important;
 }
 .booking-wizard .multiselect-tag:hover {
-  background: #975DEE !important;
+  background: #FF4931 !important;
 }
 .booking-wizard .multiselect-tag {
-  background: #975DEE !important;
+  background: #FF4931 !important;
 }
 .booking-wizard .multiselect:focus {
   box-shadow: none !important;
@@ -737,7 +737,7 @@
   box-shadow: none !important;
 }
 .booking-wizard .multiselect-option.is-pointed {
-  background: #975DEE !important;
+  background: #FF4931 !important;
   color: #fff !important;
 }
 

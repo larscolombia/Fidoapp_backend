@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex align-items-center justify-content-between">
-      <h6 class="mt-4 mb-3">{{$t('setting_general_page.Color_Customizer')}}</h6>
+      <h6 class="mt-4 mb-3">{{ $t('setting_general_page.Color_Customizer') }}</h6>
       <div class="d-flex align-items-center">
         <a href="#custom-color" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="custom-color">Custom</a>
         <div data-setting="radio">
@@ -16,11 +16,11 @@
     </div>
     <div class="collapse" id="custom-color">
       <div class="form-group d-flex justify-content-between align-items-center">
-        <label for="custom-primary-color">{{$t('setting_general_page.primary')}}</label>
-        <input name="primary" type="color"  @input="onColorUpdate" id="custom-primary-color"  :value="themeCustomColor.colors['--{{prefix}}primary']"/>
+        <label for="custom-primary-color">{{ $t('setting_general_page.primary') }}</label>
+        <input name="primary" type="color" @input="onColorUpdate" id="custom-primary-color" :value="themeCustomColor.colors['--{{prefix}}primary']" />
       </div>
       <div class="form-group d-flex d-flex justify-content-between align-items-center">
-        <label for="custom-secondary-color">{{$t('setting_general_page.secondary')}}</label>
+        <label for="custom-secondary-color">{{ $t('setting_general_page.secondary') }}</label>
         <input name="secondary" type="color" @input="onColorUpdate" id="custom-secondary-color" :value="themeCustomColor.colors['--{{prefix}}secondary']" />
       </div>
     </div>
@@ -36,7 +36,7 @@
 </template>
 <script>
 import { computed } from 'vue'
-import {useSetting} from '@/store/index'
+import { useSetting } from '@/store/index'
 import RadioInput from '../store/elements/RadioInput.vue'
 import _ from 'lodash'
 export default {
@@ -96,8 +96,8 @@ export default {
       const obj = {
         value: 'theme-color-default',
         colors: {
-          "--{{prefix}}primary": "#975DEE",
-          "--{{prefix}}secondary": "#19235A",
+          '--{{prefix}}primary': '#FF4931',
+          '--{{prefix}}secondary': '#19235A'
         }
       }
       store.theme_color(obj)

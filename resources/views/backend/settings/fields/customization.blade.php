@@ -7,9 +7,8 @@
                         <h6>Color Customizer</h6>
                         <div class="d-flex align-items-center">
                             <div data-setting="radio">
-                                <input type="radio" value="theme-color-default" class="btn-check"
-                                    name="theme_color" id="theme-color-default"
-                                    data-colors='{"primary": "#975DEE", "info": "#08B1BA"}'>
+                                <input type="radio" value="theme-color-default" class="btn-check" name="theme_color"
+                                    id="theme-color-default" data-colors='{"primary": "#FF4931", "info": "#823800"}'>
                                 <label class="btn bg-transparent border-0" for="theme-color-default"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Reset Color"
                                     data-bs-original-title="Reset color">
@@ -28,70 +27,65 @@
                     </div>
                     <div class="grid-cols-5 mb-4 d-grid gap-3">
                         <div data-setting="radio">
-                            <input type="radio" value="theme-color-blue" class="btn-check"
-                                name="theme_color" id="theme-color-1"
-                                data-colors='{"primary": "#00C3F9", "info": "#573BFF"}'>
+                            <input type="radio" value="theme-color-blue" class="btn-check" name="theme_color"
+                                id="theme-color-1" data-colors='{"primary": "#00C3F9", "info": "#573BFF"}'>
                             <label class="btn btn-border d-block bg-transparent" for="theme-color-1"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Theme-1"
                                 data-bs-original-title="Theme-1">
-                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" width="26" height="26">
+                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    width="26" height="26">
                                     <circle cx="12" cy="12" r="10" fill="#00C3F9" />
                                     <path d="M2,12 a1,1 1 1,0 20,0" fill="#573BFF" />
                                 </svg>
                             </label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="theme-color-gray" class="btn-check"
-                                name="theme_color" id="theme-color-2"
-                                data-colors='{"primary": "#91969E", "info": "#FD8D00"}'>
+                            <input type="radio" value="theme-color-gray" class="btn-check" name="theme_color"
+                                id="theme-color-2" data-colors='{"primary": "#91969E", "info": "#FD8D00"}'>
                             <label class="btn btn-border d-block bg-transparent" for="theme-color-2"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Theme-2"
                                 data-bs-original-title="Theme-2">
-                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" width="26" height="26">
+                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    width="26" height="26">
                                     <circle cx="12" cy="12" r="10" fill="#91969E" />
                                     <path d="M2,12 a1,1 1 1,0 20,0" fill="#FD8D00" />
                                 </svg>
                             </label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="theme-color-red" class="btn-check"
-                                name="theme_color" id="theme-color-3"
-                                data-colors='{"primary": "#DB5363", "info": "#366AF0"}'>
+                            <input type="radio" value="theme-color-red" class="btn-check" name="theme_color"
+                                id="theme-color-3" data-colors='{"primary": "#DB5363", "info": "#366AF0"}'>
                             <label class="btn btn-border d-block bg-transparent" for="theme-color-3"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Theme-3"
                                 data-bs-original-title="Theme-3">
-                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" width="26" height="26">
+                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    width="26" height="26">
                                     <circle cx="12" cy="12" r="10" fill="#DB5363" />
                                     <path d="M2,12 a1,1 1 1,0 20,0" fill="#366AF0" />
                                 </svg>
                             </label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="theme-color-yellow" class="btn-check"
-                                name="theme_color" id="theme-color-4"
-                                data-colors='{"primary": "#EA6A12", "info": "#6410F1"}'>
+                            <input type="radio" value="theme-color-yellow" class="btn-check" name="theme_color"
+                                id="theme-color-4" data-colors='{"primary": "#EA6A12", "info": "#6410F1"}'>
                             <label class="btn btn-border d-block bg-transparent" for="theme-color-4"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Theme-4"
                                 data-bs-original-title="Theme-4">
-                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" width="26" height="26">
+                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    width="26" height="26">
                                     <circle cx="12" cy="12" r="10" fill="#EA6A12" />
                                     <path d="M2,12 a1,1 1 1,0 20,0" fill="#6410F1" />
                                 </svg>
                             </label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="theme-color-pink" class="btn-check"
-                                name="theme_color" id="theme-color-5"
-                                data-colors='{"primary": "#E586B3", "info": "#25C799"}'>
+                            <input type="radio" value="theme-color-pink" class="btn-check" name="theme_color"
+                                id="theme-color-5" data-colors='{"primary": "#E586B3", "info": "#25C799"}'>
                             <label class="btn btn-border d-block bg-transparent" for="theme-color-5"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Theme-5"
                                 data-bs-original-title="Theme-5">
-                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" width="26" height="26">
+                                <svg class="customizer-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    width="26" height="26">
                                     <circle cx="12" cy="12" r="10" fill="#E586B3" />
                                     <path d="M2,12 a1,1 1 1,0 20,0" fill="#25C799" />
                                 </svg>
@@ -104,48 +98,46 @@
                     <h6>Menu Color</h6>
                     <div class="d-grid gap-3 grid-cols-3 mb-3">
                         <div data-setting="radio">
-                            <input type="radio" value="sidebar-white" class="btn-check"
-                                name="sidebar_color" id="sidebar-white" checked>
-                            <label class="btn btn-border d-flex align-items-center bg-transparent"
-                                for="sidebar-white" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Sidebar White" data-bs-original-title="Sidebar White">
+                            <input type="radio" value="sidebar-white" class="btn-check" name="sidebar_color"
+                                id="sidebar-white" checked>
+                            <label class="btn btn-border d-flex align-items-center bg-transparent" for="sidebar-white"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Sidebar White"
+                                data-bs-original-title="Sidebar White">
                                 <i class="text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18"
-                                        width="18" viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="12" r="8"
-                                            fill="currentColor" stroke="black" stroke-width="3"></circle>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18" width="18"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"
+                                            stroke="black" stroke-width="3"></circle>
                                     </svg>
                                 </i>
                                 <span class="ms-2 ">Default</span>
                             </label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="sidebar-dark" class="btn-check"
-                                name="sidebar_color" id="sidebar-dark">
-                            <label class="btn btn-border d-flex align-items-center bg-transparent"
-                                for="sidebar-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Sidebar Dark" data-bs-original-title="Sidebar Dark">
+                            <input type="radio" value="sidebar-dark" class="btn-check" name="sidebar_color"
+                                id="sidebar-dark">
+                            <label class="btn btn-border d-flex align-items-center bg-transparent" for="sidebar-dark"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Sidebar Dark"
+                                data-bs-original-title="Sidebar Dark">
                                 <i class="text-dark">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18"
-                                        width="18" viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="12" r="8"
-                                            fill="currentColor"></circle>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18" width="18"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
                                     </svg>
                                 </i>
                                 <span class="ms-2 "> Dark </span>
                             </label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="sidebar-color" class="btn-check"
-                                name="sidebar_color" id="sidebar-color">
-                            <label class="btn btn-border d-flex align-items-center bg-transparent"
-                                for="sidebar-color" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Sidebar Colored" data-bs-original-title="Sidebar Colored">
+                            <input type="radio" value="sidebar-color" class="btn-check" name="sidebar_color"
+                                id="sidebar-color">
+                            <label class="btn btn-border d-flex align-items-center bg-transparent" for="sidebar-color"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Sidebar Colored"
+                                data-bs-original-title="Sidebar Colored">
                                 <i class="text-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18"
-                                        width="18" viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="12" r="8"
-                                            fill="currentColor"></circle>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18" width="18"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
                                     </svg>
                                 </i>
                                 <span class="ms-2 "> Color </span>
@@ -154,33 +146,32 @@
                     </div>
                     <div class="d-grid gap-3 grid-cols-2 mb-4">
                         <div data-setting="radio">
-                            <input type="radio" value="sidebar-transparent" class="btn-check"
-                                name="sidebar_color" id="sidebar-transparent">
+                            <input type="radio" value="sidebar-transparent" class="btn-check" name="sidebar_color"
+                                id="sidebar-transparent">
                             <label class="btn btn-border d-flex align-items-center bg-transparent"
-                                for="sidebar-transparent" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Sidebar Transparent"
-                                data-bs-original-title="Sidebar Transparent">
+                                for="sidebar-transparent" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Sidebar Transparent" data-bs-original-title="Sidebar Transparent">
                                 <i class="text-dark">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18"
-                                        width="18" viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="12" r="8"
-                                            fill="#F5F6FA" stroke="black" stroke-width="3"></circle>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18" width="18"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="12" cy="12" r="8" fill="#F5F6FA" stroke="black"
+                                            stroke-width="3"></circle>
                                     </svg>
                                 </i>
                                 <span class="ms-2">Transparent</span>
                             </label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="sidebar-glass" class="btn-check"
-                                name="sidebar_color" id="sidebar-glass">
-                            <label class="btn btn-border d-flex align-items-center bg-transparent"
-                                for="sidebar-glass" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Sidebar Transparent" data-bs-original-title="Sidebar Transparent">
+                            <input type="radio" value="sidebar-glass" class="btn-check" name="sidebar_color"
+                                id="sidebar-glass">
+                            <label class="btn btn-border d-flex align-items-center bg-transparent" for="sidebar-glass"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Sidebar Transparent"
+                                data-bs-original-title="Sidebar Transparent">
                                 <i class="text-dark">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18"
-                                        width="18" viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="12" r="8"
-                                            fill="#F5F6FA" stroke="black" stroke-width="3"></circle>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-18" width="18"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="12" cy="12" r="8" fill="#F5F6FA" stroke="black"
+                                            stroke-width="3"></circle>
                                     </svg>
                                 </i>
                                 <span class="ms-2">Glass</span>
@@ -193,15 +184,19 @@
                     <h6>Menu Style</h6>
                     <div class="d-grid gap-3 grid-cols-4 mb-4">
                         <div data-setting="checkbox" class="text-center">
-                            <input type="checkbox" value="sidebar-mini" class="btn-check" name="sidebar_type" id="sidebar-mini">
+                            <input type="checkbox" value="sidebar-mini" class="btn-check" name="sidebar_type"
+                                id="sidebar-mini">
                             <label class="btn btn-border d-block overflow-hidden" for="sidebar-mini">Mini</label>
                         </div>
                         <div data-setting="checkbox" class="text-center">
-                            <input type="checkbox" value="sidebar-hover" data-extra="{target: '.sidebar', ClassListAdd: 'sidebar-mini'}" class="btn-check" name="sidebar_type" id="sidebar-hover">
+                            <input type="checkbox" value="sidebar-hover"
+                                data-extra="{target: '.sidebar', ClassListAdd: 'sidebar-mini'}" class="btn-check"
+                                name="sidebar_type" id="sidebar-hover">
                             <label class="btn btn-border d-block overflow-hidden" for="sidebar-hover">Hover</label>
                         </div>
                         <div data-setting="checkbox" class="text-center">
-                            <input type="checkbox" value="sidebar-boxed" class="btn-check" name="sidebar_type" id="sidebar-boxed">
+                            <input type="checkbox" value="sidebar-boxed" class="btn-check" name="sidebar_type"
+                                id="sidebar-boxed">
                             <label class="btn btn-border d-block overflow-hidden" for="sidebar-boxed"> Boxed</label>
                         </div>
                     </div>
@@ -211,28 +206,40 @@
                     <h6>Active Menu Style</h6>
                     <div class="d-grid gap-3 grid-cols-3 mb-4">
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="sidebar-default navs-rounded" class="btn-check" name="sidebar_menu_style" id="navs-rounded">
-                            <label class="btn btn-border d-block overflow-hidden" for="navs-rounded">Rounded One Side</label>
+                            <input type="radio" value="sidebar-default navs-rounded" class="btn-check"
+                                name="sidebar_menu_style" id="navs-rounded">
+                            <label class="btn btn-border d-block overflow-hidden" for="navs-rounded">Rounded One
+                                Side</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="sidebar-default navs-rounded-all" class="btn-check" name="sidebar_menu_style" id="navs-rounded-all">
-                            <label class="btn btn-border d-block overflow-hidden" for="navs-rounded-all">Rounded All</label>
+                            <input type="radio" value="sidebar-default navs-rounded-all" class="btn-check"
+                                name="sidebar_menu_style" id="navs-rounded-all">
+                            <label class="btn btn-border d-block overflow-hidden" for="navs-rounded-all">Rounded
+                                All</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="sidebar-default navs-pill" class="btn-check" name="sidebar_menu_style" id="navs-pill">
-                            <label class="btn btn-border d-block overflow-hidden" for="navs-pill">Pill One Side</label>
+                            <input type="radio" value="sidebar-default navs-pill" class="btn-check"
+                                name="sidebar_menu_style" id="navs-pill">
+                            <label class="btn btn-border d-block overflow-hidden" for="navs-pill">Pill One
+                                Side</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value=" sidebar-default navs-pill-all" class="btn-check" name="sidebar_menu_style" id="navs-pill-all">
-                            <label class="btn btn-border d-block overflow-hidden" for="navs-pill-all"> Pill All</label>
+                            <input type="radio" value=" sidebar-default navs-pill-all" class="btn-check"
+                                name="sidebar_menu_style" id="navs-pill-all">
+                            <label class="btn btn-border d-block overflow-hidden" for="navs-pill-all"> Pill
+                                All</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="left-bordered" class="btn-check" name="sidebar_menu_style" id="left-bordered" checked>
-                            <label class="btn btn-border d-block overflow-hidden" for="left-bordered">Left Bordered</label>
+                            <input type="radio" value="left-bordered" class="btn-check" name="sidebar_menu_style"
+                                id="left-bordered" checked>
+                            <label class="btn btn-border d-block overflow-hidden" for="left-bordered">Left
+                                Bordered</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="sidebar-default navs-full-width" class="btn-check" name="sidebar_menu_style" id="navs-full-width">
-                            <label class="btn btn-border d-block overflow-hidden" for="navs-full-width">Full Width</label>
+                            <input type="radio" value="sidebar-default navs-full-width" class="btn-check"
+                                name="sidebar_menu_style" id="navs-full-width">
+                            <label class="btn btn-border d-block overflow-hidden" for="navs-full-width">Full
+                                Width</label>
                         </div>
                     </div>
                 </div>
@@ -260,12 +267,12 @@
                                 <div class="form-group d-flex justify-content-between align-items-center">
                                     <label class="" for="custom-primary-color">Primary</label>
                                     <input class="" name="theme_color" data-extra="primary" type="color"
-                                        id="custom-primary-color" value="#975DEE" data-setting="color">
+                                        id="custom-primary-color" value="#FF4931" data-setting="color">
                                 </div>
                                 <div class="form-group d-flex d-flex justify-content-between align-items-center">
                                     <label class="" for="custom-info-color">Secondary</label>
                                     <input class="" name="theme_color" data-extra="info" type="color"
-                                        id="custom-info-color" value="#08B1BA" data-setting="color">
+                                        id="custom-info-color" value="#823800" data-setting="color">
                                 </div>
                             </div>
                         </div>
@@ -279,8 +286,7 @@
                             <input type="radio" value="card-default" class="btn-check" name="card_color"
                                 id="card-default" checked>
                             <label class="btn btn-border d-block" for="card-default" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Card White"
-                                data-bs-original-title="Card White">
+                                data-bs-placement="top" title="Card White" data-bs-original-title="Card White">
                                 <span>Default Style</span>
                             </label>
                         </div>
@@ -288,8 +294,7 @@
                             <input type="radio" value="card-glass" class="btn-check" name="card_color"
                                 id="card-glass">
                             <label class="btn btn-border d-block" for="card-glass" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Card Glass"
-                                data-bs-original-title="Card Glass">
+                                data-bs-placement="top" title="Card Glass" data-bs-original-title="Card Glass">
                                 <span>Glass Effect</span>
                             </label>
                         </div>
@@ -314,8 +319,8 @@
                             <label class="btn btn-border d-block" for="page-layout-boxed">Boxed</label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="container-fluid" class="btn-check"
-                                name="page_layout" id="page-layout-full-width" checked>
+                            <input type="radio" value="container-fluid" class="btn-check" name="page_layout"
+                                id="page-layout-full-width" checked>
                             <label class="btn btn-border d-block" for="page-layout-full-width">Full
                                 Width</label>
                         </div>
@@ -339,8 +344,7 @@
                         <div data-setting="checkbox">
                             <input type="checkbox" value="theme-sharp" class="btn-check"
                                 name="theme_style_appearance" id="theme-style-appearance-sharp">
-                            <label class="btn btn-border d-block"
-                                for="theme-style-appearance-sharp">Sharp</label>
+                            <label class="btn btn-border d-block" for="theme-style-appearance-sharp">Sharp</label>
                         </div>
                     </div>
                 </div>
@@ -357,19 +361,24 @@
                     <h6>Navbar Style</h6>
                     <div class="d-grid gap-3 grid-cols-4 mb-4">
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="nav-glass" class="btn-check" name="header_navbar" id="nav-glass">
+                            <input type="radio" value="nav-glass" class="btn-check" name="header_navbar"
+                                id="nav-glass">
                             <label class="btn btn-border d-block overflow-hidden" for="nav-glass">Glass</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="navs-sticky" class="btn-check" name="header_navbar" id="navs-sticky">
+                            <input type="radio" value="navs-sticky" class="btn-check" name="header_navbar"
+                                id="navs-sticky">
                             <label class="btn btn-border d-block overflow-hidden" for="navs-sticky">Sticky</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="navs-transparent" class="btn-check" name="header_navbar" id="navs-transparent">
-                            <label class="btn btn-border d-block overflow-hidden" for="navs-transparent">Transparent</label>
+                            <input type="radio" value="navs-transparent" class="btn-check" name="header_navbar"
+                                id="navs-transparent">
+                            <label class="btn btn-border d-block overflow-hidden"
+                                for="navs-transparent">Transparent</label>
                         </div>
                         <div data-setting="radio" class="text-center">
-                            <input type="radio" value="navs-default" class="btn-check" name="header_navbar" id="navs-default" checked>
+                            <input type="radio" value="navs-default" class="btn-check" name="header_navbar"
+                                id="navs-default" checked>
                             <label class="btn btn-border d-block overflow-hidden" for="navs-default">Default</label>
                         </div>
                     </div>
@@ -394,15 +403,18 @@
                     <h6>Footer</h6>
                     <div class="d-grid gap-3 grid-cols-3 mb-4">
                         <div data-setting="radio">
-                            <input type="radio" value="default" class="btn-check" name="footer" id="footer_default" checked>
+                            <input type="radio" value="default" class="btn-check" name="footer"
+                                id="footer_default" checked>
                             <label class="btn btn-border d-block" for="footer_default">Default</label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="sticky" class="btn-check" name="footer" id="footer_Sticky">
+                            <input type="radio" value="sticky" class="btn-check" name="footer"
+                                id="footer_Sticky">
                             <label class="btn btn-border d-block" for="footer_Sticky">Sticky</label>
                         </div>
                         <div data-setting="radio">
-                            <input type="radio" value="glass" class="btn-check" name="footer" id="footer_glass">
+                            <input type="radio" value="glass" class="btn-check" name="footer"
+                                id="footer_glass">
                             <label class="btn btn-border d-block" for="footer_glass">Glass</label>
                         </div>
                     </div>

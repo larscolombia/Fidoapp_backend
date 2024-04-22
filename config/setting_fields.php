@@ -23,7 +23,7 @@ return [
                 'label' => 'Footer Text', // you know what label it is
                 'rules' => 'required|min:2', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'Built with ♥ from <a href="https://iqonic.design" target="_blank">IQONIC DESIGN.</a>', // default value if you want
+                'value' => '', // default value if you want
             ],
             [
                 'type' => 'text', // input fields type
@@ -41,7 +41,7 @@ return [
                 'label' => 'Copyright Text', // you know what label it is
                 'rules' => 'required|min:2', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'Copyright © 2023', // default value if you want
+                'value' => 'Copyright © 2024', // default value if you want
             ],
             [
                 'type' => 'text', // input fields type
@@ -50,7 +50,7 @@ return [
                 'label' => 'UI Text', // you know what label it is
                 'rules' => 'required|min:2', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'UI Powered By <a href="https://hopeui.iqonic.design/" target="_blank">HOPE UI</a>', // default value if you want
+                'value' => 'Desarrollado por <a href="https://lars.net.co" target="_blank">LARS Software Company</a>', // default value if you want
             ],
             [
                 'type' => 'text', // input fields type
@@ -198,62 +198,62 @@ return [
 
         'elements' => [
             [
-              'type' => 'text', // input fields type
-              'data' => 'misc', // data type, string, int, boolean
-              'name' => 'slot_duration', // unique name for field
-              'label' => 'slot Duration', // you know what label it is
-              'rules' => 'required|min:2', // validation rule of laravel
-              'class' => '', // any class for input
-              'value' => '00:15', // default value if you want
-          ],
-          [
-            'type' => 'text', // input fields type
-            'data' => 'misc', // data type, string, int, boolean
-            'name' => 'default_language', // unique name for field
-            'label' => 'Language', // you know what label it is
-            'rules' => 'required', // validation rule of laravel
-            'class' => '', // any class for input
-            'value' => 'en', // default value if you want
-          ],
+                'type' => 'text', // input fields type
+                'data' => 'misc', // data type, string, int, boolean
+                'name' => 'slot_duration', // unique name for field
+                'label' => 'slot Duration', // you know what label it is
+                'rules' => 'required|min:2', // validation rule of laravel
+                'class' => '', // any class for input
+                'value' => '00:15', // default value if you want
+            ],
+            [
+                'type' => 'text', // input fields type
+                'data' => 'misc', // data type, string, int, boolean
+                'name' => 'default_language', // unique name for field
+                'label' => 'Language', // you know what label it is
+                'rules' => 'required', // validation rule of laravel
+                'class' => '', // any class for input
+                'value' => 'en', // default value if you want
+            ],
 
-          [
-              'type' => 'text', // input fields type
-              'data' => 'misc', // data type, string, int, boolean
-              'name' => 'default_time_zone', // unique name for field
-              'label' => 'Time Zone', // you know what label it is
-              'rules' => 'required', // validation rule of laravel
-              'class' => '', // any class for input
-              'value' => 'UTC', // default value if you want
-          ],
+            [
+                'type' => 'text', // input fields type
+                'data' => 'misc', // data type, string, int, boolean
+                'name' => 'default_time_zone', // unique name for field
+                'label' => 'Time Zone', // you know what label it is
+                'rules' => 'required', // validation rule of laravel
+                'class' => '', // any class for input
+                'value' => 'UTC', // default value if you want
+            ],
 
-          [
-              'type' => 'text', // input fields type
-              'data' => 'misc', // data type, string, int, boolean
-              'name' => 'data_table_limit', // unique name for field
-              'label' => 'Datatable Limit', // you know what label it is
-              'rules' => 'required', // validation rule of laravel
-              'class' => '', // any class for input
-              'value' => '10', // default value if you want
-          ],
+            [
+                'type' => 'text', // input fields type
+                'data' => 'misc', // data type, string, int, boolean
+                'name' => 'data_table_limit', // unique name for field
+                'label' => 'Datatable Limit', // you know what label it is
+                'rules' => 'required', // validation rule of laravel
+                'class' => '', // any class for input
+                'value' => '10', // default value if you want
+            ],
 
-          [
-              'type' => 'text', // input fields type
-              'data' => 'misc', // data type, string, int, boolean
-              'name' => 'booking_invoice_prifix', // unique name for field
-              'label' => 'Booking Invoice Prefix', // you know what label it is
-              'rules' => 'required|min:2', // validation rule of laravel
-              'class' => '', // any class for input
-              'value' => 'Inv#', // default value if you want
-          ],
-          [
-            'type' => 'text', // input fields type
-            'data' => 'misc', // data type, string, int, boolean
-            'name' => 'is_quick_booking', // unique name for field
-            'label' => 'Quick Booking', // you know what label it is
-            'rules' => '', // validation rule of laravel
-            'class' => '', // any class for input
-            'value' => '1', // default value if you want
-        ],
+            [
+                'type' => 'text', // input fields type
+                'data' => 'misc', // data type, string, int, boolean
+                'name' => 'booking_invoice_prifix', // unique name for field
+                'label' => 'Booking Invoice Prefix', // you know what label it is
+                'rules' => 'required|min:2', // validation rule of laravel
+                'class' => '', // any class for input
+                'value' => 'Inv#', // default value if you want
+            ],
+            [
+                'type' => 'text', // input fields type
+                'data' => 'misc', // data type, string, int, boolean
+                'name' => 'is_quick_booking', // unique name for field
+                'label' => 'Quick Booking', // you know what label it is
+                'rules' => '', // validation rule of laravel
+                'class' => '', // any class for input
+                'value' => '1', // default value if you want
+            ],
         ],
     ],
     'analytics' => [
@@ -841,7 +841,7 @@ return [
                 'label' => 'From Name', // you know what label it is
                 'rules' => 'required', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'Pawlly', // default value if you wantPassword
+                'value' => 'FidoApp', // default value if you wantPassword
             ],
         ],
 
@@ -1107,7 +1107,7 @@ return [
                 'value' => '', // default value if you want
                 'help' => 'Paste the only the Measurement Id of Google Analytics stream.', // Help text for the input field.
             ],
-         
+
         ],
     ],
 
@@ -1161,7 +1161,7 @@ return [
                 'class' => '', // any class for input
                 'value' => '0', // default value if you want
                 'help' => 'Paste the only the Measurement Id of Google Analytics stream.', // Help text for the input field.
-            ], 
+            ],
             [
                 'type' => 'checkbox', // input fields type
                 'data' => 'other_settings', // data type, string, int, boolean
@@ -1171,7 +1171,7 @@ return [
                 'class' => '', // any class for input
                 'value' => '0', // default value if you want
                 'help' => 'Paste the only the Measurement Id of Google Analytics stream.', // Help text for the input field.
-            ], 
+            ],
             [
                 'type' => 'checkbox', // input fields type
                 'data' => 'other_settings', // data type, string, int, boolean
@@ -1181,7 +1181,7 @@ return [
                 'class' => '', // any class for input
                 'value' => '0', // default value if you want
                 'help' => 'Paste the only the Measurement Id of Google Analytics stream.', // Help text for the input field.
-            ], 
+            ],
             [
                 'type' => 'checkbox', // input fields type
                 'data' => 'other_settings', // data type, string, int, boolean
@@ -1191,7 +1191,7 @@ return [
                 'class' => '', // any class for input
                 'value' => '0', // default value if you want
                 'help' => 'Paste the only the Measurement Id of Google Analytics stream.', // Help text for the input field.
-            ], 
+            ],
             [
                 'type' => 'checkbox', // input fields type
                 'data' => 'other_settings', // data type, string, int, boolean
@@ -1221,7 +1221,7 @@ return [
                 'class' => '', // any class for input
                 'value' => 'Paste the only the Measurement Id of Google Analytics stream.', // default value if you want
             ],
-            
+
         ],
 
     ],

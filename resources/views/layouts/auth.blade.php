@@ -25,13 +25,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
+
     @stack('after-styles')
 
     <!-- Analytics -->
     <x-google-analytics config="{{ setting('google_analytics') }}" />
 
     <style>
-      {!! setting('custom_css_block') !!}
+        {!! setting('custom_css_block') !!}
     </style>
 </head>
 
@@ -48,7 +50,7 @@
     <script src="{{ mix('js/backend.js') }}"></script>
 
     <script>
-      {!! setting('custom_js_block') !!}
+        {!! setting('custom_js_block') !!}
     </script>
 </body>
 
