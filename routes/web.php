@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\NotificationsController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EBookController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PermissionController;
@@ -266,6 +267,8 @@ Route::group(['prefix' => 'app'], function () {
 
         Route::resource('e-books', EBookController::class);
         Route::get('e-books-index-data', [EBookController::class, 'index_data'])->name('ebooks.index_data');
+        Route::resource('courses', CourseController::class);
+        Route::get('courses-index-data', [CourseController::class, 'index_data'])->name('courses.index_data');
 
     });
 });

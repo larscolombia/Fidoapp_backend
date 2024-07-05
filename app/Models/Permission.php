@@ -394,6 +394,12 @@ class Permission extends \Spatie\Permission\Models\Permission
             'add_e-books' => 'Add E-Books',
             'edit_e-books' => 'Edit E-Books',
             'delete_e-books' => 'Delete E-Books', 
+
+            
+            'view_courses' => 'View Courses',
+            'add_courses' => 'Add Courses',
+            'edit_courses' => 'Edit Courses',
+            'delete_courses' => 'Delete Courses', 
         ];
     }
 

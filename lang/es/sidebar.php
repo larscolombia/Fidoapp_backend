@@ -36,6 +36,7 @@ return [
     'units' => 'Unidades',
     'variations' => 'Variaciones del Producto',
     'e-books' => 'Libros Electrónicos',
+    'courses' => 'Cursos',
     'supply' => 'Suministro',
     'logistics' => 'Logística',
     'logistic_zone' => 'Zonas de Envío',
