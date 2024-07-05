@@ -390,6 +390,10 @@ class Permission extends \Spatie\Permission\Models\Permission
             'edit_country' => 'Edit Country',
             'delete_country' => 'Delete Country', 
 
+            'view_e-books' => 'View E-Books',
+            'add_e-books' => 'Add E-Books',
+            'edit_e-books' => 'Edit E-Books',
+            'delete_e-books' => 'Delete E-Books', 
         ];
     }
 

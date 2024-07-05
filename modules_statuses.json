@@ -29,5 +29,6 @@
     "Tag": true,
     "Location": true,
     "LikeModule": true,
-    "World": true
+    "World": true,
+    "EBook": true
 }

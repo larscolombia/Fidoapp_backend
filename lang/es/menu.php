@@ -25,7 +25,7 @@ return [
     'notification_list' => 'Lista de Notificaciones',
     'notification_template' => 'Plantilla de Notificaciones',
     'app_banner' => 'Banner de la Aplicación',
-
+    'e-books' => 'Libros Electrónicos',
     'boarding_booking' => 'Reservas de Hospedaje',
     'boarder_list' => 'Lista de Huéspedes',
     'facility_list' => 'Lista de Instalaciones',

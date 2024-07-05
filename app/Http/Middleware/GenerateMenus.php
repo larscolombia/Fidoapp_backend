@@ -422,6 +422,15 @@ class GenerateMenus
             ]);
 
             $this->mainRoute($menu, [
+                'icon' => 'icon-all-booking',
+                'title' => __('sidebar.e-books'),
+                'route' => ['backend.e-books.index'],
+                'active' => ['app/e-books'],
+                'permission' => 'view_e-books',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
                 'icon' => 'icon-Orders',
                 'title' => __('sidebar.orders'),
                 'permission' => 'view_tag',

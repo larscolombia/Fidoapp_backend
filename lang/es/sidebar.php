@@ -35,6 +35,7 @@ return [
     'brand' => 'Marca',
     'units' => 'Unidades',
     'variations' => 'Variaciones del Producto',
+    'e-books' => 'Libros Electrónicos',
     'supply' => 'Suministro',
     'logistics' => 'Logística',
     'logistic_zone' => 'Zonas de Envío',

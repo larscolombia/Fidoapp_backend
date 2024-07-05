@@ -31,9 +31,7 @@
         }
 
         $(document).on('click', '[data-crud-id]', function() {
-
             const data = {
-
                 form_id: $(this).attr('data-crud-id')
             }
             setEditID({data: data, resetData: resetData}, () => instance.show())

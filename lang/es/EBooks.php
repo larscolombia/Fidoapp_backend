@@ -1,0 +1,27 @@
+<?php
+
+return [
+  'title' => 'Libros Electrónicos',
+  'title_table' => 'Titulo',
+  'author' => 'Autor',
+  'description' => 'Descripción',
+  'enlace' => 'Enlace',
+  'Enter_title' => 'Ingrese el título',
+  'Enter_author' => 'Ingrese el autor',
+  'Enter_description' => 'Ingrese la descripción',
+  'Enter_url' => 'Ingrese el enlace',
+  'cover_image' => 'Imagen de portada',
+  'Enter_cover_image' => 'Ingrese la imagen de portada',
+  'optional' => '(Opcional)',
+  'create' => 'Crear',
+  'Delete' => 'Eliminar',
+  'EBook has been created successfully' => 'El libro electrónico se ha creado correctamente',
+  'EBook has been updated successfully' => 'El libro electrónico se ha editado correctamente',
+  'EBook has been deleted successfully' => 'El libro electrónico se ha eliminado correctamente',
+  'View Details' => 'Ver detalles',
+  'Edit Details' => 'Editar detalles',
+  'edit' => 'Editar',
+  'Cancel' => 'Cancelar',
+  'Confirm Deletion' => 'Confirmar eliminación',
+  'Are you sure you want to delete this eBook?' => '¿Estás seguro de que quieres eliminar este libro electrónico?',
+];

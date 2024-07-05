@@ -1,7 +1,6 @@
 <template>
   <form>
     <div :class="`offcanvas offcanvas-end offcanvas-booking`" data-bs-scroll="true" tabindex="-1" id="form-offcanvas" aria-labelledby="offcanvasBookingForm">
-     
         <div class="offcanvas-header">
           <BookingHeader :currentId="currentId" :booking_id="id" :editTitle="editTitle" :createTitle="createTitle" :status="status" :is_paid="is_paid" @statusUpdate="updateStatus"></BookingHeader>
         </div>

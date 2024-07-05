@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\NotificationsController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\EBookController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ModuleController;
@@ -153,27 +154,26 @@ Route::group(['prefix' => 'app'], function () {
 
         Route::group(['middleware' => 'permission:view_daily_bookings'], function () {
 
-        Route::get('daily-booking-report', [ReportsController::class, 'daily_booking_report'])->name('reports.daily-booking-report');
-        Route::get('daily-booking-report-index-data', [ReportsController::class, 'daily_booking_report_index_data'])->name('reports.daily-booking-report.index_data');
-    });
+            Route::get('daily-booking-report', [ReportsController::class, 'daily_booking_report'])->name('reports.daily-booking-report');
+            Route::get('daily-booking-report-index-data', [ReportsController::class, 'daily_booking_report_index_data'])->name('reports.daily-booking-report.index_data');
+        });
         Route::group(['middleware' => 'permission:view_overall_bookings'], function () {
-        Route::get('overall-booking-report', [ReportsController::class, 'overall_booking_report'])->name('reports.overall-booking-report');
-        Route::get('overall-booking-report-index-data', [ReportsController::class, 'overall_booking_report_index_data'])->name('reports.overall-booking-report.index_data');
-    });
+            Route::get('overall-booking-report', [ReportsController::class, 'overall_booking_report'])->name('reports.overall-booking-report');
+            Route::get('overall-booking-report-index-data', [ReportsController::class, 'overall_booking_report_index_data'])->name('reports.overall-booking-report.index_data');
+        });
         Route::group(['middleware' => 'permission:view_reports'], function () {
-        Route::get('payout-report', [ReportsController::class, 'payout_report'])->name('reports.payout-report');
-        Route::get('payout-report-index-data', [ReportsController::class, 'payout_report_index_data'])->name('reports.payout-report.index_data');
-    });
+            Route::get('payout-report', [ReportsController::class, 'payout_report'])->name('reports.payout-report');
+            Route::get('payout-report-index-data', [ReportsController::class, 'payout_report_index_data'])->name('reports.payout-report.index_data');
+        });
         Route::group(['middleware' => 'permission:view_reports'], function () {
-        Route::get('staff-report', [ReportsController::class, 'staff_report'])->name('reports.staff-report');
-        Route::get('staff-report-index-data', [ReportsController::class, 'staff_report_index_data'])->name('reports.staff-report.index_data');
-    });
+            Route::get('staff-report', [ReportsController::class, 'staff_report'])->name('reports.staff-report');
+            Route::get('staff-report-index-data', [ReportsController::class, 'staff_report_index_data'])->name('reports.staff-report.index_data');
+        });
         Route::group(['middleware' => 'permission:view_order_reports'], function () {
-        Route::get('order-report', [ReportsController::class, 'order_report'])->name('reports.order-report');
-        Route::get('order-report-index-data', [ReportsController::class, 'order_report_index_data'])->name('reports.order-report.index_data');
+            Route::get('order-report', [ReportsController::class, 'order_report'])->name('reports.order-report');
+            Route::get('order-report-index-data', [ReportsController::class, 'order_report_index_data'])->name('reports.order-report.index_data');
+        });
     });
-
-});
 
   
 
@@ -263,5 +263,9 @@ Route::group(['prefix' => 'app'], function () {
 
         Route::get('my-profile/{vue_capture?}', [UserController::class, 'myProfile'])->name('my-profile')->where('vue_capture', '^(?!storage).*$');
         Route::get('my-info', [UserController::class, 'authData'])->name('authData');
+
+        Route::resource('e-books', EBookController::class);
+        Route::get('e-books-index-data', [EBookController::class, 'index_data'])->name('ebooks.index_data');
+
     });
 });

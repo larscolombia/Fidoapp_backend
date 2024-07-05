@@ -6,6 +6,7 @@ if(process.env.MIX_PUBLIC_PATH !== null && process.env.MIX_PUBLIC_PATH !== undef
         output: {publicPath: process.env.MIX_PUBLIC_PATH}
       });
 }
+
 /**
  *
  * !Copy Assets
