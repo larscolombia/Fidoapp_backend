@@ -145,10 +145,83 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      */
     Route::get('/courses/{id}', [CourseController::class, 'getById']);
 
+    /**
+     * Obtener Todas las Razas
+     * Método HTTP: GET
+     * Ruta: /breeds
+     * Descripción: Recupera todas las razas disponibles.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Breeds retrieved successfully",
+     *     "data": [
+     *         {
+     *             "id": 1,
+     *             "name": "Breed Name",
+     *             "description": "Breed Description"
+     *         },
+     *         ...
+     *     ]
+     * }
+     */
     Route::get('/breeds', [BreedController::class, 'get']);
 
+    // Rutas para Mascota con Información sobre Edad
+
+    /**
+     * Obtener la Edad de una Mascota y su Dueño por ID de Mascota
+     * Método HTTP: GET
+     * Ruta: /pets/{id}/ages
+     * Descripción: Recupera la edad de una mascota específica y la edad de su dueño.
+     * Parámetros:
+     * - id: ID de la mascota que se desea obtener.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Pet and owner ages retrieved successfully",
+     *     "data": {
+     *         "pet_age": 3,
+     *         "owner_age": 35
+     *     }
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "Pet not found"
+     * }
+     */
     Route::get('/pets/{id}/ages', [PetController::class, 'getPetAndOwnerAge']);
 
+
+    // Rutas para Mascotas con Información sobre Razas y Edad
+
+    /**
+     * Obtener Información de Todas las Mascotas con Edad y Raza
+     * Método HTTP: GET
+     * Ruta: /pets/breed-age-info
+     * Descripción: Recupera todas las mascotas disponibles con su nombre, edad, género, peso, unidad de peso, altura, unidad de altura, raza y la información de la raza.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Pets retrieved successfully",
+     *     "data": [
+     *         {
+     *             "name": "Pet Name",
+     *             "age": 3,
+     *             "gender": "Male",
+     *             "weight": 10.5,
+     *             "weight_unit": "kg",
+     *             "height": 30,
+     *             "height_unit": "cm",
+     *             "breed": {
+     *                 "name": "Breed Name",
+     *                 "description": "Breed Description"
+     *             }
+     *         },
+     *         ...
+     *     ]
+     * }
+     */
     Route::get('/pets/breed-age-info', [PetController::class, 'getAllPetsWithBreedInfo']);
 
     /**
