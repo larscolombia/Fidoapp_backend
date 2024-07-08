@@ -1181,4 +1181,29 @@ class UserController extends Controller
 
     }
     
+    public function getAllUsersWithProfiles()
+    {
+        $users = User::whereNotIn('user_type', ['admin', 'user'])->with('profile')->get();
+        
+        $result = $users->map(function ($user) {
+            return [
+                'name' => $user->name,
+                'profile' => [
+                    'about_self' => $user->profile->about_self ?? null,
+                    'expert' => $user->profile->expert ?? null,
+                    'facebook_link' => $user->profile->facebook_link ?? null,
+                    'instagram_link' => $user->profile->instagram_link ?? null,
+                    'twitter_link' => $user->profile->twitter_link ?? null,
+                    'dribbble_link' => $user->profile->dribbble_link ?? null,
+                ]
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.Users with profiles retrieved successfully'),
+            'data' => $result
+        ]);
+    }
+
 }

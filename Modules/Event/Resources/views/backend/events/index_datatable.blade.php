@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-{{ __($module_action) }} {{ __($module_title) }}
+   {{ __($module_title) }}
 @endsection
 
 @push('after-styles')
@@ -37,7 +37,7 @@
             aria-describedby="addon-wrapping">
           
         </div>
-        <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('Create') }} {{ __($module_title) }}" class=" d-flex align-items-center gap-1">{{ __('messages.new') }}</x-buttons.offcanvas>
+        <a class="btn btn-primary" href="{{ route('backend.events.create') }}">{{ __('messages.create') }} {{ __($module_title) }}</a>
         
       </x-slot>
     </x-backend.section-header>

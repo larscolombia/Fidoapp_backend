@@ -232,4 +232,33 @@ class EBookController extends Controller
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been deleted successfully'));
 
     }
+
+    public function get()
+    {
+        $ebooks = EBook::all();
+        
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.ebooks_retrieved_successfully'),
+            'data' => $ebooks
+        ]);
+    }
+
+    public function getById($id)
+    {
+        $ebook = EBook::find($id);
+
+        if ($ebook) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.ebook_retrieved_successfully'),
+                'data' => $ebook
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => __('messages.ebook_not_found')
+            ], 404);
+        }
+    }
 }

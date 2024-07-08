@@ -2,6 +2,16 @@
 
 return [
     'title' => 'Eventos',
+    'Create' => 'Crear',
+    'description' => 'Descripción',
+    'Cancelar' => 'Cancelar',
+    'Nombre del Organizador' => 'Nombre del Organizador',
+    'Hora' => 'Hora',
+    'Fecha' => 'Fecha',
+    'titulo' => 'Título', 
+    'Tipo' => 'Tipo',
+    'Atras' => 'Atras',
+    'Crear' => 'Crear',
     'lbl_name' => 'Nombre',
     'lbl_title' => 'Título',
     'lbl_status' => 'Estado',

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Presenters\UserPresenter;
 use App\Models\Traits\HasHashedMediaTrait;
 use App\Trait\CustomFieldsTrait;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -261,5 +262,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function hasPermission($permission)
     {
         return $this->roles->flatMap->permissions->pluck('name')->contains($permission);
+    }
+
+    // Método para calcular la edad del usuario
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->date_of_birth)->age;
     }
 }

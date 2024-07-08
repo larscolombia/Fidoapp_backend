@@ -196,6 +196,14 @@ return [
     'service_inactive' => 'Este servicio está inactivo. Por favor, contacta a tu administración.',
     'create_pet_note' => 'Notas de mascotas guardadas exitosamente',
     'delete_notes' => 'Notas eliminadas exitosamente',
-    'verify_account' => '¿Deseas verificar esta cuenta?'
+    'verify_account' => '¿Deseas verificar esta cuenta?',
 
+    'ebooks_retrieved_successfully' => 'E-Books recuperados con éxito',
+    'ebook_retrieved_successfully' => 'E-Book recuperado con éxito',
+    'ebook_not_found' => 'E-Book no encontrado',
+    'courses_retrieved_successfully' => 'Cursos recuperados con éxito',
+    'course_retrieved_successfully' => 'Curso recuperado con éxito',
+    'course_not_found' => 'Curso no encontrado',
+    'breeds_retrieved_successfully' => 'Razas recuperadas con éxito',
+    'Users with profiles retrieved successfully' => 'Usuarios con perfiles recuperados con éxito',
 ];

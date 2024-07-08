@@ -186,4 +186,55 @@ class PetController extends Controller
         ], 200);
         
     }
+
+
+    public function getPetAndOwnerAge($id)
+    {
+        $pet = Pet::with('user')->find($id);
+
+        if (!$pet) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pet not found'
+            ], 404);
+        }
+
+        $owner = $pet->user;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pet and owner ages retrieved successfully',
+            'data' => [
+                'pet_age' => $pet->age,
+                'owner_age' => $owner->age,
+            ]
+        ]);
+    }
+
+    public function getAllPetsWithBreedInfo()
+    {
+        $pets = Pet::where('pettype_id', 2)->with('breed')->get();
+        
+        $result = $pets->map(function ($pet) {
+            return [
+                'name' => $pet->name,
+                'age' => $pet->age,
+                'breed' => [
+                    'name' => $pet->breed->name,
+                    'description' => $pet->breed->description,
+                    'gender' => $pet->gender,
+                    'weight' => $pet->weight,
+                    'weight_unit' => $pet->weight_unit,
+                    'height' => $pet->height,
+                    'height_unit' => $pet->height_unit,
+                ],
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pets retrieved successfully',
+            'data' => $result
+        ]);
+    }
 }

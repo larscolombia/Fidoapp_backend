@@ -259,4 +259,14 @@ class BreedController extends Controller
 
         return response()->json(['status' => true, 'message' => __('branch.status_update')]);
     }
+
+    public function get () {
+        $breeds = Breed::where('pettype_id', 2)->get();
+        
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.breeds_retrieved_successfully'),
+            'data' => $breeds
+        ]);
+    }
 }

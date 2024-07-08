@@ -168,4 +168,33 @@ class CourseController extends Controller
         }
         return false;
     }
+
+    public function get()
+    {
+        $courses = Course::all();
+        
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.courses_retrieved_successfully'),
+            'data' => $courses
+        ]);
+    }
+
+    public function getById($id)
+    {
+        $course = Course::find($id);
+
+        if ($course) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.course_retrieved_successfully'),
+                'data' => $course
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => __('messages.course_not_found')
+            ], 404);
+        }
+    }
 }
