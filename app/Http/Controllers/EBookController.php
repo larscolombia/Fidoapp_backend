@@ -165,7 +165,8 @@ class EBookController extends Controller
      */
     public function show($e_book)
     {
-        return "aa";
+        $ebook = EBook::findOrFail($e_book);
+        return view('backend.ebooks.show', compact('ebook'));
     }
 
     /**

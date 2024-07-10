@@ -16,7 +16,7 @@
             </x-slot>
             <x-slot name="toolbar">
                 @can('add_'.$module_name)
-                <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ __($module_title) }}" />
+                    <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ __($module_title) }}" />
                 @endcan
 
                 @can('restore_'.$module_name)

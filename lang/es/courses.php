@@ -24,6 +24,7 @@ return [
     'Cancel' => 'Cancelar',
     'Update' => 'Actualizar',
     'update' => 'Actualizar',
+    'back' => 'Atrás',
     'Save Changes' => 'Guardar cambios',
     'Confirm Deletion' => 'Confirmar eliminación',
     'Are you sure you want to delete this course?' => '¿Estás seguro de que quieres eliminar este curso?',

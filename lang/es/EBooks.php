@@ -23,5 +23,7 @@ return [
   'edit' => 'Editar',
   'Cancel' => 'Cancelar',
   'Confirm Deletion' => 'Confirmar eliminación',
+  "No_cover_image" => "Sin imagen de portada",
+  "back" => "Atrás",
   'Are you sure you want to delete this eBook?' => '¿Estás seguro de que quieres eliminar este libro electrónico?',
 ];

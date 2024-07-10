@@ -4,12 +4,14 @@ namespace Modules\Event\Http\Controllers\Backend;
 
 use App\Authorizable;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Modules\Event\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 use Illuminate\Database\Query\Expression;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class EventsController extends Controller
 {
@@ -173,8 +175,9 @@ class EventsController extends Controller
     public function create()
     {
         $module_action = 'Create';
-
-        return view('event::backend.events.create', compact('module_action'));
+        $users = User::where('user_type', '!=', 'admin')->get();
+        
+        return view('event::backend.events.create', compact('module_action', 'users'));
     }
 
     /**
@@ -185,13 +188,33 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->except('event_image');
-        $query = Event::create($data);
+        // Validar los datos del formulario
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'tipo' => 'required|string|in:salud,entrenamiento',
+            'fecha' => 'required|date',
+            'hora' => 'required|date_format:H:i',
+            'user_id' => 'required|integer|exists:users,id',
+            'descripcion' => 'nullable|string',
+            'ubication' => 'nullable|string',
+        ]);
 
-        storeMediaFile($query, $request->file('event_image'), 'event_image');
-        $message = __('messages.create_form', ['form' => __($this->module_title)]);
+        // Combinar fecha y hora en un solo campo datetime
+        $datetime = $request->fecha . ' ' . $request->hora;
 
-        return response()->json(['message' => $message, 'status' => true], 200);
+         // Crear el evento en la base de datos
+         $event = Event::create([
+            'name' => $request->titulo,
+            'tipo' => $request->tipo,
+            'date' => $datetime, // campo combinado
+            'user_id' => $request->user_id, // ID del organizador
+            'description' => $request->descripcion,
+            'location' => $request->ubication,
+            'created_by' => auth()->id(),
+            'status' => 1,
+        ]);
+
+        return redirect()->route('backend.events.index')->with('success', 'Evento creado correctamente');
     }
 
     /**

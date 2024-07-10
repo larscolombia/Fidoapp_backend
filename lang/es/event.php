@@ -12,6 +12,8 @@ return [
     'Tipo' => 'Tipo',
     'Atras' => 'Atras',
     'Crear' => 'Crear',
+    'Descripción' => 'Descripción', 
+    'ubication' => 'Ubicación',
     'lbl_name' => 'Nombre',
     'lbl_title' => 'Título',
     'lbl_status' => 'Estado',
