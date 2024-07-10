@@ -52,11 +52,14 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+                <div id="calendar-container" class="mb-3">
+                    <div id="calendar"></div>
+                </div>
                 <div class="mb-3">
                     <label for="user_id" class="form-label">{{ __('event.Nombre del Organizador') }}</label>
                     <select class="form-control @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->first_name }} . {{ $user->last_name }}</option>
+                            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
                         @endforeach
                     </select>
                     @error('user_id')
@@ -72,7 +75,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="ubication" class="form-label">{{ __('event.ubication') }} ({{ __('Opcional') }})</label>
-                    <textarea class="form-control @error('ubication') is-invalid @enderror" id="ubication" name="ubication">{{ old('ubication') }}</textarea>
+                    <textarea class="form-control @error('ubication') is-invalid @enderror" id="ubication" name="ubication" placeholder="https://www.google.com/maps/...">{{ old('ubication') }}</textarea>
                     @error('ubication')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -82,23 +85,59 @@
             </form>
         </div>
     </div>
-
-    <div class="card mt-4">
-        <div class="card-body">
-            <iframe src="https://calendar.google.com/calendar/embed?src=your_calendar_id&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-        </div>
-    </div>
 @endsection
 
 @push('after-styles')
 <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
 @endpush
 
 @push('after-scripts')
 <script src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Aquí puedes añadir cualquier JavaScript adicional si es necesario
+        var calendarEl = document.getElementById('calendar'); // Asegúrate de tener un elemento con id 'calendar'
+        var events = @json($events); // Asegúrate de que esto esté bien formateado
+        console.log(events);
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: events,
+            dateClick: function(info) {
+                document.getElementById('fecha').value = info.dateStr;
+            },
+            eventDidMount: function(info) {
+                info.el.querySelector('.fc-event-title').innerHTML = info.event.title;
+            }
+        });
+        calendar.render();
+
+        // Actualiza el calendario cuando se cambian los inputs de fecha y hora
+        document.getElementById('fecha').addEventListener('change', function() {
+            var fecha = this.value;
+            var hora = document.getElementById('hora').value;
+            if (fecha && hora) {
+                var event = {
+                    title: document.getElementById('titulo').value,
+                    start: fecha + 'T' + hora + ':00',
+                    allDay: false
+                };
+                calendar.addEvent(event);
+            }
+        });
+
+        document.getElementById('hora').addEventListener('change', function() {
+            var fecha = document.getElementById('fecha').value;
+            var hora = this.value;
+            if (fecha && hora) {
+                var event = {
+                    title: document.getElementById('titulo').value,
+                    start: fecha + 'T' + hora + ':00',
+                    allDay: false
+                };
+                calendar.addEvent(event);
+            }
+        });
     });
 </script>
 @endpush

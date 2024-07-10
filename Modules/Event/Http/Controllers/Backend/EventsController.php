@@ -174,10 +174,16 @@ class EventsController extends Controller
      */
     public function create()
     {
-        $module_action = 'Create';
-        $users = User::where('user_type', '!=', 'admin')->get();
-        
-        return view('event::backend.events.create', compact('module_action', 'users'));
+        $users = User::all();
+        $events = Event::all()->map(function ($event) {
+            return [
+                'title' => $event->name,
+                'start' => $event->date,
+                'description' => $event->description,
+            ];
+        })->toArray(); // Asegúrate de convertir a un array
+
+        return view('event::backend.events.create', compact('users', 'events'));
     }
 
     /**
@@ -188,33 +194,31 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos del formulario
         $request->validate([
             'titulo' => 'required|string|max:255',
-            'tipo' => 'required|string|in:salud,entrenamiento',
+            'tipo' => 'required|string|max:255',
             'fecha' => 'required|date',
-            'hora' => 'required|date_format:H:i',
-            'user_id' => 'required|integer|exists:users,id',
+            'hora' => 'required',
+            'user_id' => 'required|exists:users,id',
             'descripcion' => 'nullable|string',
-            'ubication' => 'nullable|string',
+            'ubication' => [
+                'nullable', 
+                'string', 
+            ]
         ]);
 
-        // Combinar fecha y hora en un solo campo datetime
-        $datetime = $request->fecha . ' ' . $request->hora;
+        $fechaHora = $request->input('fecha') . ' ' . $request->input('hora');
 
-         // Crear el evento en la base de datos
-         $event = Event::create([
-            'name' => $request->titulo,
-            'tipo' => $request->tipo,
-            'date' => $datetime, // campo combinado
-            'user_id' => $request->user_id, // ID del organizador
-            'description' => $request->descripcion,
-            'location' => $request->ubication,
-            'created_by' => auth()->id(),
-            'status' => 1,
+        Event::create([
+            'name' => $request->input('titulo'),
+            'tipo' => $request->input('tipo'),
+            'fecha' => $fechaHora,
+            'user_id' => $request->input('user_id'),
+            'descripcion' => $request->input('descripcion'),
+            'location' => $request->input('ubication'),
         ]);
 
-        return redirect()->route('backend.events.index')->with('success', 'Evento creado correctamente');
+        return redirect()->route('backend.events.index')->with('success', __('event.Event created successfully.'));
     }
 
     /**
@@ -225,11 +229,11 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        $module_action = 'Show';
-
-        $data = Event::findOrFail($id);
-
-        return view('event::backend.events.show', compact('module_action', "$data"));
+        $event = Event::findOrFail($id);
+        // Asegúrate de que $event->date sea una instancia de Carbon.
+        $event->fecha = $event->date ? Carbon::parse($event->date)->format('Y-m-d') : null;
+        $event->hora = $event->date ? Carbon::parse($event->date)->format('H:i') : null;
+        return view('event::backend.events.show', compact('event'));
     }
 
     /**
@@ -240,13 +244,17 @@ class EventsController extends Controller
      */
     public function edit($id)
     {
-        $data = Event::findOrFail($id);
+        $event = Event::findOrFail($id);
+        $users = User::all();
+        $events = Event::all()->map(function ($event) {
+            return [
+                'title' => $event->name,
+                'start' => $event->date,
+                'description' => $event->description,
+            ];
+        })->toArray(); // Asegúrate de convertir a un array
 
-        $date = new \DateTime($data->date);
-        $data['date'] = $date->format('Y-m-d');
-
-        $data['event_image'] = $data->event_image;
-        return response()->json(['data' => $data, 'status' => true]);
+        return view('event::backend.events.edit', compact('event', 'users', 'events'));
     }
 
     /**
@@ -258,15 +266,29 @@ class EventsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $query = Event::findOrFail($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'tipo' => 'required|string|max:255',
+            'fecha' => 'required|date',
+            'hora' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'description' => 'nullable|string',
+            'ubication' => 'nullable|string',
+        ]);
 
-        $data = $request->except('event_image');
-        $query->update($data);
+        $event = Event::findOrFail($id);
+        $fechaHora = $request->input('fecha') . ' ' . $request->input('hora');
 
-        storeMediaFile($query, $request->file('event_image'), 'event_image');
-        $message = __('messages.update_form', ['form' => __($this->module_title)]);
+        $event->update([
+            'name' => $request->input('name'),
+            'tipo' => $request->input('tipo'),
+            'fecha' => $fechaHora,
+            'user_id' => $request->input('user_id'),
+            'descripcion' => $request->input('descripcion'),
+            'location' => $request->input('location'),
+        ]);
 
-        return response()->json(['message' => $message, 'status' => true], 200);
+        return redirect()->route('backend.events.index')->with('success', __('event.Event updated successfully.'));
     }
 
     /**

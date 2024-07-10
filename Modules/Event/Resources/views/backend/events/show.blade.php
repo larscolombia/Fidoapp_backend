@@ -1,49 +1,60 @@
 @extends('backend.layouts.app')
 
-@section('title') {{ __($module_action) }} {{ __($module_title) }} @endsection
-
-
+@section('title') {{ __($module_title) }} @endsection
 
 @section('content')
-<div class="card">
-    <div class="card-body">
+    <div class="card">
+        <div class="card-body">
+            <x-backend.section-header>
+                <x-slot name="toolbar">
+                    <a class="btn btn-primary" href="{{ route('backend.events.index') }}">{{ __('event.Atras') }}</a>
+                </x-slot>
+                {{ __('event.Detalles del Evento') }}
+            </x-backend.section-header>
 
-        <x-backend.section-header>
-            <i class="{{ $module_icon }}"></i> {{ $module_title }} <small class="text-muted">{{ __($module_action) }}</small>
+            <div class="mb-3">
+                <label for="name" class="form-label">{{ __('event.name') }}</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ $event->name }}" readonly>
+            </div>
 
-            <x-slot name="subtitle">
-                @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
-            </x-slot>
-            <x-slot name="toolbar">
-                <x-backend.buttons.return-back />
-                <a href="{{ route("backend.$module_name.index") }}" class="btn btn-secondary" data-bs-toggle="tooltip" title="{{ __($module_name) }} List"><i class="fas fa-list"></i> List</a>
-                @can('edit_'.$module_name)
-                <x-buttons.edit route='{!!route("backend.$module_name.edit", $$module_name_singular)!!}' title="{{__('Edit')}} " class="ms-1" />
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
+            <div class="mb-3">
+                <label for="tipo" class="form-label">{{ __('event.Tipo') }}</label>
+                <input type="text" class="form-control" id="tipo" name="tipo" value="{{ $event->tipo }}" readonly>
+            </div>
 
-        <hr>
+            <div class="mb-3">
+                <label for="fecha" class="form-label">{{ __('event.Fecha') }}</label>
+                <input type="text" class="form-control" id="fecha" name="fecha" value="{{ $event->fecha }}" readonly>
+            </div>
 
-        <div class="row mt-4">
-            <div class="col-12">
+            <div class="mb-3">
+                <label for="hora" class="form-label">{{ __('event.Hora') }}</label>
+                <input type="text" class="form-control" id="hora" name="hora" value="{{ $event->fecha }}" readonly>
+            </div>
 
-                @include('backend.includes.show')
+            <div class="mb-3">
+                <label for="user_id" class="form-label">{{ __('event.Nombre del Organizador') }}</label>
+                <input type="text" class="form-control" id="user_id" name="user_id" value="{{ $event->user->first_name }} {{ $event->user->last_name }}" readonly>
+            </div>
 
+            <div class="mb-3">
+                <label for="description" class="form-label">{{ __('event.Descripción') }} ({{ __('Opcional') }})</label>
+                <textarea class="form-control" id="description" name="description" readonly>{{ $event->description }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">{{ __('event.location') }} ({{ __('Opcional') }})</label>
+                <textarea class="form-control" id="location" name="location" readonly>{{ $event->location }}</textarea>
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ route('backend.events.edit', $event->id) }}" class="btn btn-primary">{{ __('event.Editar') }}</a>
+                <a href="{{ route('backend.events.index') }}" class="btn btn-secondary">{{ __('event.Atras') }}</a>
             </div>
         </div>
     </div>
-
-    <div class="card-footer">
-        <div class="row">
-            <div class="col">
-                <small class="float-end text-muted">
-                    Updated: {{$$module_name_singular->updated_at->diffForHumans()}},
-                    Created at: {{$$module_name_singular->created_at->isoFormat('LLLL')}}
-                </small>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endsection
+
+@push('after-styles')
+<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+@endpush
