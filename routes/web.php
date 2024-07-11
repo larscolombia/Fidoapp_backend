@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\NotificationsController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\ComandoController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EBookController;
 use App\Http\Controllers\LanguageController;
@@ -269,6 +270,12 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('e-books-index-data', [EBookController::class, 'index_data'])->name('ebooks.index_data');
         Route::resource('courses', CourseController::class);
         Route::get('courses-index-data', [CourseController::class, 'index_data'])->name('courses.index_data');
+
+
+        Route::resource('comandos', ComandoController::class);
+        Route::get('comandos-index-data', [ComandoController::class, 'index_data'])->name('comandos.index_data');
+        Route::post('/categories/comandos', [ComandoController::class, 'storeCategory'])->name('categories_comando.store');
+        Route::post('backend/comandos/toggle_favorite', [ComandoController::class, 'toggleFavorite'])->name('comandos.toggle_favorite');
 
     });
 });

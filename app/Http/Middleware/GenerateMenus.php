@@ -610,6 +610,15 @@ class GenerateMenus
             ]);
 
             $this->mainRoute($menu, [
+                'icon' => 'icon-Setting',
+                'title' => __('comando_entrenamiento.title'),
+                'route' => 'backend.comandos.index',
+                'active' => ['app/comando'],
+                'permission' => 'view_comandos',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
                 'icon' => ' icon-Daily-Bookings',
                 'title' => __('menu.lbl_blog'),
                 'route' => 'backend.blogs.index',

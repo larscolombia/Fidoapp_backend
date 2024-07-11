@@ -399,7 +399,12 @@ class Permission extends \Spatie\Permission\Models\Permission
             'view_courses' => 'View Courses',
             'add_courses' => 'Add Courses',
             'edit_courses' => 'Edit Courses',
-            'delete_courses' => 'Delete Courses', 
+            'delete_courses' => 'Delete Courses',
+            
+            'view_comandos' => 'View Comandos',
+            'add_comandos' => 'Add Comandos',
+            'edit_comandos' => 'Edit Comandos',
+            'delete_comandos' => 'Delete Comandos', 
         ];
     }
 
