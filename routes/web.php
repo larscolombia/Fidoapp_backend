@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ComandoController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EBookController;
+use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ModuleController;
@@ -276,6 +277,9 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('comandos-index-data', [ComandoController::class, 'index_data'])->name('comandos.index_data');
         Route::post('/categories/comandos', [ComandoController::class, 'storeCategory'])->name('categories_comando.store');
         Route::post('backend/comandos/toggle_favorite', [ComandoController::class, 'toggleFavorite'])->name('comandos.toggle_favorite');
+
+        Route::resource('herramientas_entrenamiento', HerramientaController::class);
+        Route::get('herramientas-entrenamiento-index-data', [HerramientaController::class, 'index_data'])->name('herramientas_entrenamiento.index_data');
 
     });
 });

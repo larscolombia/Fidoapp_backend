@@ -619,6 +619,15 @@ class GenerateMenus
             ]);
 
             $this->mainRoute($menu, [
+                'icon' => 'icon-Setting',
+                'title' => __('herramientas_entrenamiento.title'),
+                'route' => 'backend.herramientas_entrenamiento.index',
+                'active' => ['app/herramientas_entrenamiento'],
+                'permission' => 'view_herramientas_entrenamiento',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
                 'icon' => ' icon-Daily-Bookings',
                 'title' => __('menu.lbl_blog'),
                 'route' => 'backend.blogs.index',

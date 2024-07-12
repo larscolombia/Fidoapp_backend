@@ -405,6 +405,11 @@ class Permission extends \Spatie\Permission\Models\Permission
             'add_comandos' => 'Add Comandos',
             'edit_comandos' => 'Edit Comandos',
             'delete_comandos' => 'Delete Comandos', 
+
+            'view_herramientas_entrenamiento' => 'View Herramientas de Entrenamiento',
+            'add_herramientas_entrenamiento' => 'Add Herramientas de Entrenamiento',
+            'edit_herramientas_entrenamiento' => 'Edit Herramientas de Entrenamiento',
+            'delete_herramientas_entrenamiento' => 'Delete Herramientas de Entrenamiento',
         ];
     }
 
