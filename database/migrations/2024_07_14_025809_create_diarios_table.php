@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('herramientas_entrenamiento', function (Blueprint $table) {
+        Schema::create('diarios', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->enum('type', ['clicker', 'silbato', 'diarios']);
-            $table->enum('status', ['active', 'inactive']);
+            $table->timestamp('date');
+            $table->string('actividad');
+            $table->text('notas')->nullable();
+            $table->unsignedBigInteger('pet_id');
+            $table->foreign('pet_id')->references('id')->on('pets')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('herramientas_entrenamiento');
+        Schema::dropIfExists('diarios');
     }
 };

@@ -261,7 +261,7 @@ class BreedController extends Controller
     }
 
     public function get () {
-        $breeds = Breed::where('pettype_id', 2)->get();
+        $breeds = Breed::where('slug', 'dog')->get();
         
         return response()->json([
             'success' => true,

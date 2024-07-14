@@ -213,7 +213,7 @@ class PetController extends Controller
 
     public function getAllPetsWithBreedInfo()
     {
-        $pets = Pet::where('pettype_id', 2)->with('breed')->get();
+        $pets = Pet::where('slug', 'dog')->with('breed')->get();
         
         $result = $pets->map(function ($pet) {
             return [

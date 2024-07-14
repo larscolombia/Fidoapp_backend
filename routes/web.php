@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ComandoController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DiarioController;
 use App\Http\Controllers\EBookController;
 use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\LanguageController;
@@ -281,5 +282,18 @@ Route::group(['prefix' => 'app'], function () {
         Route::resource('herramientas_entrenamiento', HerramientaController::class);
         Route::get('herramientas-entrenamiento-index-data', [HerramientaController::class, 'index_data'])->name('herramientas_entrenamiento.index_data');
 
+        Route::get('/mascotas/diarios', [DiarioController::class, 'mascotas'])->name('mascotas.diarios');
+        Route::get('diarios/mascotas_data', [DiarioController::class, 'mascotas_data'])->name('diarios.mascotas_data');
+        Route::prefix('/mascotas/diarios/{pet}')->name('mascotas.diarios.')->group(function () {
+            Route::get('/', [DiarioController::class, 'index'])->name('index');
+            Route::get('/create', [DiarioController::class, 'create'])->name('create');
+            Route::post('/store', [DiarioController::class, 'store'])->name('store');
+            Route::get('/show/{diario}', [DiarioController::class, 'show'])->name('show');
+            Route::get('/edit/{diario}', [DiarioController::class, 'edit'])->name('edit');
+            Route::put('/update/{diario}', [DiarioController::class, 'update'])->name('update');
+            Route::delete('/destroy/{diario}', [DiarioController::class, 'destroy'])->name('destroy');
+
+            Route::get('/diarios_data', [DiarioController::class, 'diarios_data'])->name('diarios_data');
+        });
     });
 });

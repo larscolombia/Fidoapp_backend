@@ -628,6 +628,15 @@ class GenerateMenus
             ]);
 
             $this->mainRoute($menu, [
+                'icon' => 'icon-Daily-Bookings',
+                'title' => __('diarios.title'),
+                'route' => 'backend.mascotas.diarios',
+                'active' => ['app/diarios'],
+                'permission' => 'view_diarios',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
                 'icon' => ' icon-Daily-Bookings',
                 'title' => __('menu.lbl_blog'),
                 'route' => 'backend.blogs.index',

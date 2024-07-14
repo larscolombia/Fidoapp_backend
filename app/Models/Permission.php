@@ -410,6 +410,11 @@ class Permission extends \Spatie\Permission\Models\Permission
             'add_herramientas_entrenamiento' => 'Add Herramientas de Entrenamiento',
             'edit_herramientas_entrenamiento' => 'Edit Herramientas de Entrenamiento',
             'delete_herramientas_entrenamiento' => 'Delete Herramientas de Entrenamiento',
+
+            'view_diarios' => 'View Diarios',
+            'add_diarios' => 'Add Diarios',
+            'edit_diarios' => 'Edit Diarios',
+            'delete_diarios' => 'Delete Diarios',
         ];
     }
 

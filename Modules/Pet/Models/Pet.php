@@ -3,6 +3,7 @@
 namespace Modules\Pet\Models;
 
 use App\Models\BaseModel;
+use App\Models\Diario;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Traits\HasSlug;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -52,5 +53,10 @@ class Pet extends BaseModel
     public function petnote()
     {
         return $this->hasMany(PetNote::class, 'pet_id')->with('createdBy');
+    }
+
+    public function diario()
+    {
+        return $this->hasMany(Diario::class, 'pet_id');
     }
 }
