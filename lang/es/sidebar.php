@@ -37,6 +37,8 @@ return [
     'variations' => 'Variaciones del Producto',
     'e-books' => 'Libros Electrónicos',
     'courses' => 'Cursos',
+    'education_content' => 'Contenido Educativo',
+    'course_platform' => 'Cursos de la Plataforma',
     'supply' => 'Suministro',
     'logistics' => 'Logística',
     'logistic_zone' => 'Zonas de Envío',

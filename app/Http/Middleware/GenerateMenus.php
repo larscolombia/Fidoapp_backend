@@ -342,8 +342,25 @@ class GenerateMenus
             // }
 
             $permissionsToCheck = [
+                'view_course_platform'
+            ];
+
+            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->hasPermission($permission))) {
+                $this->staticMenu($menu, ['title' => __('sidebar.education_content'), 'order' => 0]);
+            }
+
+            $this->mainRoute($menu, [
+                'icon' => 'icon-Product',
+                'title' => __('sidebar.course_platform'),
+                'route' => ['backend.course_platform.index'],
+                'active' => ['app/cursos-plataforma'],
+                'permission' => 'view_course_platform',
+                'order' => 0,
+            ]);
+
+            $permissionsToCheck = [
                 'view_product', 'view_brand', 'view_product_category', 'view_product_subcategory', 'view_unit',
-                'view_tag', 'view_product_variation', 'view_supply', 'view_logistics', 'view_shipping_zones'
+                'view_tag', 'view_product_variation', 'view_supply', 'view_logistics', 'view_shipping_zones', 'view_e-books', 'view_courses'
             ];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->hasPermission($permission))) {
@@ -593,7 +610,7 @@ class GenerateMenus
 
             // OTHER Static
 
-            $permissionsToCheck = ['view_events', 'view_blogs'];
+            $permissionsToCheck = ['view_events', 'view_blogs', 'view_comandos', 'view_herramientas_entrenamiento', 'view_diarios'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'OTROS', 'order' => 0]);

@@ -7,10 +7,14 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\NotificationsController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\ClaseController;
 use App\Http\Controllers\ComandoController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CoursePlatformConroller;
+use App\Http\Controllers\CursoPlataformaController;
 use App\Http\Controllers\DiarioController;
 use App\Http\Controllers\EBookController;
+use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PermissionController;
@@ -272,6 +276,9 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('e-books-index-data', [EBookController::class, 'index_data'])->name('ebooks.index_data');
         Route::resource('courses', CourseController::class);
         Route::get('courses-index-data', [CourseController::class, 'index_data'])->name('courses.index_data');
+        Route::get('/curso-plataforma/data', [CursoPlataformaController::class, 'index_data'])->name('course_platform.index_data');
+        Route::get('curso-plataforma/{course}/clases/data', [ClaseController::class, 'index_data'])->name('course_platform.clases.index_data');
+        Route::get('clases/{clase}ejercicios/data', [EjercicioController::class, 'index_data'])->name('clases.ejercicios.index_data');
 
 
         Route::resource('comandos', ComandoController::class);
@@ -294,6 +301,27 @@ Route::group(['prefix' => 'app'], function () {
             Route::delete('/destroy/{diario}', [DiarioController::class, 'destroy'])->name('destroy');
 
             Route::get('/diarios_data', [DiarioController::class, 'diarios_data'])->name('diarios_data');
+        });
+
+        Route::resource('/curso-plataforma', CursoPlataformaController::class)
+            ->names([
+                'index' => 'course_platform.index',
+                'create' => 'course_platform.create',
+                'store' => 'course_platform.store',
+                'show' => 'course_platform.show',
+                'edit' => 'course_platform.edit',
+                'update' => 'course_platform.update',
+                'destroy' => 'course_platform.destroy',
+            ]);
+
+        // Clase routes
+        Route::prefix('curso-plataforma/{course}')->name('course_platform.')->group(function() {
+            Route::resource('clases', ClaseController::class);
+        });
+
+        // Ejercicio routes
+        Route::prefix('clases/{clase}')->name('clases.')->group(function() {
+            Route::resource('ejercicios', EjercicioController::class);
         });
     });
 });

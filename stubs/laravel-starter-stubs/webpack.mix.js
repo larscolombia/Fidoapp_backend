@@ -1,4 +1,4 @@
-const dotenvExpand = require("dotenv-expand");
+ebconst dotenvExpand = require("dotenv-expand");
 dotenvExpand(
     require("dotenv").config({ path: "../../.env" /*, debug: true*/ })
 );

@@ -18,25 +18,14 @@
                         <input type="text" name="table_search" class="form-control dt-search" placeholder="Search...">
                     </div>
                 </x-slot>
-                @hasPermission('add_e-books')
-                    <a class="btn btn-primary" href="{{ route('backend.e-books.create') }}">{{ __('EBooks.create') }}</a>
+                @hasPermission('add_course_platform')
+                    <a class="btn btn-primary" href="{{ route('backend.course_platform.create') }}">{{ __('course_platform.create') }}</a>
                 @endhasPermission
-                {{-- @hasPermission('add_e-books')
-                    <x-buttons.offcanvas :href="route('backend.e-books.create')" title="{{ __('messages.create') }} {{ __('EBooks.title') }}">
-                    {{ __('messages.create') }} {{ __('EBooks.title') }}</x-buttons.offcanvas>
-                @endhasPermission --}}
                 </x-backend.section-header>
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
         </div>
     </div>
-
-    {{--<x-backend.advance-filter>
-        <x-slot name="title">
-            <h4>{{ __('service.lbl_advanced_filter') }}</h4>
-        </x-slot>
-        <button type="reset" class="btn btn-danger" id="reset-filter">{{__('product.reset')}}</button>
-    </x-backend.advance-filter>--}}
 @endsection
 
 @push ('after-styles')
@@ -53,34 +42,33 @@
 <script type="text/javascript" defer>
         const columns = [
             {
-                data: 'title',
-                name: 'title',
-                title: "{{ __('EBooks.title') }}",
+                data: 'name',
+                name: 'name',
+                title: "{{ __('course_platform.name') }}",
                 orderable: true,
                 searchable: true,
             },
             {
                 data: 'url',
                 name: 'url',
-                title: "{{ __('EBooks.enlace') }}",
+                title: "{{ __('course_platform.url') }}",
+                orderable: false,
+                searchable: true,
+            },
+            {
+                data: 'price',
+                name: 'price',
+                title: "{{ __('course_platform.price') }}",
                 orderable: false,
                 searchable: true,
             },
             {
                 data: 'description',
                 name: 'description',
-                title: "{{ __('EBooks.description') }}",
+                title: "{{ __('course_platform.description') }}",
                 orderable: false,
                 searchable: true,
             },    
-            {
-              data: 'updated_at',
-              name: 'updated_at',
-              title: "{{ __('product.lbl_update_at') }}",
-              orderable: true,
-              visible: false,
-           },
-
         ]
 
         const actionColumn = [{
@@ -99,7 +87,7 @@
 
         document.addEventListener('DOMContentLoaded', (event) => {
             initDatatable({
-                url: '{{ route("backend.ebooks.index_data") }}',
+                url: '{{ route("backend.course_platform.index_data") }}',
                 finalColumns,
                 orderColumn: [[ 1, "asc" ]],
                 advanceFilter: () => {

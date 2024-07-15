@@ -415,6 +415,11 @@ class Permission extends \Spatie\Permission\Models\Permission
             'add_diarios' => 'Add Diarios',
             'edit_diarios' => 'Edit Diarios',
             'delete_diarios' => 'Delete Diarios',
+
+            'view_course_platform' => 'View Curso de Plataforma',
+            'add_course_platform' => 'Add Curso de Plataforma',
+            'edit_course_platform' => 'Edit Curso de Plataforma',
+            'delete_course_platform' => 'Delete Curso de Plataforma',
         ];
     }
 

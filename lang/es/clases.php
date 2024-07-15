@@ -1,0 +1,24 @@
+<?php
+
+return [
+    'title' => 'Clases',
+    'create' => 'Crear Clase',
+    'edit' => 'Editar Clase',
+    'delete' => 'Eliminar Clase',
+    'back' => 'Atrás',
+    'name' => 'Nombre',
+    'description' => 'Descripción',
+    'url' => 'URL',
+    'price' => 'Precio',
+    'created_successfully' => 'Clase creada con éxito',
+    'updated_successfully' => 'Clase actualizada con éxito',
+    'deleted_successfully' => 'Clase eliminada con éxito',
+    'Delete' => 'Eliminar',
+    'View Details' => 'Ver Detalles',
+    'Edit Details' => 'Editar Detalles',
+    'course' => 'Curso',
+    'video_preview' => 'Vista Previa del Video',
+    'cancel' => 'Cancelar',
+    'show_exercises' => 'Mostrar Ejercicios',
+    'El precio de la clase no puede ser mayor que el del curso al que pertenece.' => 'El precio de la clase no puede ser mayor que el del curso al que pertenece.',
+];
