@@ -14,6 +14,6 @@ class Ejercicio extends Model
 
     public function clase()
     {
-        return $this->belongsTo(Clase::class);
+        return $this->belongsTo(Clase::class, 'clase_id', 'id');
     }
 }

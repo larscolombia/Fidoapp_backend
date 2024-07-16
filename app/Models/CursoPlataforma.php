@@ -14,6 +14,6 @@ class CursoPlataforma extends Model
 
     public function clases()
     {
-        return $this->hasMany(Clase::class);
+        return $this->hasMany(Clase::class, 'course_id', 'id');
     }
 }

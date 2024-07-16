@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\ClaseController;
+use App\Http\Controllers\Api\CursoPlataformaController;
+use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Backend\API\DashboardController;
@@ -250,6 +253,381 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      * }
      */
     Route::get('/users/profiles', [UserController::class, 'getAllUsersWithProfiles']);
+
+    /**
+     * Rutas para la gestión de cursos de la plataforma
+     */
+    Route::prefix('course-platform')->group(function () {
+        /**
+         * Obtener Todos los Cursos de la Plataforma
+         * Método HTTP: GET
+         * Ruta: /api/course-platform
+         * Descripción: Recupera todos los cursos de la plataforma disponibles.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Cursos de la plataforma recuperados exitosamente",
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "name": "Curso de la Plataforma 1",
+         *             "description": "Descripción 1",
+         *             "url": "http://example.com",
+         *             "price": 100.00,
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         },
+         *         ...
+         *     ]
+         * }
+         */
+        Route::get('/', [CursoPlataformaController::class, 'index'])->name('course_platform.index');
+
+        /**
+         * Crear un Nuevo Curso de la Plataforma
+         * Método HTTP: POST
+         * Ruta: /api/course-platform
+         * Descripción: Crea un nuevo curso de la plataforma con los datos proporcionados.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Curso de la Plataforma 1",
+         *     "description": "Descripción 1",
+         *     "url": "http://example.com",
+         *     "price": 100.00
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Curso de la plataforma creado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Curso de la Plataforma 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "price": 100.00,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::post('/', [CursoPlataformaController::class, 'store'])->name('course_platform.store');
+
+        /**
+         * Obtener un Curso de la Plataforma por ID
+         * Método HTTP: GET
+         * Ruta: /api/course-platform/{course_platform}
+         * Descripción: Recupera la información de un curso de la plataforma específico por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Curso de la plataforma recuperado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Curso de la Plataforma 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "price": 100.00,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::get('{course_platform}', [CursoPlataformaController::class, 'show'])->name('course_platform.show');
+        /**
+         * Actualizar un Curso de la Plataforma por ID
+         * Método HTTP: PUT
+         * Ruta: /api/course-platform/{course_platform}
+         * Descripción: Actualiza los datos de un curso de la plataforma específico por ID.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Curso de la Plataforma 1",
+         *     "description": "Descripción 1",
+         *     "url": "http://example.com",
+         *     "price": 100.00
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Curso de la plataforma actualizado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Curso de la Plataforma 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "price": 100.00,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         * Respuesta de Error (Validación):
+         * {
+         *     "success": false,
+         *     "message": "La URL del video no es válida o el video no está disponible.",
+         * }
+         */
+        Route::put('{course_platform}', [CursoPlataformaController::class, 'update'])->name('course_platform.update');
+
+        /**
+         * Eliminar un Curso de la Plataforma por ID
+         * Método HTTP: DELETE
+         * Ruta: /api/course-platform/{course_platform}
+         * Descripción: Elimina un curso de la plataforma específico por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Curso de la plataforma eliminado exitosamente"
+         * }
+         */
+        Route::delete('{course_platform}', [CursoPlataformaController::class, 'destroy'])->name('course_platform.destroy');
+    });
+
+    /**
+     * Rutas para la gestión de clases dentro de un curso de la plataforma
+     */
+    Route::prefix('course-platform/{course_platform}/clases')->group(function () {
+        /**
+         * Obtener Todas las Clases de un Curso de la Plataforma
+         * Método HTTP: GET
+         * Ruta: /api/course-platform/{course_platform}/clases
+         * Descripción: Recupera todas las clases de un curso de la plataforma específico.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Clases recuperadas exitosamente",
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "name": "Clase 1",
+         *             "description": "Descripción 1",
+         *             "url": "http://example.com",
+         *             "price": 50.00,
+         *             "course_id": 1,
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         },
+         *         ...
+         *     ]
+         * }
+         */
+        Route::get('/', [ClaseController::class, 'index'])->name('clases.index');
+
+        /**
+         * Crear una Nueva Clase para un Curso de la Plataforma
+         * Método HTTP: POST
+         * Ruta: /api/course-platform/{course_platform}/clases
+         * Descripción: Crea una nueva clase en un curso de la plataforma específico.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Clase 1",
+         *     "description": "Descripción 1",
+         *     "url": "http://example.com",
+         *     "price": 50.00
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Clase creada exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Clase 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "price": 50.00,
+         *         "course_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::post('/', [ClaseController::class, 'store'])->name('clases.store');
+
+        /**
+         * Obtener una Clase por ID
+         * Método HTTP: GET
+         * Ruta: /api/course-platform/{course_platform}/clases/{clase}
+         * Descripción: Recupera la información de una clase específica por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Clase recuperada exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Clase 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "price": 50.00,
+         *         "course_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::get('{clase}', [ClaseController::class, 'show'])->name('clases.show');
+
+        /**
+         * Actualizar una Clase por ID
+         * Método HTTP: PUT
+         * Ruta: /api/course-platform/{course_platform}/clases/{clase}
+         * Descripción: Actualiza los datos de una clase específica por ID.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Clase 1",
+         *     "description": "Descripción 1",
+         *     "url": "http://example.com",
+         *     "price": 50.00
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Clase actualizada exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Clase 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "price": 50.00,
+         *         "course_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::put('{clase}', [ClaseController::class, 'update'])->name('clases.update');
+
+        /**
+         * Eliminar una Clase por ID
+         * Método HTTP: DELETE
+         * Ruta: /api/course-platform/{course_platform}/clases/{clase}
+         * Descripción: Elimina una clase específica por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Clase eliminada exitosamente"
+         * }
+         */
+        Route::delete('{clase}', [ClaseController::class, 'destroy'])->name('clases.destroy');
+    });
+
+    /**
+     * Rutas para la gestión de ejercicios dentro de una clase
+     */
+    Route::prefix('clases/{clase}/ejercicios')->group(function () {
+        /**
+         * Obtener Todos los Ejercicios de una Clase
+         * Método HTTP: GET
+         * Ruta: /api/clases/{clase}/ejercicios
+         * Descripción: Recupera todos los ejercicios de una clase específica.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Ejercicios recuperados exitosamente",
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "name": "Ejercicio 1",
+         *             "description": "Descripción 1",
+         *             "url": "http://example.com",
+         *             "clase_id": 1,
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         },
+         *         ...
+         *     ]
+         * }
+         */
+        Route::get('/', [EjercicioController::class, 'index'])->name('ejercicios.index');
+
+        /**
+         * Crear un Nuevo Ejercicio para una Clase
+         * Método HTTP: POST
+         * Ruta: /api/clases/{clase}/ejercicios
+         * Descripción: Crea un nuevo ejercicio en una clase específica.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Ejercicio 1",
+         *     "description": "Descripción 1",
+         *     "url": "http://example.com"
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Ejercicio creado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Ejercicio 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "clase_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::post('/', [EjercicioController::class, 'store'])->name('ejercicios.store');
+
+        /**
+         * Obtener un Ejercicio por ID
+         * Método HTTP: GET
+         * Ruta: /api/clases/{clase}/ejercicios/{ejercicio}
+         * Descripción: Recupera la información de un ejercicio específico por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Ejercicio recuperado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Ejercicio 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "clase_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::get('{ejercicio}', [EjercicioController::class, 'show'])->name('ejercicios.show');
+
+        /**
+         * Actualizar un Ejercicio por ID
+         * Método HTTP: PUT
+         * Ruta: /api/clases/{clase}/ejercicios/{ejercicio}
+         * Descripción: Actualiza los datos de un ejercicio específico por ID.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Ejercicio 1",
+         *     "description": "Descripción 1",
+         *     "url": "http://example.com"
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Ejercicio actualizado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Ejercicio 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "clase_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::put('{ejercicio}', [EjercicioController::class, 'update'])->name('ejercicios.update');
+
+        /**
+         * Eliminar un Ejercicio por ID
+         * Método HTTP: DELETE
+         * Ruta: /api/clases/{clase}/ejercicios/{ejercicio}
+         * Descripción: Elimina un ejercicio específico por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Ejercicio eliminado exitosamente"
+         * }
+         */
+        Route::delete('{ejercicio}', [EjercicioController::class, 'destroy'])->name('ejercicios.destroy');
+    });
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
