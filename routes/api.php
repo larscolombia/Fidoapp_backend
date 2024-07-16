@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ClaseController;
 use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Api\EjercicioController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Backend\API\DashboardController;
@@ -409,7 +410,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     ]
          * }
          */
-        Route::get('/', [ClaseController::class, 'index'])->name('clases.index');
+        Route::get('/', [ClaseController::class, 'index']);
 
         /**
          * Crear una Nueva Clase para un Curso de la Plataforma
@@ -439,7 +440,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     }
          * }
          */
-        Route::post('/', [ClaseController::class, 'store'])->name('clases.store');
+        Route::post('/', [ClaseController::class, 'store']);
 
         /**
          * Obtener una Clase por ID
@@ -462,7 +463,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     }
          * }
          */
-        Route::get('{clase}', [ClaseController::class, 'show'])->name('clases.show');
+        Route::get('{clase}', [ClaseController::class, 'show']);
 
         /**
          * Actualizar una Clase por ID
@@ -492,7 +493,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     }
          * }
          */
-        Route::put('{clase}', [ClaseController::class, 'update'])->name('clases.update');
+        Route::put('{clase}', [ClaseController::class, 'update']);
 
         /**
          * Eliminar una Clase por ID
@@ -505,7 +506,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Clase eliminada exitosamente"
          * }
          */
-        Route::delete('{clase}', [ClaseController::class, 'destroy'])->name('clases.destroy');
+        Route::delete('{clase}', [ClaseController::class, 'destroy']);
     });
 
     /**
@@ -628,6 +629,160 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          */
         Route::delete('{ejercicio}', [EjercicioController::class, 'destroy'])->name('ejercicios.destroy');
     });
+
+    /**
+     * Obtener todos los eventos.
+     * Método HTTP: GET
+     * Ruta: /api/events
+     * Descripción: Recupera todos los eventos disponibles.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Eventos recuperados exitosamente",
+     *     "data": [
+     *         {
+     *             "id": 1,
+     *             "name": "Evento 1",
+     *             "date": "2024-07-13T00:00:00.000000Z",
+     *             "slug": "evento-1",
+     *             "user_id": 1,
+     *             "description": "Descripción del evento 1",
+     *             "location": "Ubicación del evento 1",
+     *             "tipo": "salud",
+     *             "status": true,
+     *             "created_by": null,
+     *             "updated_by": null,
+     *             "deleted_by": null,
+     *             "created_at": "2024-07-13T00:00:00.000000Z",
+     *             "updated_at": "2024-07-13T00:00:00.000000Z"
+     *         },
+     *         ...
+     *     ]
+     * }
+     */
+    Route::get('events', [EventController::class, 'index']);
+
+    /**
+     * Obtener un evento por ID.
+     * Método HTTP: GET
+     * Ruta: /api/events/{id}
+     * Descripción: Recupera un evento específico por ID.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Evento recuperado exitosamente",
+     *     "data": {
+     *         "id": 1,
+     *         "name": "Evento 1",
+     *         "date": "2024-07-13T00:00:00.000000Z",
+     *         "slug": "evento-1",
+     *         "user_id": 1,
+     *         "description": "Descripción del evento 1",
+     *         "location": "Ubicación del evento 1",
+     *         "tipo": "salud",
+     *         "status": true,
+     *         "created_by": null,
+     *         "updated_by": null,
+     *         "deleted_by": null,
+     *         "created_at": "2024-07-13T00:00:00.000000Z",
+     *         "updated_at": "2024-07-13T00:00:00.000000Z"
+     *     }
+     * }
+     */
+    Route::get('events/{id}', [EventController::class, 'show'])->name('events.show');
+
+     /**
+     * Crear un nuevo evento.
+     * Método HTTP: POST
+     * Ruta: /api/events
+     * Descripción: Crea un nuevo evento.
+     * Datos de Solicitud:
+     * {
+     *     "name": "Evento 1",
+     *     "date": "2024-07-13T00:00:00.000000Z",
+     *     "slug": "evento-1",
+     *     "user_id": 1,
+     *     "description": "Descripción del evento 1",
+     *     "location": "Ubicación del evento 1",
+     *     "tipo": "salud",
+     *     "status": true
+     * }
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Evento creado exitosamente",
+     *     "data": {
+     *         "id": 1,
+     *         "name": "Evento 1",
+     *         "date": "2024-07-13T00:00:00.000000Z",
+     *         "slug": "evento-1",
+     *         "user_id": 1,
+     *         "description": "Descripción del evento 1",
+     *         "location": "Ubicación del evento 1",
+     *         "tipo": "salud",
+     *         "status": true,
+     *         "created_by": null,
+     *         "updated_by": null,
+     *         "deleted_by": null,
+     *         "created_at": "2024-07-13T00:00:00.000000Z",
+     *         "updated_at": "2024-07-13T00:00:00.000000Z"
+     *     }
+     * }
+     */
+    Route::post('events', [EventController::class, 'store'])->name('events.store');
+
+    /**
+     * Actualizar un evento por ID.
+     * Método HTTP: PUT
+     * Ruta: /api/events/{id}
+     * Descripción: Actualiza los datos de un evento específico por ID.
+     * Datos de Solicitud:
+     * {
+     *     "name": "Evento 1",
+     *     "date": "2024-07-13T00:00:00.000000Z",
+     *     "slug": "evento-1",
+     *     "user_id": 1,
+     *     "description": "Descripción del evento 1",
+     *     "location": "Ubicación del evento 1",
+     *     "tipo": "salud",
+     *     "status": true
+     * }
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Evento actualizado exitosamente",
+     *     "data": {
+     *         "id": 1,
+     *         "name": "Evento 1",
+     *         "date": "2024-07-13T00:00:00.000000Z",
+     *         "slug": "evento-1",
+     *         "user_id": 1,
+     *         "description": "Descripción del evento 1",
+     *         "location": "Ubicación del evento 1",
+     *         "tipo": "salud",
+     *         "status": true,
+     *         "created_by": null,
+     *         "updated_by": null,
+     *         "deleted_by": null,
+     *         "created_at": "2024-07-13T00:00:00.000000Z",
+     *         "updated_at": "2024-07-13T00:00:00.000000Z"
+     *     }
+     * }
+     */
+    Route::put('events/{id}', [EventController::class, 'update'])->name('events.update');
+
+    /**
+     * Eliminar un evento por ID.
+     * Método HTTP: DELETE
+     * Ruta: /api/events/{id}
+     * Descripción: Elimina un evento específico por ID.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Evento eliminado exitosamente"
+     * }
+     */
+    Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
