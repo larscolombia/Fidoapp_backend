@@ -80,6 +80,10 @@ class CursoPlataformaController extends Controller
             'description' => 'nullable|string',
             'url' => 'required|url',
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'duration' => 'required|integer|min:0',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'duration' => 'required|string|max:255'
         ]);
 
         // Verificar si la URL del video es válida
@@ -88,11 +92,21 @@ class CursoPlataformaController extends Controller
             return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
         }
 
+        // Manejar la carga de la imagen
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/cursos_plataforma'), $imageName);
+        }
+
         CursoPlataforma::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
             'price' => $request->input('price'),
+            'image' => $imageName ? 'images/cursos_plataforma/' . $imageName : null,
+            'duration' => $request->input('duration'),
         ]);
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.created_successfully'));
@@ -164,6 +178,8 @@ class CursoPlataformaController extends Controller
             'description' => 'nullable|string',
             'url' => 'required|url',
             'price' => 'required|numeric',
+            'duration' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         $course_platform = CursoPlataforma::findOrFail($id);
@@ -174,11 +190,21 @@ class CursoPlataformaController extends Controller
             return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
         }
 
+        // Manejar la carga de la imagen
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/cursos_plataforma'), $imageName);
+            $course_platform->image = 'images/cursos_plataforma/' . $imageName;
+        }
+
         $course_platform->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
             'price' => $request->input('price'),
+            'duration' => $request->input('duration'),
+            'image' => $course_platform->image ?? $course_platform->image,
         ]);
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));

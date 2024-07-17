@@ -32,6 +32,22 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
+                    <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" required>
+                    @error('duration')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">{{ __('course_platform.image') }}</label>
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*" required>
+                    @error('image')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
                     <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required>
                     @error('price')

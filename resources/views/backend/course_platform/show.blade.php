@@ -26,6 +26,20 @@
                 <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" readonly>
             </div>
 
+            <div class="mb-3">
+                <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
+                <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">{{ __('course_platform.image') }}</label>
+                @if($course_platform->image)
+                    <img src="{{ asset($course_platform->image) }}" class="img-fluid" alt="{{ $course_platform->name }}">
+                @else
+                    <p>{{ __('course_platform.no_image') }}</p>
+                @endif
+            </div>
+
             <div class="mt-4">
                 <a href="{{ route('backend.course_platform.edit', ['curso_plataforma' => $course_platform->id]) }}" class="btn btn-primary">{{ __('course_platform.edit') }}</a>
                 <a href="{{ route('backend.course_platform.index') }}" class="btn btn-secondary">{{ __('course_platform.back') }}</a>

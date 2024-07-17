@@ -29,6 +29,19 @@
                     <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
                 </div>
 
+                <div class="mb-3">
+                    <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
+                    <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">{{ __('course_platform.image') }}</label>
+                    <input type="file" class="form-control" id="image" name="image">
+                    @if ($course_platform->image)
+                        <img src="{{ asset($course_platform->image) }}" alt="Imagen del Curso" class="img-thumbnail mt-2" style="width: 200px;">
+                    @endif
+                </div>
+
                 <button type="submit" class="btn btn-primary">{{ __('course_platform.update') }}</button>
             </form>
         </div>

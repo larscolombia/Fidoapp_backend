@@ -21,5 +21,7 @@ return [
     'Delete' => 'Eliminar',
     'Cancel' => 'Cancelar',
     'Confirm Deletion' => 'Confirmar Eliminación',
+    'image' => 'Imagen',
+    'duration' => 'Duración',
     'Are you sure you want to delete this course platform?' => '¿Estás seguro de que quieres eliminar este curso de la plataforma?',
 ];
