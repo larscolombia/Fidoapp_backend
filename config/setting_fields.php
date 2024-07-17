@@ -50,7 +50,7 @@ return [
                 'label' => 'UI Text', // you know what label it is
                 'rules' => 'required|min:2', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'Desarrollado por <a href="https://lars.net.co" target="_blank">LARS Software Company</a>', // default value if you want
+                'value' => 'Desarrollado por Zunami', // default value if you want
             ],
             [
                 'type' => 'text', // input fields type
