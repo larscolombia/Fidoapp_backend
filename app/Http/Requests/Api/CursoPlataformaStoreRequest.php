@@ -30,6 +30,8 @@ class CursoPlataformaStoreRequest extends FormRequest
             'description' => 'nullable|string',
             'url' => 'required|url',
             'price' => 'required|numeric|min:0',
+            'duration' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 

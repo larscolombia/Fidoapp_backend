@@ -32,11 +32,23 @@ class CursoPlataformaController extends Controller
             ], 422);
         }
 
+        // Manejar la carga de la imagen
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/cursos_plataforma'), $imageName);
+            $imagePath = 'images/cursos_plataforma/' . $imageName;
+        } else {
+            $imagePath = null;
+        }
+
         $course = CursoPlataforma::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
             'price' => $request->input('price'),
+            'duration' => $request->input('duration'),
+            'image' => $imagePath,
         ]);
 
         return response()->json([
@@ -69,7 +81,23 @@ class CursoPlataformaController extends Controller
         }
 
         // Filtra solo los campos presentes en la solicitud
-        $data = $request->only(['name', 'description', 'url', 'price']);
+        $data = $request->only(['name', 'description', 'url', 'price', 'duration']);
+
+        // Manejar la carga de la imagen si está presente
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/cursos_plataforma'), $imageName);
+            $data['image'] = 'images/cursos_plataforma/' . $imageName;
+
+            // Eliminar la imagen anterior si existe
+            if ($course->image) {
+                $oldImagePath = public_path($course->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+        }
 
         // Actualiza los campos presentes
         $course->update($data);
