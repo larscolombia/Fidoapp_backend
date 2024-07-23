@@ -101,10 +101,16 @@ class HerramientaController extends Controller
             'description' => 'nullable|string',
             'type' => 'required|in:clicker,silbato,diarios',
             'status' => 'required|string|max:255',
+            'audio' => 'required|mimes:mp3,wav,aac|max:10240', // Validación del archivo de audio
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+         // Manejar la carga del archivo de audio
+        if ($request->hasFile('audio')) {
+            $audioPath = $request->file('audio')->move(public_path('audios/herramientas'), $request->file('audio')->getClientOriginalName());
         }
 
         Herramienta::create([
@@ -112,6 +118,7 @@ class HerramientaController extends Controller
             'description' => $request->description,
             'type' => $request->type,
             'status' => $request->status,
+            'audio' => 'audios/herramientas/' . $request->file('audio')->getClientOriginalName(),
         ]);
 
         return redirect()->route('backend.herramientas_entrenamiento.index')->with('success', __('Herramienta de entrenamiento creada exitosamente.'));
@@ -125,27 +132,33 @@ class HerramientaController extends Controller
 
     public function update(Request $request, $herramientas_entrenamiento)
     {
-        $herramienta = Herramienta::findOrFail($herramientas_entrenamiento);
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'type' => 'required|in:clicker,silbato,diarios',
-            'status' => 'required|string|max:255',
+            'status' => 'required|in:active,inactive',
+            'audio' => 'nullable|mimes:mp3,wav',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $herramienta->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'type' => $request->type,
-            'status' => $request->status,
-        ]);
+        $herramienta = Herramienta::findOrFail($herramientas_entrenamiento);
+        
+        $herramienta->name = $request->input('name');
+        $herramienta->description = $request->input('description');
+        $herramienta->type = $request->input('type');
+        $herramienta->status = $request->input('status');
 
-        return redirect()->route('backend.herramientas_entrenamiento.index')->with('success', __('Herramienta de entrenamiento actualizada exitosamente.'));
+        if ($request->hasFile('audio')) {
+            $audioPath = $request->file('audio')->store('audios/herramientas', 'public');
+            $herramienta->audio = 'audios/herramientas/' . basename($audioPath);
+        }
+
+        $herramienta->save();
+
+        return redirect()->route('backend.herramientas_entrenamiento.index')->with('success', __('herramientas_entrenamiento.Actualizado correctamente'));
     }
 
     public function destroy($herramientas_entrenamiento)

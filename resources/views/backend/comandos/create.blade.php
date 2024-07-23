@@ -48,6 +48,11 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="voz_comando" class="form-label">{{ __('comando_entrenamiento.voz_comando') }}</label>
+                    <input type="text" class="form-control" id="voz_comando" name="voz_comando" placeholder="{{ __('comando_entrenamiento.Enter_voz_comando') }}" required>
+                </div>
+
+                <div class="mb-3">
                     <label for="instructions" class="form-label">{{ __('comando_entrenamiento.instructions') }}</label>
                     <textarea class="form-control" id="instructions" name="instructions" rows="5" placeholder="{{ __('comando_entrenamiento.Enter_instructions') }}" required></textarea>
                 </div>
@@ -84,7 +89,6 @@
 
 @push('after-styles')
 <link rel="stylesheet" href='{{ mix("modules/product/style.css") }}'>
-<!-- DataTables Core and Extensions -->
 <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush
 

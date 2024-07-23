@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('is_favorite');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('category_comandos')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('voz_comando');
             $table->text('instructions');
             $table->timestamps();
         });

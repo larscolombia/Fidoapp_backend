@@ -48,6 +48,20 @@
                     </select>
                 </div>
 
+                <div class="mb-3">
+                    <label for="audio" class="form-label">{{ __('herramientas_entrenamiento.Audio') }}</label>
+                    <input type="file" class="form-control @error('audio') is-invalid @enderror" id="audio" name="audio" accept="audio/*">
+                    @if ($herramienta->audio)
+                        <audio controls class="mt-3">
+                            <source src="{{ asset($herramienta->audio) }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    @endif
+                    @error('audio')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <button type="submit" class="btn btn-success">{{ __('herramientas_entrenamiento.Actualizar Herramienta') }}</button>
                 <a href="{{ route('backend.herramientas_entrenamiento.index') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
             </form>

@@ -25,6 +25,15 @@
                 <textarea class="form-control" id="notas" name="notas" rows="3" readonly>{{ $diario->notas }}</textarea>
             </div>
 
+            <div class="mb-3">
+                <label for="image" class="form-label">{{ __('Diarios.image') }}</label>
+                @if ($diario->image)
+                    <img src="{{ asset($diario->image) }}" class="img-fluid img-preview-diario mr-3" alt="{{ $diario->actividad }}">
+                @else
+                    <p>{{ __('Diarios.No image available') }}</p>
+                @endif
+            </div>
+
             <div class="mt-4">
                 <a href="{{ route('backend.mascotas.diarios.edit', ['pet' => $diario->pet_id, 'diario' => $diario->id]) }}" class="btn btn-primary">{{ __('Diarios.Edit') }}</a>
                 <a href="{{ route('backend.mascotas.diarios.index', ['pet' => $diario->pet_id]) }}" class="btn btn-secondary">{{ __('Diarios.Back') }}</a>
@@ -33,8 +42,9 @@
     </div>
 @endsection
 
-@push ('after-styles')
+@push('after-styles')
 <link rel="stylesheet" href='{{ mix("modules/product/style.css") }}'>
+<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 <!-- DataTables Core and Extensions -->
 <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush

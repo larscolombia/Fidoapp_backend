@@ -38,6 +38,11 @@
             </div>
 
             <div class="mb-3">
+                <label for="voz_comando" class="form-label">{{ __('comando_entrenamiento.voz_comando') }}</label>
+                <input type="text" class="form-control" id="voz_comando" name="voz_comando" value="{{ $comando->voz_comando }}" disabled>
+            </div>
+
+            <div class="mb-3">
                 <label for="instructions" class="form-label">{{ __('comando_entrenamiento.instructions') }}</label>
                 <textarea class="form-control" id="instructions" name="instructions" rows="5" disabled>{{ $comando->instructions }}</textarea>
             </div>

@@ -34,12 +34,17 @@
                     </select>
                 </div>
 
+                <div class="mb-3">
+                    <label for="audio" class="form-label">{{ __('herramientas_entrenamiento.Audio') }}</label>
+                    <input type="file" class="form-control" id="audio" name="audio" accept="audio/*" required>
+                </div>
+
                 <button type="submit" class="btn btn-primary">{{ __('herramientas_entrenamiento.Crear Herramienta') }}</button>
             </form>
         </div>
     </div>
 @endsection
 
-@push ('after-styles')
+@push('after-styles')
 <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush

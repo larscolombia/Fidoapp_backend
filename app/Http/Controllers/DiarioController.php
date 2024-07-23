@@ -98,9 +98,9 @@ class DiarioController extends Controller
             ->make(true);
     }
 
-    public function show($id)
+    public function show($pet, $diario)
     {
-        $diario = Diario::findOrFail($id);
+        $diario = Diario::findOrFail($diario);
         return view('backend.diarios.show', compact('diario'));
     }
 
@@ -115,10 +115,19 @@ class DiarioController extends Controller
             'date' => 'required|date',
             'actividad' => 'required|string|max:255',
             'notas' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/diarios'), $imageName);
+            $imagePath = 'images/diarios/' . $imageName;
         }
 
         Diario::create([
@@ -126,6 +135,7 @@ class DiarioController extends Controller
             'actividad' => $request->input('actividad'),
             'notas' => $request->input('notas'),
             'pet_id' => $pet,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('backend.mascotas.diarios.index', ['pet' => $pet])->with('success', __('Diarios.Created successfully'));
@@ -143,6 +153,7 @@ class DiarioController extends Controller
             'date' => 'required|date',
             'actividad' => 'required|string|max:255',
             'notas' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -150,10 +161,20 @@ class DiarioController extends Controller
         }
 
         $diario = Diario::findOrFail($diario);
+
+        $imagePath = $diario->image;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/diarios'), $imageName);
+            $imagePath = 'images/diarios/' . $imageName;
+        }
+
         $diario->update([
             'date' => $request->input('date'),
             'actividad' => $request->input('actividad'),
             'notas' => $request->input('notas'),
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('backend.mascotas.diarios.index', ['pet' => $pet])->with('success', __('Diarios.Updated successfully'));

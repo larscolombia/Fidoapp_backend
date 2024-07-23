@@ -122,6 +122,7 @@ class ComandoController extends Controller
             'type' => 'required|in:especializado,basico',
             'is_favorite' => 'required|boolean',
             'category_id' => 'required|exists:category_comandos,id',
+            'voz_comando' => 'required|string|max:255',
             'instructions' => 'required|string',
         ]);
 
@@ -135,6 +136,7 @@ class ComandoController extends Controller
             'type' => $request->type,
             'is_favorite' => $request->is_favorite,
             'category_id' => $request->category_id,
+            'voz_comando' => $request->input('voz_comando'),
             'instructions' => $request->instructions,
         ]);
 
@@ -200,6 +202,7 @@ class ComandoController extends Controller
             'type' => 'required|in:especializado,basico',
             'is_favorite' => 'required|boolean',
             'category_id' => 'required|exists:category_comandos,id',
+            'voz_comando' => 'required|string|max:255',
             'instructions' => 'required|string',
         ]);
 
@@ -214,6 +217,7 @@ class ComandoController extends Controller
             'type' => $request->type,
             'is_favorite' => $request->is_favorite,
             'category_id' => $request->category_id,
+            'voz_comando' => $request->input('voz_comando'),
             'instructions' => $request->instructions,
         ]);
 

@@ -62,6 +62,14 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="voz_comando" class="form-label">{{ __('comando_entrenamiento.voz_comando') }}</label>
+                    <input type="text" class="form-control @error('voz_comando') is-invalid @enderror" id="voz_comando" name="voz_comando" value="{{ old('voz_comando', $comando->voz_comando) }}" required>
+                    @error('voz_comando')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label for="instructions" class="form-label">{{ __('comando_entrenamiento.instructions') }}</label>
                     <textarea class="form-control @error('instructions') is-invalid @enderror" id="instructions" name="instructions" rows="3" required>{{ old('instructions', $comando->instructions) }}</textarea>
                     @error('instructions')

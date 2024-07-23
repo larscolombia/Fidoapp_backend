@@ -35,6 +35,18 @@
                     <input type="text" class="form-control" id="status" name="status" value="{{ __('herramientas_entrenamiento.Inactivo') }}" readonly>
                 @endif 
             </div>
+
+            <div class="mb-3">
+                <label for="audio" class="form-label">{{ __('herramientas_entrenamiento.Audio') }}</label>
+                @if($herramienta->audio)
+                    <audio controls>
+                        <source src="{{ asset($herramienta->audio) }}" type="audio/mpeg">
+                        {{ __('herramientas_entrenamiento.Your browser does not support the audio element.') }}
+                    </audio>
+                @else
+                    <p>{{ __('herramientas_entrenamiento.No audio available') }}</p>
+                @endif
+            </div>
         </div>
     </div>
 @endsection

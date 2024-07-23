@@ -24,5 +24,7 @@ return [
     'basico' => 'Básico',
     'especializado' => 'Especializado',
     'update' => 'Actualizar',
+    'voz_comando' => 'Voz de Comando',
+    'Enter_voz_comando' => 'Introducir voz de comando',
     'Are you sure you want to delete this command?' => '¿Estás seguro de que deseas eliminar este comando?'
 ];

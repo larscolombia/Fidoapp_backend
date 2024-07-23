@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->enum('type', ['clicker', 'silbato', 'diarios']);
+            $table->string('audio');
             $table->enum('status', ['active', 'inactive']);
             $table->timestamps();
         });

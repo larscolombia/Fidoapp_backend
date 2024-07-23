@@ -26,4 +26,10 @@ return [
     'Updated successfully' => 'Actualizado con éxito',
     'Deleted successfully' => 'Eliminado con éxito',
     'Update' => 'Actualizar',
+    'image' => 'Imagen',
+    'No image available' => 'No hay imagen disponible',
+    'Image' => 'Imagen',
+    'Date' => 'Fecha',
+    'Activity' => 'Actividad',
+    'Notes' => 'Notas',
 ];

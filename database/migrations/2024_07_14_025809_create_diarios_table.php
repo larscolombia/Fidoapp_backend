@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('notas')->nullable();
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

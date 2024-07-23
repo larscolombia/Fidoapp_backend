@@ -12,7 +12,7 @@
                 {{ __('Diarios.create') }}
             </x-backend.section-header>
 
-            <form action="{{ route('backend.mascotas.diarios.store', ['pet' => $pet]) }}" method="POST">
+            <form action="{{ route('backend.mascotas.diarios.store', ['pet' => $pet]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <label for="date" class="form-label">{{ __('Diarios.date') }}</label>
@@ -34,6 +34,14 @@
                     <label for="notas" class="form-label">{{ __('Diarios.notes') }}</label>
                     <textarea class="form-control @error('notas') is-invalid @enderror" id="notas" name="notas" rows="3">{{ old('notas') }}</textarea>
                     @error('notas')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">{{ __('Diarios.image') }}</label>
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
+                    @error('image')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

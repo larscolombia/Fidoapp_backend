@@ -23,5 +23,8 @@ return [
     'Detalles' => 'Detalles',
     'Cancel' => 'Cancelar',
     'Save' => 'Guardar',
+    'Audio' => 'Audio',
+    'Actualizado correctamente' => 'Actualizado correctamente',
+    'Your browser does not support the audio element.' => 'Tu navegador no soporta el elemento de audio.',
     'Are you sure you want to delete this tool?' => '¿Estás seguro de que deseas eliminar esta herramienta?'
 ];
