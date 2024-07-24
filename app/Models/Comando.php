@@ -16,4 +16,9 @@ class Comando extends Model
     {
         return $this->belongsTo(CategoryComando::class, 'category_id');
     }
+
+    public function comandos_equivalentes()
+    {
+        return $this->hasMany(ComandoEquivalente::class);
+    }
 }

@@ -26,5 +26,15 @@ return [
     'update' => 'Actualizar',
     'voz_comando' => 'Voz de Comando',
     'Enter_voz_comando' => 'Introducir voz de comando',
+    'commands_equivalent_list_by_user' => 'Lista de comandos equivalentes por usuario',
+    'commands_equivalent_by_id' => 'Comando equivalente por ID',
+    'Comando equivalente creado con éxito' => 'Comando equivalente creado con éxito',
+    'commands_equivalent_list' => 'Lista de comandos equivalentes',
+    'Comando deleted successfully' => 'Comando eliminado con éxito',
+    'get_command' => 'Comando visualizado',
+    'commands_list' => 'Lista de comandos',
+    'Comando equivalente actualizado con éxito' => 'Comando equivalente actualizado con éxito',
+    'Comando equivalente eliminado con éxito' => 'Comando equivalente eliminado con éxito',
+    'Comando equivalente actualizado con éxito' => 'Comando equivalente actualizado con éxito',
     'Are you sure you want to delete this command?' => '¿Estás seguro de que deseas eliminar este comando?'
 ];

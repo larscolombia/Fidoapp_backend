@@ -269,4 +269,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
         return Carbon::parse($this->date_of_birth)->age;
     }
+
+    public function comandos_equivalentes()
+    {
+        return $this->hasMany(ComandoEquivalente::class);
+    }
 }

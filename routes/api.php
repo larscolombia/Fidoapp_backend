@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\ClaseController;
+use App\Http\Controllers\Api\ComandoController;
+use App\Http\Controllers\Api\ComandoEquivalenteController;
 use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Api\EventController;
@@ -783,6 +785,284 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      * }
      */
     Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
+    
+    Route::prefix('comando-equivalente')->group(function () {
+        /**
+         * Mostrar todos los registros de comando equivalente.
+         * 
+         * Método HTTP: GET
+         * Ruta: /api/comando-equivalente
+         * Descripción: Devuelve una lista de todos los comandos equivalentes, incluyendo el nombre del usuario relacionado.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "comando_id": 2,
+         *             "name": "Comando Equivalente 1",
+         *             "user_name": "Nombre del Usuario",
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         },
+         *         ...
+         *     ]
+         * }
+         */
+        Route::get('/', [ComandoEquivalenteController::class, 'index']);
+
+
+        /**
+         * Crear un nuevo comando equivalente.
+         * Método HTTP: POST
+         * Ruta: /api/comando-equivalente
+         * Descripción: Crea un nuevo comando equivalente con los datos proporcionados.
+         * Datos de Solicitud:
+         * {
+         *     "comando_id": 1,
+         *     "name": "Nombre del comando equivalente",
+         *     "user_id": 1
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Comando equivalente creado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "comando_id": 1,
+         *         "name": "Nombre del comando equivalente",
+         *         "user_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::post('/', [ComandoEquivalenteController::class, 'store']);
+
+        /**
+         * Obtener los detalles de un comando equivalente por ID.
+         * Método HTTP: GET
+         * Ruta: /api/comando-equivalente/{id}
+         * Descripción: Retorna los detalles de un comando equivalente específico por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "comando_id": 1,
+         *         "name": "Nombre del comando equivalente",
+         *         "user_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::get('/{id}', [ComandoEquivalenteController::class, 'show']);
+
+        /**
+         * Obtener todos los comandos equivalentes de un usuario.
+         * Método HTTP: GET
+         * Ruta: /api/comando-equivalente/user/{user_id}
+         * Descripción: Retorna una lista de todos los comandos equivalentes asociados a un usuario específico.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "comando_id": 1,
+         *             "name": "Nombre del comando equivalente 1",
+         *             "user_id": 1,
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         },
+         *         {
+         *             "id": 2,
+         *             "comando_id": 2,
+         *             "name": "Nombre del comando equivalente 2",
+         *             "user_id": 1,
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         }
+         *     ]
+         * }
+         */
+        Route::get('/user/{user_id}', [ComandoEquivalenteController::class, 'getByUserId']);
+
+        /**
+         * Actualizar un comando equivalente por ID.
+         * Método HTTP: PUT
+         * Ruta: /api/comando-equivalente/{id}
+         * Descripción: Actualiza los datos de un comando equivalente específico por ID.
+         * Datos de Solicitud:
+         * {
+         *     "comando_id": 1,
+         *     "name": "Nombre actualizado del comando equivalente",
+         *     "user_id": 1
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Comando equivalente actualizado exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "comando_id": 1,
+         *         "name": "Nombre actualizado del comando equivalente",
+         *         "user_id": 1,
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::put('/{id}', [ComandoEquivalenteController::class, 'update']);
+
+        /**
+         * Eliminar un comando equivalente por ID.
+         * Método HTTP: DELETE
+         * Ruta: /api/comando-equivalente/{id}
+         * Descripción: Elimina un comando equivalente específico por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Comando equivalente eliminado exitosamente"
+         * }
+         */
+        Route::delete('/{id}', [ComandoEquivalenteController::class, 'destroy']);
+    });
+
+    Route::prefix('comandos')->group(function () {
+        /**
+         * Listar todos los comandos.
+         * Método HTTP: GET
+         * Ruta: /api/comandos
+         * Descripción: Obtiene una lista de todos los comandos de entrenamiento.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "name": "Comando 1",
+         *             "description": "Descripción del comando 1",
+         *             "type": "especializado",
+         *             "is_favorite": true,
+         *             "category_id": 1,
+         *             "voz_comando": "Voz de comando 1",
+         *             "instructions": "Instrucciones del comando 1",
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         },
+         *         ...
+         *     ]
+         * }
+         */
+        Route::get('/', [ComandoController::class, 'index']);
+
+        /**
+         * Mostrar un comando por ID.
+         * Método HTTP: GET
+         * Ruta: /api/comandos/{id}
+         * Descripción: Obtiene los detalles de un comando específico por su ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Comando 1",
+         *         "description": "Descripción del comando 1",
+         *         "type": "especializado",
+         *         "is_favorite": true,
+         *         "category_id": 1,
+         *         "voz_comando": "Voz de comando 1",
+         *         "instructions": "Instrucciones del comando 1",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::get('/{id}', [ComandoController::class, 'show']);
+
+        /**
+         * Crear un nuevo comando.
+         * Método HTTP: POST
+         * Ruta: /api/comandos
+         * Descripción: Crea un nuevo comando de entrenamiento.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Comando 1",
+         *     "description": "Descripción del comando 1",
+         *     "type": "especializado",
+         *     "is_favorite": true,
+         *     "category_id": 1,
+         *     "voz_comando": "Voz de comando 1",
+         *     "instructions": "Instrucciones del comando 1"
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Comando 1",
+         *         "description": "Descripción del comando 1",
+         *         "type": "especializado",
+         *         "is_favorite": true,
+         *         "category_id": 1,
+         *         "voz_comando": "Voz de comando 1",
+         *         "instructions": "Instrucciones del comando 1",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::post('/', [ComandoController::class, 'store']);
+
+        /**
+         * Actualizar un comando por ID.
+         * Método HTTP: PUT
+         * Ruta: /api/comandos/{id}
+         * Descripción: Actualiza los datos de un comando específico por ID.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Comando Actualizado",
+         *     "description": "Descripción actualizada",
+         *     "type": "basico",
+         *     "is_favorite": false,
+         *     "category_id": 2,
+         *     "voz_comando": "Voz de comando actualizada",
+         *     "instructions": "Instrucciones actualizadas"
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Comando Actualizado",
+         *         "description": "Descripción actualizada",
+         *         "type": "basico",
+         *         "is_favorite": false,
+         *         "category_id": 2,
+         *         "voz_comando": "Voz de comando actualizada",
+         *         "instructions": "Instrucciones actualizadas",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::put('/{id}', [ComandoController::class, 'update']);
+
+        /**
+         * Eliminar un comando por ID.
+         * Método HTTP: DELETE
+         * Ruta: /api/comandos/{id}
+         * Descripción: Elimina un comando específico por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Comando eliminado exitosamente"
+         * }
+         */
+        Route::delete('/{id}', [ComandoController::class, 'destroy']);
+    });
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
