@@ -18,12 +18,20 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="type" class="form-label">{{ __('herramientas_entrenamiento.Tipo') }}</label>
-                    <select class="form-control" id="type" name="type" required>
-                        <option value="clicker">{{ __('herramientas_entrenamiento.Clicker') }}</option>
-                        <option value="silbato">{{ __('herramientas_entrenamiento.Silbato') }}</option>
-                        <option value="diarios">{{ __('herramientas_entrenamiento.Diarios') }}</option>
+                    <label for="type_id" class="form-label">{{ __('herramientas_entrenamiento.Tipo') }}</label>
+                    <select class="form-control" id="type_id" name="type_id" required>
+                        @foreach($types as $type)
+                            <option value="{{ $type->id }}">{{ $type->type }}</option>
+                        @endforeach
                     </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="audio" class="form-label">{{ __('herramientas_entrenamiento.Audio') }}</label>
+                    <input type="file" class="form-control @error('audio') is-invalid @enderror" id="audio" name="audio" accept="audio/*" required>
+                    @error('audio')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
@@ -34,17 +42,12 @@
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label for="audio" class="form-label">{{ __('herramientas_entrenamiento.Audio') }}</label>
-                    <input type="file" class="form-control" id="audio" name="audio" accept="audio/*" required>
-                </div>
-
                 <button type="submit" class="btn btn-primary">{{ __('herramientas_entrenamiento.Crear Herramienta') }}</button>
             </form>
         </div>
     </div>
 @endsection
 
-@push('after-styles')
+@push ('after-styles')
 <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush

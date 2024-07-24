@@ -33,10 +33,12 @@
 
                 <div class="mb-3">
                     <label for="type" class="form-label">{{ __('Tipo') }}</label>
-                    <select class="form-control" id="type" name="type" required>
-                        <option value="clicker" {{ $herramienta->type == 'clicker' ? 'selected' : '' }}>{{ __('herramientas_entrenamiento.Clicker') }}</option>
-                        <option value="silbato" {{ $herramienta->type == 'silbato' ? 'selected' : '' }}>{{ __('herramientas_entrenamiento.Silbato') }}</option>
-                        <option value="diarios" {{ $herramienta->type == 'diarios' ? 'selected' : '' }}>{{ __('herramientas_entrenamiento.Diarios') }}</option>
+                    <select class="form-control" id="type_id" name="type_id" required>
+                        @foreach($types as $type)
+                            <option value="{{ $type->id }}" {{ $herramienta->type_id == $type->id ? 'selected' : '' }}>
+                                {{ $type->type }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -54,7 +56,7 @@
                     @if ($herramienta->audio)
                         <audio controls class="mt-3">
                             <source src="{{ asset($herramienta->audio) }}" type="audio/mpeg">
-                            Your browser does not support the audio element.
+                            {{ __('herramientas_entrenamiento.Your browser does not support the audio element.') }}
                         </audio>
                     @endif
                     @error('audio')

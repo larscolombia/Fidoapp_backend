@@ -19,7 +19,8 @@
                     </div>
                 </x-slot>
                 @hasPermission('add_herramientas_entrenamiento')
-                    <a class="btn btn-primary" href="{{ route('backend.herramientas_entrenamiento.create') }}">{{ __('Crear Herramienta') }}</a>
+                    <a class="btn btn-primary" href="{{ route('backend.herramientas_entrenamiento.create') }}">{{ __('herramientas_entrenamiento.Crear Herramienta') }}</a>
+                    <a class="btn btn-primary" href="{{ route('backend.herramientas_entrenamiento.icon') }}">{{ __('herramientas_entrenamiento.icons') }}</a>
                 @endhasPermission
             </x-backend.section-header>
             <table id="datatable" class="table table-striped border table-responsive">

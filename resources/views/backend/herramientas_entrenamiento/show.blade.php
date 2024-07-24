@@ -24,7 +24,7 @@
 
             <div class="mb-3">
                 <label for="type" class="form-label">{{ __('herramientas_entrenamiento.Tipo') }}</label>
-                <input type="text" class="form-control" id="type" name="type" value="{{ $herramienta->type }}" readonly>
+                <input type="text" class="form-control" id="type" name="type" value="{{ $herramienta->type->type }}" readonly>
             </div>
 
             <div class="mb-3">

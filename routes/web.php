@@ -286,6 +286,12 @@ Route::group(['prefix' => 'app'], function () {
         Route::post('/categories/comandos', [ComandoController::class, 'storeCategory'])->name('categories_comando.store');
         Route::post('backend/comandos/toggle_favorite', [ComandoController::class, 'toggleFavorite'])->name('comandos.toggle_favorite');
 
+        Route::get('herramientas_entrenamiento/icon', [HerramientaController::class, 'icon'])->name('herramientas_entrenamiento.icon');
+        Route::get('herramientas_entrenamiento/icon/index-data', [HerramientaController::class, 'icon_index_data'])->name('herramientas_entrenamiento.icon_index_data');
+        Route::get('herramientas_entrenamiento/icon/edit/{herramientas_entrenamiento_type}', [HerramientaController::class, 'edit_type'])->name('herramientas_entrenamiento_type.edit');
+        Route::put('herramientas_entrenamiento/icon/{herramientas_entrenamiento_type}', [HerramientaController::class, 'update_type'])->name('herramientas_entrenamiento_type.update');
+
+
         Route::resource('herramientas_entrenamiento', HerramientaController::class);
         Route::get('herramientas-entrenamiento-index-data', [HerramientaController::class, 'index_data'])->name('herramientas_entrenamiento.index_data');
 

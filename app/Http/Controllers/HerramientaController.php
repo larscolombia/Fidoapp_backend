@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Herramienta;
+use App\Models\HerramientaType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,7 +45,7 @@ class HerramientaController extends Controller
     public function index_data(DataTables $datatable, Request $request)
     {
         $herramientas = Herramienta::query();
-
+        
         $filter = $request->filter;
 
         if (isset($filter)) {
@@ -66,8 +68,8 @@ class HerramientaController extends Controller
             ->editColumn('description', function ($data) {
                 return $data->description ?? 'N/A';
             })
-            ->editColumn('type', function ($data) {
-                return $data->type;
+            ->addColumn('type', function ($data) {
+                return $data->type->type;
             })
             ->editColumn('status', function ($data) {
                 return $data->status;
@@ -91,7 +93,8 @@ class HerramientaController extends Controller
 
     public function create()
     {
-        return view('backend.herramientas_entrenamiento.create');
+        $types = HerramientaType::all();
+        return view('backend.herramientas_entrenamiento.create', compact('types'));
     }
 
     public function store(Request $request)
@@ -99,7 +102,7 @@ class HerramientaController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'type' => 'required|in:clicker,silbato,diarios',
+            'type_id' => 'required|exists:herramientas_entrenamiento_type,id',
             'status' => 'required|string|max:255',
             'audio' => 'required|mimes:mp3,wav,aac|max:10240', // Validación del archivo de audio
         ]);
@@ -116,7 +119,7 @@ class HerramientaController extends Controller
         Herramienta::create([
             'name' => $request->name,
             'description' => $request->description,
-            'type' => $request->type,
+            'type_id' => $request->type_id,
             'status' => $request->status,
             'audio' => 'audios/herramientas/' . $request->file('audio')->getClientOriginalName(),
         ]);
@@ -127,7 +130,8 @@ class HerramientaController extends Controller
     public function edit($herramientas_entrenamiento)
     {
         $herramienta = Herramienta::findOrFail($herramientas_entrenamiento);
-        return view('backend.herramientas_entrenamiento.edit', compact('herramienta'));
+        $types = HerramientaType::all();
+        return view('backend.herramientas_entrenamiento.edit', compact('herramienta', 'types'));
     }
 
     public function update(Request $request, $herramientas_entrenamiento)
@@ -135,7 +139,7 @@ class HerramientaController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'type' => 'required|in:clicker,silbato,diarios',
+            'type_id' => 'required|exists:herramientas_entrenamiento_type,id',
             'status' => 'required|in:active,inactive',
             'audio' => 'nullable|mimes:mp3,wav',
         ]);
@@ -148,7 +152,7 @@ class HerramientaController extends Controller
         
         $herramienta->name = $request->input('name');
         $herramienta->description = $request->input('description');
-        $herramienta->type = $request->input('type');
+        $herramienta->type_id = $request->input('type_id');
         $herramienta->status = $request->input('status');
 
         if ($request->hasFile('audio')) {
@@ -173,5 +177,38 @@ class HerramientaController extends Controller
     {
         $herramienta = Herramienta::findOrFail($herramientas_entrenamiento);
         return view('backend.herramientas_entrenamiento.show', compact('herramienta'));
+    }
+
+    public function icon() {
+        return view('backend.herramientas_entrenamiento.icon');
+    }
+
+    public function icon_index_data (DataTables $datatable, Request $request) {
+        $herramientas = HerramientaType::query();
+        
+        $filter = $request->filter;
+
+        if (isset($filter)) {
+        }
+
+        return $datatable->eloquent($herramientas)
+            ->addColumn('action', function ($data) {
+                return view('backend.herramientas_entrenamiento.action_column_type', compact('data'));
+            })
+            ->addColumn('icon', function ($data) {
+                return $data->icon;
+            })
+            ->addColumn('type', function ($data) {
+                return $data->type;
+            })
+            ->orderColumns(['id'], '-:column $1')
+            ->rawColumns(['action'])
+            ->toJson();
+    }
+
+    public function edit_type($herramientas_entrenamiento_type)
+    {
+        $herramienta_entrenamiento_type = HerramientaType::findOrFail($herramientas_entrenamiento_type);
+        return view('backend.herramientas_entrenamiento.edit_type', compact('herramienta_entrenamiento_type'));
     }
 }
