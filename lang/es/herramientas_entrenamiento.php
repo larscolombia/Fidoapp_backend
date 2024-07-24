@@ -28,6 +28,7 @@ return [
     'Crear Herramienta' => 'Crear Herramienta',
     'icons' => 'Iconos',
     'icon' => 'Icono',
+    'Use FontAwesome class names (e.g., fa-dog, fa-cat)' => 'Usar nombres de clase FontAwesome (por ejemplo, fa-dog, fa-cat)',
     'Your browser does not support the audio element.' => 'Tu navegador no soporta el elemento de audio.',
     'Are you sure you want to delete this tool?' => '¿Estás seguro de que deseas eliminar esta herramienta?'
 ];

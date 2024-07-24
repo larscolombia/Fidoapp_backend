@@ -19,8 +19,8 @@
                 {{ __('Editar Ícono de Herramienta de Entrenamiento') }}
             </x-backend.section-header>
 
-            <form action="{{ route('backend.herramientas_entrenamiento_type.update', $herramienta_entrenamiento_type->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
+            <form action="{{ route('backend.herramientas_entrenamiento_type.update',['herramientas_entrenamiento_type' => $herramienta_entrenamiento_type->id]) }}" method="POST" enctype="multipart/form-data">
+            @csrf
                 @method('PUT')
 
                 <div class="mb-3">
@@ -29,7 +29,10 @@
                         <input type="text" class="form-control @error('icon') is-invalid @enderror" id="icon" name="icon" placeholder="fa-example" value="{{ old('icon', $herramienta_entrenamiento_type->icon) }}" required readonly>
                         <button type="button" class="btn btn-secondary" id="iconPickerBtn">{{ __('Seleccionar Ícono') }}</button>
                     </div>
-                    <small class="form-text text-muted">{{ __('Use FontAwesome class names (e.g., fa-dog, fa-cat)') }}</small>
+                    <h3 class="mr-3 mt-2">
+                        <i id="icon-value" class="{{ $herramienta_entrenamiento_type->icon }}"></i>
+                    </h3>
+                    <small class="form-text text-muted">{{ __('herramientas_entrenamiento.Use FontAwesome class names (e.g., fa-dog, fa-cat)') }}</small>
                     @error('icon')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -48,26 +51,26 @@
 @endpush
 
 @push('after-scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-iconpicker/1.10.0/js/bootstrap-iconpicker.bundle.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#iconPickerBtn').iconpicker({
-            iconset: 'fontawesome',
-            icon: '{{ old('icon', $herramienta_entrenamiento_type->icon) }}',
-            rows: 5,
-            cols: 10,
-            placement: 'bottom',
-            align: 'left',
-            arrowClass: 'btn-info',
-            arrowPrevIconClass: 'fa fa-angle-left',
-            arrowNextIconClass: 'fa fa-angle-right',
-            footer: false,
-            searchText: 'Buscar...',
-            labelHeader: '{0} de {1} Pags.',
-        }).on('change', function(e) {
-            $('#icon').val(e.icon);
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-iconpicker/1.10.0/js/bootstrap-iconpicker.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#iconPickerBtn').iconpicker({
+                iconset: 'fontawesome',
+                rows: 5,
+                cols: 10,
+                placement: 'bottom',
+                align: 'left',
+                arrowClass: 'btn-info',
+                arrowPrevIconClass: 'fa fa-angle-left',
+                arrowNextIconClass: 'fa fa-angle-right',
+                footer: false,
+                searchText: 'Buscar...',
+                labelHeader: '{0} de {1} Pags.',
+            }).on('change', function(e) {
+                $('#icon').val(e.icon);
+                $('#icon-value').attr('class', e.icon);	
+            });
         });
-    });
-</script>
+    </script>
 @endpush

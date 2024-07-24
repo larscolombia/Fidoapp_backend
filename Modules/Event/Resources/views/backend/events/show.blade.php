@@ -28,8 +28,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="hora" class="form-label">{{ __('event.Hora') }}</label>
-                <input type="text" class="form-control" id="hora" name="hora" value="{{ $event->fecha }}" readonly>
+                <label for="end_date" class="form-label">{{ __('event.End Date') }}</label>
+                <input type="text" class="form-control" id="end_date" name="end_date" value="{{ $event->end_date }}" readonly>
             </div>
 
             <div class="mb-3">
@@ -45,6 +45,15 @@
             <div class="mb-3">
                 <label for="location" class="form-label">{{ __('event.location') }} ({{ __('Opcional') }})</label>
                 <textarea class="form-control" id="location" name="location" readonly>{{ $event->location }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">{{ __('event.Image') }}</label>
+                @if ($event->image)
+                    <img src="{{ asset($event->image) }}" class="img-fluid" style="max-width: 100%; max-height: 400px;" alt="{{ $event->name }}">
+                @else
+                    <p>{{ __('event.No Image Available') }}</p>
+                @endif
             </div>
 
             <div class="mt-4">

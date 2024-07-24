@@ -31,4 +31,11 @@ return [
     'lbl_event_title' => 'Título del Evento',
     'lbl_action' => 'Acción',
     'lbl_location' => 'Ubicación',
+    'Fecha y Hora de Finalización' => 'Fecha y Hora de Finalización',
+    'Fecha y Hora' => 'Fecha y Hora',
+    'Imagen' => 'Imagen',
+    'Image' => 'Imagen',
+    'End Date' => 'Fecha de Finalización',
+    'Fecha y Hora de Inicio' => 'Fecha y Hora de Inicio',
+    'Fecha y Hora de Fin' => 'Fecha y Hora de Finalización',
 ];

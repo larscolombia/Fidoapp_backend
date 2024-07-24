@@ -197,25 +197,30 @@ class EventsController extends Controller
         $request->validate([
             'titulo' => 'required|string|max:255',
             'tipo' => 'required|string|max:255',
-            'fecha' => 'required|date',
-            'hora' => 'required',
+            'fecha' => 'required|date_format:Y-m-d\TH:i', // Valida el formato de fecha y hora
+            'end_date' => 'required|date_format:Y-m-d\TH:i|after_or_equal:fecha',
             'user_id' => 'required|exists:users,id',
             'descripcion' => 'nullable|string',
-            'ubication' => [
-                'nullable', 
-                'string', 
-            ]
+            'ubication' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Valida que sea una imagen
         ]);
 
-        $fechaHora = $request->input('fecha') . ' ' . $request->input('hora');
+        // Verifica si se subió una imagen y guárdala en el directorio público
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->move(public_path('images/events'), $request->file('image')->getClientOriginalName());
+            $imagePath = 'images/events/' . $request->file('image')->getClientOriginalName(); // Guarda la ruta relativa
+        }
 
         Event::create([
             'name' => $request->input('titulo'),
             'tipo' => $request->input('tipo'),
-            'fecha' => $fechaHora,
+            'date' => $request->input('fecha'),
+            'end_date' => $request->input('end_date'),
             'user_id' => $request->input('user_id'),
-            'descripcion' => $request->input('descripcion'),
+            'description' => $request->input('descripcion'),
             'location' => $request->input('ubication'),
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('backend.events.index')->with('success', __('event.Event created successfully.'));
@@ -250,6 +255,7 @@ class EventsController extends Controller
             return [
                 'title' => $event->name,
                 'start' => $event->date,
+                'end' => $event->end_date,
                 'description' => $event->description,
             ];
         })->toArray(); // Asegúrate de convertir a un array
@@ -269,23 +275,37 @@ class EventsController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'tipo' => 'required|string|max:255',
-            'fecha' => 'required|date',
-            'hora' => 'required',
+            'date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:date',
             'user_id' => 'required|exists:users,id',
             'description' => 'nullable|string',
-            'ubication' => 'nullable|string',
+            'location' => 'nullable|string',
+            'image' => 'nullable|image|max:2048', // Agregar validación de la imagen
         ]);
 
         $event = Event::findOrFail($id);
-        $fechaHora = $request->input('fecha') . ' ' . $request->input('hora');
+
+        // Si se sube una nueva imagen, elimine la anterior y guarde la nueva
+        if ($request->hasFile('image')) {
+            // Eliminar la imagen anterior si existe
+            if ($event->image && file_exists(public_path($event->image))) {
+                unlink(public_path($event->image));
+            }
+
+            // Almacenar la nueva imagen
+            $imagePath = $request->file('image')->store('images/events', 'public');
+            $event->image = $imagePath;
+        }
 
         $event->update([
             'name' => $request->input('name'),
             'tipo' => $request->input('tipo'),
-            'fecha' => $fechaHora,
+            'date' => $request->input('date'),
+            'end_date' => $request->input('end_date'),
             'user_id' => $request->input('user_id'),
-            'descripcion' => $request->input('descripcion'),
+            'description' => $request->input('description'),
             'location' => $request->input('location'),
+            'image' => $imagePath ?? $event->image, // Mantener la imagen anterior si no se actualiza
         ]);
 
         return redirect()->route('backend.events.index')->with('success', __('event.Event updated successfully.'));

@@ -39,16 +39,23 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="fecha" class="form-label">{{ __('event.Fecha') }}</label>
-                    <input type="date" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" value="{{ old('fecha') }}" required>
+                    <label for="fecha" class="form-label">{{ __('event.Fecha y Hora') }}</label>
+                    <input type="datetime-local" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" value="{{ old('fecha') }}" required>
                     @error('fecha')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="hora" class="form-label">{{ __('event.Hora') }}</label>
-                    <input type="time" class="form-control @error('hora') is-invalid @enderror" id="hora" name="hora" value="{{ old('hora') }}" required>
-                    @error('hora')
+                    <label for="end_date" class="form-label">{{ __('event.Fecha y Hora de Finalización') }}</label>
+                    <input type="datetime-local" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
+                    @error('end_date')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">{{ __('event.Imagen') }}</label>
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
+                    @error('image')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

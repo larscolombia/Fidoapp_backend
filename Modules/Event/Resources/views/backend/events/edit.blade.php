@@ -23,9 +23,9 @@
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
-                    <label for="titulo" class="form-label">{{ __('event.titulo') }}</label>
-                    <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo', $event->titulo) }}" required>
-                    @error('titulo')
+                    <label for="name" class="form-label">{{ __('event.titulo') }}</label>
+                    <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="name" name="name" value="{{ old('name', $event->name) }}" required>
+                    @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -40,21 +40,21 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="fecha" class="form-label">{{ __('event.Fecha') }}</label>
-                    <input type="date" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" value="{{ old('fecha', $event->fecha ? $event->fecha->format('Y-m-d') : '') }}" required>
-                    @error('fecha')
+                    <label for="date" class="form-label">{{ __('event.Fecha y Hora de Inicio') }}</label>
+                    <input type="datetime-local" class="form-control @error('date') is-invalid @enderror" id="date" name="date" value="{{ old('date', $event->date ? \Carbon\Carbon::parse($event->date)->format('Y-m-d\TH:i') : '') }}" required>
+                    @error('date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="hora" class="form-label">{{ __('event.Hora') }}</label>
-                    <input type="time" class="form-control @error('hora') is-invalid @enderror" id="hora" name="hora" value="{{ old('hora', $event->fecha ? $event->fecha->format('H:i') : '') }}" required>
-                    @error('hora')
+                    <label for="end_date" class="form-label">{{ __('event.Fecha y Hora de Fin') }}</label>
+                    <input type="datetime-local" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" value="{{ old('end_date', $event->end_date ? \Carbon\Carbon::parse($event->end_date)->format('Y-m-d\TH:i') : '') }}" required>
+                    @error('end_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div id="calendar-container" class="mb-3">
-                    <div id="calendar"></div>
+                    <div id="calendar"></div> <!-- Asegúrate de que este div esté presente -->
                 </div>
                 <div class="mb-3">
                     <label for="user_id" class="form-label">{{ __('event.Nombre del Organizador') }}</label>
@@ -68,21 +68,32 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="descripcion" class="form-label">{{ __('event.Descripción') }} ({{ __('Opcional') }})</label>
-                    <textarea class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion">{{ old('descripcion', $event->descripcion) }}</textarea>
-                    @error('descripcion')
+                    <label for="description" class="form-label">{{ __('event.Descripción') }} ({{ __('Opcional') }})</label>
+                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $event->description) }}</textarea>
+                    @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="ubication" class="form-label">{{ __('event.ubication') }} ({{ __('Opcional') }})</label>
-                    <textarea class="form-control @error('ubication') is-invalid @enderror" id="ubication" name="ubication" placeholder="https://www.google.com/maps/...">{{ old('ubication', $event->ubication) }}</textarea>
-                    @error('ubication')
+                    <label for="location" class="form-label">{{ __('event.ubication') }} ({{ __('Opcional') }})</label>
+                    <textarea class="form-control @error('location') is-invalid @enderror" id="location" name="location" placeholder="https://www.google.com/maps/...">{{ old('location', $event->location) }}</textarea>
+                    @error('location')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">{{ __('event.Imagen') }}</label>
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
+                    @if ($event->image)
+                        <img src="{{ asset($event->image) }}" class="img-fluid mt-3" style="max-width: 100%; max-height: 300px;" alt="{{ $event->name }}">
+                    @endif
+                    @error('image')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-success">{{ __('event.Editar') }}</button>
                 <a href="{{ route('backend.events.index') }}" class="btn btn-secondary">{{ __('event.Cancelar') }}</a>
+                <button class="btn btn-primary">Agregar a Google Calendar</button>
             </form>
         </div>
     </div>
@@ -94,47 +105,56 @@
 @endpush
 
 @push('after-scripts')
-<script src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var events = @json($events);
+    <script src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var events = @json($events);
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: events,
-            dateClick: function(info) {
-                document.getElementById('fecha').value = info.dateStr;
-            },
-            eventContent: function(info) {
-                return { html: info.event.title + ' ' + info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }; // Mostrar el título y la hora del evento
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: events,
+                dateClick: function(info) {
+                    document.getElementById('date').value = info.dateStr;
+                },
+                eventContent: function(info) {
+                    return { 
+                        html: info.event.title + ' ' + 
+                        info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' +
+                        (info.event.end ? info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '')
+                    };
+                }
+            });
+
+            calendar.render();
+
+            // Function to update event on calendar
+            function updateCalendarEvent() {
+                var fecha = document.getElementById('date').value;
+                var endDate = document.getElementById('end_date').value;
+                var eventId = "{{ $event->id }}"; // Ensure event ID is available in the view
+                
+                var event = calendar.getEventById(eventId); // Get the event by ID
+                
+                if (event) {
+                    event.setDates(fecha, endDate); // Update the event dates
+                } else {
+                    // If the event does not exist, create it (if necessary)
+                    event = {
+                        id: eventId,
+                        title: document.getElementById('name').value,
+                        start: fecha,
+                        end: endDate,
+                        allDay: false
+                    };
+                    calendar.addEvent(event);
+                }
             }
+
+            // Attach change events to date and end_date fields
+            document.getElementById('date').addEventListener('change', updateCalendarEvent);
+            document.getElementById('end_date').addEventListener('change', updateCalendarEvent);
         });
-
-        calendar.render();
-
-        // Actualiza el calendario cuando se cambian los inputs de fecha y hora
-        document.getElementById('fecha').addEventListener('change', function() {
-            updateCalendarEvent();
-        });
-
-        document.getElementById('hora').addEventListener('change', function() {
-            updateCalendarEvent();
-        });
-
-        function updateCalendarEvent() {
-            var fecha = document.getElementById('fecha').value;
-            var hora = document.getElementById('hora').value;
-            if (fecha && hora) {
-                var event = {
-                    title: document.getElementById('titulo').value,
-                    start: fecha + 'T' + hora + ':00',
-                    allDay: false
-                };
-                calendar.addEvent(event);
-            }
-        }
-    });
-</script>
+    </script>
 @endpush

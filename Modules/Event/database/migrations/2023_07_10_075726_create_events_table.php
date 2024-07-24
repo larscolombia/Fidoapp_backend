@@ -18,6 +18,9 @@ return new class extends Migration
 
             $table->string('name')->nullable();
             $table->dateTime('date')->nullable();
+            $table->dateTime('end_date')->nullable();
+            $table->string('image')->nullable();
+            
             $table->string('slug')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->longText('description')->nullable();

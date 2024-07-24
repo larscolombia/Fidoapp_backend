@@ -211,4 +211,22 @@ class HerramientaController extends Controller
         $herramienta_entrenamiento_type = HerramientaType::findOrFail($herramientas_entrenamiento_type);
         return view('backend.herramientas_entrenamiento.edit_type', compact('herramienta_entrenamiento_type'));
     }
+
+    public function update_type(Request $request, $herramientas_entrenamiento_type) {
+        $validator = Validator::make($request->all(), [
+            'icon' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $herramienta_entrenamiento_type = HerramientaType::findOrFail($herramientas_entrenamiento_type);
+
+        $herramienta_entrenamiento_type->icon = $request->input('icon');
+
+        $herramienta_entrenamiento_type->save();
+
+        return redirect()->route('backend.herramientas_entrenamiento.icon')->with('success', __('herramientas_entrenamiento.Actualizado correctamente'));
+    }
 }
