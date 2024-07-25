@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\ComandoEquivalenteController;
 use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\HerramientaController;
+use App\Http\Controllers\Api\HerramientasEntrenamientoController;
 use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Backend\API\DashboardController;
@@ -1063,6 +1065,131 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          */
         Route::delete('/{id}', [ComandoController::class, 'destroy']);
     });
+
+
+    Route::prefix('herramientas')->group(function () {
+        /**
+         * Crear una nueva herramienta.
+         * Método HTTP: POST
+         * Ruta: /api/herramientas
+         * Descripción: Crea una nueva herramienta de entrenamiento.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Nombre de la herramienta",
+         *     "description": "Descripción de la herramienta",
+         *     "type": "Silbato", // Opcional si se proporciona type_id
+         *     "type_id": 1, // Opcional si se proporciona type
+         *     "audio": "ruta/al/audio.mp3",
+         *     "status": "active"
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Nombre de la herramienta",
+         *         "description": "Descripción de la herramienta",
+         *         "type_id": 1,
+         *         "audio": "ruta/al/audio.mp3",
+         *         "status": "active",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::post('/', [HerramientaController::class, 'store']);
+
+        /**
+         * Mostrar una herramienta específica por ID.
+         * Método HTTP: GET
+         * Ruta: /api/herramientas/{id}
+         * Descripción: Obtiene los detalles de una herramienta específica por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Nombre de la herramienta",
+         *         "description": "Descripción de la herramienta",
+         *         "type_id": 1,
+         *         "audio": "ruta/al/audio.mp3",
+         *         "status": "active",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::get('/{id}', [HerramientaController::class, 'show']);
+
+        /**
+         * Listar todas las herramientas.
+         * Método HTTP: GET
+         * Ruta: /api/herramientas
+         * Descripción: Obtiene una lista de todas las herramientas de entrenamiento.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "name": "Nombre de la herramienta 1",
+         *             "description": "Descripción de la herramienta 1",
+         *             "type_id": 1,
+         *             "audio": "ruta/al/audio1.mp3",
+         *             "status": "active",
+         *             "created_at": "2024-07-13T00:00:00.000000Z",
+         *             "updated_at": "2024-07-13T00:00:00.000000Z"
+         *         },
+         *         ...
+         *     ]
+         * }
+         */
+        Route::get('/', [HerramientaController::class, 'index']);
+
+        /**
+         * Actualizar una herramienta específica por ID.
+         * Método HTTP: PUT
+         * Ruta: /api/herramientas/{id}
+         * Descripción: Actualiza los datos de una herramienta específica por ID.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Nombre de la herramienta",
+         *     "description": "Descripción de la herramienta",
+         *     "type": "Silbato", // Opcional si se proporciona type_id
+         *     "type_id": 1, // Opcional si se proporciona type
+         *     "audio": "ruta/al/audio.mp3",
+         *     "status": "active"
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Nombre de la herramienta",
+         *         "description": "Descripción de la herramienta",
+         *         "type_id": 1,
+         *         "audio": "ruta/al/audio.mp3",
+         *         "status": "active",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::put('/{id}', [HerramientaController::class, 'update']);
+
+        /**
+         * Eliminar una herramienta por ID.
+         * Método HTTP: DELETE
+         * Ruta: /api/herramientas/{id}
+         * Descripción: Elimina una herramienta específica por ID.
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Herramienta eliminada exitosamente"
+         * }
+         */
+        Route::delete('/{id}', [HerramientaController::class, 'destroy']);
+        });
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 

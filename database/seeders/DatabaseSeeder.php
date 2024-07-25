@@ -58,6 +58,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(EmployeeRatingTableSeeder::class);
         // $this->call(ProductsTableSeeder::class);
         $this->call(TagsTableSeeder::class);
+        $this->call(HerramientaEntrenamientoTypeSeeder::class);
         // $this->call(ProductTagsTableSeeder::class);
         // $this->call(ProductVariationsTableSeeder::class);
         // $this->call(ProductVariationCombinationsTableSeeder::class);
