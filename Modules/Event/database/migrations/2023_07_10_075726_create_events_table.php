@@ -33,7 +33,7 @@ return new class extends Migration
             ->onDelete('cascade');
 
             $table->boolean('status')->default(1);
-
+            
             $table->integer('created_by')->unsigned()->nullable();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->integer('deleted_by')->unsigned()->nullable();

@@ -3,6 +3,7 @@
 namespace Modules\Event\Models;
 
 use App\Models\BaseModel;
+use App\Models\CalendarEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
@@ -32,6 +33,11 @@ class Event extends BaseModel
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function calendarEvents()
+    {
+        return $this->hasMany(CalendarEvent::class);
     }
     
     protected function getEventImageAttribute()

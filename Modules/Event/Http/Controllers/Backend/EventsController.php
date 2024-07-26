@@ -5,6 +5,8 @@ namespace Modules\Event\Http\Controllers\Backend;
 use App\Authorizable;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\EventCreatedNotification;
+use App\Notifications\EventUpdatedNotification;
 use Modules\Event\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -108,7 +110,7 @@ class EventsController extends Controller
         $query = Event::query()
                 ->whereDate('date', $currentDate)
                 ->orWhere('date', '>', $currentDate);
-
+                
         return Datatables::of($query)
                         ->addColumn('check', function ($row) {
                             return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
@@ -212,7 +214,7 @@ class EventsController extends Controller
             $imagePath = 'images/events/' . $request->file('image')->getClientOriginalName(); // Guarda la ruta relativa
         }
 
-        Event::create([
+        $event = Event::create([
             'name' => $request->input('titulo'),
             'tipo' => $request->input('tipo'),
             'date' => $request->input('fecha'),
@@ -222,6 +224,12 @@ class EventsController extends Controller
             'location' => $request->input('ubication'),
             'image' => $imagePath,
         ]);
+
+         // Enviar notificación a todos los usuarios
+        $users = User::all();
+        foreach ($users as $user) {
+            $user->notify(new EventCreatedNotification($event));
+        }
 
         return redirect()->route('backend.events.index')->with('success', __('event.Event created successfully.'));
     }
@@ -307,6 +315,12 @@ class EventsController extends Controller
             'location' => $request->input('location'),
             'image' => $imagePath ?? $event->image, // Mantener la imagen anterior si no se actualiza
         ]);
+
+        // Enviar notificación a todos los usuarios interesados (por ejemplo, organizadores)
+        $users = User::all(); // Ajustar según los roles o criterios de usuarios
+        foreach ($users as $user) {
+            $user->notify(new EventUpdatedNotification($event));
+        }
 
         return redirect()->route('backend.events.index')->with('success', __('event.Event updated successfully.'));
     }

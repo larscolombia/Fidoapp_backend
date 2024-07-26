@@ -37,5 +37,10 @@ return [
     'Image' => 'Imagen',
     'End Date' => 'Fecha de Finalización',
     'Fecha y Hora de Inicio' => 'Fecha y Hora de Inicio',
+    'Google Calendar connected successfully' => 'Google Calendar conectado exitosamente',
     'Fecha y Hora de Fin' => 'Fecha y Hora de Finalización',
+    'Event added to Google Calendar' => 'Evento añadido a Google Calendar',
+    'No calendar event URL available' => 'No hay URL de evento de calendario disponible',
+    'A new event has been created.'  => 'Se ha creado un nuevo evento.',
+    'event_updated' => "El evento ':event_name' ha sido actualizado.",
 ];

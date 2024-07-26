@@ -93,7 +93,6 @@
                 </div>
                 <button type="submit" class="btn btn-success">{{ __('event.Editar') }}</button>
                 <a href="{{ route('backend.events.index') }}" class="btn btn-secondary">{{ __('event.Cancelar') }}</a>
-                <button class="btn btn-primary">Agregar a Google Calendar</button>
             </form>
         </div>
     </div>

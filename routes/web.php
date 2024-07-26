@@ -15,6 +15,7 @@ use App\Http\Controllers\CursoPlataformaController;
 use App\Http\Controllers\DiarioController;
 use App\Http\Controllers\EBookController;
 use App\Http\Controllers\EjercicioController;
+use App\Http\Controllers\GoogleCalendarController;
 use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PermissionController;
@@ -329,5 +330,9 @@ Route::group(['prefix' => 'app'], function () {
         Route::prefix('clases/{clase}')->name('clases.')->group(function() {
             Route::resource('ejercicios', EjercicioController::class);
         });
+
+        Route::get('auth/google', [GoogleCalendarController::class, 'redirectToGoogle'])->name('google.redirect');
+        Route::get('auth/google/callback', [GoogleCalendarController::class, 'handleGoogleCallback']);
+        Route::post('events/google-calendar', [GoogleCalendarController::class, 'createEvent'])->name('google.calendar.create');
     });
 });
