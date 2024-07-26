@@ -29,66 +29,66 @@ class PetTypeSeederTableSeeder extends Seeder
 
         if (env('IS_DUMMY_DATA')) {
             $data = [
-                [
-                    'name' => 'Cat',
-                    'slug' => 'cat',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Cat.png'),
-                ],
+                // [
+                //     'name' => 'Cat',
+                //     'slug' => 'cat',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Cat.png'),
+                // ],
                 [
                     'name' => 'Dog',
                     'slug' => 'dog',
                     'status' => 1,
                     'image' => public_path('/dummy-images/pet_type/Dog.png'),
                 ],
-                [
-                    'name' => 'Rabbit',
-                    'slug' => 'rabbit',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Rabbit.png'),
-                ],
-                [
-                    'name' => 'Mouse',
-                    'slug' => 'mouse',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Mouse.png'),
-                ],
-                [
-                    'name' => 'Bird',
-                    'slug' => 'bird',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Bird.png'),
-                ],
-                [
-                    'name' => 'Squirrel',
-                    'slug' => 'squirrel',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Squirrel.png'),
-                ],
-                [
-                    'name' => 'Turtle',
-                    'slug' => 'turtle',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Turtle.png'),
-                ],
-                [
-                    'name' => 'Chameleon',
-                    'slug' => 'chameleon',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Chameleon.png'),
-                ],
-                [
-                    'name' => 'Horse',
-                    'slug' => 'horse',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Horse.png'),
-                ],
-                [
-                    'name' => 'Fish',
-                    'slug' => 'fish',
-                    'status' => 1,
-                    'image' => public_path('/dummy-images/pet_type/Fish.png'),
-                ],
+                // [
+                //     'name' => 'Rabbit',
+                //     'slug' => 'rabbit',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Rabbit.png'),
+                // ],
+                // [
+                //     'name' => 'Mouse',
+                //     'slug' => 'mouse',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Mouse.png'),
+                // ],
+                // [
+                //     'name' => 'Bird',
+                //     'slug' => 'bird',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Bird.png'),
+                // ],
+                // [
+                //     'name' => 'Squirrel',
+                //     'slug' => 'squirrel',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Squirrel.png'),
+                // ],
+                // [
+                //     'name' => 'Turtle',
+                //     'slug' => 'turtle',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Turtle.png'),
+                // ],
+                // [
+                //     'name' => 'Chameleon',
+                //     'slug' => 'chameleon',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Chameleon.png'),
+                // ],
+                // [
+                //     'name' => 'Horse',
+                //     'slug' => 'horse',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Horse.png'),
+                // ],
+                // [
+                //     'name' => 'Fish',
+                //     'slug' => 'fish',
+                //     'status' => 1,
+                //     'image' => public_path('/dummy-images/pet_type/Fish.png'),
+                // ],
 
             ];
             foreach ($data as $key => $val) {
