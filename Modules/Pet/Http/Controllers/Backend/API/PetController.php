@@ -4,6 +4,7 @@ namespace Modules\Pet\Http\Controllers\Backend\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\api\pets\storeRequest;
+use App\Http\Requests\api\pets\UpdateRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Modules\Pet\Models\Pet;
@@ -19,6 +20,7 @@ use Modules\Pet\Transformers\PetDetailsResource;
 use Modules\Booking\Models\Booking;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Log;
 
 class PetController extends Controller
 {
@@ -288,8 +290,13 @@ class PetController extends Controller
         $validatedData['slug'] = $slug;
 
         // Manejo de la imagen de la mascota
-        if ($request->hasFile('pet_image')) {
-            $imagePath = $request->file('pet_image')->store('pet_images', 'public');
+         if ($request->hasFile('pet_image')) {
+            $image = $request->file('pet_image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'images/pets/' . $imageName;
+
+            // Mueve la imagen a la carpeta public/images/pets
+            $image->move(public_path('images/pets'), $imageName);
             $validatedData['pet_image'] = $imagePath;
         }
 
@@ -300,5 +307,63 @@ class PetController extends Controller
             'message' => __('pet.pet_created_successfully'),
             'data' => $pet
         ], 201);
+    }
+
+    public function update(UpdateRequest $request, $id)
+    {
+        $pet = Pet::findOrFail($id);
+
+        $validatedData = $request->validated();
+
+        if (isset($validatedData['breed_id'])) {
+            $breed = Breed::find($validatedData['breed_id']);
+        } elseif (isset($validatedData['breed_name'])) {
+            $breed = Breed::where('name', $validatedData['breed_name'])->first();
+            if ($breed) {
+                $validatedData['breed_id'] = $breed->id;
+            } else {
+                return response()->json([
+                    'message' => __('validation.invalid_breed'),
+                ], 422);
+            }
+        }
+
+        if ($request->hasFile('pet_image')) {
+            $image = $request->file('pet_image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'images/pets/' . $imageName;
+
+            $image->move(public_path('images/pets'), $imageName);
+            $validatedData['pet_image'] = $imagePath;
+        }
+
+        $pet->update($validatedData);
+
+        return response()->json([
+            'message' => __('pet.pet_updated_successfully'),
+            'data' => $pet
+        ]);
+    }
+
+    public function show($id)
+    {
+        $pet = Pet::with(['pettype', 'breed'])->findOrFail($id);
+
+        return response()->json([
+            'data' => $pet,
+            'message' => __('pet.pet_retrieved_successfully'),
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $petSelected = Pet::find($id);
+        $petSelected->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => __('pet.pet_deleted_successfully'),
+            'data' => $petSelected
+        ]);
     }
 }

@@ -1388,6 +1388,82 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::post('/pets', [PetController::class, 'store']);
+
+        /**
+         * Editar una mascota.
+         * Método HTTP: PATCH
+         * Ruta: /api/pets/{id}
+         * Descripción: Actualiza los datos de una mascota específica. Se puede enviar cualquier campo para ser actualizado.
+         * Parámetros de Solicitud (opcional):
+         * - name (string): Nombre de la mascota.
+         * - breed_id (integer): ID de la raza de la mascota.
+         * - breed_name (string): Nombre de la raza de la mascota.
+         * - size (string): Tamaño de la mascota.
+         * - date_of_birth (date): Fecha de nacimiento de la mascota. Formato: 'YYYY-MM-DD'.
+         * - age (string): Edad de la mascota.
+         * - gender (string): Género de la mascota. Valores permitidos: 'male', 'female'.
+         * - weight (numeric): Peso de la mascota.
+         * - height (numeric): Altura de la mascota.
+         * - weight_unit (string): Unidad de peso.
+         * - height_unit (string): Unidad de altura.
+         * - user_id (integer): ID del dueño de la mascota.
+         * - additional_info (string): Información adicional sobre la mascota.
+         * - status (boolean): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false.
+         * - pet_image (file): Imagen de la mascota. Debe ser una imagen válida (jpeg, png, jpg, gif) y no superar los 2MB.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Mascota actualizada exitosamente",
+         *     "data": { ... }
+         * }
+         * 
+         * Respuesta de Error (422):
+         * {
+         *     "message": "El breed_id o breed_name proporcionado no es válido."
+         *     // o
+         *     "message": "El usuario especificado no existe."
+         * }
+         */
+        Route::put('/pets/{id}', [PetController::class, 'update']);
+
+        /**
+         * Ver detalles de una mascota.
+         * Método HTTP: GET
+         * Ruta: /api/pets/{id}
+         * Descripción: Recupera los detalles de una mascota específica por su ID.
+         * Parámetros de Solicitud: Ninguno
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": { ... },
+         *     "message": "Detalles de la mascota recuperados con éxito"
+         * }
+         * 
+         * Respuesta de Error (404):
+         * {
+         *     "message": "Mascota no encontrada."
+         * }
+         */
+        Route::get('/pets/{id}', [PetController::class, 'show']);
+
+        /**
+         * Eliminar una mascota.
+         * Método HTTP: DELETE
+         * Ruta: /api/pets/{id}
+         * Descripción: Elimina una mascota específica por su ID.
+         * Parámetros de Solicitud: Ninguno
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Mascota eliminada exitosamente"
+         * }
+         * 
+         * Respuesta de Error (404):
+         * {
+         *     "message": "Mascota no encontrada."
+         * }
+         */
+        Route::delete('/pets/{id}', [PetController::class, 'destroy']);
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 

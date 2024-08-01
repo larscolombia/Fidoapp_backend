@@ -43,5 +43,8 @@ return [
     'pet_created_successfully' => 'Mascota creada exitosamente.',
     'user_not_found' => 'El usuario especificado no existe.',
     'invalid_image' => 'El archivo subido no es una imagen válida.',
+    'pet_retrieved_successfully' => 'Mascota retornada satisfactoriamente',
+    'pet_deleted_successfully' => 'Mascota eliminada satisfactoriamente',
+    'pet_updated_successfully' => 'Mascota eliminada satisfactoriamente',
     'invalid_image_format' => 'El formato de la imagen no es válido. Los formatos permitidos son jpeg, png, jpg, gif.',
 ];
