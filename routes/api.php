@@ -1236,7 +1236,158 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          */
         Route::get('/pets/{petId}/owners', [SharedOwnerController::class, 'getOwners']);
 
-        
+        // Retorna una lista paginada de tipos de mascotas, filtrada por estado activo y una búsqueda opcional.
+        /**
+         * Obtener una lista de tipos de mascotas.
+         * Método HTTP: GET
+         * Ruta: /api/pet-types
+         * Descripción: Recupera una lista de tipos de mascotas, con soporte para paginación y búsqueda opcional.
+         * Parámetros de Solicitud:
+         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+         * - search (string, opcional): Texto de búsqueda para filtrar tipos de mascotas por nombre.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [ ... ],
+         *     "message": "Lista de tipos de mascotas recuperada con éxito"
+         * }
+         */
+        Route::get('/pet-types', [PetController::class, 'petTypeList']);
+
+        // Retorna una lista paginada de mascotas de un usuario específico, filtrada por estado, tipo de mascota y búsqueda opcional.
+        /**
+         * Obtener una lista de mascotas.
+         * Método HTTP: GET
+         * Ruta: /api/pets
+         * Descripción: Recupera una lista de mascotas asociadas a un usuario, con soporte para paginación, filtrado por tipo de mascota y búsqueda opcional.
+         * Parámetros de Solicitud:
+         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+         * - search (string, opcional): Texto de búsqueda para filtrar mascotas por nombre.
+         * - user_id (integer, opcional): ID del usuario para filtrar las mascotas por dueño. Por defecto, el usuario autenticado.
+         * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las mascotas.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [ ... ],
+         *     "message": "Lista de mascotas recuperada con éxito"
+         * }
+         */
+        Route::get('/pets', [PetController::class, 'petList']);
+
+        // Retorna una lista paginada de razas, filtrada por estado, tipo de mascota y búsqueda opcional en el nombre o descripción.
+        /**
+         * Obtener una lista de razas de mascotas.
+         * Método HTTP: GET
+         * Ruta: /api/breeds
+         * Descripción: Recupera una lista de razas, con soporte para paginación, filtrado por tipo de mascota y búsqueda opcional en nombre o descripción.
+         * Parámetros de Solicitud:
+         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+         * - search (string, opcional): Texto de búsqueda para filtrar razas por nombre o descripción.
+         * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las razas.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [ ... ],
+         *     "message": "Lista de razas recuperada con éxito"
+         * }
+         */
+        Route::get('/breeds', [PetController::class, 'breedList']);
+
+        // Retorna una lista paginada de notas de mascotas, filtrada por estado, privacidad y tipo de usuario (usuario o administrador).
+        /**
+         * Obtener una lista de notas de mascotas.
+         * Método HTTP: GET
+         * Ruta: /api/pet-notes
+         * Descripción: Recupera una lista de notas de mascotas, con soporte para paginación, filtrado por estado, privacidad y tipo de usuario.
+         * Parámetros de Solicitud:
+         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+         * - search (string, opcional): Texto de búsqueda para filtrar notas de mascotas por nombre.
+         * - pet_id (integer, opcional): ID de la mascota para filtrar las notas.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [ ... ],
+         *     "message": "Lista de notas de mascotas recuperada con éxito"
+         * }
+         */
+        Route::get('/pet-notes', [PetController::class, 'petNoteList']);
+
+        // Retorna una lista paginada de dueños y sus mascotas, basándose en un employee_id y los datos de reserva.
+        /**
+         * Obtener una lista de dueños y sus mascotas.
+         * Método HTTP: GET
+         * Ruta: /api/owner-pets
+         * Descripción: Recupera una lista de dueños y sus mascotas, basándose en un ID de empleado y los datos de reserva, con soporte para paginación.
+         * Parámetros de Solicitud:
+         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+         * - employee_id (integer, opcional): ID del empleado para filtrar las reservas. Por defecto, el empleado autenticado.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [ ... ],
+         *     "message": "Lista de dueños y mascotas recuperada con éxito"
+         * }
+         */
+        Route::get('/owner-pets', [PetController::class, 'OwnerPetList']);
+
+        // Retorna los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
+        /**
+         * Obtener detalles de una mascota específica.
+         * Método HTTP: GET
+         * Ruta: /api/pet-details
+         * Descripción: Recupera los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
+         * Parámetros de Solicitud:
+         * - pet_id (integer, opcional): ID de la mascota para recuperar los detalles. Obligatorio si no se pasa por URL.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": { ... },
+         *     "message": "Detalles de la mascota recuperados con éxito"
+         * }
+         */
+        Route::get('/pet-details', [PetController::class, 'PetDetails']);
+
+        /**
+         * Crear una nueva mascota.
+         * Método HTTP: POST
+         * Ruta: /api/pets
+         * Descripción: Crea una nueva mascota con los datos proporcionados. El campo 'breed_id' se valida primero, y si no es válido, se intenta validar 'breed_name'. Si ambos son inválidos, se devuelve un error.
+         * Parámetros de Solicitud:
+         * - name (string): Nombre de la mascota (requerido).
+         * - breed_id (integer, opcional): ID de la raza de la mascota. Si se proporciona y es inválido, se prueba con 'breed_name'.
+         * - breed_name (string, opcional): Nombre de la raza de la mascota. Se utiliza si 'breed_id' no es válido o no se proporciona.
+         * - size (string, opcional): Tamaño de la mascota.
+         * - date_of_birth (date, opcional): Fecha de nacimiento de la mascota. Formato: 'YYYY-MM-DD'.
+         * - age (string, opcional): Edad de la mascota.
+         * - gender (string, opcional): Género de la mascota. Valores permitidos: 'male', 'female'.
+         * - weight (numeric, opcional): Peso de la mascota.
+         * - height (numeric, opcional): Altura de la mascota.
+         * - weight_unit (string, opcional): Unidad de peso.
+         * - height_unit (string, opcional): Unidad de altura.
+         * - user_id (integer): ID del dueño de la mascota (requerido).
+         * - additional_info (string, opcional): Información adicional sobre la mascota.
+         * - status (boolean, opcional): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false. Por defecto es 1 (activo).
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Mascota creada exitosamente",
+         *     "data": { ... }
+         * }
+         * 
+         * Respuesta de Error (422):
+         * {
+         *     "message": "El breed_id o breed_name proporcionado no es válido."
+         *     // o
+         *     "message": "El usuario especificado no existe."
+         * }
+         */
+        Route::post('/pets', [PetController::class, 'store']);
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 

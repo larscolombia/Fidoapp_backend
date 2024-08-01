@@ -3,6 +3,8 @@
 namespace Modules\Pet\Http\Controllers\Backend\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\api\pets\storeRequest;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Modules\Pet\Models\Pet;
 use Modules\Pet\Models\PetType;
@@ -20,6 +22,7 @@ use Auth;
 
 class PetController extends Controller
 {
+    // Retorna una lista paginada de tipos de mascotas, filtrada por estado activo y una búsqueda opcional.
     public function petTypeList(Request $request)
     {
         $perPage = $request->input('per_page', 10);
@@ -41,6 +44,7 @@ class PetController extends Controller
         ], 200);
     }
 
+    //  Retorna una lista paginada de mascotas de un usuario específico, filtrada por estado, tipo de mascota y búsqueda opcional.
     public function petList(Request $request)
     {
         $user = Auth::user();
@@ -67,6 +71,7 @@ class PetController extends Controller
         ], 200);
     }
 
+    // Retorna una lista paginada de razas, filtrada por estado, tipo de mascota y búsqueda opcional en el nombre o descripción.
     public function breedList(Request $request)
     {
         $perPage = $request->input('per_page', 10);
@@ -91,6 +96,7 @@ class PetController extends Controller
         ], 200);
     }
 
+    // Retorna una lista paginada de notas de mascotas, filtrada por estado, privacidad y tipo de usuario (usuario o administrador).
     public function petNoteList(Request $request)
     {
         $perPage = $request->input('per_page', 10);
@@ -144,6 +150,7 @@ class PetController extends Controller
         ], 200);
     }
 
+    // Retorna una lista paginada de dueños y sus mascotas, basándose en un employee_id y los datos de reserva.
     public function OwnerPetList(Request $request){
 
         $employee_id=!empty($request->emaployee_id) ? $request->emaployee_id : auth()->user()->id;
@@ -171,6 +178,7 @@ class PetController extends Controller
 
     }
 
+    // Retorna los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
     public function PetDetails(Request $request){
 
         $pet_id = $request->has('pet_id') ? $request->input('pet_id') : null;
@@ -187,7 +195,7 @@ class PetController extends Controller
         
     }
 
-
+    // Retorna las edades de una mascota y su dueño, basado en el id de la mascota.
     public function getPetAndOwnerAge($id)
     {
         $pet = Pet::with('user')->find($id);
@@ -211,6 +219,7 @@ class PetController extends Controller
         ]);
     }
 
+    // Retorna una lista de todas las mascotas de tipo 'dog' con información detallada sobre su raza, incluyendo nombre, descripción, género, peso y altura.
     public function getAllPetsWithBreedInfo()
     {
         $pets = Pet::where('slug', 'dog')->with('breed')->get();
@@ -238,19 +247,58 @@ class PetController extends Controller
         ]);
     }
 
-    public function attachPetToUser(Request $request, $userId)
+     /**
+     * Crear una nueva mascota.
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(storeRequest $request)
     {
-        // Validar los datos entrantes
-        $request->validate([
-            'pet_id' => 'required|exists:pets,id',
-        ]);
+        // Obtener los datos validados
+        $validatedData = $request->validated();
 
-        $user = User::findOrFail($userId);
-        $pet = Pet::findOrFail($request->pet_id);
+        // Manejo de breed_id y breed_name
+        $breed = null;
 
-        // Adjuntar la mascota al usuario
-        $user->pets()->attach($pet->id);
+        if (!empty($validatedData['breed_id'])) {
+            $breed = Breed::find($validatedData['breed_id']);
+        }
 
-        return response()->json(['message' => 'Pet added to user successfully']);
+        if (!$breed && !empty($validatedData['breed_name'])) {
+            $breed = Breed::where('name', $validatedData['breed_name'])->first();
+        }
+
+        if (!$breed) {
+            return response()->json([
+                'message' => __('pet.invalid_breed'),
+            ], 422);
+        }
+
+        $validatedData['breed_id'] = $breed->id;
+
+        // Generar el slug automáticamente si no está presente
+        $slug = Str::slug($validatedData['name']);
+        $slugCount = Pet::where('slug', 'LIKE', "{$slug}%")->count();
+        if ($slugCount > 0) {
+            $slug .= '-' . ($slugCount + 1);
+        }
+
+        $validatedData['pettype_id'] = PetType::where('slug', 'dog')->first()->id;
+        $validatedData['slug'] = $slug;
+
+        // Manejo de la imagen de la mascota
+        if ($request->hasFile('pet_image')) {
+            $imagePath = $request->file('pet_image')->store('pet_images', 'public');
+            $validatedData['pet_image'] = $imagePath;
+        }
+
+        // Crear la nueva mascota
+        $pet = Pet::create($validatedData);
+
+        return response()->json([
+            'message' => __('pet.pet_created_successfully'),
+            'data' => $pet
+        ], 201);
     }
 }

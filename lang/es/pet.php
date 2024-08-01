@@ -38,4 +38,10 @@ return [
     'pettype_name' => 'Nombre del Tipo de Mascota',
     'owners_and_pets' => 'Propietarios y Mascotas',
     'lbl_private' => 'Nota Privada',
+    'Pet created successfully' => 'Mascota creada satisfactoriamente',
+    'invalid_breed' => 'El breed_id y breed_name proporcionado no son válidos.',
+    'pet_created_successfully' => 'Mascota creada exitosamente.',
+    'user_not_found' => 'El usuario especificado no existe.',
+    'invalid_image' => 'El archivo subido no es una imagen válida.',
+    'invalid_image_format' => 'El formato de la imagen no es válido. Los formatos permitidos son jpeg, png, jpg, gif.',
 ];
