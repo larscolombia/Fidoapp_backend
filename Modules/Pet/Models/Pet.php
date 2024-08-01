@@ -33,6 +33,11 @@ class Pet extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function sharedOwners()
+    {
+        return $this->belongsToMany(User::class, 'shared_owners', 'pet_id', 'user_id');
+    }
     
     protected function getPetImageAttribute()
     {

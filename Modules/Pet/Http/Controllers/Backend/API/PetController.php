@@ -237,4 +237,20 @@ class PetController extends Controller
             'data' => $result
         ]);
     }
+
+    public function attachPetToUser(Request $request, $userId)
+    {
+        // Validar los datos entrantes
+        $request->validate([
+            'pet_id' => 'required|exists:pets,id',
+        ]);
+
+        $user = User::findOrFail($userId);
+        $pet = Pet::findOrFail($request->pet_id);
+
+        // Adjuntar la mascota al usuario
+        $user->pets()->attach($pet->id);
+
+        return response()->json(['message' => 'Pet added to user successfully']);
+    }
 }

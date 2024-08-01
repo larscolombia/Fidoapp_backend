@@ -255,6 +255,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
         return $this->hasMany(Pet::class, 'user_id');
     }
+    public function sharedPets()
+    {
+        return $this->belongsToMany(Pet::class, 'shared_owners', 'user_id', 'pet_id');
+    }
     public function event()
     {
         return $this->hasMany(event::class, 'user_id');

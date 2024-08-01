@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\HerramientaController;
 use App\Http\Controllers\Api\HerramientasEntrenamientoController;
+use App\Http\Controllers\Api\SharedOwnerController;
 use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Backend\API\DashboardController;
@@ -1190,6 +1191,52 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          */
         Route::delete('/{id}', [HerramientaController::class, 'destroy']);
         });
-});
+
+
+        /**
+         * Agregar un dueño compartido a una mascota.
+         * Método HTTP: POST
+         * Ruta: /api/pets/{petId}/shared-owners
+         * Descripción: Asocia un dueño secundario a una mascota específica utilizando el ID de la mascota y del usuario.
+         * Parámetros de Solicitud:
+         * - user_id (integer): El ID del usuario que se va a agregar como dueño compartido.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Shared owner added successfully"
+         * }
+         */
+        Route::post('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'addSharedOwner']);
+    
+        /**
+         * Eliminar un dueño compartido de una mascota.
+         * Método HTTP: DELETE
+         * Ruta: /api/pets/{petId}/shared-owners
+         * Descripción: Elimina la asociación de un dueño secundario con una mascota específica.
+         * Parámetros de Solicitud:
+         * - user_id (integer): El ID del usuario que se va a eliminar como dueño compartido.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Shared owner removed successfully"
+         * }
+         */
+        Route::delete('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'removeSharedOwner']);
+    
+        /**
+         * Obtener los dueños de una mascota.
+         * Método HTTP: GET
+         * Ruta: /api/pets/{petId}/owners
+         * Descripción: Recupera el dueño principal y los dueños compartidos de una mascota específica.
+         * Respuesta Exitosa:
+         * {
+         *     "primary_owner": { ... },
+         *     "shared_owners": [ ... ]
+         * }
+         */
+        Route::get('/pets/{petId}/owners', [SharedOwnerController::class, 'getOwners']);
+
+        
+    });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
