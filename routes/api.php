@@ -31,6 +31,7 @@ use App\Http\Controllers\EBookController;
 */
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
 use Modules\Pet\Http\Controllers\Backend\API\PetController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
 
@@ -1464,6 +1465,212 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::delete('/pets/{id}', [PetController::class, 'destroy']);
+
+        /**
+         * Obtener la lista de reservas.
+         * Método HTTP: GET
+         * Ruta: /api/bookings/get
+         * Descripción: Obtiene una lista de reservas filtradas según los parámetros proporcionados.
+         * 
+         * Parámetros de Solicitud:
+         * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
+         * - booking_type: string (Opcional) - Tipo de reserva (e.g., 'training', 'veterinary').
+         * - nearby_booking: int (Opcional) - Si es 1, obtiene reservas cercanas.
+         * - system_service_name: string (Opcional) - Nombres de servicios del sistema, separados por comas.
+         * - status: string (Opcional) - Estados de reserva, separados por comas.
+         * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
+         * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
+         * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [
+         *         // Datos de las reservas
+         *     ],
+         *     "message": "Lista de reservas obtenida exitosamente."
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "status": false,
+         *     "message": "Error message"
+         * }
+         */
+        Route::get('/bookings/get', [BookingsController::class, 'bookingList'])->name('bookings.list');
+
+        /**
+         * Crear o actualizar una reserva.
+         * Método HTTP: POST
+         * Ruta: /api/bookings/store
+         * Descripción: Crea o actualiza una reserva dependiendo de si se proporciona un ID en la solicitud.
+         * 
+         * Parámetros de Solicitud:
+         * - booking_type: string (Requerido) - Tipo de reserva (e.g., 'veterinary', 'training')
+         * - date_time: string (Requerido) - Fecha y hora de la reserva
+         * - duration: string (Opcional) - Duración de la reserva
+         * - service_id: int (Opcional) - ID del servicio (solo para 'veterinary')
+         * - service_name: string (Opcional) - Nombre del servicio (solo para 'veterinary')
+         * - employee_id: int (Requerido) - ID del empleado (entrenador o veterinario)
+         * - reason: string (Opcional) - Razón de la consulta (solo para 'veterinary')
+         * - start_video_link: string (Opcional) - Enlace para iniciar la videollamada (solo para 'veterinary')
+         * - join_video_link: string (Opcional) - Enlace para unirse a la videollamada (solo para 'veterinary')
+         * - medical_report: file (Opcional) - Archivo del reporte médico (solo para 'veterinary')
+         * - training_id: int (Opcional) - ID del entrenamiento (solo para 'training')
+         * - user_id: int (Opcional) - ID del usuario (Se tomará el usuario autenticado, en caso de no estar definido)
+         * - service_amount: float - Monto del servicio
+         * - price: float - Precio del servicio
+         * - latitude: float (Opcional) - Para la notificación por ubicación
+         * - longitude: float (Opcional) - Para la notificación por ubicación
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "New Booking Added", // O "Booking Updated" si se actualizó una reserva existente
+         *     "status": true,
+         *     "data": object // Detalles de la reserva
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error message",
+         *     "status": false
+         * }
+         */
+        Route::post('/bookings/store', [BookingsController::class, 'store'])->name('bookings.store');
+
+        /**
+         * Actualizar el estado de una reserva.
+         * Método HTTP: PUT
+         * Ruta: /api/bookings/status
+         * Descripción: Actualiza el estado de una reserva existente por su ID.
+         * 
+         * Parámetros de Solicitud:
+         * - id: int (Requerido) - ID de la reserva.
+         * - status: string (Requerido) - Nuevo estado de la reserva (completed, cancelled, in-progress, rejected, pending, confirmed).
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Estado de la reserva actualizado exitosamente",
+         *     "status": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error message",
+         *     "status": false
+         * }
+         */
+        Route::put('/bookings/status', [BookingsController::class, 'updateStatus'])->name('bookings.updateStatus');
+
+        /**
+         * Actualizar una reserva existente.
+         * Método HTTP: PUT
+         * Ruta: /api/bookings/{id}
+         * Descripción: Actualiza una reserva existente por su ID.
+         * 
+         * Parámetros de Solicitud:
+         * - Cualquier parámetro que sea necesario para actualizar la reserva.
+         * - services: array (Opcional) - Servicios asociados a la reserva.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Reserva actualizada exitosamente",
+         *     "data": {
+         *         // Datos de la reserva actualizada
+         *     },
+         *     "status": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error message",
+         *     "status": false
+         * }
+         */
+        Route::put('/bookings/{id}', [BookingsController::class, 'update'])->name('bookings.update');
+
+        /**
+         * Obtener los detalles de una reserva.
+         * Método HTTP: GET
+         * Ruta: /api/bookings/detail
+         * Descripción: Obtiene los detalles de una reserva específica por su ID.
+         * 
+         * Parámetros de Solicitud:
+         * - id: int (Requerido) - ID de la reserva.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": {
+         *         // Datos de la reserva
+         *     },
+         *     "customer_review": {
+         *         // Reseña del cliente
+         *     },
+         *     "message": "Detalles de la reserva obtenidos exitosamente."
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "status": false,
+         *     "message": "Reserva no encontrada."
+         * }
+         */
+        Route::get('/bookings/detail', [BookingsController::class, 'bookingDetail'])->name('bookings.detail');
+    
+        /**
+         * Obtener la lista de estados de reservas.
+         * Método HTTP: GET
+         * Ruta: /api/bookings/status-list
+         * Descripción: Obtiene la lista de todos los estados de reservas.
+         * 
+         * Parámetros de Solicitud: Ninguno
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [
+         *         {
+         *             "status": "estado",
+         *             "title": "título",
+         *             "is_disabled": boolean,
+         *             "next_status": "siguiente_estado" (opcional)
+         *         },
+         *         // Otros estados...
+         *     ],
+         *     "message": "Lista de estados de reservas obtenida exitosamente."
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "status": false,
+         *     "message": "Error message"
+         * }
+         */
+        Route::get('/bookings/status-list', [BookingsController::class, 'statusList'])->name('bookings.statusList');
+    
+        /**
+         * Aceptar una reserva.
+         * Método HTTP: PUT
+         * Ruta: /api/bookings/accept/{id}
+         * Descripción: Permite que un empleado acepte una reserva, asignando su ID a la reserva y actualizando el estado de la solicitud.
+         * 
+         * Parámetros de Solicitud:
+         * - {id}: int (Requerido) - ID de la reserva a aceptar.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Reserva aceptada exitosamente.",
+         *     "status": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "status": false,
+         *     "message": "La reserva ya ha sido aceptada."
+         * }
+         */
+        Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 

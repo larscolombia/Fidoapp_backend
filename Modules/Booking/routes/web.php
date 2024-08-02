@@ -102,7 +102,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth']], 
 
     Route::get('training-table-view', [TrainingController::class, 'datatable_view'])->name('training.datatable_view');
     Route::get('training', [TrainingController::class, 'index'])->name('training');
-    Route::get('training.index_data', [trainingController::class, 'index_data'])->name('training.index_data');
+    // Route::get('training.index_data', [trainingController::class, 'index_data'])->name('training.index_data');
 
   });
 

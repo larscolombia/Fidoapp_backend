@@ -32,6 +32,8 @@ use Modules\Commission\Models\CommissionEarning;
 use App\Models\Address;
 
 use DateTime;
+use Illuminate\Support\Facades\Log;
+
 // use Modules\CustomField\Models\CustomField;
 // use Modules\CustomField\Models\CustomFieldGroup;
 
@@ -442,7 +444,6 @@ class BookingsController extends Controller
      */
     public function store(BookingRequest $request)
     {
-
         $data = $request->all();
 
         $branch_id=get_pet_center_id();

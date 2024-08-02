@@ -26,7 +26,7 @@ use App\Http\Controllers\RolePermission;
 use App\Http\Controllers\SearchController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
-
+use Modules\Booking\Http\Controllers\Backend\TrainingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -334,5 +334,8 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('auth/google', [GoogleCalendarController::class, 'redirectToGoogle'])->name('google.redirect');
         Route::get('auth/google/callback', [GoogleCalendarController::class, 'handleGoogleCallback']);
         Route::post('events/google-calendar', [GoogleCalendarController::class, 'createEvent'])->name('google.calendar.create');
+    
+        Route::get('training-index-data', [TrainingController::class, 'index_data'])->name('training.index_data');
+
     });
 });

@@ -4,10 +4,12 @@ namespace Modules\Booking\Http\Controllers\Backend;
 
 use App\Authorizable;
 use App\Http\Controllers\Controller;
+use App\Models\Herramienta;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Modules\Booking\Trait\BookingTrait;
 use Modules\Constant\Models\Constant;
 use Yajra\DataTables\DataTables;
@@ -18,6 +20,9 @@ class TrainingController extends Controller
 {
     // use Authorizable;
     use BookingTrait;
+    public $module_title;
+    public $module_name;
+    public $module_icon;
 
     public function __construct()
     {

@@ -27,6 +27,7 @@ return [
     'booking_status_list' => 'Lista de Estado de Reservas',
     'search_booking' => 'Resultados de búsqueda para reservas.',
     'booking_detail' => 'Detalle de la Reserva',
+    'Booking already accepted' => 'Reserva aceptada exitosamente',
     'booking_list' => 'Lista de Reservas',
     'status_update' => '¡El estado ha sido actualizado!',
     'booking_delete' => 'Eliminado con éxito',

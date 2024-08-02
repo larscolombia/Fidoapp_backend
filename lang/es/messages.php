@@ -2,6 +2,8 @@
 
 return [
     'Welcome to' => 'Bienvenido a :name Panel de Administración.',
+    'new_booking_updated' => 'Nueva reservación actualizada',
+    'new_booking_created' => 'Nueva reservación creada',
     'yes' => 'Sí',
     'no' => 'No',
     'list' => 'Lista',

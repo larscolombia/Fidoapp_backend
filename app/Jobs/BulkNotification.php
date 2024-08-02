@@ -31,7 +31,6 @@ class BulkNotification implements ShouldQueue
      */
     public function handle()
     {
-
         sendNotification($this->data);
     }
 }

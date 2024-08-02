@@ -3,6 +3,7 @@
 namespace Modules\Booking\Http\Controllers\Backend\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -31,8 +32,8 @@ use Modules\Booking\Models\BookingRequestMapping;
 use Modules\Booking\Models\BookingTransaction;
 use Modules\Commission\Models\CommissionEarning;
 use DateTime;
-
-
+use Illuminate\Support\Facades\Log;
+use Modules\Service\Models\SystemService;
 
 //use Modules\Booking\Trait\BookingTrait;
 
@@ -62,11 +63,21 @@ class BookingsController extends Controller
             $start_date_time = new DateTime($data['date'].''.$data['dropoff_time']);
         }
 
+
+        $system_service_id = SystemService::where('slug', $data['booking_type'])->first()->id;
+
         $data['start_date_time'] = $start_date_time;
         $data['user_id'] = ! empty($request->user_id) ? $request->user_id : auth()->user()->id;
         $data['branch_id'] = get_pet_center_id();
         $data['service_amount'] = $request->price;
-        $booking = Booking::updateOrCreate(['id' => $data['id'] ],$data);
+        $data['system_service_id'] = $system_service_id;
+
+          // Ejecutar updateOrCreate solo si $data['id'] existe
+        if (!empty($data['id'])) {
+            $booking = Booking::updateOrCreate(['id' => $data['id']], $data);
+        } else {
+            $booking = Booking::create($data);
+        }
 
         switch ($request->booking_type) {
             case 'boarding':
@@ -155,33 +166,36 @@ class BookingsController extends Controller
         }
         // $this->updateBookingService($req, $booking->id);
 
-        $message = Str::singular($this->module_title).' Updated';
+        $message = __('messages.new_booking_updated');
         if($booking->wasRecentlyCreated){
-        $message = 'New '.Str::singular($this->module_title).' Added';
+            $message = __('messages.new_booking_created');
 
-        try {
-            $notification_data = [
-                'id' => $booking->id,
-                'user_id' => $booking->user_id,
-                'user_name' => optional($booking->user)->first_name ?? default_user_name(),
-                'employee_id' => optional($booking->employee)->id,
-                'employee_name' => optional($booking->employee)->first_name,
-                'booking_date' => $booking->start_date_time->format('d/m/Y'),
-                'booking_time' => $booking->start_date_time->format('h:i'),
-                'booking_services_names' => $booking->systemservice->name,
-                'booking_services_image' => $booking->systemservice->feature_image,
-                'booking_date_and_time' => $booking->start_date_time->format('Y-m-d H:i'),
-                'latitude' => $request->has('latitude') ? $request->latitude : null,
-                'longitude' => $request->has('longitude') ? $request->longitude : null,
-            ];
-            $this->sendNotificationOnBookingUpdate('new_booking', $notification_data);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            try {
+                $notification_data = [
+                    'id' => $booking->id,
+                    'user_id' => $booking->user_id,
+                    'user_name' => optional($booking->user)->first_name ?? default_user_name(),
+                    'employee_id' => optional($booking->employee)->id,
+                    'employee_name' => optional($booking->employee)->first_name,
+                    'booking_date' => $booking->start_date_time->format('d/m/Y'),
+                    'booking_time' => $booking->start_date_time->format('h:i'),
+                    'booking_services_names' => $booking->systemservice->name,
+                    'booking_services_image' => $booking->systemservice->feature_image,
+                    'booking_date_and_time' => $booking->start_date_time->format('Y-m-d H:i'),
+                    'latitude' => $request->has('latitude') ? $request->latitude : null,
+                    'longitude' => $request->has('longitude') ? $request->longitude : null,
+                ];
+                $this->sendNotificationOnBookingUpdate('new_booking', $notification_data);
+            } catch (\Exception $e) {
+                \Log::error($e->getMessage());
+            }
         }
-
-
-        }
-        return response()->json(['message' => $message, 'status' => true, 'booking_id' => $booking->id], 200);
+        return response()->json(
+            [
+                'message' => $message, 
+                'status' => true, 
+                'data' => $booking
+            ], 200);
     }
 
     public function update(Request $request, $id)
@@ -195,11 +209,15 @@ class BookingsController extends Controller
             $this->updateBookingService($request->services, $booking->id);
         }
 
-        
+        $message = __('messages.new_booking_updated');
 
-        $message = 'New '.Str::singular($this->module_title).' updated';
-
-        return response()->json(['message' => $message, 'status' => true], 200);
+        return response()->json(
+            [
+                'message' => $message,
+                'data' => $booking, 
+                'status' => true
+            ], 200
+        );
     }
 
     public function updateStatus(Request $request)
@@ -212,12 +230,22 @@ class BookingsController extends Controller
 
         $message = __('booking.status_update');
 
-        return response()->json(['message' => $message, 'status' => true], 200);
+        return response()->json(
+            [
+                'message' => $message, 
+                'status' => true,
+                'data' => $data
+            ], 200);
     }
 
     public function bookingList(Request $request)
     {
-        $user = \Auth::user();
+        if ($request->has('user_id')) {
+            $userId = $request->input('user_id', \Auth::user());
+            $user = User::find($userId);
+        } else {
+            $user = \Auth::user();
+        }
         if($user->user_type == 'user'){
             $booking = Booking::where('user_id', $user->id);
         }else{
@@ -243,7 +271,7 @@ class BookingsController extends Controller
     
         }
 
-        $booking =$booking->with(['boarding','training','daycare','walking','bookingTransaction','systemservice']);
+        $booking = $booking->with(['boarding','training','daycare','walking','bookingTransaction','systemservice']);
 
 
 
@@ -322,6 +350,7 @@ class BookingsController extends Controller
         // if($request->booking_type === 'grooming'){
         //     $items = BookingGroomingResource::collection($booking);
         // }
+        Log::info($booking);
         $items = BookingListResource::collection($booking);
         return response()->json([
             'status' => true,
@@ -577,8 +606,8 @@ class BookingsController extends Controller
   
         }
   
-        return response()->json(['status' => false, 'message' => __('booking.booking_already_accepted')]);
+        return response()->json(['status' => false, 'message' => __('booking.Booking already accepted')]);
   
-      }
+    }
   
 }
