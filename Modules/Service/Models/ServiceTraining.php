@@ -12,7 +12,7 @@ class ServiceTraining extends Model
     use HasSlug;
 
     protected $table = 'service_training';
-    protected $fillable = ['name', 'slug', 'status', 'description'];
+    protected $fillable = ['name', 'slug', 'status', 'description', 'created_by', 'updated_by', 'deleted_by'];
     
     protected static function newFactory()
     {

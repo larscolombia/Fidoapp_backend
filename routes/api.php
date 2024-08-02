@@ -1697,6 +1697,46 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::post('/service-training', [ServiceTrainingController::class, 'store'])->name('service-training.store');
+    
+        /**
+         * Obtener la lista de servicios de entrenamiento.
+         * Método HTTP: GET
+         * Ruta: /api/service-training/get
+         * Descripción: Obtiene una lista paginada de servicios de entrenamiento activos con opción de búsqueda.
+         * 
+         * Parámetros de Solicitud:
+         * - per_page: int (Opcional) - Número de resultados por página. Predeterminado es 10.
+         * - search: string (Opcional) - Término de búsqueda para filtrar servicios de entrenamiento por nombre o descripción.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [
+         *         {
+         *             "id": 1,
+         *             "slug": "entrenamiento-basico",
+         *             "name": "Entrenamiento Básico",
+         *             "description": "Un curso de entrenamiento básico para perros.",
+         *             "status": 1,
+         *             "created_by": null,
+         *             "updated_by": null,
+         *             "deleted_by": null,
+         *             "created_at": "2023-01-01T00:00:00.000000Z",
+         *             "updated_at": "2023-01-01T00:00:00.000000Z",
+         *             "deleted_at": null
+         *         },
+         *         // Otros servicios de entrenamiento...
+         *     ],
+         *     "message": "Lista de servicios de entrenamiento obtenida con éxito."
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "status": false,
+         *     "message": "Mensaje de error"
+         * }
+         */
+        Route::get('/service-training/get', [ServiceTrainingController::class, 'trainingList'])->name('service-training.list');
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
