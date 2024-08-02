@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
 use Modules\Pet\Http\Controllers\Backend\API\PetController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
+use Modules\Service\Http\Controllers\Backend\API\ServiceTrainingController;
 
 Route::get('branch-list', [BranchController::class, 'branchList']);
 Route::get('user-detail', [AuthController::class, 'userDetails']);
@@ -1671,6 +1672,31 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
+    
+        /**
+         * Crear un nuevo servicio de entrenamiento.
+         * Método HTTP: POST
+         * Ruta: /api/service-training
+         * Descripción: Crea un nuevo servicio de entrenamiento y genera automáticamente un slug único a partir del nombre.
+         * 
+         * Parámetros de Solicitud:
+         * - name: string (Requerido) - El nombre del servicio de entrenamiento.
+         * - description: string (Opcional) - La descripción del servicio de entrenamiento.
+         * - status: boolean (Opcional) - El estado del servicio de entrenamiento.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Formulario de creación de servicio enviado con éxito.",
+         *     "status": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Mensaje de error",
+         *     "status": false
+         * }
+         */
+        Route::post('/service-training', [ServiceTrainingController::class, 'store'])->name('service-training.store');
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 

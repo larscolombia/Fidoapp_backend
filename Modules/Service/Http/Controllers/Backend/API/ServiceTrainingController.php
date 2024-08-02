@@ -2,9 +2,11 @@
 
 namespace Modules\Service\Http\Controllers\Backend\API;
 
+use App\Http\Requests\Api\ServiceTrainingStoreRequest;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Modules\Service\Models\ServiceTraining;
 use Modules\Service\Transformers\ServiceTrainingResource;
 
@@ -33,13 +35,40 @@ class ServiceTrainingController extends Controller
     }
 
 
-    public function store(Request $request)
+     /**
+     * Crea.
+     *
+     * @param \App\Http\Requests\StoreServiceTrainingRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(ServiceTrainingStoreRequest $request)
     {
-        $data = ServiceTraining::create($request->all());
+       // Obtener los datos validados
+       $validatedData = $request->validated();
 
-        $message = __('messages.create_form', ['form' => __('service.singular_title')]);
+       // Generar el slug a partir del name
+       $slug = Str::slug($validatedData['name'], '-');
+       $originalSlug = $slug;
 
-        return response()->json(['message' => $message, 'status' => true], 200);
+       // Verificar la unicidad del slug y modificarlo si es necesario
+       $counter = 1;
+       while (ServiceTraining::where('slug', $slug)->exists()) {
+           $slug = $originalSlug . '-' . $counter++;
+       }
+
+       $validatedData['slug'] = $slug;
+
+       // Añadir el usuario que crea el registro
+       $validatedData['created_by'] = auth()->id();
+
+       // Crear el registro en la base de datos
+       $data = ServiceTraining::create($validatedData);
+
+       // Mensaje de éxito
+       $message = __('messages.created_service_training');
+
+       // Devolver la respuesta JSON
+       return response()->json(['message' => $message, 'status' => true], 200);
     }
 
 }
