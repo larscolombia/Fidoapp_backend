@@ -28,6 +28,7 @@ class LoginResource extends JsonResource
             'profile_image' => $this->avatar,
             'user_type' => $this->user_type,
             'login_type' => $this->login_type,
+            'gender' => $this->gender,
             'address' => $this->address,
             'player_id' => $this->player_id,
             'profile_image' => $this->media->pluck('original_url')->first(),

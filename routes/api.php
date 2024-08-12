@@ -1375,6 +1375,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - user_id (integer): ID del dueño de la mascota (requerido).
          * - additional_info (string, opcional): Información adicional sobre la mascota.
          * - status (boolean, opcional): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false. Por defecto es 1 (activo).
+         * - pet_image (string): Url de la magen de la mascota.
          * 
          * Respuesta Exitosa:
          * {
@@ -1393,7 +1394,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Editar una mascota.
-         * Método HTTP: PATCH
+         * Método HTTP: POST
          * Ruta: /api/pets/{id}
          * Descripción: Actualiza los datos de una mascota específica. Se puede enviar cualquier campo para ser actualizado.
          * Parámetros de Solicitud (opcional):
@@ -1411,7 +1412,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - user_id (integer): ID del dueño de la mascota.
          * - additional_info (string): Información adicional sobre la mascota.
          * - status (boolean): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false.
-         * - pet_image (file): Imagen de la mascota. Debe ser una imagen válida (jpeg, png, jpg, gif) y no superar los 2MB.
+         * - pet_image (string): Url de la magen de la mascota.
          * 
          * Respuesta Exitosa:
          * {
@@ -1426,7 +1427,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "El usuario especificado no existe."
          * }
          */
-        Route::put('/pets/{id}', [PetController::class, 'update']);
+        Route::post('/pets/{id}', [PetController::class, 'update']);
 
         /**
          * Ver detalles de una mascota.

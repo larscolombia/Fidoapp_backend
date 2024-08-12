@@ -17,6 +17,13 @@ use Modules\Pet\Models\PetNote;
 use Modules\Booking\Models\Booking;
 use App\Models\Setting;
 use Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use BaconQrCode\Renderer\Image\Png;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+
 
 class PetsController extends Controller
 {
@@ -272,6 +279,9 @@ class PetsController extends Controller
         $query = Pet::create($data);
 
         storeMediaFile($query, $request->file('pet_image'), 'pet_image');
+
+        // Genera y guarda el código QR para la mascota
+        $this->generateQrCode($query);
         
         $this->module_title='pet.title';
 
@@ -500,5 +510,33 @@ class PetsController extends Controller
         return response()->json(['message' => $message, 'data'=>$notes, 'status' => true], 200);
     }
 
+    
+    public function generateQrCode(Pet $pet)
+    {
+        try {
+            // Crea un nuevo renderer de imagen PNG usando el backend GD
+            $renderer = new Png();
+            $renderer->setWidth(200);
+            $renderer->setHeight(200);
 
+            // Crea un nuevo escritor de QR Code
+            $writer = new Writer($renderer);
+
+            // Genera el código QR en formato PNG
+            $qrCode = $writer->writeString(route('pets.show', $pet->id));
+
+            // Define la ruta para guardar el código QR dentro del almacenamiento público
+            $qrCodePath = 'qr_codes/' . $pet->id . '.png';
+            
+            // Guarda el código QR en el almacenamiento público
+            Storage::disk('public')->put($qrCodePath, $qrCode);
+            
+            // Actualiza la ruta del código QR en la base de datos
+            $pet->update(['qr_code' => $qrCodePath]);
+        } catch (\Exception $e) {
+            // Maneja cualquier excepción y registra el error
+            Log::error('Error generating QR code: ' . $e->getMessage());
+            // Puedes optar por manejar el error de otra manera o lanzar una excepción
+        }
+    }
 }

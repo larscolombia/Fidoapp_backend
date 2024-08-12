@@ -20,6 +20,7 @@ use Modules\Pet\Transformers\PetDetailsResource;
 use Modules\Booking\Models\Booking;
 use App\Models\User;
 use Auth;
+use DB;
 use Illuminate\Support\Facades\Log;
 
 class PetController extends Controller
@@ -297,11 +298,15 @@ class PetController extends Controller
 
             // Mueve la imagen a la carpeta public/images/pets
             $image->move(public_path('images/pets'), $imageName);
-            $validatedData['pet_image'] = $imagePath;
         }
 
         // Crear la nueva mascota
         $pet = Pet::create($validatedData);
+
+        if (!empty($request['pet_image'])) {
+            // $media = $pet->addMediaFromUrl($request['pet_image'])->toMediaCollection('pet_image');
+            storeMediaFile($pet, $request->file('pet_image'), 'pet_image');
+        }
 
         return response()->json([
             'message' => __('pet.pet_created_successfully'),
@@ -313,7 +318,7 @@ class PetController extends Controller
     {
         $pet = Pet::findOrFail($id);
 
-        $validatedData = $request->validated();
+        $validatedData = $request->all();
 
         if (isset($validatedData['breed_id'])) {
             $breed = Breed::find($validatedData['breed_id']);
@@ -329,12 +334,14 @@ class PetController extends Controller
         }
 
         if ($request->hasFile('pet_image')) {
-            $image = $request->file('pet_image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = 'images/pets/' . $imageName;
-
-            $image->move(public_path('images/pets'), $imageName);
-            $validatedData['pet_image'] = $imagePath;
+            storeMediaFile($pet, $request->file('pet_image'), 'pet_image');
+        } elseif ( $request->has('pet_image') ) {
+            $pet->clearMediaCollection('pet_image');
+            $pet->addMediaFromUrl($request['pet_image'])->toMediaCollection('pet_image');
+        } else {
+            return response()->json([
+                'message' => 'El campo pet_image debe ser un archivo o una URL válida.'
+            ], 422);
         }
 
         $pet->update($validatedData);

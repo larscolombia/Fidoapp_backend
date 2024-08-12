@@ -20,6 +20,7 @@ use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermission;
@@ -336,6 +337,9 @@ Route::group(['prefix' => 'app'], function () {
         Route::post('events/google-calendar', [GoogleCalendarController::class, 'createEvent'])->name('google.calendar.create');
     
         Route::get('training-index-data', [TrainingController::class, 'index_data'])->name('training.index_data');
+
+        Route::get('/mascotas/qr_code', [QRCodeController::class, 'mascotas'])->name('mascotas.qr_code');
+        Route::get('qr_code/mascotas_data', [QRCodeController::class, 'mascotas_data'])->name('qr_code.mascotas_data');
 
     });
 });

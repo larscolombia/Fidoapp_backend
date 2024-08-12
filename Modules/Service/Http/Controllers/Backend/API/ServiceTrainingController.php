@@ -71,4 +71,7 @@ class ServiceTrainingController extends Controller
        return response()->json(['message' => $message, 'status' => true], 200);
     }
 
+    public function update () {
+        
+    }
 }

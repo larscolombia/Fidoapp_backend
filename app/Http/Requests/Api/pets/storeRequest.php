@@ -40,7 +40,7 @@ class storeRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'additional_info' => 'nullable|string',
             'status' => 'nullable|boolean',
-            'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Nueva regla para la imagen
+            'pet_image' => 'nullable', // Nueva regla para la imagen
         ];
     }
 

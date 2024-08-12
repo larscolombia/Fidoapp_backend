@@ -14,6 +14,7 @@ use Auth;
 use Hash;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Modules\Commission\Models\EmployeeCommission;
 use Modules\Commission\Models\Commission;
@@ -75,8 +76,8 @@ class AuthController extends Controller
             //     return $this->sendError(__('messages.role_not_matched'), ['error' => __('messages.unauthorised')], 200);
             // }
             $user['api_token'] = $user->createToken(setting('app_name'))->plainTextToken;
-
             $loginResource = new LoginResource($user);
+            Log::info($loginResource->toJson());
             $message = __('messages.user_login');
 
             return $this->sendResponse($loginResource, $message);

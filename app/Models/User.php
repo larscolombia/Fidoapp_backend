@@ -283,4 +283,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
         return $this->hasMany(CalendarEvent::class);
     }
+
+    public function location()
+    {
+        return $this->hasOne(UserLocation::class);
+    }
 }
