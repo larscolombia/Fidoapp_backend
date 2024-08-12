@@ -30,7 +30,10 @@
                 <button  type="button" class="fs-4 text-info border-0 bg-transparent" data-bs-toggle="offcanvas" data-bs-target="#pet-notes-form"    @click="changeId(item.id)"  aria-controls="form-offcanvas" ><i class="icon-page"></i></button>
                 <button v-if="role() === 'admin' || role() === 'demo_admin'" type="button" class="fs-4 text-primary border-0 bg-transparent" data-bs-toggle="offcanvas" data-bs-target="#pet-form-offcanvas"    @click="changeId(item.id)"  aria-controls="form-offcanvas" ><i class="icon-Edit"></i></button>
                 <button v-if="role() === 'admin' || role() === 'demo_admin'" class="fs-4 text-danger border-0 bg-transparent" @click="removePet(item.id, 'Are you certain you want to delete it?')"  data-bs-toggle="tooltip"> <i class="icon-delete"></i></button>
-             
+                <a v-if="role() === 'admin' || role() === 'demo_admin'" class="fs-4 text-danger border-0 bg-transparent" :href="'/' + item.qr_code.replace('app/', '')" target="_blank"> 
+                  <i class="fas fa-qrcode"></i>
+                </a>
+
               </div>
             </div>
             <div v-else class="text-center">
