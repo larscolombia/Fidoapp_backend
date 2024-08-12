@@ -23,7 +23,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use BaconQrCode\Renderer\Image\Png;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
-
+use Http;
+use Illuminate\Support\Facades\File;
 
 class PetsController extends Controller
 {
@@ -276,18 +277,52 @@ class PetsController extends Controller
     {
         $data = $request->except('pet_image');
         $data['breed_id']=$request->breed;
+
+        if($request->age == NULL) {
+            // Calcular la edad de la mascota
+            $data['age'] = $this->calculateAge($data['date_of_birth']);
+        }
+
+        
         $query = Pet::create($data);
+        $data['qr_code'] = $this->generateQrCode($query);
+        Log::info($data['qr_code']);
+        $query->update([
+            'qr_code' => $data['qr_code']
+        ]);
+        Log::info($query);
 
         storeMediaFile($query, $request->file('pet_image'), 'pet_image');
-
-        // Genera y guarda el código QR para la mascota
-        $this->generateQrCode($query);
         
         $this->module_title='pet.title';
 
         $message = __('messages.create_form', ['form' => __($this->module_title)]);
 
         return response()->json(['message' => $message, 'status' => true], 200);
+    }
+
+    public function calculateAge($birthdate)
+    {
+        $birthdate = Carbon::parse($birthdate);
+        $now = Carbon::now();
+
+        $years = $now->diffInYears($birthdate);
+        $months = $now->diffInMonths($birthdate->copy()->addYears($years));
+        $days = $now->diffInDays($birthdate->copy()->addYears($years)->addMonths($months));
+
+        $ageString = '';
+
+        if ($years > 0) {
+            $ageString .= trans_choice('pet.years', $years, ['count' => $years]) . ', ';
+        }
+
+        if ($months > 0) {
+            $ageString .= trans_choice('pet.months', $months, ['count' => $months]) . ', ';
+        }
+
+        $ageString .= trans_choice('pet.days', $days, ['count' => $days]);
+
+        return $ageString;
     }
 
     /**
@@ -511,32 +546,40 @@ class PetsController extends Controller
     }
 
     
-    public function generateQrCode(Pet $pet)
+    public function generateQrCode($pet)
     {
-        try {
-            // Crea un nuevo renderer de imagen PNG usando el backend GD
-            $renderer = new Png();
-            $renderer->setWidth(200);
-            $renderer->setHeight(200);
+        // Convierte el array $pet a una cadena JSON
+        $data = json_encode($pet);
 
-            // Crea un nuevo escritor de QR Code
-            $writer = new Writer($renderer);
+        // Construye la URL para la API de qrserver.com
+        $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/';
+        $size = '150x150'; // Tamaño del código QR
+        $url = $qrCodeUrl . '?size=' . $size . '&data=' . urlencode($data);
 
-            // Genera el código QR en formato PNG
-            $qrCode = $writer->writeString(route('pets.show', $pet->id));
+        // Realiza la solicitud para obtener el código QR
+        $response = Http::get($url);
 
-            // Define la ruta para guardar el código QR dentro del almacenamiento público
-            $qrCodePath = 'qr_codes/' . $pet->id . '.png';
-            
-            // Guarda el código QR en el almacenamiento público
-            Storage::disk('public')->put($qrCodePath, $qrCode);
-            
-            // Actualiza la ruta del código QR en la base de datos
-            $pet->update(['qr_code' => $qrCodePath]);
-        } catch (\Exception $e) {
-            // Maneja cualquier excepción y registra el error
-            Log::error('Error generating QR code: ' . $e->getMessage());
-            // Puedes optar por manejar el error de otra manera o lanzar una excepción
+        // Verifica si la solicitud fue exitosa
+        if ($response->successful()) {
+            // Obtén el contenido de la imagen del QR Code
+            $qrCodeContent = $response->body();
+
+            // Genera un nombre de archivo basado en el timestamp actual
+            $timestamp = time(); // Obtiene el timestamp actual
+            $filename = 'qr_code_' . $timestamp . '.png'; // Nombre del archivo
+            $path = 'images/qr_codes/' . $filename;
+
+            // Guarda el archivo en el disco público
+            $saved = File::put(public_path($path), $qrCodeContent);
+
+            // Verifica si el archivo se guardó correctamente
+            if ($saved) {
+                return $path;
+            } else {
+                throw new \Exception("No se pudo guardar el archivo QR code.");
+            }
+        } else {
+            throw new \Exception("Error al generar el código QR: " . $response->status());
         }
     }
 }

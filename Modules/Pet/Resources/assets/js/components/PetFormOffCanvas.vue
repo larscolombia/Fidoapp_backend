@@ -44,12 +44,18 @@
         </div>
 
         
-        <div class="form-group">
+        <div v-if="!unknownAge" class="form-group">
           <label class="form-label d-block" for="name">{{ $t('pet.lbl_date_of_birth') }}</label>
           <flat-pickr v-model="date_of_birth" :config="config" class="form-control d-block" />
         </div>
 
-        <InputField class="col-md-12" type="text" :label="$t('pet.lbl_age')" placeholder="" v-model="age" :error-message="errors['age']" :error-messages="errorMessages['age']"></InputField>
+        <InputField v-if="unknownAge" class="col-md-12" type="text" :label="$t('pet.lbl_age')" placeholder="" v-model="age" :error-message="errors['age']" :error-messages="errorMessages['age']"></InputField>
+        
+        <div class="form-group">
+          <input type="checkbox" id="unknown-age" v-model="unknownAge" @change="toggleUnknownAge" />
+          <label for="unknown-age" class="form-label">{{ $t('pet.lbl_unknown_age') }}</label>
+        </div>
+
 
         <div class="form-group col-md-4">
             <label for="" class="form-label w-100">{{ $t('customer.lbl_gender') }}</label>
@@ -193,7 +199,6 @@ const config = ref({
   maxDate: 'today'
 })
 
-
 // Edit Form Or Create Form
 const userID = useModuleId(() => {
 
@@ -201,6 +206,9 @@ const userID = useModuleId(() => {
   setFormData(defaultData())
 
 },'add_pet')
+
+// Estado para el checkbox de "Edad Desconocida"
+const unknownAge = ref(false)
 
 /*
  * Form Data & Validation & Handeling
@@ -362,6 +370,13 @@ const formSubmit = handleSubmit((values) => {
 
 
 useOnOffcanvasHide('add-pet-form', () => setFormData(defaultData()))
+
+const toggleUnknownAge = () => {
+  if (unknownAge.value) {
+    age.value = ''
+    date_of_birth.value = ''
+  }
+}
 </script>
 
 <style >
