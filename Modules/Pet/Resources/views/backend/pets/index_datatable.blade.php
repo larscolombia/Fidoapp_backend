@@ -217,16 +217,23 @@
         var ownerId = button.getAttribute('data-owner-id'); // Extract info from data-* attributes
 
         // Make an AJAX request to get the users excluding the owner
-        fetch(`/api/users-list-without-auth/${ownerId}`)
+        fetch(`/api/users-and-owners/${ownerId}`)
             .then(response => response.json())
             .then(data => {
+                var usersArray = Object.values(data.users);
+                var owners = data.sharedOwners;
+
                 var userSelect = document.getElementById('userSelect');
                 userSelect.innerHTML = ''; // Clear existing options
 
-                data.data.forEach(user => {
+                usersArray.forEach(user => {
                     var option = document.createElement('option');
                     option.value = user.id;
                     option.textContent = user.full_name;
+                    // Preselecciona la opción si el ID del usuario está en el array selectedUsers
+                    if (owners.includes(user.id)) {
+                        option.selected = true;
+                    }
                     userSelect.appendChild(option);
                 });
 

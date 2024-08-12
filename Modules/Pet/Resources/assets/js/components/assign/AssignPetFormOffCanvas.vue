@@ -33,6 +33,9 @@
                 <a v-if="role() === 'admin' || role() === 'demo_admin'" class="fs-4 text-danger border-0 bg-transparent" :href="'/' + item.qr_code.replace('app/', '')" target="_blank"> 
                   <i class="fas fa-qrcode"></i>
                 </a>
+                <button class="btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#shareModal" :data-owner-id="item.id">
+                  <i class="fa fa-share"></i>
+                </button>
 
               </div>
             </div>

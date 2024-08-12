@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
 use Modules\Pet\Http\Controllers\Backend\API\PetController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
+use Modules\Pet\Http\Controllers\Backend\PetsController;
 use Modules\Service\Http\Controllers\Backend\API\ServiceTrainingController;
 
 Route::get('branch-list', [BranchController::class, 'branchList']);
@@ -287,6 +288,30 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      */
     Route::get('/users-list-without-auth/{user_id?}', [UserApiController::class, 'user_list_without_auth']);
 
+    /**
+     * Obtener Todos los Usuarios con Información del Perfil
+     * Método HTTP: GET
+     * Ruta: /users-list
+     * Descripción: Recupera todos los usuarios disponibles y separa los dueños que estan seleccionados.
+     * Datos de Solicitud:
+     * {
+     *     "petId" (Integer, opcional): Mascota que se va a conseguir los dueños y el resto de usuarios de la lista.,
+     * }
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Lista de Usuarios con dueños",
+     *     "data": [
+     *       {
+     *         "users": {},
+     *         "sharedOwners": {},
+     *       }
+     *       ...
+     *     ]
+     * }
+     */
+    Route::get('/users-and-owners/{petId?}', [PetsController::class, 'users_and_owners']);
+    
     /**
      * Obtener Todos los Usuarios con Información del Perfil
      * Método HTTP: GET

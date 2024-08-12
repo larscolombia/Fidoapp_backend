@@ -595,4 +595,16 @@ class PetsController extends Controller
 
         return redirect()->back()->with('success', __('pet.Pet shared successfully'));
     }
+
+    public function users_and_owners (Request $request, $petId) {
+        $users = User::all();
+
+        $sharedOwners = SharedOwner::where('pet_id', $petId)->pluck('user_id')->toArray();
+
+        // Devolver los datos necesarios para el frontend
+        return response()->json([
+            'users' => $users,
+            'sharedOwners' => $sharedOwners
+        ]);
+    }
 }
