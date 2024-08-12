@@ -285,7 +285,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      *     ]
      * }
      */
-    Route::get('/users-list-without-auth', [UserApiController::class, 'user_list_without_auth']);
+    Route::get('/users-list-without-auth/{user_id?}', [UserApiController::class, 'user_list_without_auth']);
 
     /**
      * Obtener Todos los Usuarios con Información del Perfil

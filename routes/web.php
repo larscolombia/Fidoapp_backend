@@ -28,6 +28,7 @@ use App\Http\Controllers\SearchController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\Backend\TrainingController;
+use Modules\Pet\Http\Controllers\Backend\PetsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -343,5 +344,6 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('qr_code/edit/{id}', [QRCodeController::class, 'edit'])->name('qr_code.edit');
         Route::put('qr_code/{id}', [QRCodeController::class, 'update'])->name('qr_code.update');
 
+        Route::put('pet/{id}/shared-owner', [PetsController::class, 'sharedOwner'])->name('pet.shared-owner');
     });
 });

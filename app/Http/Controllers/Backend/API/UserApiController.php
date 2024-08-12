@@ -94,12 +94,12 @@ class UserApiController extends Controller
         ], 200);
     }
 
-    public function user_list_without_auth (Request $request) {
+    public function user_list_without_auth (Request $request, $user_id = null) {
         $term = trim($request->q);
         $role = $request->role;
 
         $queryBuilder = User::query();
-        $user_id = $request->user_id ?? auth()->id();
+        $user_id = $user_id ?? auth()->id();
 
         if ($role == 'user') {
             $queryBuilder->role(['user'])->active();

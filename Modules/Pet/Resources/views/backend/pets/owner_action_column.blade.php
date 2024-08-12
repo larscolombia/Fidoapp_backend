@@ -16,6 +16,11 @@
     @hasPermission('delete_owners')
         <a href="{{route("backend.customers.destroy", $data->id)}}" id="delete-{{__('pet.lbl_owner')}}-{{$data->id}}" class="fs-4 text-danger" data-type="ajax" data-method="DELETE" data-token="{{csrf_token()}}" data-bs-toggle="tooltip" title="{{__('Delete')}}" data-confirm="{{ __('messages.are_you_sure?') }}"> <i class="icon-delete"></i></a>
     @endhasPermission
+
+    <button class="btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#shareModal" data-owner-id="{{ $data->id }}">
+    <i class="fa fa-share"></i>
+    </button>
 </div>
+
 
 

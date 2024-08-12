@@ -72,6 +72,42 @@
           edit-title="{{ __('Edit') }} {{ __('pet.title') }}">
     </pets-offcanvas>
  </div>
+
+
+ <!-- Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="" method="POST" id="shareForm">
+      @csrf
+      @method("PUT")
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shareModalLabel">{{ __('pet.share') }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="userSelect" class="form-label">{{ __('pet.Select User') }}</label>
+            <select class="form-select" id="userSelect" name="user[]" multiple>
+              <option value="">{{ __('pet.Select User') }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('pet.close') }}</button>
+          <button type="submit" class="btn btn-primary">{{ __('pet.share') }}</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endsection
 
 @push('after-styles')
@@ -175,6 +211,37 @@
         finalColumns,
         orderColumn: [[ 6, 'desc' ]],
       })
+
+      shareModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var ownerId = button.getAttribute('data-owner-id'); // Extract info from data-* attributes
+
+        // Make an AJAX request to get the users excluding the owner
+        fetch(`/api/users-list-without-auth/${ownerId}`)
+            .then(response => response.json())
+            .then(data => {
+                var userSelect = document.getElementById('userSelect');
+                userSelect.innerHTML = ''; // Clear existing options
+
+                data.data.forEach(user => {
+                    var option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.full_name;
+                    userSelect.appendChild(option);
+                });
+
+                // Update the form action
+                var shareForm = document.getElementById('shareForm');
+                shareForm.action = `/app/pet/${ownerId}/shared-owner`;
+
+                // Initialize Select2 with dropdownParent option
+                $('#userSelect').select2({
+                    placeholder: "{{ __('pet.Select User') }}",
+                    allowClear: true,
+                    dropdownParent: $('#shareModal') // Ensure the dropdown is rendered within the modal
+                });
+            });
+    });
     })
 
     function resetQuickAction() {

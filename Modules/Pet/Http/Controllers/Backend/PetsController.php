@@ -16,6 +16,7 @@ use App\Models\User;
 use Modules\Pet\Models\PetNote;
 use Modules\Booking\Models\Booking;
 use App\Models\Setting;
+use App\Models\SharedOwner;
 use Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -581,5 +582,17 @@ class PetsController extends Controller
         } else {
             throw new \Exception("Error al generar el código QR: " . $response->status());
         }
+    }
+
+    public function sharedOwner (Request $request, $id) {
+        $user = $request->user;
+        foreach ($user as $user_id) {
+            SharedOwner::create([
+                'user_id' => $user_id,
+                'pet_id' => $id,
+            ]);
+        }
+
+        return redirect()->back()->with('success', __('pet.Pet shared successfully'));
     }
 }
