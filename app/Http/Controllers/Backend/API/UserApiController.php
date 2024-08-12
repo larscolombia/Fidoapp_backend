@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserApiController extends Controller
 {
@@ -89,9 +90,60 @@ class UserApiController extends Controller
         return response()->json([
             'status' => true,
             'data' => $data,
-            'message' => __('user.user_list'),
+            'message' => __('users.user_list'),
         ], 200);
     }
 
+    public function user_list_without_auth (Request $request) {
+        $term = trim($request->q);
+        $role = $request->role;
 
+        $queryBuilder = User::query();
+        $user_id = $request->user_id ?? auth()->id();
+
+        if ($role == 'user') {
+            $queryBuilder->role(['user'])->active();
+        } elseif ($role == 'trainer') {
+            $queryBuilder->role(['trainer'])->active();
+        } elseif ($role == 'vet') {
+            $queryBuilder->role(['vet'])->active();
+        } elseif ($role == 'groomer') {
+            $queryBuilder->role(['groomer'])->active();
+        } elseif ($role == 'walker') {
+            $queryBuilder->role(['walker'])->active();
+        } elseif ($role == 'boarder') {
+            $queryBuilder->role(['boarder'])->active();
+        } elseif ($role == 'day_taker') {
+            $queryBuilder->role(['day_taker'])->active();
+        } elseif ($role == 'pet_sitter') {
+            $queryBuilder->role(['pet_sitter'])->active();
+        }
+
+        $queryBuilder->where('id', '!=', $user_id);
+
+        $query_data = $queryBuilder->where(function ($q) use ($term) {
+            if (!empty($term)) {
+                $q->orWhere('first_name', 'LIKE', "%$term%")
+                    ->orWhere('last_name', 'LIKE', "%$term%");
+            }
+        })->with('media')->get();
+
+        $data = [];
+
+        foreach ($query_data as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'full_name' => $row->first_name . ' ' . $row->last_name,
+                'email' => $row->email,
+                'mobile' => $row->mobile,
+                'profile_image' => $row->profile_image,
+                'created_at' => $row->created_at,
+            ];
+        }
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+            'message' => __('users.user_list'),
+        ], 200);
+    }
 }

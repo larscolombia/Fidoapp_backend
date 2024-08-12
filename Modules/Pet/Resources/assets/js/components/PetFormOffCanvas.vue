@@ -152,231 +152,232 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { EDIT_URL, STORE_URL, UPDATE_URL, PETTYPE_LIST, USER_LIST,BREED_LIST } from '../constant/pets'
-import { useField, useForm } from 'vee-validate'
-import InputField from '@/vue/components/form-elements/InputField.vue'
+  import { ref, onMounted } from 'vue'
+  import { EDIT_URL, STORE_URL, UPDATE_URL, PETTYPE_LIST, USER_LIST,BREED_LIST } from '../constant/pets'
+  import { useField, useForm } from 'vee-validate'
+  import InputField from '@/vue/components/form-elements/InputField.vue'
 
-import { useModuleId, useRequest, useOnOffcanvasHide } from '@/helpers/hooks/useCrudOpration'
-import * as yup from 'yup'
-import flatPickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
-import { buildMultiSelectObject } from '@/helpers/utilities'
-import { readFile } from '@/helpers/utilities'
-import FormHeader from '@/vue/components/form-elements/FormHeader.vue'
-import FormFooter from '@/vue/components/form-elements/FormFooter.vue'
-import FormElement from '@/helpers/custom-field/FormElement.vue'
+  import { useModuleId, useRequest, useOnOffcanvasHide } from '@/helpers/hooks/useCrudOpration'
+  import * as yup from 'yup'
+  import flatPickr from 'vue-flatpickr-component'
+  import 'flatpickr/dist/flatpickr.css'
+  import { buildMultiSelectObject } from '@/helpers/utilities'
+  import { readFile } from '@/helpers/utilities'
+  import FormHeader from '@/vue/components/form-elements/FormHeader.vue'
+  import FormFooter from '@/vue/components/form-elements/FormFooter.vue'
+  import FormElement from '@/helpers/custom-field/FormElement.vue'
 
-// props
-const props = defineProps({
-  createTitle: { type: String, default: '' },
-  editTitle: { type: String, default: 'Edit Pet' },
-  defaultImage: { type: String, default: 'https://dummyimage.com/600x300/cfcfcf/000000.png' },
-})
-// const CURRENCY_SYMBOL = ref(window.defaultCurrencySymbol)
-const { getRequest, storeRequest, updateRequest, listingRequest } = useRequest()
-
-// onMounted(() => {
-
-//   setFormData(defaultData())
-// })
-
-// File Upload Function
-const ImageViewer = ref(null)
-const fileUpload = async (e) => {
-  let file = e.target.files[0]
-  await readFile(file, (fileB64) => {
-    ImageViewer.value = fileB64
+  // props
+  const props = defineProps({
+    createTitle: { type: String, default: '' },
+    editTitle: { type: String, default: 'Edit Pet' },
+    defaultImage: { type: String, default: 'https://dummyimage.com/600x300/cfcfcf/000000.png' },
   })
-  pet_image.value = file
-}
+  // const CURRENCY_SYMBOL = ref(window.defaultCurrencySymbol)
+  const { getRequest, storeRequest, updateRequest, listingRequest } = useRequest()
 
-const isDisable = ref(0)
+  // onMounted(() => {
 
-const config = ref({
-  dateFormat: 'Y-m-d',
-  static: true,
-  maxDate: 'today'
-})
+  //   setFormData(defaultData())
+  // })
 
-// Edit Form Or Create Form
-const userID = useModuleId(() => {
-
-
-  setFormData(defaultData())
-
-},'add_pet')
-
-// Estado para el checkbox de "Edad Desconocida"
-const unknownAge = ref(false)
-
-/*
- * Form Data & Validation & Handeling
- */
-// Default FORM DATA
-const defaultData = () => {
-  errorMessages.value = {}
-  return {
-    name: '',
-    petype_id: '',
-    breed: '',
-    size: '',
-    date_of_birth: '',
-    age: '',
-    gender: 'male',
-    weight: '',
-    height: '',
-    weight_unit: '',
-    height_unit: '',
-    user_id: userID.value,
-    additional_info: '',
-    status: 1,
-    pet_image: null,
+  // File Upload Function
+  const ImageViewer = ref(null)
+  const fileUpload = async (e) => {
+    let file = e.target.files[0]
+    await readFile(file, (fileB64) => {
+      ImageViewer.value = fileB64
+    })
+    pet_image.value = file
   }
-}
 
-//  Reset Form
-const setFormData = (data) => {
-  ImageViewer.value = data.pet_image
-  resetForm({
-    values: {
-      name: data.name,
-      pettype_id: data.pettype_id,
-      breed: data.breed_id,
-      size: data.size,
-      date_of_birth: data.date_of_birth,
-      age: data.age,
-      gender: data.gender,
-      weight: data.weight,
-      height: data.height,
-      weight_unit: data.weight_unit,
-      height_unit: data.height_unit,
-      user_id: data.user_id,
-      additional_info: data.additional_info,
-      status: data.status,
-      pet_image: data.pet_image,
-    }
+
+  const isDisable = ref(0)
+
+  const config = ref({
+    dateFormat: 'Y-m-d',
+    static: true,
+    maxDate: 'today'
   })
-}
 
-// Reload Datatable, SnackBar Message, Alert, Offcanvas Close
-const reset_datatable_close_offcanvas = (res) => {
-  isDisable.value = 0;
-  if (res.status) {
-    window.successSnackbar(res.message)
-    renderedDataTable.ajax.reload(null, false)
-    bootstrap.Offcanvas.getInstance('#add-pet-form').hide()
+  // Edit Form Or Create Form
+  const userID = useModuleId(() => {
+
+
     setFormData(defaultData())
-  } else {
-    window.errorSnackbar(res.message)
-    errorMessages.value = res.all_message
-  }
-}
 
+  },'add_pet')
 
-const numberRegex = /^\d+$/
-const decimalRegex = /^\d+(\.\d+)?$/
-// Validations
-const validationSchema = yup.object({
-  name: yup.string().required('Name is a required field'),
-  pettype_id: yup.string().required('Pet type is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-  user_id: yup.string().required('User is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-  weight: yup.string().nullable().matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed'),
-  height: yup.string().nullable().matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed'),
+  // Estado para el checkbox de "Edad Desconocida"
+  const unknownAge = ref(false)
 
-})
-
-
-const { handleSubmit, errors, resetForm } = useForm({
-  validationSchema
-})
-const { value: name } = useField('name')
-const { value: pettype_id } = useField('pettype_id')
-const { value: breed } = useField('breed')
-const { value: size } = useField('size')
-const { value: date_of_birth } = useField('date_of_birth')
-const { value: age } = useField('age')
-const { value: gender } = useField('gender')
-const { value: weight } = useField('weight')
-const { value: height } = useField('height')
-const { value: weight_unit } = useField('weight_unit')
-const { value: height_unit } = useField('height_unit')
-const { value: user_id } = useField('user_id')
-const { value: additional_info } = useField('additional_info')
-const { value: status } = useField('status')
-const { value: pet_image } = useField('pet_image')
-
-const errorMessages = ref({})
-
-const pettype = ref({
-  searchable: true,
-  options: []
-})
-const userlist = ref({
-  searchable: true,
-  options: []
-})
-
-const breed_list = ref({
-  searchable: true,
-  options: []
-})
-
-const changePettype = () => {
-
-  let pet_id=0
-
-  if(pettype_id.value>0){
-
-   pet_id=pettype_id.value
-
-  }
-
-  listingRequest({ url: BREED_LIST, data: { id: pet_id} }).then((res) => {
-    if(res !=''){
-      breed.value=''
-      breed_list.value.options = buildMultiSelectObject(res, { value: 'id', label: 'name' })
-
-    }else{
-      breed.value=''
-      breed_list.value.options =[]
+  /*
+  * Form Data & Validation & Handeling
+  */
+  // Default FORM DATA
+  const defaultData = () => {
+    errorMessages.value = {}
+    return {
+      name: '',
+      petype_id: '',
+      breed: '',
+      size: '',
+      date_of_birth: '',
+      age: '',
+      gender: 'male',
+      weight: '',
+      height: '',
+      weight_unit: '',
+      height_unit: '',
+      user_id: userID.value,
+      additional_info: '',
+      status: 1,
+      pet_image: null,
     }
+  }
 
+  //  Reset Form
+  const setFormData = (data) => {
+    ImageViewer.value = data.pet_image
+    resetForm({
+      values: {
+        name: data.name,
+        pettype_id: data.pettype_id,
+        breed: data.breed_id,
+        size: data.size,
+        date_of_birth: data.date_of_birth,
+        age: data.age,
+        gender: data.gender,
+        weight: data.weight,
+        height: data.height,
+        weight_unit: data.weight_unit,
+        height_unit: data.height_unit,
+        user_id: data.user_id,
+        additional_info: data.additional_info,
+        status: data.status,
+        pet_image: data.pet_image,
+      }
+    })
+  }
+
+  // Reload Datatable, SnackBar Message, Alert, Offcanvas Close
+  const reset_datatable_close_offcanvas = (res) => {
+    isDisable.value = 0;
+    if (res.status) {
+      window.successSnackbar(res.message)
+      renderedDataTable.ajax.reload(null, false)
+      bootstrap.Offcanvas.getInstance('#add-pet-form').hide()
+      setFormData(defaultData())
+    } else {
+      window.errorSnackbar(res.message)
+      errorMessages.value = res.all_message
+    }
+  }
+
+
+  const numberRegex = /^\d+$/
+  const decimalRegex = /^\d+(\.\d+)?$/
+  // Validations
+  const validationSchema = yup.object({
+    name: yup.string().required('Name is a required field'),
+    pettype_id: yup.string().required('Pet type is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
+    user_id: yup.string().required('User is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
+    weight: yup.string().nullable().matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed'),
+    height: yup.string().nullable().matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed'),
 
   })
-}
 
 
-const getPettypeList = () => {
-  listingRequest({ url: PETTYPE_LIST, data: { id: 0 } }).then((res) => (pettype.value.options = buildMultiSelectObject(res, { value: 'id', label: 'name' })))
-}
+  const { handleSubmit, errors, resetForm } = useForm({
+    validationSchema
+  })
+  const { value: name } = useField('name')
+  const { value: pettype_id } = useField('pettype_id')
+  const { value: breed } = useField('breed')
+  const { value: size } = useField('size')
+  const { value: date_of_birth } = useField('date_of_birth')
+  const { value: age } = useField('age')
+  const { value: gender } = useField('gender')
+  const { value: weight } = useField('weight')
+  const { value: height } = useField('height')
+  const { value: weight_unit } = useField('weight_unit')
+  const { value: height_unit } = useField('height_unit')
+  const { value: user_id } = useField('user_id')
+  const { value: additional_info } = useField('additional_info')
+  const { value: status } = useField('status')
+  const { value: pet_image } = useField('pet_image')
 
-const getUserList = () => {
-  listingRequest({ url: USER_LIST, data: { id: 0 } }).then((res) => (userlist.value.options = buildMultiSelectObject(res, { value: 'id', label: 'first_name' })))
-}
+  const errorMessages = ref({})
 
-onMounted(() => {
-  getPettypeList()
-  getUserList()
-  //changePettype()
-  setFormData(defaultData())
-})
+  const pettype = ref({
+    searchable: true,
+    options: []
+  })
+  const userlist = ref({
+    searchable: true,
+    options: []
+  })
 
-// Form Submit
-const formSubmit = handleSubmit((values) => {
-    isDisable.value = 1;
-    storeRequest({ url: STORE_URL, body: values, type: 'file' }).then((res) => reset_datatable_close_offcanvas(res))
-})
+  const breed_list = ref({
+    searchable: true,
+    options: []
+  })
+
+  const changePettype = () => {
+
+    let pet_id=0
+
+    if(pettype_id.value>0){
+
+    pet_id=pettype_id.value
+
+    }
+
+    listingRequest({ url: BREED_LIST, data: { id: pet_id} }).then((res) => {
+      if(res !=''){
+        breed.value=''
+        breed_list.value.options = buildMultiSelectObject(res, { value: 'id', label: 'name' })
+
+      }else{
+        breed.value=''
+        breed_list.value.options =[]
+      }
 
 
-useOnOffcanvasHide('add-pet-form', () => setFormData(defaultData()))
-
-const toggleUnknownAge = () => {
-  if (unknownAge.value) {
-    age.value = ''
-    date_of_birth.value = ''
+    })
   }
-}
+
+
+  const getPettypeList = () => {
+    listingRequest({ url: PETTYPE_LIST, data: { id: 0 } }).then((res) => (pettype.value.options = buildMultiSelectObject(res, { value: 'id', label: 'name' })))
+  }
+
+  const getUserList = () => {
+    listingRequest({ url: USER_LIST, data: { id: 0 } }).then((res) => (userlist.value.options = buildMultiSelectObject(res, { value: 'id', label: 'first_name' })))
+  }
+
+  onMounted(() => {
+    getPettypeList()
+    getUserList()
+    //changePettype()
+    setFormData(defaultData())
+  })
+
+  // Form Submit
+  const formSubmit = handleSubmit((values) => {
+      isDisable.value = 1;
+      storeRequest({ url: STORE_URL, body: values, type: 'file' }).then((res) => reset_datatable_close_offcanvas(res))
+  })
+
+
+  useOnOffcanvasHide('add-pet-form', () => setFormData(defaultData()))
+
+  const toggleUnknownAge = () => {
+    if (unknownAge.value) {
+      age.value = ''
+      date_of_birth.value = ''
+    }
+  }
 </script>
 
 <style >

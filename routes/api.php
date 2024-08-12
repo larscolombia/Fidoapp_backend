@@ -238,6 +238,58 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
     /**
      * Obtener Todos los Usuarios con Información del Perfil
      * Método HTTP: GET
+     * Ruta: /users-list
+     * Descripción: Recupera todos los usuarios disponibles con su nombre y la información del perfil.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Lista de Usuarios",
+     *     "data": [
+     *       {
+     *         "id": 1,
+     *         "full_name": "Super Admin",
+     *         "email": "admin@pawlly.com",
+     *         "mobile": "44-5289568745",
+     *         "profile_image": "http://localhost:8001/storage/1/DbsVx3hU6fl5ZfCBcCC4oX6jlhI9ATgVp7tcxHBn.png",
+     *         "created_at": "2024-08-12T06:58:57.000000Z"
+     *       }
+     *       ...
+     *     ]
+     * }
+     */
+    Route::get('/users-list', [UserApiController::class, 'user_list']);
+
+    /**
+     * Obtener Todos los Usuarios con Información del Perfil
+     * Método HTTP: GET
+     * Ruta: /users-list
+     * Descripción: Recupera todos los usuarios disponibles (menos el que este autenticado o el que se restrinja) con su nombre y la información del perfil.
+     * Datos de Solicitud:
+     * {
+     *     "user_id" (Integer, opcional): Usuario que se desea excluir de la lista.,
+     * }
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Lista de Usuarios",
+     *     "data": [
+     *       {
+     *         "id": 1,
+     *         "full_name": "Super Admin",
+     *         "email": "admin@pawlly.com",
+     *         "mobile": "44-5289568745",
+     *         "profile_image": "http://localhost:8001/storage/1/DbsVx3hU6fl5ZfCBcCC4oX6jlhI9ATgVp7tcxHBn.png",
+     *         "created_at": "2024-08-12T06:58:57.000000Z"
+     *       }
+     *       ...
+     *     ]
+     * }
+     */
+    Route::get('/users-list-without-auth', [UserApiController::class, 'user_list_without_auth']);
+
+    /**
+     * Obtener Todos los Usuarios con Información del Perfil
+     * Método HTTP: GET
      * Ruta: /users/profiles
      * Descripción: Recupera todos los usuarios disponibles con su nombre y la información del perfil.
      * Respuesta Exitosa:

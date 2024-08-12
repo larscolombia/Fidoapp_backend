@@ -12,4 +12,5 @@ return [
     'lbl_old_password' => 'Contraseña anterior',
     'lbl_new_password' => 'Nueva contraseña',
     'lbl_confirm_password' => 'Confirmar contraseña',
+    'user_list' => 'Lista de usuarios',
 ];
