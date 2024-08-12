@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'back' => 'Volver',
     'title' => 'Mascota',
     'lbl_name' => 'Nombre',
     'lbl_status' => 'Estado',
