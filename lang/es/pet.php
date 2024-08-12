@@ -46,5 +46,8 @@ return [
     'pet_retrieved_successfully' => 'Mascota retornada satisfactoriamente',
     'pet_deleted_successfully' => 'Mascota eliminada satisfactoriamente',
     'pet_updated_successfully' => 'Mascota eliminada satisfactoriamente',
+    'qr_code' => 'Código QR',
+    'qr_code_image' => 'Imagen del Código QR',
+    'update' => 'Actualizar',
     'invalid_image_format' => 'El formato de la imagen no es válido. Los formatos permitidos son jpeg, png, jpg, gif.',
 ];

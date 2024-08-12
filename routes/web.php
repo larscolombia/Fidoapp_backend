@@ -340,6 +340,8 @@ Route::group(['prefix' => 'app'], function () {
 
         Route::get('/mascotas/qr_code', [QRCodeController::class, 'mascotas'])->name('mascotas.qr_code');
         Route::get('qr_code/mascotas_data', [QRCodeController::class, 'mascotas_data'])->name('qr_code.mascotas_data');
+        Route::get('qr_code/edit/{id}', [QRCodeController::class, 'edit'])->name('qr_code.edit');
+        Route::put('qr_code/{id}', [QRCodeController::class, 'update'])->name('qr_code.update');
 
     });
 });

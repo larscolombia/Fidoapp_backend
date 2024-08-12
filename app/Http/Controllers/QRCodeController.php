@@ -75,16 +75,18 @@ class QRCodeController extends Controller
             })
             ->addColumn('action', function ($pet) {
                 $action = '';
-    
-                if ($pet->qr_code_url) {
-                    $action .= '<a href="' . $pet->qr_code_url . '" class="btn btn-info" target="_blank">';
-                    $action .= __('qr_code.View QR');
-                    $action .= '</a>';
-                }
-    
+
+                $action .= '<a href="' . route('backend.qr_code.edit', ['id' => $pet->id]) . '" class="btn btn-info" target="_blank">';
+                $action .= __('qr_code.View QR');
+                $action .= '</a>';
                 return $action;
             })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    public function edit ($id) {
+        $pet = Pet::find($id);
+        return view('backend.qr_codes.edit', ['pet' => $pet]);
     }
 }

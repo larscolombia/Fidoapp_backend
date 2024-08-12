@@ -232,6 +232,11 @@ class Permission extends \Spatie\Permission\Models\Permission
             'edit_blogs' => 'Edit Blogs',
             'delete_blogs' => 'Delete Blogs',
 
+            'view_qr_code' => 'View Codigos QR',
+            'qr_code' => 'Add Codigos QR',
+            'edit_qr_code' => 'Edit Codigos QR',
+            'delete_qr_code' => 'Delete Codigos QR',
+
             'view_syetem_service' => 'View System Service',
             'add_syetem_service' => 'Add System Service',
             'edit_syetem_service' => 'Edit System Service',
