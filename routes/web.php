@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\NotificationsController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\ChipsController;
 use App\Http\Controllers\ClaseController;
 use App\Http\Controllers\ComandoController;
 use App\Http\Controllers\CourseController;
@@ -345,5 +346,9 @@ Route::group(['prefix' => 'app'], function () {
         Route::put('qr_code/{id}', [QRCodeController::class, 'update'])->name('qr_code.update');
 
         Route::put('pet/{id}/shared-owner', [PetsController::class, 'sharedOwner'])->name('pet.shared-owner');
+    
+        Route::get('/mascotas/chips', [ChipsController::class, 'mascotas'])->name('mascotas.chips');
+        Route::resource('chips', ChipsController::class);
+        Route::get('chips/index_data', [ChipsController::class, 'index_data'])->name('chips.index_data');
     });
 });

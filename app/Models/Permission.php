@@ -416,6 +416,11 @@ class Permission extends \Spatie\Permission\Models\Permission
             'edit_herramientas_entrenamiento' => 'Edit Herramientas de Entrenamiento',
             'delete_herramientas_entrenamiento' => 'Delete Herramientas de Entrenamiento',
 
+            'view_chips' => 'View Chips',
+            'add_chips' => 'Add Chips',
+            'edit_chips' => 'Edit Chips',
+            'delete_chips' => 'Delete Chips',
+
             'view_diarios' => 'View Diarios',
             'add_diarios' => 'Add Diarios',
             'edit_diarios' => 'Edit Diarios',

@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Herramientas de Entrenamientos',
+    'title_menu' => 'Herramientas',
     'Confirm Deletion' => 'Confirmar Eliminación',
     'Edit Details' => 'Editar Detalles',
     'Delete' => 'Eliminar',

@@ -17,8 +17,11 @@ return [
     'staff_earning' => 'Ganancias del Personal',
     'reports' => 'Informes',
     'daily_booking_report' => 'Informe de Reservas Diarias',
+    'daily_booking_report_menu' => 'Inf. de Reservas Diarias',
     'overall_booking_report' => 'Informe General de Reservas',
+    'overall_booking_report_menu' => 'Inf. General de Reservas',
     'payout_report' => 'Informe de Pagos al Personal',
+    'payout_report_menu' => 'Inf. de Pagos al Personal',
     'employee_report' => 'Informe del Personal',
     'system' => 'Sistema',
     'settings' => 'Configuraciones',
@@ -50,6 +53,7 @@ return [
     'daycare_taker_list' => 'Lista de Cuidadores de Guardería',
 
     'pet_sitter_list' => 'Lista de Cuidadores de Mascotas',
+    'pet_sitter_list_menu' => 'Cuidadores de Mascotas',
     'profile' => 'Perfil',
 
     'lbl_employee' => 'Empleado',

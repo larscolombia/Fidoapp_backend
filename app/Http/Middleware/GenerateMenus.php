@@ -328,7 +328,7 @@ class GenerateMenus
             //Pet Sitter
             $this->mainRoute($menu, [
                 'icon' => 'icon-Employee',
-                'title' => __('menu.pet_sitter_list'),
+                'title' => __('menu.pet_sitter_list_menu'),
                 'permission' => 'view_tag',
                 'route' => ['backend.employees.index', 'employee_type' => 'pet_sitter'],
                 'permission' => 'view_pet_sitter',
@@ -574,7 +574,7 @@ class GenerateMenus
 
             $this->mainRoute($menu, [
                 'icon' => ' icon-Daily-Bookings',
-                'title' => __('menu.daily_booking_report'),
+                'title' => __('menu.daily_booking_report_menu'),
                 'route' => 'backend.reports.daily-booking-report',
                 'active' => ['app/daily-booking-report'],
                 'permission' => 'view_daily_bookings',
@@ -583,7 +583,7 @@ class GenerateMenus
 
             $this->mainRoute($menu, [
                 'icon' => ' icon-all-booking',
-                'title' => __('menu.overall_booking_report'),
+                'title' => __('menu.overall_booking_report_menu'),
                 'route' => 'backend.reports.overall-booking-report',
                 'active' => ['app/overall-booking-report'],
                 'permission' => 'view_overall_bookings',
@@ -592,7 +592,7 @@ class GenerateMenus
 
             $this->mainRoute($menu, [
                 'icon' => ' icon-Employee-Payouts',
-                'title' => __('menu.payout_report'),
+                'title' => __('menu.payout_report_menu'),
                 'route' => 'backend.reports.payout-report',
                 'active' => ['app/payout-report'],
                 'permission' => 'view_employee_payout',
@@ -610,7 +610,7 @@ class GenerateMenus
 
             // OTHER Static
 
-            $permissionsToCheck = ['view_events', 'view_blogs', 'view_comandos', 'view_herramientas_entrenamiento', 'view_diarios', 'view_qr_code'];
+            $permissionsToCheck = ['view_events', 'view_blogs', 'view_comandos', 'view_herramientas_entrenamiento', 'view_diarios', 'view_chips', 'view_qr_code'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'OTROS', 'order' => 0]);
@@ -627,7 +627,7 @@ class GenerateMenus
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Setting',
-                'title' => __('comando_entrenamiento.title'),
+                'title' => __('comando_entrenamiento.title_menu'),
                 'route' => 'backend.comandos.index',
                 'active' => ['app/comando'],
                 'permission' => 'view_comandos',
@@ -636,7 +636,7 @@ class GenerateMenus
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Setting',
-                'title' => __('herramientas_entrenamiento.title'),
+                'title' => __('herramientas_entrenamiento.title_menu'),
                 'route' => 'backend.herramientas_entrenamiento.index',
                 'active' => ['app/herramientas_entrenamiento'],
                 'permission' => 'view_herramientas_entrenamiento',
@@ -649,6 +649,15 @@ class GenerateMenus
                 'route' => 'backend.mascotas.diarios',
                 'active' => ['app/diarios'],
                 'permission' => 'view_diarios',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
+                'icon' => 'icon-Setting',
+                'title' => __('chips.menu'),
+                'route' => 'backend.chips.index',
+                'active' => ['app/chips'],
+                'permission' => 'view_chips',
                 'order' => 0,
             ]);
 

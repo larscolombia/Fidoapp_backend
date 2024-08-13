@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Comandos de Entrenamientos',
+    'title_menu' => 'Comandos',
     'Confirm Deletion' => 'Confirmar Eliminación',
     'create' => 'Crear Comando',
     'name' => 'Nombre',

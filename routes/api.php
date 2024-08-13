@@ -1989,7 +1989,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *         },
          *         // Más objetos de reserva...
          *     ],
-         *     "message": "List of training and veterinary bookings.",
+         *     "message": "Lista de reservaciones de entrenadores y veterinarios",
          *     "success": true
          * }
          * 
