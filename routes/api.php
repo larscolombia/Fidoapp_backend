@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ComandoEquivalenteController;
 use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Api\HerramientaController;
 use App\Http\Controllers\Api\HerramientasEntrenamientoController;
 use App\Http\Controllers\Api\SharedOwnerController;
@@ -867,6 +868,33 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      * }
      */
     Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
+
+    /**
+     * Crear un evento en Google Calendar.
+     * Método HTTP: POST
+     * Ruta: /api/events/calendar/create
+     * Descripción: Crea un evento en Google Calendar utilizando los datos proporcionados y almacena la URL del evento en la base de datos.
+     * 
+     * Parámetros de Solicitud:
+     * - id_event: int (Requerido) - ID del evento en tu base de datos que contiene los detalles del evento (nombre, ubicación, fecha de inicio, fecha de fin).
+     * 
+     * Requisitos:
+     * - El usuario debe tener un token de acceso válido de Google Calendar almacenado en la sesión.
+     * 
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Event added to Google Calendar",
+     *     "event": object // Detalles del evento creado en Google Calendar, incluyendo el enlace al evento.
+     * }
+     * 
+     * Respuesta de Error:
+     * {
+     *     "error": "Error al crear el evento: [detalle del error]",
+     *     "status": false
+     * }
+     */
+    Route::post('/events/calendar/create', [GoogleCalendarController::class, 'createEvent'])->name('events.create');
     
     Route::prefix('comando-equivalente')->group(function () {
         /**
@@ -1577,6 +1605,38 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/bookings/get', [BookingsController::class, 'bookingList'])->name('bookings.list');
+
+        /**
+         * Obtener la lista de reservas.
+         * Método HTTP: GET
+         * Ruta: /api/bookings/trainings/get
+         * Descripción: Obtiene una lista de reservas de entrenamientos filtradas según los parámetros proporcionados.
+         * 
+         * Parámetros de Solicitud:
+         * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
+         * - nearby_booking: int (Opcional) - Si es 1, obtiene reservas cercanas.
+         * - system_service_name: string (Opcional) - Nombres de servicios del sistema, separados por comas.
+         * - status: string (Opcional) - Estados de reserva, separados por comas.
+         * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
+         * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
+         * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "status": true,
+         *     "data": [
+         *         // Datos de las reservas
+         *     ],
+         *     "message": "Lista de reservas de entrenamiento obtenidas exitosamente."
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "status": false,
+         *     "message": "Error message"
+         * }
+         */
+        Route::get('/bookings/training/get', [BookingsController::class, 'bookingListTraining'])->name('bookings.list');
 
         /**
          * Crear o actualizar una reserva.

@@ -359,6 +359,96 @@ class BookingsController extends Controller
         ], 200);
     }
 
+    public function bookingListTraining (Request $request) {
+        if ($request->has('user_id')) {
+            $userId = $request->input('user_id', \Auth::user());
+            $user = User::find($userId);
+        } else {
+            $user = \Auth::user();
+        }
+        if($user->user_type == 'user'){
+            $booking = Booking::where('user_id', $user->id);
+        }else{
+
+            $booking = Booking::where('employee_id', $user->id);
+        }
+        
+        $booking->where('booking_type', 'training');
+
+        if($request->has('nearby_booking') && $request->nearby_booking==1){
+
+            $booking = Booking::query();
+
+            $bookingRequestQuery = BookingRequestMapping::query()
+            ->where('walker_id', $user->id)
+            ->where('status', 0);
+
+            $bookingIds = $bookingRequestQuery->pluck('booking_id');
+
+            $booking->whereIn('id', $bookingIds);
+    
+        }
+
+        $booking = $booking->with(['boarding','training','daycare','walking','bookingTransaction','systemservice']);
+
+
+
+        if ($request->has('system_service_name') && isset($request->system_service_name)) {
+            $serviceNames = explode(',', $request->system_service_name);
+        
+            $booking->whereHas('systemservice', function ($query) use ($serviceNames) {
+                $query->whereIn('name', $serviceNames);
+            });
+        }
+
+      
+
+        if ($request->has('status') && isset($request->status)) {
+
+             $status = explode(',', $request->status); 
+             $booking->whereIn('status', $status);
+               
+        }
+        $per_page = $request->input('per_page', 10);
+        if ($request->has('per_page') && ! empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
+                $per_page = $request->per_page;
+            }
+            if ($request->per_page === 'all') {
+                $per_page = $booking->count();
+            }
+        }
+        $orderBy = 'desc';
+        if ($request->has('order_by') && ! empty($request->order_by)) {
+            $orderBy = $request->order_by;
+        }
+        // Apply search conditions for booking ID, employee name, and service name
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $booking->where(function ($query) use ($search) {
+                $query->where('id', 'LIKE', "%$search%")
+                    
+                    ->orWhereHas('pet', function ($petQuery) use ($search) {
+                        $petQuery->where('name', 'LIKE', "%$search%");
+                    })
+
+                    ->orWhereHas('employee', function ($employeeQuery) use ($search) {
+                        $employeeQuery->where(function ($nameQuery) use ($search) {
+                            $nameQuery->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%$search%"])
+                                ->orWhere('email', 'LIKE', "%$search");
+                        });
+                     })
+
+                     ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where(function ($nameQuery) use ($search) {
+                            $nameQuery->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%$search%"])
+                                ->orWhere('email', 'LIKE', "%$search");
+                        });
+                    });
+            });
+        }
+    }
+
     public function bookingDetail(Request $request)
     {
         $id = $request->id;
