@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Api\HerramientaController;
 use App\Http\Controllers\Api\HerramientasEntrenamientoController;
 use App\Http\Controllers\Api\SharedOwnerController;
+use App\Http\Controllers\Api\TrainerController;
+use App\Http\Controllers\Api\VeterinaryController;
 use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Backend\API\DashboardController;
@@ -1898,6 +1900,106 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/service-training/get', [ServiceTrainingController::class, 'trainingList'])->name('service-training.list');
+    
+        /**
+         * Obtener la lista de veterinarios para una mascota.
+         * Método HTTP: GET
+         * Ruta: /api/list-veterinaries/{petId}
+         * Descripción: Devuelve una lista de consultas veterinarias completadas para una mascota específica.
+         * 
+         * Parámetros de Ruta:
+         * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las consultas veterinarias.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": [
+         *         {
+         *             "id": int, // ID de la reserva
+         *             "pet_id": int, // ID de la mascota
+         *             "status": string, // Estado de la reserva ('completed')
+         *             "booking_type": string, // Tipo de reserva ('veterinary')
+         *             // Otros detalles adicionales de la reserva...
+         *         },
+         *         // Más objetos de reserva...
+         *     ],
+         *     "message": "Lista de veterinarios.",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "error": "Error message",
+         *     "status": false
+         * }
+         */
+        Route::get('/list-veterinaries/{petId}', [VeterinaryController::class, 'listVeterinaries']);
+
+        /**
+         * Obtener la lista de entrenadores para una mascota.
+         * Método HTTP: GET
+         * Ruta: /api/list-trainers/{petId}
+         * Descripción: Devuelve una lista de sesiones de entrenamiento completadas para una mascota específica.
+         * 
+         * Parámetros de Ruta:
+         * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las sesiones de entrenamiento.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": [
+         *         {
+         *             "id": int, // ID de la reserva de entrenamiento
+         *             "pet_id": int, // ID de la mascota
+         *             "status": string, // Estado de la reserva ('completed')
+         *             "booking_type": string, // Tipo de reserva ('training')
+         *             // Otros detalles adicionales de la reserva...
+         *         },
+         *         // Más objetos de reserva...
+         *     ],
+         *     "message": "List of trainers.",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "error": "Error message",
+         *     "status": false
+         * }
+         */
+        Route::get('/list-trainers/{petId}', [TrainerController::class, 'listTrainers']);
+
+        /**
+         * Obtener la lista combinada de reservas completadas de entrenadores y veterinarios para una mascota.
+         * 
+         * Método HTTP: GET
+         * Ruta: /api/list-trainers-veterinaries/{petId}
+         * Descripción: Devuelve una lista combinada de reservas completadas de tipo 'training' y 'veterinary' para una mascota específica.
+         * 
+         * Parámetros de Ruta:
+         * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las reservas.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": [
+         *         {
+         *             "id": int, // ID de la reserva
+         *             "pet_id": int, // ID de la mascota
+         *             "status": string, // Estado de la reserva ('completed')
+         *             "booking_type": string, // Tipo de reserva ('training' o 'veterinary')
+         *             // Otros detalles adicionales de la reserva...
+         *         },
+         *         // Más objetos de reserva...
+         *     ],
+         *     "message": "List of training and veterinary bookings.",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error message",
+         *     "success": false
+         * }
+         */
+        Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
