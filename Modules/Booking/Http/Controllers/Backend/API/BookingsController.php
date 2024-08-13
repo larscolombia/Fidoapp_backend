@@ -238,6 +238,24 @@ class BookingsController extends Controller
             ], 200);
     }
 
+    public function updateStatusConfirmed(Request $request)
+    {
+        $id = $request->id;
+        $data = Booking::with('services')->findOrFail($id);
+
+        $data->status = 'confirmed';
+        $data->update();
+
+        $message = __('booking.status_update');
+
+        return response()->json(
+            [
+                'message' => $message, 
+                'status' => true,
+                'data' => $data
+            ], 200);
+    }
+
     public function bookingList(Request $request)
     {
         if ($request->has('user_id')) {

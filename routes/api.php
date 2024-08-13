@@ -1702,6 +1702,29 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
         Route::put('/bookings/status', [BookingsController::class, 'updateStatus'])->name('bookings.updateStatus');
 
         /**
+         * Aceptar una reserva.
+         * Método HTTP: PUT
+         * Ruta: /api/bookings/status/confirmed
+         * Descripción: Acepta el estado de una reserva existente por su ID.
+         * 
+         * Parámetros de Solicitud:
+         * - id: int (Requerido) - ID de la reserva.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Estado de la reserva actualizado exitosamente",
+         *     "status": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error message",
+         *     "status": false
+         * }
+         */
+        Route::put('/bookings/status/confirmed', [BookingsController::class, 'updateStatusConfirmed'])->name('bookings.updateStatusConfirmed');
+
+        /**
          * Actualizar una reserva existente.
          * Método HTTP: PUT
          * Ruta: /api/bookings/{id}
