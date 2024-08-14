@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ChipsController;
 use App\Http\Controllers\Api\ClaseController;
 use App\Http\Controllers\Api\ComandoController;
 use App\Http\Controllers\Api\ComandoEquivalenteController;
@@ -2000,6 +2001,230 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
+    
+        /**
+         * Obtener la lista de todos los chips.
+         * 
+         * Método HTTP: GET
+         * Ruta: /api/chips
+         * Descripción: Devuelve una lista de todos los chips disponibles en la base de datos, incluyendo los detalles de la mascota y el fabricante asociados.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": [
+         *         {
+         *             "id": int, // ID del chip
+         *             "num_identificacion": int, // Número de identificación del chip
+         *             "pet_id": int, // ID de la mascota asociada
+         *             "fecha_implantacion": string, // Fecha de implantación del chip
+         *             "fabricante_id": int, // ID del fabricante del chip
+         *             "num_contacto": string, // Número de contacto asociado al chip
+         *             "pet": { // Detalles de la mascota
+         *                 "id": int,
+         *                 "name": string,
+         *                 // Otros detalles de la mascota...
+         *             },
+         *             "fabricante": { // Detalles del fabricante
+         *                 "id": int,
+         *                 "nombre": string,
+         *                 // Otros detalles del fabricante...
+         *             }
+         *         },
+         *         // Más objetos de chip...
+         *     ],
+         *     "message": "Lista de todos los chips",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error message",
+         *     "success": false
+         * }
+         */
+        Route::get('/chips', [ChipsController::class, 'index']);
+
+        /**
+         * Obtener los detalles de un chip específico.
+         * 
+         * Método HTTP: GET
+         * Ruta: /api/chips/{id}
+         * Descripción: Devuelve los detalles de un chip específico identificado por su ID.
+         * 
+         * Parámetros de Ruta:
+         * - id: int (Requerido) - ID del chip que se desea consultar.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": {
+         *         "id": int, // ID del chip
+         *         "num_identificacion": int, // Número de identificación del chip
+         *         "pet_id": int, // ID de la mascota asociada
+         *         "fecha_implantacion": string, // Fecha de implantación del chip
+         *         "fabricante_id": int, // ID del fabricante del chip
+         *         "num_contacto": string, // Número de contacto asociado al chip
+         *         "pet": { // Detalles de la mascota
+         *             "id": int,
+         *             "name": string,
+         *             // Otros detalles de la mascota...
+         *         },
+         *         "fabricante": { // Detalles del fabricante
+         *             "id": int,
+         *             "nombre": string,
+         *             // Otros detalles del fabricante...
+         *         }
+         *     },
+         *     "message": "Detalles del chip",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Chip no encontrado",
+         *     "success": false
+         * }
+         */
+        Route::get('/chips/{id}', [ChipsController::class, 'show']);
+
+        /**
+         * Crear un nuevo chip.
+         * 
+         * Método HTTP: POST
+         * Ruta: /api/chips
+         * Descripción: Permite crear un nuevo chip en la base de datos.
+         * 
+         * Parámetros de Solicitud (Body):
+         * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
+         * - pet_id: int (Requerido) - ID de la mascota asociada al chip.
+         * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
+         * - fabricante_id: int (Requerido) - ID del fabricante del chip.
+         * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": {
+         *         "id": int, // ID del chip recién creado
+         *         "num_identificacion": int, // Número de identificación del chip
+         *         "pet_id": int, // ID de la mascota asociada
+         *         "fecha_implantacion": string, // Fecha de implantación del chip
+         *         "fabricante_id": int, // ID del fabricante del chip
+         *         "num_contacto": string, // Número de contacto asociado al chip
+         *     },
+         *     "message": "Chip creado exitosamente",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error al crear el chip",
+         *     "success": false
+         * }
+         */
+        Route::post('/chips', [ChipsController::class, 'store']);
+
+        /**
+         * Actualizar un chip existente.
+         * 
+         * Método HTTP: PUT
+         * Ruta: /api/chips/{id}
+         * Descripción: Permite actualizar los detalles de un chip específico identificado por su ID.
+         * 
+         * Parámetros de Ruta:
+         * - id: int (Requerido) - ID del chip que se desea actualizar.
+         * 
+         * Parámetros de Solicitud (Body):
+         * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
+         * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
+         * - fabricante_id: int (Requerido) - ID del fabricante del chip.
+         * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": {
+         *         "id": int, // ID del chip actualizado
+         *         "num_identificacion": int, // Número de identificación del chip
+         *         "pet_id": int, // ID de la mascota asociada
+         *         "fecha_implantacion": string, // Fecha de implantación del chip
+         *         "fabricante_id": int, // ID del fabricante del chip
+         *         "num_contacto": string, // Número de contacto asociado al chip
+         *     },
+         *     "message": "Chip actualizado exitosamente",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error al actualizar el chip",
+         *     "success": false
+         * }
+         */
+        Route::put('/chips/{id}', [ChipsController::class, 'update']);
+
+        /**
+         * Eliminar un chip.
+         * 
+         * Método HTTP: DELETE
+         * Ruta: /api/chips/{id}
+         * Descripción: Permite eliminar un chip específico identificado por su ID.
+         * 
+         * Parámetros de Ruta:
+         * - id: int (Requerido) - ID del chip que se desea eliminar.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Chip eliminado exitosamente",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error al eliminar el chip",
+         *     "success": false
+         * }
+         */
+        Route::delete('/chips/{id}', [ChipsController::class, 'destroy']);
+
+        /**
+         * Obtener el chip asociado a una mascota específica.
+         * 
+         * Método HTTP: GET
+         * Ruta: /api/pets/{pet_id}/chip
+         * Descripción: Devuelve el chip asociado a la mascota identificada por su `pet_id`.
+         * 
+         * Parámetros de Ruta:
+         * - pet_id: int (Requerido) - ID de la mascota para la cual se desea obtener el chip.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": {
+         *         "id": int, // ID del chip
+         *         "num_identificacion": int, // Número de identificación del chip
+         *         "pet_id": int, // ID de la mascota asociada
+         *         "fecha_implantacion": string, // Fecha de implantación del chip
+         *         "fabricante_id": int, // ID del fabricante del chip
+         *         "num_contacto": string, // Número de contacto asociado al chip
+         *         "pet": { // Detalles de la mascota
+         *             "id": int,
+         *             "name": string,
+         *             // Otros detalles de la mascota...
+         *         },
+         *         "fabricante": { // Detalles del fabricante
+         *             "id": int,
+         *             "nombre": string,
+         *             // Otros detalles del fabricante...
+         *         }
+         *     },
+         *     "message": "Detalles del chip asociado a la mascota",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Chip no encontrado para la mascota especificada",
+         *     "success": false
+         * }
+         */
+        Route::get('/pets/{pet_id}/chip', [ChipsController::class, 'getChipByPet']);
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
