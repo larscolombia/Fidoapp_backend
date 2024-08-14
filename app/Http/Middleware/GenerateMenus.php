@@ -655,7 +655,7 @@ class GenerateMenus
             $this->mainRoute($menu, [
                 'icon' => 'icon-Setting',
                 'title' => __('chips.menu'),
-                'route' => 'backend.chips.index',
+                'route' => 'backend.mascotas.chips',
                 'active' => ['app/chips'],
                 'permission' => 'view_chips',
                 'order' => 0,

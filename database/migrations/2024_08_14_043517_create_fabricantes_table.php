@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chips', function (Blueprint $table) {
+        Schema::create('fabricantes', function (Blueprint $table) {
             $table->id();
-            $table->integer('num_identificacion')->unique();
-            $table->date('fecha_implantacion');
-            $table->string('nombre_fabricante');
-            $table->string('num_contacto');
+
+            $table->string('nombre');
+
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chips');
+        Schema::dropIfExists('fabricantes');
     }
 };

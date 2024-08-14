@@ -16,6 +16,7 @@ use App\Http\Controllers\CursoPlataformaController;
 use App\Http\Controllers\DiarioController;
 use App\Http\Controllers\EBookController;
 use App\Http\Controllers\EjercicioController;
+use App\Http\Controllers\FabricanteController;
 use App\Http\Controllers\GoogleCalendarController;
 use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\LanguageController;
@@ -348,7 +349,10 @@ Route::group(['prefix' => 'app'], function () {
         Route::put('pet/{id}/shared-owner', [PetsController::class, 'sharedOwner'])->name('pet.shared-owner');
     
         Route::get('/mascotas/chips', [ChipsController::class, 'mascotas'])->name('mascotas.chips');
+        Route::get('chips/mascotas_data', [ChipsController::class, 'mascotas_data'])->name('chips.mascotas_data');
         Route::resource('chips', ChipsController::class);
         Route::get('chips/index_data', [ChipsController::class, 'index_data'])->name('chips.index_data');
+
+        Route::post('/fabricantes/store', [FabricanteController::class, 'store'])->name('fabricantes.store');
     });
 });

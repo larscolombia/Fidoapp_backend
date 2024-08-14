@@ -3,6 +3,7 @@
 namespace Modules\Pet\Models;
 
 use App\Models\BaseModel;
+use App\Models\Chip;
 use App\Models\Diario;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Traits\HasSlug;
@@ -63,5 +64,10 @@ class Pet extends BaseModel
     public function diario()
     {
         return $this->hasMany(Diario::class, 'pet_id');
+    }
+
+    public function chip()
+    {
+        return $this->hasOne(Chip::class, 'pet_id');
     }
 }

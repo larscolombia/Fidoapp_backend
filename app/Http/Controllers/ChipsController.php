@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Chip;
+use App\Models\Fabricante;
+use Modules\Pet\Models\Pet;
 
 class ChipsController extends Controller
 {
@@ -29,6 +31,37 @@ class ChipsController extends Controller
             'module_icon' => $this->module_icon,
             'module_name' => $this->module_name,
         ]);
+    }
+
+    public function mascotas () {
+        $pets = Pet::with('user')->whereHas('pettype', function ($query) {
+            $query->where('slug', 'dog');
+        })->get();
+
+        return view('backend.chips.mascotas', compact('pets'));
+    }
+
+    public function mascotas_data(DataTables $datatable, Request $request)
+    {
+        $pets = Pet::with('user')->whereHas('pettype', function ($query) {
+            $query->where('slug', 'dog');
+        })->select('pets.*');
+
+        return $datatable->eloquent($pets)
+            ->addColumn('owner_name', function ($pet) {
+                return $pet->user->first_name . ' ' . $pet->user->last_name;
+            })
+            ->addColumn('pet_name', function ($pet) {
+                return $pet->name;
+            })
+            ->addColumn('breed', function ($pet) {
+                return $pet->breed->name;
+            })
+            ->addColumn('action', function ($pet) {
+                return view('backend.chips.action_column', compact('pet'))->render();
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -71,9 +104,19 @@ class ChipsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('backend.chips.create');
+        // Obtener el ID de la mascota desde los parámetros de la consulta
+        $petId = $request->query('pet_id');
+        
+        // Obtener la mascota seleccionada
+        $pet = Pet::findOrFail($petId);
+        
+        // Obtener todos los fabricantes para el select
+        $fabricantes = Fabricante::all();
+
+        // Pasar la mascota y los fabricantes a la vista
+        return view('backend.chips.create', compact('pet', 'fabricantes'));
     }
 
     /**
@@ -84,25 +127,26 @@ class ChipsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        // Validar los datos de entrada
+        $request->validate([
             'num_identificacion' => 'required|integer|unique:chips,num_identificacion',
+            'pet_id' => 'required|exists:pets,id',
             'fecha_implantacion' => 'required|date',
-            'nombre_fabricante' => 'required|string|max:255',
-            'num_contacto' => 'required|string|max:255',
+            'fabricante_id' => 'required|exists:fabricantes,id',
+            'num_contacto' => 'required|string|max:15',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        Chip::create([
-            'num_identificacion' => $request->num_identificacion,
-            'fecha_implantacion' => $request->fecha_implantacion,
-            'nombre_fabricante' => $request->nombre_fabricante,
-            'num_contacto' => $request->num_contacto,
+        // Crear un nuevo chip
+        $chip = Chip::create([
+            'num_identificacion' => $request->input('num_identificacion'),
+            'pet_id' => $request->input('pet_id'),
+            'fecha_implantacion' => $request->input('fecha_implantacion'),
+            'fabricante_id' => $request->input('fabricante_id'),
+            'num_contacto' => $request->input('num_contacto'),
         ]);
 
-        return redirect()->route('backend.chips.index')->with('success', __('chips.created_successfully'));
+        // Redireccionar o devolver una respuesta
+        return redirect()->route('backend.mascotas.chips')->with('success', __('chips.chip_created_successfully'));
     }
 
     /**
@@ -125,8 +169,14 @@ class ChipsController extends Controller
      */
     public function edit($id)
     {
-        $chip = Chip::findOrFail($id);
-        return view('backend.chips.edit', compact('chip'));
+        // Obtener el chip y la mascota relacionada
+        $chip = Chip::with('pet')->findOrFail($id);
+
+        // Obtener todos los fabricantes para el select
+        $fabricantes = Fabricante::all();
+
+        // Pasar el chip y los fabricantes a la vista
+        return view('backend.chips.edit', compact('chip', 'fabricantes'));
     }
 
     /**
@@ -138,26 +188,27 @@ class ChipsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'num_identificacion' => 'required|integer|unique:chips,num_identificacion,' . $id,
+        // Validar los datos de entrada
+        $request->validate([
+            'num_identificacion' => 'required|integer|unique:chips,num_identificacion',
             'fecha_implantacion' => 'required|date',
-            'nombre_fabricante' => 'required|string|max:255',
-            'num_contacto' => 'required|string|max:255',
+            'fabricante_id' => 'required|exists:fabricantes,id',
+            'num_contacto' => 'required|string|max:15',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
+        // Obtener el chip
         $chip = Chip::findOrFail($id);
+    
+        // Actualizar los datos del chip
         $chip->update([
-            'num_identificacion' => $request->num_identificacion,
-            'fecha_implantacion' => $request->fecha_implantacion,
-            'nombre_fabricante' => $request->nombre_fabricante,
-            'num_contacto' => $request->num_contacto,
+            'num_identificacion' => $request->input('num_identificacion'),
+            'fecha_implantacion' => $request->input('fecha_implantacion'),
+            'fabricante_id' => $request->input('fabricante_id'),
+            'num_contacto' => $request->input('num_contacto'),
         ]);
-
-        return redirect()->route('backend.chips.index')->with('success', __('chips.updated_successfully'));
+    
+        // Redireccionar o devolver una respuesta
+        return redirect()->route('backend.mascotas.chips')->with('success', __('chips.chip_updated_successfully'));
     }
 
     /**
@@ -171,6 +222,6 @@ class ChipsController extends Controller
         $chip = Chip::findOrFail($id);
         $chip->delete();
 
-        return redirect()->route('backend.chips.index')->with('success', __('chips.deleted_successfully'));
+        return redirect()->route('backend.mascotas.chips')->with('success', __('chips.deleted_successfully'));
     }
 }
