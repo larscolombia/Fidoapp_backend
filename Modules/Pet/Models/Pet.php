@@ -2,6 +2,7 @@
 
 namespace Modules\Pet\Models;
 
+use App\Models\ActivityLevel;
 use App\Models\BaseModel;
 use App\Models\Chip;
 use App\Models\Diario;
@@ -69,5 +70,10 @@ class Pet extends BaseModel
     public function chip()
     {
         return $this->hasOne(Chip::class, 'pet_id');
+    }
+
+    public function activityLevel()
+    {
+        return $this->hasOne(ActivityLevel::class, 'pet_id');
     }
 }

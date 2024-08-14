@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ActivityLevelController;
 use App\Http\Controllers\Api\ChipsController;
 use App\Http\Controllers\Api\ClaseController;
 use App\Http\Controllers\Api\ComandoController;
@@ -2225,6 +2226,161 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/pets/{pet_id}/chip', [ChipsController::class, 'getChipByPet']);
+
+        /**
+         * Obtener los niveles de actividad de una mascota específica.
+         * 
+         * Método HTTP: GET
+         * Ruta: /api/pets/{pet_id}/activity-levels
+         * Descripción: Devuelve todos los registros de niveles de actividad asociados a la mascota identificada por su `pet_id`.
+         * 
+         * Parámetros de Ruta:
+         * - pet_id: int (Requerido) - ID de la mascota para la cual se desean obtener los niveles de actividad.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": [
+         *         {
+         *             "id": int, // ID del nivel de actividad
+         *             "pet_id": int, // ID de la mascota
+         *             "daily_steps": int, // Número de pasos diarios
+         *             "distance_covered": float, // Distancia recorrida en kilómetros
+         *             "calories_burned": int, // Calorías quemadas
+         *             "active_minutes": int, // Minutos de actividad física
+         *             "goal_steps": int, // Meta de pasos diarios
+         *             "goal_distance": float, // Meta de distancia recorrida en kilómetros
+         *             "goal_calories": int, // Meta de calorías quemadas
+         *             "goal_active_minutes": int, // Meta de minutos de actividad física
+         *         },
+         *         // Más registros de niveles de actividad...
+         *     ],
+         *     "message": "Lista de niveles de actividad de la mascota",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Niveles de actividad no encontrados para la mascota especificada",
+         *     "success": false
+         * }
+         */
+        Route::get('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'index']);
+
+        /**
+         * Crear un nuevo nivel de actividad para una mascota específica.
+         * 
+         * Método HTTP: POST
+         * Ruta: /api/pets/{pet_id}/activity-levels
+         * Descripción: Crea un nuevo registro de nivel de actividad para la mascota identificada por su `pet_id`.
+         * 
+         * Parámetros de Ruta:
+         * - pet_id: int (Requerido) - ID de la mascota para la cual se va a crear el nivel de actividad.
+         * 
+         * Parámetros del Cuerpo (Body):
+         * - daily_steps: int (Opcional) - Número de pasos diarios.
+         * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
+         * - calories_burned: int (Opcional) - Calorías quemadas.
+         * - active_minutes: int (Opcional) - Minutos de actividad física.
+         * - goal_steps: int (Opcional) - Meta de pasos diarios.
+         * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
+         * - goal_calories: int (Opcional) - Meta de calorías quemadas.
+         * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": {
+         *         "id": int, // ID del nivel de actividad creado
+         *         "pet_id": int, // ID de la mascota
+         *         "daily_steps": int, // Número de pasos diarios
+         *         "distance_covered": float, // Distancia recorrida en kilómetros
+         *         "calories_burned": int, // Calorías quemadas
+         *         "active_minutes": int, // Minutos de actividad física
+         *         "goal_steps": int, // Meta de pasos diarios
+         *         "goal_distance": float, // Meta de distancia recorrida en kilómetros
+         *         "goal_calories": int, // Meta de calorías quemadas
+         *         "goal_active_minutes": int, // Meta de minutos de actividad física
+         *     },
+         *     "message": "Nivel de actividad creado exitosamente",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error al crear el nivel de actividad",
+         *     "success": false
+         * }
+         */
+        Route::post('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'store']);
+
+        /**
+         * Actualizar un nivel de actividad existente para una mascota específica.
+         * 
+         * Método HTTP: PUT
+         * Ruta: /api/activity-levels/{id}
+         * Descripción: Actualiza un registro de nivel de actividad para la mascota identificada por su `id`.
+         * 
+         * Parámetros de Ruta:
+         * - id: int (Requerido) - ID del nivel de actividad que se va a actualizar.
+         * 
+         * Parámetros del Cuerpo (Body):
+         * - daily_steps: int (Opcional) - Número de pasos diarios.
+         * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
+         * - calories_burned: int (Opcional) - Calorías quemadas.
+         * - active_minutes: int (Opcional) - Minutos de actividad física.
+         * - goal_steps: int (Opcional) - Meta de pasos diarios.
+         * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
+         * - goal_calories: int (Opcional) - Meta de calorías quemadas.
+         * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "data": {
+         *         "id": int, // ID del nivel de actividad actualizado
+         *         "pet_id": int, // ID de la mascota
+         *         "daily_steps": int, // Número de pasos diarios
+         *         "distance_covered": float, // Distancia recorrida en kilómetros
+         *         "calories_burned": int, // Calorías quemadas
+         *         "active_minutes": int, // Minutos de actividad física
+         *         "goal_steps": int, // Meta de pasos diarios
+         *         "goal_distance": float, // Meta de distancia recorrida en kilómetros
+         *         "goal_calories": int, // Meta de calorías quemadas
+         *         "goal_active_minutes": int, // Meta de minutos de actividad física
+         *     },
+         *     "message": "Nivel de actividad actualizado exitosamente",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error al actualizar el nivel de actividad",
+         *     "success": false
+         * }
+         */
+        Route::put('/activity-levels/{id}', [ActivityLevelController::class, 'update']);
+
+        /**
+         * Eliminar un nivel de actividad para una mascota específica.
+         * 
+         * Método HTTP: DELETE
+         * Ruta: /api/activity-levels/{id}
+         * Descripción: Elimina un registro de nivel de actividad identificado por su `id`.
+         * 
+         * Parámetros de Ruta:
+         * - id: int (Requerido) - ID del nivel de actividad que se va a eliminar.
+         * 
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Nivel de actividad eliminado exitosamente",
+         *     "success": true
+         * }
+         * 
+         * Respuesta de Error:
+         * {
+         *     "message": "Error al eliminar el nivel de actividad",
+         *     "success": false
+         * }
+         */
+        Route::delete('/activity-levels/{id}', [ActivityLevelController::class, 'destroy']);
     });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLevel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -74,25 +75,25 @@ class ChipsController extends Controller
         return view('backend.chips.index');
     }
 
-    public function index_data(DataTables $datatable, Request $request)
+    public function index_data(DataTables $datatable, Request $request, $pet_id)
     {
-        $chips = Chip::query();
+        $activityLevels = ActivityLevel::where('pet_id', $pet_id);
 
-        return $datatable->eloquent($chips)
+        return $datatable->eloquent($activityLevels)
             ->addColumn('action', function ($data) {
-                return view('backend.chips.action_column', compact('data'));
+                return view('backend.activity_levels.action_column', compact('data'));
             })
-            ->addColumn('num_identificacion', function ($data) {
-                return $data->num_identificacion;
+            ->addColumn('daily_steps', function ($data) {
+                return $data->daily_steps;
             })
-            ->addColumn('fecha_implantacion', function ($data) {
-                return $data->fecha_implantacion;
+            ->addColumn('distance_covered', function ($data) {
+                return number_format($data->distance_covered, 2) . ' km';
             })
-            ->addColumn('nombre_fabricante', function ($data) {
-                return $data->nombre_fabricante;
+            ->addColumn('calories_burned', function ($data) {
+                return $data->calories_burned;
             })
-            ->addColumn('num_contacto', function ($data) {
-                return $data->num_contacto;
+            ->addColumn('active_minutes', function ($data) {
+                return $data->active_minutes;
             })
             ->orderColumns(['id'], '-:column $1')
             ->rawColumns(['action'])

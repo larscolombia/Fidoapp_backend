@@ -357,6 +357,35 @@ Route::group(['prefix' => 'app'], function () {
         Route::post('/fabricantes/store', [FabricanteController::class, 'store'])->name('fabricantes.store');
    
         Route::get('/mascotas/activity_levels', [ActivityLevelController::class, 'mascotas'])->name('mascotas.activity_levels');
+        Route::get('/pets/{pet_id}/activity_levels/index_data', [ActivityLevelController::class, 'index_data'])->name('activity_levels.index_data');
+
         Route::get('activity_levels/mascotas_data', [ActivityLevelController::class, 'mascotas_data'])->name('activity_levels.mascotas_data');
+        // Ruta para mostrar los niveles de actividad de una mascota específica
+        Route::get('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'index'])->name('activity-levels.index');
+        
+        // Ruta para mostrar el formulario de creación de un nuevo nivel de actividad para una mascota específica
+        Route::get('/pets/{pet_id}/activity-levels/create', [ActivityLevelController::class, 'create'])->name('activity-levels.create');
+        
+        // Ruta para almacenar un nuevo nivel de actividad para una mascota específica
+        Route::post('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'store'])->name('activity-levels.store');
+        
+        // Ruta para mostrar el formulario de edición de un nivel de actividad específico
+        Route::get('/activity-levels/{id}/edit', [ActivityLevelController::class, 'edit'])->name('activity-levels.edit');
+        
+        // Ruta para actualizar un nivel de actividad específico
+        Route::put('/activity-levels/{id}', [ActivityLevelController::class, 'update'])->name('activity-levels.update');
+        
+        // Ruta para eliminar un nivel de actividad específico
+        Route::delete('/activity-levels/{id}', [ActivityLevelController::class, 'destroy'])->name('activity-levels.destroy');
+    
+        Route::put('/activity-levels/{id}/update-steps', [ActivityLevelController::class, 'update_steps'])->name('activity-levels.update_steps');
+        Route::put('/activity-levels/{id}/update-distance', [ActivityLevelController::class, 'update_distance'])->name('activity-levels.update_distance');
+        Route::put('/activity-levels/{id}/update-calories', [ActivityLevelController::class, 'update_calories'])->name('activity-levels.update_calories');
+        Route::put('/activity-levels/{id}/update-minutes', [ActivityLevelController::class, 'update_minutes'])->name('activity-levels.update_minutes');
+
+        Route::post('/activity-levels/{pet_id}/store-steps', [ActivityLevelController::class, 'store_steps'])->name('activity-levels.store_steps');
+        Route::post('/activity-levels/{pet_id}/store-distance', [ActivityLevelController::class, 'store_distance'])->name('activity-levels.store_distance');
+        Route::post('/activity-levels/{pet_id}/store-calories', [ActivityLevelController::class, 'store_calories'])->name('activity-levels.store_calories');
+        Route::post('/activity-levels/{pet_id}/store-minutes', [ActivityLevelController::class, 'store_minutes'])->name('activity-levels.store_minutes');
     });
 });
