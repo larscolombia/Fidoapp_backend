@@ -426,6 +426,11 @@ class Permission extends \Spatie\Permission\Models\Permission
             'edit_diarios' => 'Edit Diarios',
             'delete_diarios' => 'Delete Diarios',
 
+            'view_activity_levels' => 'View Activity Levels',
+            'add_activity_levels' => 'Add Activity Levels',
+            'edit_activity_levels' => 'Edit Activity Levels',
+            'delete_activity_levels' => 'Delete Activity Levels',
+
             'view_course_platform' => 'View Curso de Plataforma',
             'add_course_platform' => 'Add Curso de Plataforma',
             'edit_course_platform' => 'Edit Curso de Plataforma',

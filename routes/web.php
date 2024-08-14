@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLevelController;
 use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\BackupController;
 use App\Http\Controllers\Backend\BranchController;
@@ -354,5 +355,8 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('chips/index_data', [ChipsController::class, 'index_data'])->name('chips.index_data');
 
         Route::post('/fabricantes/store', [FabricanteController::class, 'store'])->name('fabricantes.store');
+   
+        Route::get('/mascotas/activity_levels', [ActivityLevelController::class, 'mascotas'])->name('mascotas.activity_levels');
+        Route::get('activity_levels/mascotas_data', [ActivityLevelController::class, 'mascotas_data'])->name('activity_levels.mascotas_data');
     });
 });

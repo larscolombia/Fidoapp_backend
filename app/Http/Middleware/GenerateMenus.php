@@ -610,7 +610,7 @@ class GenerateMenus
 
             // OTHER Static
 
-            $permissionsToCheck = ['view_events', 'view_blogs', 'view_comandos', 'view_herramientas_entrenamiento', 'view_diarios', 'view_chips', 'view_qr_code'];
+            $permissionsToCheck = ['view_events', 'view_blogs', 'view_comandos', 'view_herramientas_entrenamiento', 'view_diarios', 'view_activity_levels', 'view_chips', 'view_qr_code'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'OTROS', 'order' => 0]);
@@ -649,6 +649,15 @@ class GenerateMenus
                 'route' => 'backend.mascotas.diarios',
                 'active' => ['app/diarios'],
                 'permission' => 'view_diarios',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
+                'icon' => 'icon-Daily-Bookings',
+                'title' => __('activity_levels.title'),
+                'route' => 'backend.mascotas.activity_levels',
+                'active' => ['app/activity_levels'],
+                'permission' => 'view_activity_levels',
                 'order' => 0,
             ]);
 
