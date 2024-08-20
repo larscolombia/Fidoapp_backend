@@ -735,6 +735,17 @@ function storeMediaFile($module, $file, $key = 'feature_image')
         $module->clearMediaCollection($key);
     }
 }
+
+function convertToAvif ($image, $outputPath, $quality = 20) {
+    try {
+        $img = Image::make($image->getPathname())->encode('avif', $quality); // calidad del 0 al 100
+        $img->save($outputPath);
+        return $outputPath;
+    } catch (\Exception $e) {
+        return null;
+    }
+}
+
 function getCustomizationSetting($name, $key = 'customization_json')
 {
     $settingObject = setting($key);

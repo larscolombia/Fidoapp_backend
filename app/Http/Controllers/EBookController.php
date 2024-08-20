@@ -134,14 +134,23 @@ class EBookController extends Controller
             'description' => 'nullable|string',
             'author' => 'nullable|string|max:255',
             'url' => 'required|url',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         // Manejar la carga de la imagen
+       // Manejar la carga de la imagen
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/ebooks'), $imageName);
+            $imageName = time() . '.avif';
+            $pathRegister = 'images/ebooks/' . $imageName;
+            $imagePath = public_path('images/ebooks/' . $imageName);
+
+            // Convertir la imagen a .avif usando el helper
+            $convertedPath = convertToAvif($image, $imagePath);
+
+            if (!$convertedPath) {
+                return redirect()->back()->withErrors(['cover_image' => 'Error al convertir la imagen'])->withInput();
+            }
         } else {
             $imageName = '';
         }
@@ -151,7 +160,7 @@ class EBookController extends Controller
             'description' => $request->description,
             'author' => $request->author,
             'url' => $request->url,
-            'cover_image' => $imageName,
+            'cover_image' => $pathRegister,
         ]);
 
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been created successfully'));

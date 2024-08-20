@@ -15,6 +15,7 @@
         "google/apiclient": "^2.16",
         "guzzlehttp/guzzle": "^7.4",
         "hashids/hashids": "^4.1",
+        "intervention/image": "^2.7",
         "laracasts/flash": "^3.2",
         "laravel-notification-channels/onesignal": "^2.5",
         "laravel-notification-channels/webpush": "^7.1",

@@ -28,7 +28,7 @@
             <div class="mb-3">
                 <label for="cover_image" class="form-label">{{ __('EBooks.cover_image') }}</label>
                 @if ($ebook->cover_image)
-                    <img src="{{ asset('storage/' . $ebook->cover_image) }}" class="img-fluid" alt="{{ $ebook->title }}">
+                    <img src="{{ asset($ebook->cover_image) }}" class="img-fluid" alt="{{ $ebook->title }}">
                 @else
                     <p>{{ __('EBooks.No_cover_image') }}</p>
                 @endif

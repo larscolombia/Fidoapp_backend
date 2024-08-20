@@ -115,7 +115,7 @@ class DiarioController extends Controller
             'date' => 'required|date',
             'actividad' => 'required|string|max:255',
             'notas' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         if ($validator->fails()) {
@@ -125,8 +125,17 @@ class DiarioController extends Controller
         $imagePath = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/diarios'), $imageName);
+            $imageName = time() . '.avif';
+            $imagePath = public_path('images/diarios/' . $imageName);
+
+            // Usar la función de conversión a AVIF
+            $convertedPath = convertToAvif($image, $imagePath);
+
+            if (!$convertedPath) {
+                return redirect()->back()->withErrors(['image' => 'Error al convertir la imagen'])->withInput();
+            }
+
+            // Guardar la ruta relativa en la base de datos
             $imagePath = 'images/diarios/' . $imageName;
         }
 
@@ -138,7 +147,7 @@ class DiarioController extends Controller
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('backend.mascotas.diarios.index', ['pet' => $pet])->with('success', __('Diarios.Created successfully'));
+        return redirect()->route('backend.mascotas.diarios.index', ['pet' => $pet])->with('success', __('Diario creado exitosamente.'));
     }
 
     public function edit($pet, $diario)
