@@ -429,7 +429,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
         /**
          * Buscar cursos por temas o palabras claves
          * Método HTTP: GET
-         * Ruta: /api/course-platform/{search}
+         * Ruta: /api/course-platform/search/palabra clave
          * Descripción: Recupera el listado de cursos por un tema o palabras claves
          * Respuesta Exitosa:
          * {
