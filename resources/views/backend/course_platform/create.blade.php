@@ -38,7 +38,20 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
+                <!--difficulty-->
+                <div class="mb-3">
+                    <label for="difficulty" class="form-label">{{ __('course_platform.difficulty') }}</label>
+                    <select class="form-control" name="difficulty" id="difficulty" required>
+                        <option value="">{{__('course_platform.select')}}</option>
+                        <option value="1">{{__('course_platform.beginner')}}</option>
+                        <option value="2">{{__('course_platform.intermediate')}}</option>
+                        <option value="3">{{__('course_platform.advanced')}}</option>
+                    </select>
+                    @error('url')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!--enddifficulty-->
                 <div class="mb-3">
                     <label for="image" class="form-label">{{ __('course_platform.image') }}</label>
                     <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*" required>
@@ -77,7 +90,7 @@
         const url = this.value;
         const videoPreview = document.getElementById('video-preview');
         const submitButton = document.getElementById('submit-button');
-        
+
         videoPreview.innerHTML = ''; // Clear the previous preview
 
         if (isValidVideoUrl(url)) {

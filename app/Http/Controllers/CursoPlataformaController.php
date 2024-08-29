@@ -59,10 +59,23 @@ class CursoPlataformaController extends Controller
             })
             ->editColumn('name', function ($data) {
                 return $data->name;
-            })  
+            })
             ->editColumn('price', function ($data) {
                 return $data->price;
-            })  
+            })
+            ->editColumn('difficulty', function ($data) {
+                $difficulty = '';
+                if($data->difficulty == 1){
+                    $difficulty = __('course_platform.beginner');
+                }
+                if($data->difficulty == 2){
+                    $difficulty = __('course_platform.intermediate');
+                }
+                if($data->difficulty == 3){
+                    $difficulty = __('course_platform.advanced');
+                }
+                return $difficulty;
+            })
               ->orderColumns(['id'], '-:column $1')
               ->rawColumns(['action'])
               ->toJson();
@@ -83,7 +96,8 @@ class CursoPlataformaController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'duration' => 'required|integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'duration' => 'required|string|max:255'
+            'duration' => 'required|string|max:255',
+            'difficulty' => 'required',
         ]);
 
         // Verificar si la URL del video es válida
@@ -107,6 +121,7 @@ class CursoPlataformaController extends Controller
             'price' => $request->input('price'),
             'image' => $imageName ? 'images/cursos_plataforma/' . $imageName : null,
             'duration' => $request->input('duration'),
+            'difficulty' => $request->input('difficulty'),
         ]);
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.created_successfully'));
@@ -179,7 +194,8 @@ class CursoPlataformaController extends Controller
             'url' => 'required|url',
             'price' => 'required|numeric',
             'duration' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'difficulty' => 'required'
         ]);
 
         $course_platform = CursoPlataforma::findOrFail($id);
@@ -205,6 +221,7 @@ class CursoPlataformaController extends Controller
             'price' => $request->input('price'),
             'duration' => $request->input('duration'),
             'image' => $course_platform->image ?? $course_platform->image,
+            'difficulty' => $request->input('difficulty')
         ]);
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));

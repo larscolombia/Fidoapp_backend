@@ -49,6 +49,7 @@ class CursoPlataformaController extends Controller
             'price' => $request->input('price'),
             'duration' => $request->input('duration'),
             'image' => $imagePath,
+            'difficulty' => $request->input('difficulty')
         ]);
 
         return response()->json([
@@ -81,7 +82,7 @@ class CursoPlataformaController extends Controller
         }
 
         // Filtra solo los campos presentes en la solicitud
-        $data = $request->only(['name', 'description', 'url', 'price', 'duration']);
+        $data = $request->only(['name', 'description', 'url', 'price', 'duration','difficulty']);
 
         // Manejar la carga de la imagen si está presente
         if ($request->hasFile('image')) {
@@ -106,6 +107,49 @@ class CursoPlataformaController extends Controller
             'success' => true,
             'message' => 'Curso de la plataforma actualizado exitosamente',
             'data' => $course,
+        ]);
+    }
+
+    //Buscar por tema o palabra clave
+    public function search($search = null)
+    {
+        if (is_null($search) || trim($search) === '') {
+            $courses = CursoPlataforma::all();
+        } else {
+            // Dividir el término de búsqueda en palabras
+            $searchTerms = explode(' ', $search);
+
+            // Realizar la búsqueda
+            $courses = CursoPlataforma::where(function ($query) use ($search) {
+                // Buscar coincidencias con el término completo
+                $query->where('description', 'LIKE', '%' . $search . '%')
+                      ->orWhere('name', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhere(function ($query) use ($searchTerms) {
+                // Buscar coincidencias con cada palabra
+                foreach ($searchTerms as $term) {
+                    $query->orWhere(function ($q) use ($term) {
+                        $q->where('description', 'LIKE', '%' . $term . '%')
+                          ->orWhere('name', 'LIKE', '%' . $term . '%');
+                    });
+                }
+            })
+            ->get();
+        }
+
+        // Comprobar si no se encontraron resultados
+        if ($courses->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontraron resultados para la búsqueda.',
+                'data' => [],
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cursos de la plataforma recuperados exitosamente',
+            'data' => $courses,
         ]);
     }
 

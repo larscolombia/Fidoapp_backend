@@ -34,6 +34,21 @@
                     <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" required>
                 </div>
 
+                   <!--difficulty-->
+                   <div class="mb-3">
+                    <label for="difficulty" class="form-label">{{ __('course_platform.difficulty') }}</label>
+                    <select class="form-control" name="difficulty" id="difficulty" required>
+                        <option value="">{{__('course_platform.select')}}</option>
+                        <option value="1" @selected($course_platform->difficulty==1)>{{__('course_platform.beginner')}}</option>
+                        <option value="2" @selected($course_platform->difficulty==2)>{{__('course_platform.intermediate')}}</option>
+                        <option value="3" @selected($course_platform->difficulty==3)>{{__('course_platform.advanced')}}</option>
+                    </select>
+                    @error('url')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!--enddifficulty-->
+
                 <div class="mb-3">
                     <label for="image" class="form-label">{{ __('course_platform.image') }}</label>
                     <input type="file" class="form-control" id="image" name="image">

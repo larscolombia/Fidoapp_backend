@@ -68,7 +68,14 @@
                 title: "{{ __('course_platform.description') }}",
                 orderable: false,
                 searchable: true,
-            },    
+            },
+            {
+                data: 'difficulty',
+                name: 'difficulty',
+                title: "{{ __('course_platform.difficulty') }}",
+                orderable: false,
+                searchable: true,
+            },
         ]
 
         const actionColumn = [{

@@ -31,6 +31,21 @@
                 <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" readonly>
             </div>
 
+                 <!--difficulty-->
+                 <div class="mb-3">
+                    <label for="difficulty" class="form-label">{{ __('course_platform.difficulty') }}</label>
+                    @php
+                        $difficulties = [
+                        1 => __('course_platform.beginner'),
+                        2 => __('course_platform.intermediate'),
+                        3 => __('course_platform.advanced'),
+                        ];
+                        $difficulty = $difficulties[$course_platform->difficulty] ?? '';
+                    @endphp
+                        <input type="text" class="form-control" name="difficulty" id="difficulty" value="{{ $difficulty }}" placeholder="{{ __('course_platform.difficulty') }}" readonly>
+                </div>
+                <!--enddifficulty-->
+
             <div class="mb-3">
                 <label for="image" class="form-label">{{ __('course_platform.image') }}</label>
                 @if($course_platform->image)

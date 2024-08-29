@@ -316,7 +316,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      * }
      */
     Route::get('/users-and-owners/{petId?}', [PetsController::class, 'users_and_owners']);
-    
+
     /**
      * Obtener Todos los Usuarios con Información del Perfil
      * Método HTTP: GET
@@ -364,6 +364,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *             "description": "Descripción 1",
          *             "url": "http://example.com",
          *             "price": 100.00,
+         *             "difficulty":1,
          *             "created_at": "2024-07-13T00:00:00.000000Z",
          *             "updated_at": "2024-07-13T00:00:00.000000Z"
          *         },
@@ -395,6 +396,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *         "description": "Descripción 1",
          *         "url": "http://example.com",
          *         "price": 100.00,
+         *         "difficulty": 1
          *         "created_at": "2024-07-13T00:00:00.000000Z",
          *         "updated_at": "2024-07-13T00:00:00.000000Z"
          *     }
@@ -417,12 +419,35 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *         "description": "Descripción 1",
          *         "url": "http://example.com",
          *         "price": 100.00,
+         *         "difficulty": 1
          *         "created_at": "2024-07-13T00:00:00.000000Z",
          *         "updated_at": "2024-07-13T00:00:00.000000Z"
          *     }
          * }
          */
         Route::get('{course_platform}', [CursoPlataformaController::class, 'show'])->name('course_platform.show');
+        /**
+         * Buscar cursos por temas o palabras claves
+         * Método HTTP: GET
+         * Ruta: /api/course-platform/{search}
+         * Descripción: Recupera el listado de cursos por un tema o palabras claves
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Cursos de la plataforma recuperados exitosamente",
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Curso de la Plataforma 1",
+         *         "description": "Descripción 1",
+         *         "url": "http://example.com",
+         *         "price": 100.00,
+         *         "difficulty": 1
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
+        Route::get('search/{search?}', [CursoPlataformaController::class, 'search'])->name('course_platform.search');
         /**
          * Actualizar un Curso de la Plataforma por ID
          * Método HTTP: PUT
@@ -433,7 +458,8 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "name": "Curso de la Plataforma 1",
          *     "description": "Descripción 1",
          *     "url": "http://example.com",
-         *     "price": 100.00
+         *     "price": 100.00,
+         *     "difficulty": 1
          * }
          * Respuesta Exitosa:
          * {
@@ -445,6 +471,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *         "description": "Descripción 1",
          *         "url": "http://example.com",
          *         "price": 100.00,
+         *         "difficulty": 1,
          *         "created_at": "2024-07-13T00:00:00.000000Z",
          *         "updated_at": "2024-07-13T00:00:00.000000Z"
          *     }
@@ -491,6 +518,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *             "description": "Descripción 1",
          *             "url": "http://example.com",
          *             "price": 50.00,
+         *             "difficulty":1,
          *             "course_id": 1,
          *             "created_at": "2024-07-13T00:00:00.000000Z",
          *             "updated_at": "2024-07-13T00:00:00.000000Z"
@@ -878,20 +906,20 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      * Método HTTP: POST
      * Ruta: /api/events/calendar/create
      * Descripción: Crea un evento en Google Calendar utilizando los datos proporcionados y almacena la URL del evento en la base de datos.
-     * 
+     *
      * Parámetros de Solicitud:
      * - id_event: int (Requerido) - ID del evento en tu base de datos que contiene los detalles del evento (nombre, ubicación, fecha de inicio, fecha de fin).
-     * 
+     *
      * Requisitos:
      * - El usuario debe tener un token de acceso válido de Google Calendar almacenado en la sesión.
-     * 
+     *
      * Respuesta Exitosa:
      * {
      *     "success": true,
      *     "message": "Event added to Google Calendar",
      *     "event": object // Detalles del evento creado en Google Calendar, incluyendo el enlace al evento.
      * }
-     * 
+     *
      * Respuesta de Error:
      * {
      *     "error": "Error al crear el evento: [detalle del error]",
@@ -899,15 +927,15 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      * }
      */
     Route::post('/events/calendar/create', [GoogleCalendarController::class, 'createEvent'])->name('events.create');
-    
+
     Route::prefix('comando-equivalente')->group(function () {
         /**
          * Mostrar todos los registros de comando equivalente.
-         * 
+         *
          * Método HTTP: GET
          * Ruta: /api/comando-equivalente
          * Descripción: Devuelve una lista de todos los comandos equivalentes, incluyendo el nombre del usuario relacionado.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": [
@@ -1311,14 +1339,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Descripción: Asocia un dueño secundario a una mascota específica utilizando el ID de la mascota y del usuario.
          * Parámetros de Solicitud:
          * - user_id (integer): El ID del usuario que se va a agregar como dueño compartido.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Shared owner added successfully"
          * }
          */
         Route::post('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'addSharedOwner']);
-    
+
         /**
          * Eliminar un dueño compartido de una mascota.
          * Método HTTP: DELETE
@@ -1326,14 +1354,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Descripción: Elimina la asociación de un dueño secundario con una mascota específica.
          * Parámetros de Solicitud:
          * - user_id (integer): El ID del usuario que se va a eliminar como dueño compartido.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Shared owner removed successfully"
          * }
          */
         Route::delete('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'removeSharedOwner']);
-    
+
         /**
          * Obtener los dueños de una mascota.
          * Método HTTP: GET
@@ -1356,7 +1384,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Parámetros de Solicitud:
          * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
          * - search (string, opcional): Texto de búsqueda para filtrar tipos de mascotas por nombre.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1377,7 +1405,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - search (string, opcional): Texto de búsqueda para filtrar mascotas por nombre.
          * - user_id (integer, opcional): ID del usuario para filtrar las mascotas por dueño. Por defecto, el usuario autenticado.
          * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las mascotas.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1397,7 +1425,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
          * - search (string, opcional): Texto de búsqueda para filtrar razas por nombre o descripción.
          * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las razas.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1417,7 +1445,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
          * - search (string, opcional): Texto de búsqueda para filtrar notas de mascotas por nombre.
          * - pet_id (integer, opcional): ID de la mascota para filtrar las notas.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1436,7 +1464,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Parámetros de Solicitud:
          * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
          * - employee_id (integer, opcional): ID del empleado para filtrar las reservas. Por defecto, el empleado autenticado.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1454,7 +1482,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Descripción: Recupera los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
          * Parámetros de Solicitud:
          * - pet_id (integer, opcional): ID de la mascota para recuperar los detalles. Obligatorio si no se pasa por URL.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1485,13 +1513,13 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - additional_info (string, opcional): Información adicional sobre la mascota.
          * - status (boolean, opcional): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false. Por defecto es 1 (activo).
          * - pet_image (string): Url de la magen de la mascota.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Mascota creada exitosamente",
          *     "data": { ... }
          * }
-         * 
+         *
          * Respuesta de Error (422):
          * {
          *     "message": "El breed_id o breed_name proporcionado no es válido."
@@ -1522,13 +1550,13 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - additional_info (string): Información adicional sobre la mascota.
          * - status (boolean): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false.
          * - pet_image (string): Url de la magen de la mascota.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Mascota actualizada exitosamente",
          *     "data": { ... }
          * }
-         * 
+         *
          * Respuesta de Error (422):
          * {
          *     "message": "El breed_id o breed_name proporcionado no es válido."
@@ -1544,13 +1572,13 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Ruta: /api/pets/{id}
          * Descripción: Recupera los detalles de una mascota específica por su ID.
          * Parámetros de Solicitud: Ninguno
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": { ... },
          *     "message": "Detalles de la mascota recuperados con éxito"
          * }
-         * 
+         *
          * Respuesta de Error (404):
          * {
          *     "message": "Mascota no encontrada."
@@ -1564,12 +1592,12 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Ruta: /api/pets/{id}
          * Descripción: Elimina una mascota específica por su ID.
          * Parámetros de Solicitud: Ninguno
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Mascota eliminada exitosamente"
          * }
-         * 
+         *
          * Respuesta de Error (404):
          * {
          *     "message": "Mascota no encontrada."
@@ -1582,7 +1610,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: GET
          * Ruta: /api/bookings/get
          * Descripción: Obtiene una lista de reservas filtradas según los parámetros proporcionados.
-         * 
+         *
          * Parámetros de Solicitud:
          * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
          * - booking_type: string (Opcional) - Tipo de reserva (e.g., 'training', 'veterinary').
@@ -1592,7 +1620,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
          * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
          * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1601,7 +1629,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     ],
          *     "message": "Lista de reservas obtenida exitosamente."
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "status": false,
@@ -1615,7 +1643,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: GET
          * Ruta: /api/bookings/trainings/get
          * Descripción: Obtiene una lista de reservas de entrenamientos filtradas según los parámetros proporcionados.
-         * 
+         *
          * Parámetros de Solicitud:
          * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
          * - nearby_booking: int (Opcional) - Si es 1, obtiene reservas cercanas.
@@ -1624,7 +1652,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
          * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
          * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1633,7 +1661,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     ],
          *     "message": "Lista de reservas de entrenamiento obtenidas exitosamente."
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "status": false,
@@ -1647,7 +1675,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: POST
          * Ruta: /api/bookings/store
          * Descripción: Crea o actualiza una reserva dependiendo de si se proporciona un ID en la solicitud.
-         * 
+         *
          * Parámetros de Solicitud:
          * - booking_type: string (Requerido) - Tipo de reserva (e.g., 'veterinary', 'training')
          * - date_time: string (Requerido) - Fecha y hora de la reserva
@@ -1665,14 +1693,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - price: float - Precio del servicio
          * - latitude: float (Opcional) - Para la notificación por ubicación
          * - longitude: float (Opcional) - Para la notificación por ubicación
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "New Booking Added", // O "Booking Updated" si se actualizó una reserva existente
          *     "status": true,
          *     "data": object // Detalles de la reserva
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error message",
@@ -1686,17 +1714,17 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: PUT
          * Ruta: /api/bookings/status
          * Descripción: Actualiza el estado de una reserva existente por su ID.
-         * 
+         *
          * Parámetros de Solicitud:
          * - id: int (Requerido) - ID de la reserva.
          * - status: string (Requerido) - Nuevo estado de la reserva (completed, cancelled, in-progress, rejected, pending, confirmed).
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Estado de la reserva actualizado exitosamente",
          *     "status": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error message",
@@ -1710,16 +1738,16 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: PUT
          * Ruta: /api/bookings/status/confirmed
          * Descripción: Acepta el estado de una reserva existente por su ID.
-         * 
+         *
          * Parámetros de Solicitud:
          * - id: int (Requerido) - ID de la reserva.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Estado de la reserva actualizado exitosamente",
          *     "status": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error message",
@@ -1733,11 +1761,11 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: PUT
          * Ruta: /api/bookings/{id}
          * Descripción: Actualiza una reserva existente por su ID.
-         * 
+         *
          * Parámetros de Solicitud:
          * - Cualquier parámetro que sea necesario para actualizar la reserva.
          * - services: array (Opcional) - Servicios asociados a la reserva.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Reserva actualizada exitosamente",
@@ -1746,7 +1774,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     },
          *     "status": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error message",
@@ -1760,10 +1788,10 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: GET
          * Ruta: /api/bookings/detail
          * Descripción: Obtiene los detalles de una reserva específica por su ID.
-         * 
+         *
          * Parámetros de Solicitud:
          * - id: int (Requerido) - ID de la reserva.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1775,7 +1803,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     },
          *     "message": "Detalles de la reserva obtenidos exitosamente."
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "status": false,
@@ -1783,15 +1811,15 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/bookings/detail', [BookingsController::class, 'bookingDetail'])->name('bookings.detail');
-    
+
         /**
          * Obtener la lista de estados de reservas.
          * Método HTTP: GET
          * Ruta: /api/bookings/status-list
          * Descripción: Obtiene la lista de todos los estados de reservas.
-         * 
+         *
          * Parámetros de Solicitud: Ninguno
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1806,7 +1834,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     ],
          *     "message": "Lista de estados de reservas obtenida exitosamente."
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "status": false,
@@ -1814,22 +1842,22 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/bookings/status-list', [BookingsController::class, 'statusList'])->name('bookings.statusList');
-    
+
         /**
          * Aceptar una reserva.
          * Método HTTP: PUT
          * Ruta: /api/bookings/accept/{id}
          * Descripción: Permite que un empleado acepte una reserva, asignando su ID a la reserva y actualizando el estado de la solicitud.
-         * 
+         *
          * Parámetros de Solicitud:
          * - {id}: int (Requerido) - ID de la reserva a aceptar.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Reserva aceptada exitosamente.",
          *     "status": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "status": false,
@@ -1837,24 +1865,24 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
-    
+
         /**
          * Crear un nuevo servicio de entrenamiento.
          * Método HTTP: POST
          * Ruta: /api/service-training
          * Descripción: Crea un nuevo servicio de entrenamiento y genera automáticamente un slug único a partir del nombre.
-         * 
+         *
          * Parámetros de Solicitud:
          * - name: string (Requerido) - El nombre del servicio de entrenamiento.
          * - description: string (Opcional) - La descripción del servicio de entrenamiento.
          * - status: boolean (Opcional) - El estado del servicio de entrenamiento.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Formulario de creación de servicio enviado con éxito.",
          *     "status": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Mensaje de error",
@@ -1862,17 +1890,17 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::post('/service-training', [ServiceTrainingController::class, 'store'])->name('service-training.store');
-    
+
         /**
          * Obtener la lista de servicios de entrenamiento.
          * Método HTTP: GET
          * Ruta: /api/service-training/get
          * Descripción: Obtiene una lista paginada de servicios de entrenamiento activos con opción de búsqueda.
-         * 
+         *
          * Parámetros de Solicitud:
          * - per_page: int (Opcional) - Número de resultados por página. Predeterminado es 10.
          * - search: string (Opcional) - Término de búsqueda para filtrar servicios de entrenamiento por nombre o descripción.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "status": true,
@@ -1894,7 +1922,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     ],
          *     "message": "Lista de servicios de entrenamiento obtenida con éxito."
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "status": false,
@@ -1902,16 +1930,16 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/service-training/get', [ServiceTrainingController::class, 'trainingList'])->name('service-training.list');
-    
+
         /**
          * Obtener la lista de veterinarios para una mascota.
          * Método HTTP: GET
          * Ruta: /api/list-veterinaries/{petId}
          * Descripción: Devuelve una lista de consultas veterinarias completadas para una mascota específica.
-         * 
+         *
          * Parámetros de Ruta:
          * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las consultas veterinarias.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": [
@@ -1927,7 +1955,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Lista de veterinarios.",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "error": "Error message",
@@ -1941,10 +1969,10 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * Método HTTP: GET
          * Ruta: /api/list-trainers/{petId}
          * Descripción: Devuelve una lista de sesiones de entrenamiento completadas para una mascota específica.
-         * 
+         *
          * Parámetros de Ruta:
          * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las sesiones de entrenamiento.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": [
@@ -1960,7 +1988,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "List of trainers.",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "error": "Error message",
@@ -1971,14 +1999,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Obtener la lista combinada de reservas completadas de entrenadores y veterinarios para una mascota.
-         * 
+         *
          * Método HTTP: GET
          * Ruta: /api/list-trainers-veterinaries/{petId}
          * Descripción: Devuelve una lista combinada de reservas completadas de tipo 'training' y 'veterinary' para una mascota específica.
-         * 
+         *
          * Parámetros de Ruta:
          * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las reservas.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": [
@@ -1994,7 +2022,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Lista de reservaciones de entrenadores y veterinarios",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error message",
@@ -2002,14 +2030,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
-    
+
         /**
          * Obtener la lista de todos los chips.
-         * 
+         *
          * Método HTTP: GET
          * Ruta: /api/chips
          * Descripción: Devuelve una lista de todos los chips disponibles en la base de datos, incluyendo los detalles de la mascota y el fabricante asociados.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": [
@@ -2036,7 +2064,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Lista de todos los chips",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error message",
@@ -2047,14 +2075,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Obtener los detalles de un chip específico.
-         * 
+         *
          * Método HTTP: GET
          * Ruta: /api/chips/{id}
          * Descripción: Devuelve los detalles de un chip específico identificado por su ID.
-         * 
+         *
          * Parámetros de Ruta:
          * - id: int (Requerido) - ID del chip que se desea consultar.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": {
@@ -2078,7 +2106,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Detalles del chip",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Chip no encontrado",
@@ -2089,18 +2117,18 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Crear un nuevo chip.
-         * 
+         *
          * Método HTTP: POST
          * Ruta: /api/chips
          * Descripción: Permite crear un nuevo chip en la base de datos.
-         * 
+         *
          * Parámetros de Solicitud (Body):
          * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
          * - pet_id: int (Requerido) - ID de la mascota asociada al chip.
          * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
          * - fabricante_id: int (Requerido) - ID del fabricante del chip.
          * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": {
@@ -2114,7 +2142,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Chip creado exitosamente",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error al crear el chip",
@@ -2125,20 +2153,20 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Actualizar un chip existente.
-         * 
+         *
          * Método HTTP: PUT
          * Ruta: /api/chips/{id}
          * Descripción: Permite actualizar los detalles de un chip específico identificado por su ID.
-         * 
+         *
          * Parámetros de Ruta:
          * - id: int (Requerido) - ID del chip que se desea actualizar.
-         * 
+         *
          * Parámetros de Solicitud (Body):
          * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
          * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
          * - fabricante_id: int (Requerido) - ID del fabricante del chip.
          * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": {
@@ -2152,7 +2180,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Chip actualizado exitosamente",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error al actualizar el chip",
@@ -2163,20 +2191,20 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Eliminar un chip.
-         * 
+         *
          * Método HTTP: DELETE
          * Ruta: /api/chips/{id}
          * Descripción: Permite eliminar un chip específico identificado por su ID.
-         * 
+         *
          * Parámetros de Ruta:
          * - id: int (Requerido) - ID del chip que se desea eliminar.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Chip eliminado exitosamente",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error al eliminar el chip",
@@ -2187,14 +2215,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Obtener el chip asociado a una mascota específica.
-         * 
+         *
          * Método HTTP: GET
          * Ruta: /api/pets/{pet_id}/chip
          * Descripción: Devuelve el chip asociado a la mascota identificada por su `pet_id`.
-         * 
+         *
          * Parámetros de Ruta:
          * - pet_id: int (Requerido) - ID de la mascota para la cual se desea obtener el chip.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": {
@@ -2218,7 +2246,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Detalles del chip asociado a la mascota",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Chip no encontrado para la mascota especificada",
@@ -2229,14 +2257,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Obtener los niveles de actividad de una mascota específica.
-         * 
+         *
          * Método HTTP: GET
          * Ruta: /api/pets/{pet_id}/activity-levels
          * Descripción: Devuelve todos los registros de niveles de actividad asociados a la mascota identificada por su `pet_id`.
-         * 
+         *
          * Parámetros de Ruta:
          * - pet_id: int (Requerido) - ID de la mascota para la cual se desean obtener los niveles de actividad.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": [
@@ -2257,7 +2285,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Lista de niveles de actividad de la mascota",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Niveles de actividad no encontrados para la mascota especificada",
@@ -2268,14 +2296,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Crear un nuevo nivel de actividad para una mascota específica.
-         * 
+         *
          * Método HTTP: POST
          * Ruta: /api/pets/{pet_id}/activity-levels
          * Descripción: Crea un nuevo registro de nivel de actividad para la mascota identificada por su `pet_id`.
-         * 
+         *
          * Parámetros de Ruta:
          * - pet_id: int (Requerido) - ID de la mascota para la cual se va a crear el nivel de actividad.
-         * 
+         *
          * Parámetros del Cuerpo (Body):
          * - daily_steps: int (Opcional) - Número de pasos diarios.
          * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
@@ -2285,7 +2313,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
          * - goal_calories: int (Opcional) - Meta de calorías quemadas.
          * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": {
@@ -2303,7 +2331,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Nivel de actividad creado exitosamente",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error al crear el nivel de actividad",
@@ -2314,14 +2342,14 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Actualizar un nivel de actividad existente para una mascota específica.
-         * 
+         *
          * Método HTTP: PUT
          * Ruta: /api/activity-levels/{id}
          * Descripción: Actualiza un registro de nivel de actividad para la mascota identificada por su `id`.
-         * 
+         *
          * Parámetros de Ruta:
          * - id: int (Requerido) - ID del nivel de actividad que se va a actualizar.
-         * 
+         *
          * Parámetros del Cuerpo (Body):
          * - daily_steps: int (Opcional) - Número de pasos diarios.
          * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
@@ -2331,7 +2359,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
          * - goal_calories: int (Opcional) - Meta de calorías quemadas.
          * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "data": {
@@ -2349,7 +2377,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          *     "message": "Nivel de actividad actualizado exitosamente",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error al actualizar el nivel de actividad",
@@ -2360,20 +2388,20 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
 
         /**
          * Eliminar un nivel de actividad para una mascota específica.
-         * 
+         *
          * Método HTTP: DELETE
          * Ruta: /api/activity-levels/{id}
          * Descripción: Elimina un registro de nivel de actividad identificado por su `id`.
-         * 
+         *
          * Parámetros de Ruta:
          * - id: int (Requerido) - ID del nivel de actividad que se va a eliminar.
-         * 
+         *
          * Respuesta Exitosa:
          * {
          *     "message": "Nivel de actividad eliminado exitosamente",
          *     "success": true
          * }
-         * 
+         *
          * Respuesta de Error:
          * {
          *     "message": "Error al eliminar el nivel de actividad",

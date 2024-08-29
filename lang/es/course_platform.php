@@ -23,5 +23,10 @@ return [
     'Confirm Deletion' => 'Confirmar Eliminación',
     'image' => 'Imagen',
     'duration' => 'Duración',
+    'difficulty' => 'Dificultad',
+    'select' => 'Seleccione',
+    'beginner' => 'Principiante',
+    'intermediate' => 'Intermedio',
+    'advanced' => 'Avanzado',
     'Are you sure you want to delete this course platform?' => '¿Estás seguro de que quieres eliminar este curso de la plataforma?',
 ];
