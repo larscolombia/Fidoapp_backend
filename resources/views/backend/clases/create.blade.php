@@ -29,9 +29,9 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="url" class="form-label">{{ __('clases.url') }}</label>
-                    <input type="url" class="form-control @error('url') is-invalid @enderror" id="url" name="url" value="{{ old('url') }}" required>
-                    @error('url')
+                    <label for="video" class="form-label">{{ __('clases.video') }}</label>
+                    <input type="file" class="form-control @error('video') is-invalid @enderror" id="video" name="video" accept="video/*" required>
+                    @error('video')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -48,7 +48,7 @@
                     <div id="video-preview" class="border p-3" style="width: 100%; height: auto;"></div>
                 </div>
 
-                <button type="submit" class="btn btn-success" id="submit-button" disabled>{{ __('clases.create') }}</button>
+                <button type="submit" class="btn btn-success" id="submit-button">{{ __('clases.create') }}</button>
                 <a href="{{ route('backend.course_platform.clases.index', ['course' => request()->route('course')]) }}" class="btn btn-secondary">{{ __('clases.cancel') }}</a>
             </form>
         </div>
@@ -61,47 +61,31 @@
 
 @push('after-scripts')
     <script>
-        document.getElementById('url').addEventListener('input', function() {
-            const url = this.value;
+        document.getElementById('video').addEventListener('change', function(event) {
+            const file = event.target.files[0];
             const videoPreview = document.getElementById('video-preview');
-            const submitButton = document.getElementById('submit-button');
             
             videoPreview.innerHTML = ''; // Clear the previous preview
 
-            if (isValidVideoUrl(url)) {
-                submitButton.disabled = false;
-
-                if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                    const videoId = getYouTubeVideoId(url);
-                    if (videoId) {
-                        videoPreview.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            if (file) {
+                const videoElement = document.createElement('video');
+                videoElement.src = URL.createObjectURL(file);
+                videoElement.controls = true;
+                videoElement.width = 320; // Set the width of the video element
+                videoElement.height = 180; // Set the height of the video element
+                videoElement.currentTime = 0;
+                videoElement.addEventListener('loadedmetadata', function() {
+                    if (videoElement.duration > 10) {
+                        videoElement.currentTime = 10;
                     }
-                } else if (url.includes('vimeo.com')) {
-                    const videoId = getVimeoVideoId(url);
-                    if (videoId) {
-                        videoPreview.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+                });
+                videoElement.addEventListener('timeupdate', function() {
+                    if (videoElement.currentTime >= 10) {
+                        videoElement.pause();
                     }
-                }
-            } else {
-                submitButton.disabled = true;
-                videoPreview.innerHTML = 'Video inválido o no soportado. Por favor, ingrese un enlace de YouTube o Vimeo.';
+                });
+                videoPreview.appendChild(videoElement);
             }
         });
-
-        function isValidVideoUrl(url) {
-            return (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com'));
-        }
-
-        function getYouTubeVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
-
-        function getVimeoVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/)([0-9]+)/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
     </script>
 @endpush

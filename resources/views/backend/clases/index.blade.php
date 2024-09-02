@@ -56,19 +56,19 @@
                 return `<span title="${data}">${truncated}</span>`;
             }
         },
-        {
-            data: 'url',
-            name: 'url',
-            title: "{{ __('clases.url') }}",
-            orderable: false,
-            searchable: true,
-            render: function(data, type, row) {
-                console.log(data);
-                // Limit the description to 50 characters
-                const truncated = data && data.length > 50 ? data.substr(0, 50) + '...' : data;
-                return `<span title="${data}">${truncated}</span>`;
-            }
-        },
+        // {
+        //     data: 'url',
+        //     name: 'url',
+        //     title: "{{ __('clases.url') }}",
+        //     orderable: false,
+        //     searchable: true,
+        //     render: function(data, type, row) {
+        //         console.log(data);
+        //         // Limit the description to 50 characters
+        //         const truncated = data && data.length > 50 ? data.substr(0, 50) + '...' : data;
+        //         return `<span title="${data}">${truncated}</span>`;
+        //     }
+        // },
         {
             data: 'price',
             name: 'price',

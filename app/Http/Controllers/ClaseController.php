@@ -45,9 +45,9 @@ class ClaseController extends Controller
             ->addColumn('action', function ($data) {
                 return view('backend.clases.action_column', compact('data'));
             })
-            ->editColumn('url', function ($data) {
-                return $data->url;
-            })
+            // ->editColumn('url', function ($data) {
+            //     return $data->url;
+            // })
             ->editColumn('description', function ($data) {
                 return Str::limit($data->description, 50, '...');
             })
@@ -73,7 +73,8 @@ class ClaseController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'required|url',
+            'url' => 'sometimes|url',
+            'video' => 'sometimes|file|mimes:mp4,mov,ogg,qt|max:20000', // Validación para el video
             'price' => 'required|numeric',
         ]);
 
@@ -88,16 +89,24 @@ class ClaseController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        // Verificar si la URL del video es válida (solo si se proporciona una URL)
         $url = $request->input('url');
+        if ($url && !$this->isValidVideoUrl($url)) {
+            return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
+        }
 
-        if (!$this->isValidVideoUrl($url)) {
-            return redirect()->back()->withErrors(['url' => 'Video inválido o no soportado. Por favor, ingrese un enlace de YouTube o Vimeo.'])->withInput();
+        // Manejar la carga del archivo de video
+        if ($request->hasFile('video')) {
+            $video = $request->file('video');
+            $videoName = time() . '.' . $video->getClientOriginalExtension();
+            $video->move(public_path('videos/cursos_plataforma/clases'), $videoName);
         }
 
         Clase::create([
             'name' => $request->name,
             'description' => $request->description,
-            'url' => $request->url,
+            'url' => $url,
+            'video' => $videoName ? 'videos/cursos_plataforma/clases/' . $videoName : null,
             'price' => $request->price,
             'course_id' => $course->id,
         ]);
@@ -154,8 +163,8 @@ class ClaseController extends Controller
 
     public function show($id)
     {
-        $clase = Clase::findOrFail($id);
-
+        $clase = Clase::with('cursoPlataforma')->findOrFail($id);
+        
         // Extraer el ID del video de la URL
         $videoId = $this->getVideoId($clase->url);
 
@@ -189,7 +198,7 @@ class ClaseController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'required|url',
+            'video' => 'sometimes|file|mimes:mp4,mov,ogg,qt|max:20000', // Validación para el video
             'price' => 'required|numeric',
         ]);
 
@@ -197,19 +206,25 @@ class ClaseController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $url = $request->input('url');
+        $course_platform = Clase::findOrFail($id);
 
-        if (!$this->isValidVideoUrl($url)) {
-            return redirect()->back()->withErrors(['url' => 'Video inválido o no soportado. Por favor, ingrese un enlace de YouTube o Vimeo.'])->withInput();
+        // Inicializar el array de datos a actualizar
+        $data = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+        ];
+
+        // Manejar la carga del archivo de video
+        if ($request->hasFile('video')) {
+            $video = $request->file('video');
+            $videoName = time() . '.' . $video->getClientOriginalExtension();
+            $video->move(public_path('videos/cursos_plataforma/clases'), $videoName);
+            $data['video'] = 'videos/cursos_plataforma/clases/' . $videoName;
         }
 
-        $course_platform = CursoPlataforma::findOrFail($id);
-        $course_platform->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'url' => $request->url,
-            'price' => $request->price,
-        ]);
+        // Actualizar el modelo con los datos
+        $course_platform->update($data);
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));
     }

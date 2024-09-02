@@ -19,6 +19,6 @@ class Clase extends Model
 
     public function cursoPlataforma()
     {
-        return $this->belongsTo(CursoPlataforma::class);
+        return $this->belongsTo(CursoPlataforma::class, 'course_id', 'id');
     }
 }

@@ -15,6 +15,7 @@ return [
     'optional' => '(Opcional)',
     'Name' => 'Nombre',
     'Description' => 'Descripción',
+    'Video' => 'Video',
     'create' => 'Crear',
     'Delete' => 'Eliminar',
     'Course has been created successfully' => 'El curso se ha creado correctamente',

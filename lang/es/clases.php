@@ -19,6 +19,7 @@ return [
     'course' => 'Curso',
     'video_preview' => 'Vista Previa del Video',
     'cancel' => 'Cancelar',
+    'video' => 'Video',
     'show_exercises' => 'Mostrar Ejercicios',
     'El precio de la clase no puede ser mayor que el del curso al que pertenece.' => 'El precio de la clase no puede ser mayor que el del curso al que pertenece.',
 ];
