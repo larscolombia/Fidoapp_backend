@@ -106,15 +106,32 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar'); // Asegúrate de tener un elemento con id 'calendar'
         var events = @json($events); // Asegúrate de que esto esté bien formateado
-        console.log(events);
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             events: events,
             dateClick: function(info) {
                 document.getElementById('fecha').value = info.dateStr;
             },
-            eventDidMount: function(info) {
-                info.el.querySelector('.fc-event-title').innerHTML = info.event.title;
+            eventContent: function(arg) {
+                let event = arg.event;
+
+                // Generar un color aleatorio entre rojo y azul
+                let colors = ['#FF0000', '#0000FF']; // Rojo y Azul
+                let randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                let dot = document.createElement('span');
+                dot.style.backgroundColor = randomColor;
+                dot.style.borderRadius = '50%';
+                dot.style.display = 'inline-block';
+                dot.style.width = '10px';
+                dot.style.height = '10px';
+                dot.style.marginRight = '5px';
+
+                let title = document.createElement('span');
+                title.innerHTML = event.title;
+
+                let arrayOfDomNodes = [ dot, title ];
+                return { domNodes: arrayOfDomNodes };
             }
         });
         calendar.render();

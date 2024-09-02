@@ -15,10 +15,24 @@
                 <textarea class="form-control" id="description" name="description" rows="3" placeholder="{{ __('course_platform.enter_description') }}" readonly>{{ $course_platform->description }}</textarea>
             </div>
 
-            <div class="mb-3">
+            {{-- <div class="mb-3">
                 <label for="url" class="form-label">{{ __('course_platform.url') }}</label>
                 <input type="url" class="form-control" id="url" name="url" value="{{ $course_platform->url }}" placeholder="{{ __('course_platform.enter_url') }}" readonly>
                 <div id="video-preview" class="mt-3"></div>
+            </div> --}}
+
+            <div class="mb-3">
+                <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
+                <div id="video-preview" class="mt-3">
+                    @if($course_platform->file)
+                        <video width="320" height="180" controls>
+                            <source src="{{ asset($course_platform->file) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @else
+                        <p>{{ __('course_platform.no_video') }}</p>
+                    @endif
+                </div>
             </div>
 
             <div class="mb-3">
@@ -31,25 +45,25 @@
                 <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" readonly>
             </div>
 
-                 <!--difficulty-->
-                 <div class="mb-3">
-                    <label for="difficulty" class="form-label">{{ __('course_platform.difficulty') }}</label>
-                    @php
-                        $difficulties = [
-                        1 => __('course_platform.beginner'),
-                        2 => __('course_platform.intermediate'),
-                        3 => __('course_platform.advanced'),
-                        ];
-                        $difficulty = $difficulties[$course_platform->difficulty] ?? '';
-                    @endphp
-                        <input type="text" class="form-control" name="difficulty" id="difficulty" value="{{ $difficulty }}" placeholder="{{ __('course_platform.difficulty') }}" readonly>
-                </div>
-                <!--enddifficulty-->
+            <!--difficulty-->
+            <div class="mb-3">
+                <label for="difficulty" class="form-label">{{ __('course_platform.difficulty') }}</label>
+                @php
+                    $difficulties = [
+                    1 => __('course_platform.beginner'),
+                    2 => __('course_platform.intermediate'),
+                    3 => __('course_platform.advanced'),
+                    ];
+                    $difficulty = $difficulties[$course_platform->difficulty] ?? '';
+                @endphp
+                <input type="text" class="form-control" name="difficulty" id="difficulty" value="{{ $difficulty }}" placeholder="{{ __('course_platform.difficulty') }}" readonly>
+            </div>
+            <!--enddifficulty-->
 
             <div class="mb-3">
                 <label for="image" class="form-label">{{ __('course_platform.image') }}</label>
                 @if($course_platform->image)
-                    <img src="{{ asset($course_platform->image) }}" class="img-fluid" alt="{{ $course_platform->name }}">
+                    <img src="{{ asset($course_platform->image) }}" class="img-fluid" alt="{{ $course_platform->name }}" style="width: 200px;">
                 @else
                     <p>{{ __('course_platform.no_image') }}</p>
                 @endif
@@ -64,7 +78,7 @@
 @endsection
 
 @push('after-scripts')
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         const url = '{{ $course_platform->url }}';
         const videoPreview = document.getElementById('video-preview');
@@ -106,5 +120,5 @@
             return match ? match[1] : null;
         }
     });
-</script>
+</script> --}}
 @endpush

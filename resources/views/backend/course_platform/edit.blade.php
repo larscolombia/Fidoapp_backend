@@ -18,10 +18,28 @@
                     <textarea class="form-control" id="description" name="description" rows="3" placeholder="{{ __('course_platform.enter_description') }}">{{ $course_platform->description }}</textarea>
                 </div>
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="url" class="form-label">{{ __('course_platform.url') }}</label>
                     <input type="url" class="form-control" id="url" name="url" value="{{ $course_platform->url }}" placeholder="{{ __('course_platform.enter_url') }}" required>
                     <div id="video-preview" class="mt-3"></div>
+                </div> --}}
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
+                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
+                    <input type="file" class="form-control" id="video" name="video" accept="video/*">
+                    <div id="video-preview" class="mt-3 border p-3" style="width: 320px; height: 180px;">
+                        @if ($course_platform->file)
+                            <video width="320" height="180" controls>
+                                <source src="{{ asset($course_platform->file) }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        @endif
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -34,8 +52,8 @@
                     <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" required>
                 </div>
 
-                   <!--difficulty-->
-                   <div class="mb-3">
+                <!--difficulty-->
+                <div class="mb-3">
                     <label for="difficulty" class="form-label">{{ __('course_platform.difficulty') }}</label>
                     <select class="form-control" name="difficulty" id="difficulty" required>
                         <option value="">{{__('course_platform.select')}}</option>
@@ -63,53 +81,31 @@
     </div>
 @endsection
 
-@push ('after-scripts')
+@push('after-scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlInput = document.getElementById('url');
+    document.getElementById('video').addEventListener('change', function(event) {
+        const file = event.target.files[0];
         const videoPreview = document.getElementById('video-preview');
-        const initialUrl = urlInput.value;
-        updateVideoPreview(initialUrl);
+        videoPreview.innerHTML = ''; // Clear the previous preview
 
-        urlInput.addEventListener('input', function() {
-            const url = this.value;
-            updateVideoPreview(url);
-        });
-
-        function updateVideoPreview(url) {
-            videoPreview.innerHTML = '';
-
-            if (isValidVideoUrl(url)) {
-                if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                    const videoId = getYouTubeVideoId(url);
-                    if (videoId) {
-                        videoPreview.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-                    }
-                } else if (url.includes('vimeo.com')) {
-                    const videoId = getVimeoVideoId(url);
-                    if (videoId) {
-                        videoPreview.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-                    }
+        if (file) {
+            const videoElement = document.createElement('video');
+            videoElement.src = URL.createObjectURL(file);
+            videoElement.controls = true;
+            videoElement.width = 320; // Set the width of the video element
+            videoElement.height = 180; // Set the height of the video element
+            videoElement.currentTime = 0;
+            videoElement.addEventListener('loadedmetadata', function() {
+                if (videoElement.duration > 10) {
+                    videoElement.currentTime = 10;
                 }
-            } else {
-                videoPreview.innerHTML = 'Video inválido o no soportado. Por favor, ingrese un enlace de YouTube o Vimeo.';
-            }
-        }
-
-        function isValidVideoUrl(url) {
-            return (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com'));
-        }
-
-        function getYouTubeVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
-
-        function getVimeoVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/)([0-9]+)/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
+            });
+            videoElement.addEventListener('timeupdate', function() {
+                if (videoElement.currentTime >= 10) {
+                    videoElement.pause();
+                }
+            });
+            videoPreview.appendChild(videoElement);
         }
     });
 </script>

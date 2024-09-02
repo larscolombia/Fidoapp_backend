@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->string('image');
             $table->string('duration')->nullable();
             $table->decimal('price', 8, 2); // Agrega el campo price con tipo float

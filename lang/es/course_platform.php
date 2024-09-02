@@ -8,6 +8,7 @@ return [
     'update' => 'Actualizar Curso',
     'back' => 'Atrás',
     'name' => 'Nombre',
+    'video' => 'Video',
     'description' => 'Descripción',
     'url' => 'URL',
     'price' => 'Precio',

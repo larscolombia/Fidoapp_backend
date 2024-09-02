@@ -48,13 +48,13 @@
                 orderable: true,
                 searchable: true,
             },
-            {
-                data: 'url',
-                name: 'url',
-                title: "{{ __('course_platform.url') }}",
-                orderable: false,
-                searchable: true,
-            },
+            // {
+            //     data: 'url',
+            //     name: 'url',
+            //     title: "{{ __('course_platform.url') }}",
+            //     orderable: false,
+            //     searchable: true,
+            // },
             {
                 data: 'price',
                 name: 'price',
