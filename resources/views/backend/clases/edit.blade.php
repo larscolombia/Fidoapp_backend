@@ -23,7 +23,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
+                
                 <div class="mb-3">
                     <label for="video" class="form-label">{{ __('courses.Video') }}</label>
                     <input type="file" class="form-control @error('video') is-invalid @enderror" id="video" name="video" accept="video/*">

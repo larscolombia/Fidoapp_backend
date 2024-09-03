@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('backend.clases.ejercicios.store', ['clase' => $clase->id]) }}" method="POST">
+            <form action="{{ route('backend.clases.ejercicios.store', ['clase' => $clase->id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">{{ __('ejercicios.Name') }}</label>
@@ -24,9 +24,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="url" class="form-label">{{ __('ejercicios.URL') }}</label>
-                    <input type="url" class="form-control @error('url') is-invalid @enderror" id="url" name="url" value="{{ old('url') }}" required>
-                    @error('url')
+                    <label for="video" class="form-label">{{ __('ejercicios.Video') }}</label>
+                    <input type="file" class="form-control @error('video') is-invalid @enderror" id="video" name="video" accept="video/*" required>
+                    @error('video')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <div id="video-preview" class="mt-3"></div>
@@ -42,39 +42,33 @@
 @push('after-scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const urlInput = document.getElementById('url');
+        const videoInput = document.getElementById('video');
         const videoPreview = document.getElementById('video-preview');
-        const submitButton = document.getElementById('submit-button');
 
-        urlInput.addEventListener('input', function() {
-            const url = this.value;
-            videoPreview.innerHTML = '';
+        videoInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            videoPreview.innerHTML = ''; // Clear the previous preview
 
-            if (isValidVideoUrl(url)) {
-                const videoId = getVideoId(url);
-                submitButton.disabled = false;
-
-                if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                    videoPreview.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-                } else if (url.includes('vimeo.com')) {
-                    videoPreview.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-                }
-            } else {
-                submitButton.disabled = true;
-                videoPreview.innerHTML = 'Invalid video URL. Please enter a valid YouTube or Vimeo URL.';
+            if (file) {
+                const videoElement = document.createElement('video');
+                videoElement.src = URL.createObjectURL(file);
+                videoElement.controls = true;
+                videoElement.width = 320; // Set the width of the video element
+                videoElement.height = 180; // Set the height of the video element
+                videoElement.currentTime = 0;
+                videoElement.addEventListener('loadedmetadata', function() {
+                    if (videoElement.duration > 10) {
+                        videoElement.currentTime = 10;
+                    }
+                });
+                videoElement.addEventListener('timeupdate', function() {
+                    if (videoElement.currentTime >= 10) {
+                        videoElement.pause();
+                    }
+                });
+                videoPreview.appendChild(videoElement);
             }
         });
-
-        function isValidVideoUrl(url) {
-            return /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(url) ||
-                   /^(https?\:\/\/)?(www\.)?(vimeo\.com)\/.+$/.test(url);
-        }
-
-        function getVideoId(url) {
-            const youtubeMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-            const vimeoMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/)([0-9]+)/);
-            return youtubeMatch ? youtubeMatch[1] : vimeoMatch ? vimeoMatch[1] : null;
-        }
     });
 </script>
 @endpush

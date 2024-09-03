@@ -45,9 +45,9 @@ class EjercicioController extends Controller
             ->addColumn('description', function ($ejercicio) {
                 return $ejercicio->description;
             })
-            ->addColumn('url', function ($ejercicio) {
-                return $ejercicio->url;
-            })
+            // ->addColumn('url', function ($ejercicio) {
+            //     return $ejercicio->url;
+            // })
             ->addColumn('action', function ($data) {
                 return view('backend.ejercicios.action_column', compact('data'));
             })
@@ -67,21 +67,35 @@ class EjercicioController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'required|url',
+            'video' => 'required|file|mimes:mp4,mov,avi,wmv,flv,webm|max:20000', // Validación para el video
+            'url' => 'nullable|url', // URL opcional
         ]);
 
-        // Verificar si la URL del video es válida
+        $data = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'clase_id' => $claseId,
+        ];
+
+        // Manejar la carga del archivo de video
+        if ($request->hasFile('video')) {
+            $video = $request->file('video');
+            $videoName = time() . '.' . $video->getClientOriginalExtension();
+            $video->move(public_path('videos/cursos_plataforma/clases/ejercicios/'), $videoName);
+            $data['video'] = 'videos/cursos_plataforma/clases/ejercicios/' . $videoName;
+        }
+
+        // Verificar si la URL del video es válida solo si se proporciona
         $url = $request->input('url');
-        if (!$this->isValidVideoUrl($url)) {
+        if ($url && !$this->isValidVideoUrl($url)) {
             return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
         }
 
-        Ejercicio::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'url' => $request->input('url'),
-            'clase_id' => $claseId,
-        ]);
+        if ($url) {
+            $data['url'] = $url;
+        }
+
+        Ejercicio::create($data);
 
         return redirect()->route('backend.clases.ejercicios.index', ['clase' => $claseId])->with('success', __('ejercicios.created_successfully'));
     }
@@ -150,24 +164,41 @@ class EjercicioController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'required|url',
+            'video' => 'sometimes|file|mimes:mp4,mov,avi,wmv,flv,webm|max:20000', // Validación para el video
+            'url' => 'nullable|url', // URL opcional
         ]);
 
-        // Verificar si la URL del video es válida
+        $ejercicio = Ejercicio::findOrFail($ejercicioId);
+
+        // Inicializar el array de datos a actualizar
+        $data = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ];
+
+        // Manejar la carga del archivo de video
+        if ($request->hasFile('video')) {
+            $video = $request->file('video');
+            $videoName = time() . '.' . $video->getClientOriginalExtension();
+            $video->move(public_path('videos/cursos_plataforma/clases'), $videoName);
+            $data['video'] = 'videos/cursos_plataforma/clases/' . $videoName;
+        }
+
+        // Verificar si la URL del video es válida solo si se proporciona
         $url = $request->input('url');
-        if (!$this->isValidVideoUrl($url)) {
+        if ($url && !$this->isValidVideoUrl($url)) {
             return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
         }
 
-        $ejercicio = Ejercicio::findOrFail($ejercicioId);
-        $ejercicio->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'url' => $request->input('url'),
-        ]);
+        if ($url) {
+            $data['url'] = $url;
+        }
+
+        // Actualizar el modelo con los datos
+        $ejercicio->update($data);
 
         return redirect()->route('backend.clases.ejercicios.index', ['clase' => $claseId])->with('success', __('ejercicios.updated_successfully'));
-    }
+}
 
     public function destroy($clase_id, $id)
     {

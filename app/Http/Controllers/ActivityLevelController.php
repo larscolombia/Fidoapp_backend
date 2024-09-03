@@ -32,18 +32,14 @@ class ActivityLevelController extends Controller
     }
 
     public function mascotas () {
-        $pets = Pet::with('user')->whereHas('pettype', function ($query) {
-            $query->where('slug', 'dog');
-        })->get();
+        $pets = Pet::with('user')->get();
 
         return view('backend.activity_levels.mascotas', compact('pets'));
     }
 
     public function mascotas_data(DataTables $datatable, Request $request)
     {
-        $pets = Pet::with('user')->whereHas('pettype', function ($query) {
-            $query->where('slug', 'dog');
-        })->select('pets.*');
+        $pets = Pet::with('user')->select('pets.*');
 
         return $datatable->eloquent($pets)
             ->addColumn('owner_name', function ($pet) {

@@ -51,13 +51,13 @@
             orderable: false,
             searchable: true,
         },
-        {
-            data: 'url',
-            name: 'url',
-            title: "{{ __('ejercicios.url') }}",
-            orderable: false,
-            searchable: true,
-        }
+        // {
+        //     data: 'url',
+        //     name: 'url',
+        //     title: "{{ __('ejercicios.url') }}",
+        //     orderable: false,
+        //     searchable: true,
+        // }
     ]
 
     const actionColumn = [{

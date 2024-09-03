@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->unsignedBigInteger('clase_id');
             $table->foreign('clase_id')->references('id')->on('clases')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

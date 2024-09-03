@@ -426,10 +426,20 @@ class Permission extends \Spatie\Permission\Models\Permission
             'edit_diarios' => 'Edit Diarios',
             'delete_diarios' => 'Delete Diarios',
 
+            'view_vacunas' => 'View Vacunas',
+            'add_vacunas' => 'Add Vacunas',
+            'edit_vacunas' => 'Edit Vacunas',
+            'delete_vacunas' => 'Delete Vacunas',
+
             'view_activity_levels' => 'View Activity Levels',
             'add_activity_levels' => 'Add Activity Levels',
             'edit_activity_levels' => 'Edit Activity Levels',
             'delete_activity_levels' => 'Delete Activity Levels',
+
+            'view_salud' => 'View Salud',
+            'add_salud' => 'Add Salud',
+            'edit_salud' => 'Edit Salud',
+            'delete_salud' => 'Delete Salud',
 
             'view_course_platform' => 'View Curso de Plataforma',
             'add_course_platform' => 'Add Curso de Plataforma',

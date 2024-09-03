@@ -27,7 +27,9 @@ use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermission;
+use App\Http\Controllers\SaludController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\VacunaController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\Backend\TrainingController;
@@ -387,5 +389,12 @@ Route::group(['prefix' => 'app'], function () {
         Route::post('/activity-levels/{pet_id}/store-distance', [ActivityLevelController::class, 'store_distance'])->name('activity-levels.store_distance');
         Route::post('/activity-levels/{pet_id}/store-calories', [ActivityLevelController::class, 'store_calories'])->name('activity-levels.store_calories');
         Route::post('/activity-levels/{pet_id}/store-minutes', [ActivityLevelController::class, 'store_minutes'])->name('activity-levels.store_minutes');
+    
+        Route::resource('salud', SaludController::class);
+        Route::get('/mascotas/salud', [SaludController::class, 'mascotas'])->name('mascotas.salud');
+
+        Route::resource('vacunas', VacunaController::class);
+        Route::get('/mascotas/vacunas', [VacunaController::class, 'mascotas'])->name('mascotas.vacunas');
+        Route::get('vacunas/mascotas_data', [VacunaController::class, 'mascotas_data'])->name('vacunas.mascotas_data');
     });
 });

@@ -15,10 +15,27 @@
                 <textarea class="form-control" id="description" name="description" rows="3" readonly>{{ $ejercicio->description }}</textarea>
             </div>
 
+            <!-- Comentado la sección de URL -->
+            <!--
             <div class="mb-3">
                 <label for="url" class="form-label">{{ __('ejercicios.URL') }}</label>
                 <input type="url" class="form-control" id="url" name="url" value="{{ $ejercicio->url }}" readonly>
                 <div id="video-preview" class="mt-3"></div>
+            </div>
+            -->
+
+            <div class="mb-3">
+                <label for="video" class="form-label">{{ __('ejercicios.Video') }}</label>
+                <div id="video-preview" class="mt-3">
+                    @if($ejercicio->video)
+                        <video width="560" height="315" controls>
+                            <source src="{{ asset($ejercicio->video) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @else
+                        <p>{{ __('No video available') }}</p>
+                    @endif
+                </div>
             </div>
 
             <div class="mt-4">
@@ -32,6 +49,8 @@
 @push('after-scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Comentado el script de URL
+        /*
         const url = "{{ $ejercicio->url }}";
         const videoPreview = document.getElementById('video-preview');
 
@@ -55,6 +74,7 @@
             const vimeoMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/)([0-9]+)/);
             return youtubeMatch ? youtubeMatch[1] : vimeoMatch ? vimeoMatch[1] : null;
         }
+        */
     });
 </script>
 @endpush

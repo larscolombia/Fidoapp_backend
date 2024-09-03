@@ -23,6 +23,7 @@ return [
     'Edit' => 'Editar',
     'Cancel' => 'Cancelar',
     'Back' => 'Atrás',
+    'Video' => 'Video',
     'Update' => 'Actualizar',
     'Confirm Deletion' => 'Confirmar Eliminación',
 ];

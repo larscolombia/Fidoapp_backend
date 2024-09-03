@@ -33,18 +33,14 @@ class QRCodeController extends Controller
 
     public function mascotas(Pet $pet)
     {
-        $pets = Pet::with('user')->whereHas('pettype', function ($query) {
-            $query->where('slug', 'dog');
-        })->get();
+        $pets = Pet::with('user')->get();
 
         return view('backend.qr_codes.mascotas', compact('pet'));
     }
 
     public function mascotas_data(DataTables $datatable, Request $request)
     {
-        $pets = Pet::with('user')->whereHas('pettype', function ($query) {
-            $query->where('slug', 'dog');
-        })->select('pets.*');
+        $pets = Pet::with('user')->select('pets.*');
 
         $filter = $request->filter;
         if (isset($filter)) {

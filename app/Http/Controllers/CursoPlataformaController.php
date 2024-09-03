@@ -127,7 +127,7 @@ class CursoPlataformaController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'url' => $url, // Guardar la URL si se proporciona
-            'file' => $videoName ? 'videos/course_platform/' . $videoName : null,
+            'file' => $videoName ? 'videos/cursos_plataforma/' . $videoName : null,
             'price' => $request->input('price'),
             'image' => $imageName ? 'images/cursos_plataforma/' . $imageName : null,
             'duration' => $request->input('duration'),
