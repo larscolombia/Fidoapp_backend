@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pets', function (Blueprint $table) {
-            $table->string('qr_code')->unique()->nullable();
+            $table->string('qr_code')->nullable();
         });
     }
 
