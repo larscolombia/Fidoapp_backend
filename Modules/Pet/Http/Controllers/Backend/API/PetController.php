@@ -3,8 +3,8 @@
 namespace Modules\Pet\Http\Controllers\Backend\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\api\pets\storeRequest;
-use App\Http\Requests\api\pets\UpdateRequest;
+use app\Http\Requests\Api\pets\storeRequest;
+use app\Http\Requests\Api\pets\UpdateRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Modules\Pet\Models\Pet;
