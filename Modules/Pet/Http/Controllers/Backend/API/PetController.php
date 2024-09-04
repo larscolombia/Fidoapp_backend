@@ -258,6 +258,27 @@ class PetController extends Controller
      */
     public function store(storeRequest $request)
     {
+        // Define las reglas de validación
+        $rules = [
+            'name' => 'sometimes|string|max:255',
+            'breed_id' => 'sometimes|exists:breeds,id',
+            'breed_name' => 'sometimes|string',
+            'size' => 'sometimes|string|max:50',
+            'date_of_birth' => 'sometimes|date',
+            'age' => 'sometimes|string|max:50',
+            'gender' => 'sometimes|in:male,female',
+            'weight' => 'sometimes|numeric',
+            'height' => 'sometimes|numeric',
+            'weight_unit' => 'sometimes|string|max:10',
+            'height_unit' => 'sometimes|string|max:10',
+            'user_id' => 'sometimes|exists:users,id',
+            'additional_info' => 'sometimes|string',
+            'status' => 'sometimes|boolean',
+            'pet_image' => 'sometimes',
+        ];
+
+        // Obtener los datos validados
+        $validatedData = $request->validate($rules);
         // Obtener los datos validados
         $validatedData = $request->validated();
 
