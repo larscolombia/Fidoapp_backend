@@ -256,7 +256,7 @@ class PetController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(storeRequest $request)
+    public function store(Request $request)
     {
         // Define las reglas de validación
         $rules = [
@@ -279,8 +279,6 @@ class PetController extends Controller
 
         // Obtener los datos validados
         $validatedData = $request->validate($rules);
-        // Obtener los datos validados
-        $validatedData = $request->validated();
 
         // Manejo de breed_id y breed_name
         $breed = null;
