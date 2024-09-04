@@ -333,9 +333,9 @@ class PetController extends Controller
             }
         }
 
-        if ($request->hasFile('pet_image')) {
+        if ($request->has('pet_image') && $request->hasFile('pet_image')) {
             storeMediaFile($pet, $request->file('pet_image'), 'pet_image');
-        } elseif ( $request->has('pet_image') ) {
+        } elseif ( $request->has('pet_image') && $request->pet_image != null && $request->pet_image != '') {
             $pet->clearMediaCollection('pet_image');
             $pet->addMediaFromUrl($request['pet_image'])->toMediaCollection('pet_image');
         } else {
