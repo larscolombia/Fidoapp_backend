@@ -337,7 +337,25 @@ class PetController extends Controller
     {
         $pet = Pet::findOrFail($id);
 
-        $validatedData = $request->all();
+        $rules = [
+            'name' => 'sometimes|string|max:255',
+            'breed_id' => 'sometimes|exists:breeds,id',
+            'breed_name' => 'sometimes|string',
+            'size' => 'sometimes|string|max:50',
+            'date_of_birth' => 'sometimes|date',
+            'age' => 'sometimes|string|max:50',
+            'gender' => 'sometimes|in:male,female',
+            'weight' => 'sometimes|numeric',
+            'height' => 'sometimes|numeric',
+            'weight_unit' => 'sometimes|string|max:10',
+            'height_unit' => 'sometimes|string|max:10',
+            'user_id' => 'sometimes|exists:users,id',
+            'additional_info' => 'sometimes|string',
+            'status' => 'sometimes|boolean',
+            'pet_image' => 'sometimes',
+        ];
+
+        $validatedData = $request->validate($rules);
 
         if (isset($validatedData['breed_id'])) {
             $breed = Breed::find($validatedData['breed_id']);
