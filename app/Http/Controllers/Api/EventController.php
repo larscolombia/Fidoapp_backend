@@ -26,6 +26,17 @@ class EventController extends Controller
         ]);
     }
 
+    public function getEventsByUser($user_id)
+    {
+        $events = Event::where('user_id', $user_id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Eventos recuperados exitosamente',
+            'data' => $events
+        ]);
+    }
+
     public function store (StoreRequest $request) {
         $validatedData = $request->validated();
 

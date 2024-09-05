@@ -780,6 +780,38 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
     Route::get('events', [EventController::class, 'index']);
 
     /**
+     * Obtener eventos por user_id.
+     * Método HTTP: GET
+     * Ruta: /api/events/user/{user_id}
+     * Descripción: Recupera los eventos disponibles para un usuario específico.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "Eventos recuperados exitosamente",
+     *     "data": [
+     *         {
+     *             "id": 1,
+     *             "name": "Evento 1",
+     *             "date": "2024-07-13T00:00:00.000000Z",
+     *             "slug": "evento-1",
+     *             "user_id": 1,
+     *             "description": "Descripción del evento 1",
+     *             "location": "Ubicación del evento 1",
+     *             "tipo": "salud",
+     *             "status": true,
+     *             "created_by": null,
+     *             "updated_by": null,
+     *             "deleted_by": null,
+     *             "created_at": "2024-07-13T00:00:00.000000Z",
+     *             "updated_at": "2024-07-13T00:00:00.000000Z"
+     *         },
+     *         ...
+     *     ]
+     * }
+     */
+    Route::get('events/user/{user_id}', [EventController::class, 'getEventsByUser']);
+
+    /**
      * Obtener un evento por ID.
      * Método HTTP: GET
      * Ruta: /api/events/{id}
