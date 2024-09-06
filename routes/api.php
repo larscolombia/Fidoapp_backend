@@ -1379,6 +1379,21 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          */
         Route::post('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'addSharedOwner']);
 
+          /**
+         * Agregar un dueño compartido a una mascota usando el email.
+         * Método HTTP: POST
+         * Ruta: /api/pets/{petId}/shared-owners-with-email
+         * Descripción: Asocia un dueño secundario a una mascota específica utilizando el ID de la mascota y el correo del usuario.
+         * Parámetros de Solicitud:
+         * - email (string): El correo del usuario que se usara para buscar el id del mismo que se va a agregar como dueño compartido.
+         *
+         * Respuesta Exitosa:
+         * {
+         *     "message": "Shared owner added successfully"
+         * }
+         */
+        Route::post('/pets/{petId}/shared-owners-with-email', [SharedOwnerController::class, 'addSharedOwnerWithEmail']);
+
         /**
          * Eliminar un dueño compartido de una mascota.
          * Método HTTP: DELETE
