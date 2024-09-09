@@ -610,7 +610,7 @@ class GenerateMenus
 
             // Historial Médico Static
 
-            $permissionsToCheck = ['view_vacunas'];
+            $permissionsToCheck = ['view_vacunas', 'view_antiparasitantes', 'view_antigarrapatas'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'Historial Medico', 'order' => 0]);
@@ -622,6 +622,24 @@ class GenerateMenus
                 'route' => 'backend.mascotas.vacunas',
                 'active' => ['app/vacunas'],
                 'permission' => 'view_vacunas',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
+                'icon' => 'icon-Daily-Bookings',
+                'title' => __('antiparasitantes.title'),
+                'route' => 'backend.antiparasitantes.index',
+                'active' => ['app/antiparasitantes'],
+                'permission' => 'view_antiparasitantes',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
+                'icon' => 'icon-Daily-Bookings',
+                'title' => __('antigarrapata.title'),
+                'route' => 'backend.antigarrapatas.index',
+                'active' => ['app/antigarrapata'],
+                'permission' => 'view_antigarrapatas',
                 'order' => 0,
             ]);
 

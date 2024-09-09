@@ -19,6 +19,7 @@ return [
     'Are you sure you want to delete this diario?' => '¿Estás seguro de que quieres eliminar este diario?',
     'Cancel' => 'Cancelar',
     'Delete' => 'Eliminar',
+    'View Diarios' => 'Ver Diarios',
     'Edit' => 'Editar',
     'Save' => 'Guardar',
     'Back' => 'Atrás',

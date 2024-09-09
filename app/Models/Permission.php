@@ -430,6 +430,16 @@ class Permission extends \Spatie\Permission\Models\Permission
             'add_vacunas' => 'Add Vacunas',
             'edit_vacunas' => 'Edit Vacunas',
             'delete_vacunas' => 'Delete Vacunas',
+            
+            'view_antiparasitantes' => 'View Antiparasitante',
+            'add_antiparasitantes' => 'Add Antiparasitante',
+            'edit_antiparasitantes' => 'Edit Antiparasitante',
+            'delete_antiparasitantes' => 'Delete Antiparasitante',
+            
+            'view_antigarrapatas' => 'View Antigarrapatas',
+            'add_antigarrapatas' => 'Add Antigarrapatas',
+            'edit_antigarrapatas' => 'Edit Antigarrapatas',
+            'delete_antigarrapatas' => 'Delete Antigarrapatas',
 
             'view_activity_levels' => 'View Activity Levels',
             'add_activity_levels' => 'Add Activity Levels',

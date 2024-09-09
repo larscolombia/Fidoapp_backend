@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Diario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Modules\Pet\Models\Pet;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -53,10 +54,22 @@ class DiarioController extends Controller
                 return $pet->breed->name;
             })
             ->addColumn('action', function ($pet) {
+                $currentUrl = url()->current();
+                $routeName = '';
+                $buttonText = '';
+
+                if ($currentUrl === route('backend.diarios.mascotas_data')) {
+                    $routeName = 'backend.mascotas.diarios.index';
+                    $buttonText = __('diarios.View Diarios');
+                } elseif ($currentUrl === route('backend.vacunas.mascotas_data')) {
+                    $routeName = 'backend.mascotas.vacunas.index';
+                    $buttonText = __('vacunas.View Vacunas');
+                }
+            
                 $return = '<a href="';
-                $return .= route('backend.mascotas.diarios.index', ['pet' => $pet->id]);
+                $return .= route($routeName, ['pet' => $pet->id]);
                 $return .= '" class="btn btn-primary">';
-                $return .= __('diarios.View Diarie');
+                $return .= $buttonText;
                 $return .= '</a>';
                 return $return;
             })

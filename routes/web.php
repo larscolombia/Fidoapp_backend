@@ -395,6 +395,21 @@ Route::group(['prefix' => 'app'], function () {
 
         Route::resource('vacunas', VacunaController::class);
         Route::get('/mascotas/vacunas', [VacunaController::class, 'mascotas'])->name('mascotas.vacunas');
-        Route::get('vacunas/mascotas_data', [VacunaController::class, 'mascotas_data'])->name('vacunas.mascotas_data');
+        Route::get('/vacunas/mascotas_data', [VacunaController::class, 'mascotas_data'])->name('vacunas.mascotas_data');
+        Route::prefix('/mascotas/vacunas/{pet}')->name('mascotas.vacunas.')->group(function () {
+            Route::get('/', [VacunaController::class, 'index'])->name('index');
+            Route::get('/create', [VacunaController::class, 'create'])->name('create');
+            Route::post('/store', [VacunaController::class, 'store'])->name('store');
+            Route::get('/show/{vacuna}', [VacunaController::class, 'show'])->name('show');
+            Route::get('/edit/{vacuna}', [VacunaController::class, 'edit'])->name('edit');
+            Route::put('/update/{vacuna}', [VacunaController::class, 'update'])->name('update');
+            
+            Route::get('/vacunas_data', [VacunaController::class, 'vacunas_data'])->name('vacunas_data');
+        });    
+        Route::delete('/destroy/{vacuna}', [VacunaController::class, 'destroy'])->name('destroy');
+
+        Route::resource('antigarrapatas', VacunaController::class);
+
+        Route::resource('antiparasitantes', VacunaController::class);
     });
 });

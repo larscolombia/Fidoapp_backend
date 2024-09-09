@@ -19,6 +19,9 @@
                     </div>
                 </x-slot>
             </x-backend.section-header>
+            @hasPermission('add_diarios')
+                <a class="btn btn-primary" href="{{ route('backend.mascotas.vacunas.create', ['pet' => $pet]) }}">{{ __('vacunas.create') }}</a>
+            @endhasPermission
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
         </div>
@@ -46,23 +49,30 @@
 <script type="text/javascript" defer>
     const columns = [
         {
-            data: 'owner_name',
-            name: 'owner_name',
-            title: "{{ __('vacunas.Owner Name') }}",
+            data: 'pet_type',
+            name: 'pet_type',
+            title: "{{ __('vacunas.Pet Type') }}",
             orderable: true,
             searchable: true,
         },
         {
-            data: 'pet_name',
-            name: 'pet_name',
-            title: "{{ __('vacunas.Pet Name') }}",
+            data: 'vacuna_name',
+            name: 'vacuna_name',
+            title: "{{ __('vacunas.Vacuna Name') }}",
             orderable: true,
             searchable: true,
         },
         {
-            data: 'breed',
-            name: 'breed',
-            title: "{{ __('vacunas.Breed') }}",
+            data: 'fecha_aplication',
+            name: 'fecha_aplication',
+            title: "{{ __('vacunas.Fecha de aplicacion') }}",
+            orderable: true,
+            searchable: true,
+        },
+        {
+            data: 'fecha_refuerzo_vacuna',
+            name: 'fecha_refuerzo_vacuna',
+            title: "{{ __('vacunas.Fecha de refuerzo vacuna') }}",
             orderable: true,
             searchable: true,
         }
@@ -84,7 +94,7 @@
 
     document.addEventListener('DOMContentLoaded', (event) => {
         initDatatable({
-            url: '{{ route("backend.diarios.mascotas_data") }}',
+            url: '{{ route("backend.mascotas.vacunas.vacunas_data", ["pet" => $pet]) }}',
             finalColumns,
             orderColumn: [[ 1, "asc" ]],
             advanceFilter: () => {
