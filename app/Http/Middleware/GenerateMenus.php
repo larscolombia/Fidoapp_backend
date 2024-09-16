@@ -627,17 +627,8 @@ class GenerateMenus
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Daily-Bookings',
-                'title' => __('antiparasitantes.title'),
-                'route' => 'backend.antiparasitantes.index',
-                'active' => ['app/antiparasitantes'],
-                'permission' => 'view_antiparasitantes',
-                'order' => 0,
-            ]);
-
-            $this->mainRoute($menu, [
-                'icon' => 'icon-Daily-Bookings',
                 'title' => __('antigarrapata.title'),
-                'route' => 'backend.antigarrapatas.index',
+                'route' => 'backend.mascotas.antigarrapata',
                 'active' => ['app/antigarrapata'],
                 'permission' => 'view_antigarrapatas',
                 'order' => 0,

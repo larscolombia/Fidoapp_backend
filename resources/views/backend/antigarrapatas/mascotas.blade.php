@@ -48,21 +48,21 @@
         {
             data: 'owner_name',
             name: 'owner_name',
-            title: "{{ __('vacunas.Owner Name') }}",
+            title: "{{ __('antigarrapata.Owner Name') }}",
             orderable: true,
             searchable: true,
         },
         {
             data: 'pet_name',
             name: 'pet_name',
-            title: "{{ __('vacunas.Pet Name') }}",
+            title: "{{ __('antigarrapata.Pet Name') }}",
             orderable: true,
             searchable: true,
         },
         {
             data: 'breed',
             name: 'breed',
-            title: "{{ __('vacunas.Breed') }}",
+            title: "{{ __('antigarrapata.Breed') }}",
             orderable: true,
             searchable: true,
         }
@@ -84,7 +84,7 @@
 
     document.addEventListener('DOMContentLoaded', (event) => {
         initDatatable({
-            url: '{{ route("backend.vacunas.mascotas_data") }}',
+            url: '{{ route("backend.antigarrapata.mascotas_dataa") }}',
             finalColumns,
             orderColumn: [[ 1, "asc" ]],
             advanceFilter: () => {
@@ -96,25 +96,25 @@
     })
 
     function resetQuickAction() {
-        const actionValue = $('#quick-action-type').val();
-        if (actionValue != '') {
-            $('#quick-action-apply').removeAttr('disabled');
+      const actionValue = $('#quick-action-type').val();
+      if (actionValue != '') {
+          $('#quick-action-apply').removeAttr('disabled');
 
-            if (actionValue == 'change-status') {
-                $('.quick-action-field').addClass('d-none');
-                $('#change-status-action').removeClass('d-none');
-            } else {
-                $('.quick-action-field').addClass('d-none');
-            }
+          if (actionValue == 'change-status') {
+              $('.quick-action-field').addClass('d-none');
+              $('#change-status-action').removeClass('d-none');
+          } else {
+              $('.quick-action-field').addClass('d-none');
+          }
 
-        } else {
-            $('#quick-action-apply').attr('disabled', true);
-            $('.quick-action-field').addClass('d-none');
-        }
-    }
+      } else {
+          $('#quick-action-apply').attr('disabled', true);
+          $('.quick-action-field').addClass('d-none');
+      }
+  }
 
-    $('#quick-action-type').change(function() {
-        resetQuickAction()
-    });
+  $('#quick-action-type').change(function() {
+      resetQuickAction()
+  });
 </script>
 @endpush

@@ -19,17 +19,13 @@
                     </div>
                 </x-slot>
             </x-backend.section-header>
+            @hasPermission('add_antigarrapatas')
+                <a class="btn btn-primary" href="{{ route('backend.mascotas.antigarrapatas.create', ['pet' => $pet]) }}">{{ __('antigarrapata.create') }}</a>
+            @endhasPermission
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
         </div>
     </div>
-
-    {{--<x-backend.advance-filter>
-        <x-slot name="title">
-            <h4>{{ __('service.lbl_advanced_filter') }}</h4>
-        </x-slot>
-        <button type="reset" class="btn btn-danger" id="reset-filter">{{__('product.reset')}}</button>
-    </x-backend.advance-filter>--}}
 @endsection
 
 @push ('after-styles')
@@ -38,7 +34,6 @@
 @endpush
 
 @push ('after-scripts')
-<script src='{{ mix("modules/product/script.js") }}'></script>
 <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
 <!-- DataTables Core and Extensions -->
 <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
@@ -46,23 +41,30 @@
 <script type="text/javascript" defer>
     const columns = [
         {
-            data: 'owner_name',
-            name: 'owner_name',
-            title: "{{ __('vacunas.Owner Name') }}",
+            data: 'pet_type',
+            name: 'pet_type',
+            title: "{{ __('antigarrapata.Pet Type') }}",
             orderable: true,
             searchable: true,
         },
         {
-            data: 'pet_name',
-            name: 'pet_name',
-            title: "{{ __('vacunas.Pet Name') }}",
+            data: 'antigarrapata_name',
+            name: 'antigarrapata_name',
+            title: "{{ __('antigarrapata.Antigarrapata Name') }}",
             orderable: true,
             searchable: true,
         },
         {
-            data: 'breed',
-            name: 'breed',
-            title: "{{ __('vacunas.Breed') }}",
+            data: 'fecha_aplicacion',
+            name: 'fecha_aplicacion',
+            title: "{{ __('antigarrapata.Fecha de aplicacion') }}",
+            orderable: true,
+            searchable: true,
+        },
+        {
+            data: 'fecha_refuerzo_antigarrapata',
+            name: 'fecha_refuerzo_antigarrapata',
+            title: "{{ __('antigarrapata.Fecha de refuerzo antigarrapata') }}",
             orderable: true,
             searchable: true,
         }
@@ -75,25 +77,25 @@
         searchable: false,
         title: "{{ __('service.lbl_action') }}",
         width: '5%'
-    }]
+    }];
 
     let finalColumns = [
         ...columns,
         ...actionColumn
-    ]
+    ];
 
     document.addEventListener('DOMContentLoaded', (event) => {
         initDatatable({
-            url: '{{ route("backend.vacunas.mascotas_data") }}',
+            url: '{{ route("backend.mascotas.antigarrapatas.antigarrapatas_data", ["pet" => $pet]) }}',
             finalColumns,
             orderColumn: [[ 1, "asc" ]],
             advanceFilter: () => {
                 return {
-                search: $('[name="table_search"]').val(),
-              }
+                    search: $('[name="table_search"]').val(),
+                }
             }
         });
-    })
+    });
 
     function resetQuickAction() {
         const actionValue = $('#quick-action-type').val();
@@ -106,7 +108,6 @@
             } else {
                 $('.quick-action-field').addClass('d-none');
             }
-
         } else {
             $('#quick-action-apply').attr('disabled', true);
             $('.quick-action-field').addClass('d-none');
@@ -114,7 +115,7 @@
     }
 
     $('#quick-action-type').change(function() {
-        resetQuickAction()
+        resetQuickAction();
     });
 </script>
 @endpush

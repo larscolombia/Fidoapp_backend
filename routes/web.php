@@ -18,6 +18,7 @@ use App\Http\Controllers\DiarioController;
 use App\Http\Controllers\EBookController;
 use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\FabricanteController;
+use App\Http\Controllers\GarrapataController;
 use App\Http\Controllers\GoogleCalendarController;
 use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\LanguageController;
@@ -304,7 +305,10 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('herramientas-entrenamiento-index-data', [HerramientaController::class, 'index_data'])->name('herramientas_entrenamiento.index_data');
 
         Route::get('/mascotas/diarios', [DiarioController::class, 'mascotas'])->name('mascotas.diarios');
+        Route::get('/vacunas/mascotas_data', [VacunaController::class, 'mascotas_data'])->name('vacunas.mascotas_data');
         Route::get('diarios/mascotas_data', [DiarioController::class, 'mascotas_data'])->name('diarios.mascotas_data');
+        Route::get('/antiparasitantes/mascotas_data', [GarrapataController::class, 'mascotas_data'])->name('antiparasitantes.mascotas_data');
+        Route::get('/antigarrapatas/mascotas_dataa', [GarrapataController::class, 'mascotas_data'])->name('antigarrapata.mascotas_dataa');
         Route::prefix('/mascotas/diarios/{pet}')->name('mascotas.diarios.')->group(function () {
             Route::get('/', [DiarioController::class, 'index'])->name('index');
             Route::get('/create', [DiarioController::class, 'create'])->name('create');
@@ -395,7 +399,6 @@ Route::group(['prefix' => 'app'], function () {
 
         Route::resource('vacunas', VacunaController::class);
         Route::get('/mascotas/vacunas', [VacunaController::class, 'mascotas'])->name('mascotas.vacunas');
-        Route::get('/vacunas/mascotas_data', [VacunaController::class, 'mascotas_data'])->name('vacunas.mascotas_data');
         Route::prefix('/mascotas/vacunas/{pet}')->name('mascotas.vacunas.')->group(function () {
             Route::get('/', [VacunaController::class, 'index'])->name('index');
             Route::get('/create', [VacunaController::class, 'create'])->name('create');
@@ -408,8 +411,36 @@ Route::group(['prefix' => 'app'], function () {
         });    
         Route::delete('/destroy/{vacuna}', [VacunaController::class, 'destroy'])->name('destroy');
 
-        Route::resource('antigarrapatas', VacunaController::class);
+        Route::resource('antigarrapatas', GarrapataController::class);
+
+        Route::get('/mascotas/antigarrapatas', [GarrapataController::class, 'mascotas'])->name('mascotas.antigarrapata');
+        Route::prefix('/mascotas/antigarrapatas/{pet}')->name('mascotas.antigarrapatas.')->group(function () {
+            Route::get('/', [GarrapataController::class, 'index'])->name('index');
+            Route::get('/create', [GarrapataController::class, 'create'])->name('create');
+            Route::post('/store', [GarrapataController::class, 'store'])->name('store');
+            Route::get('/show/{antigarrapata}', [GarrapataController::class, 'show'])->name('show');
+            Route::get('/edit/{antigarrapata}', [GarrapataController::class, 'edit'])->name('edit');
+            Route::put('/update/{antigarrapata}', [GarrapataController::class, 'update'])->name('update');
+            
+            Route::get('/antigarrapatas_data', [GarrapataController::class, 'antigarrapatas_data'])->name('antigarrapatas_data');
+        });    
+        Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('mascotas.antigarrapatas.destroy');
 
         Route::resource('antiparasitantes', VacunaController::class);
+
+        
+        Route::get('/mascotas/antiparasitantes', [GarrapataController::class, 'mascotas'])->name('mascotas.antiparasitantes');
+        Route::prefix('/mascotas/antiparasitantes/{pet}')->name('mascotas.antiparasitantes.')->group(function () {
+            Route::get('/', [GarrapataController::class, 'index'])->name('index');
+            Route::get('/create', [GarrapataController::class, 'create'])->name('create');
+            Route::post('/store', [GarrapataController::class, 'store'])->name('store');
+            Route::get('/show/{antiparasitante}', [GarrapataController::class, 'show'])->name('show');
+            Route::get('/edit/{antiparasitante}', [GarrapataController::class, 'edit'])->name('edit');
+            Route::put('/update/{antiparasitante}', [GarrapataController::class, 'update'])->name('update');
+            
+            Route::get('/antiparasitantes_data', [GarrapataController::class, 'antiparasitantes_data'])->name('antiparasitantes_data');
+        });    
+        Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('destroy');
+
     });
 });

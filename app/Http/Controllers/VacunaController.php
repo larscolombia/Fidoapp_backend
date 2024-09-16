@@ -36,7 +36,7 @@ class VacunaController extends Controller
 
     public function mascotas_data(DataTables $datatable, Request $request)
     {
-        Log::info('bsjs');
+        Log::info('Diarios2');
         $pets = Pet::with('user')->select('pets.*');
 
         return $datatable->eloquent($pets)
@@ -50,10 +50,15 @@ class VacunaController extends Controller
                 return $pet->breed->name;
             })
             ->addColumn('action', function ($pet) {
+                $currentUrl = url()->current();
+                $routeName = '';
+                $buttonText = '';
+                $routeName = 'backend.mascotas.vacunas.index';
+                $buttonText = __('vacunas.View Vacunas');
                 $return = '<a href="';
-                $return .= route('backend.mascotas.vacunas.index', ['pet' => $pet->id]);
+                $return .= route($routeName, ['pet' => $pet->id]);
                 $return .= '" class="btn btn-primary">';
-                $return .= __('vacunas.View Vacunas');
+                $return .= $buttonText;
                 $return .= '</a>';
                 return $return;
             })
@@ -70,7 +75,6 @@ class VacunaController extends Controller
 
     public function vacunas_data (DataTables $datatable, Request $request, $pet) {
         $vacunas = Vacuna::with('pet')->where('pet_id', $pet);
-        Log::info('aaa');
         return $datatable->eloquent($vacunas)
             ->addColumn('pet_type', function ($vacuna) {
                 return $vacuna->pet->pettype->name;
@@ -155,14 +159,14 @@ class VacunaController extends Controller
                         ->with('success', __('Vacuna actualizada exitosamente.'));
     }
 
-    public function destroy(Pet $pet, Vacuna $vacuna)
+    public function destroy(Vacuna $vacuna)
     {
         // Eliminar la vacuna
         $vacuna->delete();
 
-        // Redirigir con un mensaje de éxito
-        return redirect()->route('backend.mascotas.vacunas.index', ['pet' => $pet])
-                        ->with('success', __('Vacuna eliminada exitosamente.'));
+       // Redirigir con un mensaje de éxito
+        return redirect()->route('backend.mascotas.vacunas.index', ['pet' => $vacuna->pet->id])
+                        ->with('success', __('Vacuna creada exitosamente.'));
     }
 
 }

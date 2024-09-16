@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('antigarrapatas', function (Blueprint $table) {
+        Schema::create('antidesparasitantes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pet_id')->constrained();
-            $table->string('antigarrapata_name');
+            $table->string('antidesparasitante_name');
             $table->date('fecha_aplicacion');
-            $table->date('fecha_refuerzo_antigarrapata');
+            $table->date('fecha_refuerzo_antidesparasitante');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('antigarrapatas');
+        Schema::dropIfExists('antidesparasitantes');
     }
 };

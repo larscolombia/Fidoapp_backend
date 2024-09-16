@@ -41,6 +41,7 @@ class DiarioController extends Controller
 
     public function mascotas_data(DataTables $datatable, Request $request)
     {
+        Log::info('Diarios');
         $pets = Pet::with('user')->select('pets.*');
 
         return $datatable->eloquent($pets)
@@ -57,15 +58,8 @@ class DiarioController extends Controller
                 $currentUrl = url()->current();
                 $routeName = '';
                 $buttonText = '';
-
-                if ($currentUrl === route('backend.diarios.mascotas_data')) {
-                    $routeName = 'backend.mascotas.diarios.index';
-                    $buttonText = __('diarios.View Diarios');
-                } elseif ($currentUrl === route('backend.vacunas.mascotas_data')) {
-                    $routeName = 'backend.mascotas.vacunas.index';
-                    $buttonText = __('vacunas.View Vacunas');
-                }
-            
+                $routeName = 'backend.mascotas.diarios.index';
+                $buttonText = __('diarios.View Diarios');
                 $return = '<a href="';
                 $return .= route($routeName, ['pet' => $pet->id]);
                 $return .= '" class="btn btn-primary">';

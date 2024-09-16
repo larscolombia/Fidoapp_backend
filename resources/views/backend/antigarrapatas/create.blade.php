@@ -1,16 +1,16 @@
 @extends('backend.layouts.app')
 
-@section('title') {{ __('Crear Vacuna') }} @endsection
+@section('title') {{ __('Crear Antigarrapata') }} @endsection
 
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('backend.mascotas.vacunas.store', ['pet' => $pet]) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('backend.mascotas.antigarrapatas.store', ['pet' => $pet]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
-                    <label for="vacuna_name" class="form-label">{{ __('Nombre de la Vacuna') }}</label>
-                    <input type="text" class="form-control @error('vacuna_name') is-invalid @enderror" id="vacuna_name" name="vacuna_name" value="{{ old('vacuna_name') }}" required>
-                    @error('vacuna_name')
+                    <label for="antigarrapata_name" class="form-label">{{ __('Nombre del Antigarrapata') }}</label>
+                    <input type="text" class="form-control @error('antigarrapata_name') is-invalid @enderror" id="antigarrapata_name" name="antigarrapata_name" value="{{ old('antigarrapata_name') }}" required>
+                    @error('antigarrapata_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -34,15 +34,15 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="fecha_refuerzo_vacuna" class="form-label">{{ __('Fecha de Refuerzo') }}</label>
-                    <input type="date" class="form-control @error('fecha_refuerzo_vacuna') is-invalid @enderror" id="fecha_refuerzo_vacuna" name="fecha_refuerzo_vacuna" value="{{ old('fecha_refuerzo_vacuna') }}" required>
-                    @error('fecha_refuerzo_vacuna')
+                    <label for="fecha_refuerzo_antigarrapata" class="form-label">{{ __('Fecha de Refuerzo Antigarrapata') }}</label>
+                    <input type="date" class="form-control @error('fecha_refuerzo_antigarrapata') is-invalid @enderror" id="fecha_refuerzo_antigarrapata" name="fecha_refuerzo_antigarrapata" value="{{ old('fecha_refuerzo_antigarrapata') }}" required>
+                    @error('fecha_refuerzo_antigarrapata')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <button type="submit" class="btn btn-success">{{ __('Crear Vacuna') }}</button>
-                <a href="{{ route('backend.mascotas.vacunas.index', ['pet' => $pet]) }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
+                <button type="submit" class="btn btn-success">{{ __('Crear Antigarrapata') }}</button>
+                <a href="{{ route('backend.mascotas.antigarrapatas.index', ['pet' => $pet]) }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
             </form>
         </div>
     </div>
@@ -50,7 +50,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
         const fechaAplicacionInput = document.getElementById('fecha_aplicacion');
-        const fechaRefuerzoInput = document.getElementById('fecha_refuerzo_vacuna');
+        const fechaRefuerzoInput = document.getElementById('fecha_refuerzo_antigarrapata');
         const patronRefuerzoRadios = document.querySelectorAll('input[name="patron_refuerzo"]');
 
         function calcularFechaRefuerzo() {
@@ -90,6 +90,5 @@
             radio.addEventListener('change', calcularFechaRefuerzo);
         });
     });
-
     </script>
 @endsection
