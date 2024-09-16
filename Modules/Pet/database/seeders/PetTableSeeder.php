@@ -770,7 +770,7 @@ class PetTableSeeder extends Seeder
                     'gender' => $value['gender'],
                     'user_id' =>$value['user_id'],
                     'status' => $value['status'],
-                    'qr_code' => $this->generateQrCode($pet),
+                    'qr_code' => $this->safeGenerateQrCode($pet),
                 ];
                 $pet = Pet::create($pet);
                 if (isset($image)) {
@@ -792,6 +792,17 @@ class PetTableSeeder extends Seeder
         $media = $model->addMedia($file)->preservingOriginal()->toMediaCollection('pet_image');
 
         return $media;
+    }
+
+    private function safeGenerateQrCode($pet)
+    {
+        try {
+            return $this->generateQrCode($pet);
+        } catch (\Exception $e) {
+            // Manejo de errores: registra el error y retorna null
+            \Log::error('Error al generar el código QR: ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function generateQrCode($pet)
