@@ -31,9 +31,9 @@
                 <label for="status" class="form-label">{{ __('herramientas_entrenamiento.status') }}</label>
                 @if($herramienta->status == 'active' || $herramienta->status == 'Active')
                     <input type="text" class="form-control" id="status" name="status" value="{{ __('herramientas_entrenamiento.Activo') }}" readonly>
-                @else   
+                @else
                     <input type="text" class="form-control" id="status" name="status" value="{{ __('herramientas_entrenamiento.Inactivo') }}" readonly>
-                @endif 
+                @endif
             </div>
 
             <div class="mb-3">
@@ -45,6 +45,15 @@
                     </audio>
                 @else
                     <p>{{ __('herramientas_entrenamiento.No audio available') }}</p>
+                @endif
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">{{ __('herramientas_entrenamiento.image') }}</label>
+                @if($herramienta->image)
+                    <img src="{{ asset($herramienta->image) }}" class="img-fluid" alt="{{ $herramienta->name }}" style="width: 200px;">
+                @else
+                    <p>{{ __('herramientas_entrenamiento.no_image') }}</p>
                 @endif
             </div>
         </div>

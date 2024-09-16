@@ -25,6 +25,16 @@ class HerramientaController extends Controller
             return response()->json(['error' => 'Debe proporcionar un type o type_id.'], 400);
         }
 
+            // Manejar la carga de la imagen
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/herramientas'), $imageName);
+                $imagePath = 'images/herramientas/' . $imageName;
+            } else {
+                $imagePath = null;
+            }
+
         if ($request->filled('type')) {
             $type = HerramientaType::firstOrCreate(
                 ['type' => $request->input('type')],
@@ -41,6 +51,8 @@ class HerramientaController extends Controller
             'type_id' => $type_id,
             'audio' => $request->input('audio'),
             'status' => $request->input('status'),
+            'image' => $imagePath,
+            'progress' => 0
         ]);
 
         return response()->json(['data' => $herramienta], 201);
@@ -62,6 +74,23 @@ class HerramientaController extends Controller
         // Verificar que se haya proporcionado 'type' o 'type_id'
         if (!$request->filled('type') && !$request->filled('type_id')) {
             return response()->json(['error' => 'Debe proporcionar un type o type_id.'], 400);
+        }
+
+
+        // Manejar la carga de la imagen si está presente
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/herramientas'), $imageName);
+            $data['image'] = 'images/herramientas/' . $imageName;
+
+            // Eliminar la imagen anterior si existe
+            if ($herramienta->image) {
+                $oldImagePath = public_path($herramienta->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
         }
 
         if ($request->filled('type')) {
