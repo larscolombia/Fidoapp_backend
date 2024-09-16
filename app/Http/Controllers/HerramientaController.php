@@ -45,7 +45,7 @@ class HerramientaController extends Controller
     public function index_data(DataTables $datatable, Request $request)
     {
         $herramientas = Herramienta::query();
-        
+
         $filter = $request->filter;
 
         if (isset($filter)) {
@@ -105,6 +105,7 @@ class HerramientaController extends Controller
             'type_id' => 'required|exists:herramientas_entrenamiento_type,id',
             'status' => 'required|string|max:255',
             'audio' => 'required|mimes:mp3,wav,aac|max:10240', // Validación del archivo de audio
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -116,12 +117,22 @@ class HerramientaController extends Controller
             $audioPath = $request->file('audio')->move(public_path('audios/herramientas'), $request->file('audio')->getClientOriginalName());
         }
 
+           // Manejar la carga de la imagen
+           $imageName = null;
+           if ($request->hasFile('image')) {
+               $image = $request->file('image');
+               $imageName = time() . '.' . $image->getClientOriginalExtension();
+               $image->move(public_path('images/herramientas'), $imageName);
+           }
+
         Herramienta::create([
             'name' => $request->name,
             'description' => $request->description,
             'type_id' => $request->type_id,
             'status' => $request->status,
             'audio' => 'audios/herramientas/' . $request->file('audio')->getClientOriginalName(),
+            'image' => $imageName ? 'images/herramientas/' . $imageName : null,
+            'progress' => 0
         ]);
 
         return redirect()->route('backend.herramientas_entrenamiento.index')->with('success', __('Herramienta de entrenamiento creada exitosamente.'));
@@ -142,6 +153,7 @@ class HerramientaController extends Controller
             'type_id' => 'required|exists:herramientas_entrenamiento_type,id',
             'status' => 'required|in:active,inactive',
             'audio' => 'nullable|mimes:mp3,wav',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -149,7 +161,7 @@ class HerramientaController extends Controller
         }
 
         $herramienta = Herramienta::findOrFail($herramientas_entrenamiento);
-        
+
         $herramienta->name = $request->input('name');
         $herramienta->description = $request->input('description');
         $herramienta->type_id = $request->input('type_id');
@@ -159,6 +171,14 @@ class HerramientaController extends Controller
             $audioPath = $request->file('audio')->store('audios/herramientas', 'public');
             $herramienta->audio = 'audios/herramientas/' . basename($audioPath);
         }
+          // Manejar la carga de la imagen
+          if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/herramientas'), $imageName);
+            $herramienta->image = 'images/herramientas/' . $imageName;
+        }
+
 
         $herramienta->save();
 
@@ -185,7 +205,7 @@ class HerramientaController extends Controller
 
     public function icon_index_data (DataTables $datatable, Request $request) {
         $herramientas = HerramientaType::query();
-        
+
         $filter = $request->filter;
 
         if (isset($filter)) {

@@ -35,6 +35,14 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="image" class="form-label">{{ __('herramientas_entrenamiento.image') }}</label>
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*" required>
+                    @error('image')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label for="status" class="form-label">{{ __('herramientas_entrenamiento.status') }}</label>
                     <select class="form-control" id="status" name="status" required>
                         <option value="active">{{ __('herramientas_entrenamiento.Activo') }}</option>

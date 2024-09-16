@@ -64,6 +64,14 @@
                     @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label for="image" class="form-label">{{ __('herramientas_entrenamiento.image') }}</label>
+                    <input type="file" class="form-control" id="image" name="image">
+                    @if ($herramienta->image)
+                        <img src="{{ asset($herramienta->image) }}" alt="Imagen del Curso" class="img-thumbnail mt-2" style="width: 200px;">
+                    @endif
+                </div>
+
                 <button type="submit" class="btn btn-success">{{ __('herramientas_entrenamiento.Actualizar Herramienta') }}</button>
                 <a href="{{ route('backend.herramientas_entrenamiento.index') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
             </form>
