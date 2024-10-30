@@ -70,7 +70,7 @@ Route::get('branch-gallery', [BranchController::class, 'branchGallery']);
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard']);
+    Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard']);
 
     Route::post('branch/assign/{id}', [BranchController::class, 'assign_update']);
     Route::apiResource('branch', BranchController::class);
@@ -840,7 +840,7 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
      */
     Route::get('events/{id}', [EventController::class, 'show'])->name('events.show');
 
-     /**
+    /**
      * Crear un nuevo evento.
      * Método HTTP: POST
      * Ruta: /api/events
@@ -1361,1101 +1361,1135 @@ Route::get('employee-dashboard', [DashboardController::class, 'employeeDashboard
          * }
          */
         Route::delete('/{id}', [HerramientaController::class, 'destroy']);
-        });
-
-
-        /**
-         * Agregar un dueño compartido a una mascota.
-         * Método HTTP: POST
-         * Ruta: /api/pets/{petId}/shared-owners
-         * Descripción: Asocia un dueño secundario a una mascota específica utilizando el ID de la mascota y del usuario.
-         * Parámetros de Solicitud:
-         * - user_id (integer): El ID del usuario que se va a agregar como dueño compartido.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Shared owner added successfully"
-         * }
-         */
-        Route::post('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'addSharedOwner']);
-
-          /**
-         * Agregar un dueño compartido a una mascota usando el email.
-         * Método HTTP: POST
-         * Ruta: /api/pets/{petId}/shared-owners-with-email
-         * Descripción: Asocia un dueño secundario a una mascota específica utilizando el ID de la mascota y el correo del usuario.
-         * Parámetros de Solicitud:
-         * - email (string): El correo del usuario que se usara para buscar el id del mismo que se va a agregar como dueño compartido.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Shared owner added successfully"
-         * }
-         */
-        Route::post('/pets/{petId}/shared-owners-with-email', [SharedOwnerController::class, 'addSharedOwnerWithEmail']);
-
-        /**
-         * Eliminar un dueño compartido de una mascota.
-         * Método HTTP: DELETE
-         * Ruta: /api/pets/{petId}/shared-owners
-         * Descripción: Elimina la asociación de un dueño secundario con una mascota específica.
-         * Parámetros de Solicitud:
-         * - user_id (integer): El ID del usuario que se va a eliminar como dueño compartido.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Shared owner removed successfully"
-         * }
-         */
-        Route::delete('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'removeSharedOwner']);
-
-        /**
-         * Obtener los dueños de una mascota.
-         * Método HTTP: GET
-         * Ruta: /api/pets/{petId}/owners
-         * Descripción: Recupera el dueño principal y los dueños compartidos de una mascota específica.
-         * Respuesta Exitosa:
-         * {
-         *     "primary_owner": { ... },
-         *     "shared_owners": [ ... ]
-         * }
-         */
-        Route::get('/pets/{petId}/owners', [SharedOwnerController::class, 'getOwners']);
-
-        // Retorna una lista paginada de tipos de mascotas, filtrada por estado activo y una búsqueda opcional.
-        /**
-         * Obtener una lista de tipos de mascotas.
-         * Método HTTP: GET
-         * Ruta: /api/pet-types
-         * Descripción: Recupera una lista de tipos de mascotas, con soporte para paginación y búsqueda opcional.
-         * Parámetros de Solicitud:
-         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
-         * - search (string, opcional): Texto de búsqueda para filtrar tipos de mascotas por nombre.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [ ... ],
-         *     "message": "Lista de tipos de mascotas recuperada con éxito"
-         * }
-         */
-        Route::get('/pet-types', [PetController::class, 'petTypeList']);
-
-        // Retorna una lista paginada de mascotas de un usuario específico, filtrada por estado, tipo de mascota y búsqueda opcional.
-        /**
-         * Obtener una lista de mascotas.
-         * Método HTTP: GET
-         * Ruta: /api/pets
-         * Descripción: Recupera una lista de mascotas asociadas a un usuario, con soporte para paginación, filtrado por tipo de mascota y búsqueda opcional.
-         * Parámetros de Solicitud:
-         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
-         * - search (string, opcional): Texto de búsqueda para filtrar mascotas por nombre.
-         * - user_id (integer, opcional): ID del usuario para filtrar las mascotas por dueño. Por defecto, el usuario autenticado.
-         * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las mascotas.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [ ... ],
-         *     "message": "Lista de mascotas recuperada con éxito"
-         * }
-         */
-        Route::get('/pets', [PetController::class, 'petList']);
-
-        // Retorna una lista paginada de razas, filtrada por estado, tipo de mascota y búsqueda opcional en el nombre o descripción.
-        /**
-         * Obtener una lista de razas de mascotas.
-         * Método HTTP: GET
-         * Ruta: /api/breeds
-         * Descripción: Recupera una lista de razas, con soporte para paginación, filtrado por tipo de mascota y búsqueda opcional en nombre o descripción.
-         * Parámetros de Solicitud:
-         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
-         * - search (string, opcional): Texto de búsqueda para filtrar razas por nombre o descripción.
-         * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las razas.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [ ... ],
-         *     "message": "Lista de razas recuperada con éxito"
-         * }
-         */
-        Route::get('/breeds', [PetController::class, 'breedList']);
-
-        // Retorna una lista paginada de notas de mascotas, filtrada por estado, privacidad y tipo de usuario (usuario o administrador).
-        /**
-         * Obtener una lista de notas de mascotas.
-         * Método HTTP: GET
-         * Ruta: /api/pet-notes
-         * Descripción: Recupera una lista de notas de mascotas, con soporte para paginación, filtrado por estado, privacidad y tipo de usuario.
-         * Parámetros de Solicitud:
-         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
-         * - search (string, opcional): Texto de búsqueda para filtrar notas de mascotas por nombre.
-         * - pet_id (integer, opcional): ID de la mascota para filtrar las notas.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [ ... ],
-         *     "message": "Lista de notas de mascotas recuperada con éxito"
-         * }
-         */
-        Route::get('/pet-notes', [PetController::class, 'petNoteList']);
-
-        // Retorna una lista paginada de dueños y sus mascotas, basándose en un employee_id y los datos de reserva.
-        /**
-         * Obtener una lista de dueños y sus mascotas.
-         * Método HTTP: GET
-         * Ruta: /api/owner-pets
-         * Descripción: Recupera una lista de dueños y sus mascotas, basándose en un ID de empleado y los datos de reserva, con soporte para paginación.
-         * Parámetros de Solicitud:
-         * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
-         * - employee_id (integer, opcional): ID del empleado para filtrar las reservas. Por defecto, el empleado autenticado.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [ ... ],
-         *     "message": "Lista de dueños y mascotas recuperada con éxito"
-         * }
-         */
-        Route::get('/owner-pets', [PetController::class, 'OwnerPetList']);
-
-        // Retorna los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
-        /**
-         * Obtener detalles de una mascota específica.
-         * Método HTTP: GET
-         * Ruta: /api/pet-details
-         * Descripción: Recupera los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
-         * Parámetros de Solicitud:
-         * - pet_id (integer, opcional): ID de la mascota para recuperar los detalles. Obligatorio si no se pasa por URL.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": { ... },
-         *     "message": "Detalles de la mascota recuperados con éxito"
-         * }
-         */
-        Route::get('/pet-details', [PetController::class, 'PetDetails']);
-
-        /**
-         * Crear una nueva mascota.
-         * Método HTTP: POST
-         * Ruta: /api/pets
-         * Descripción: Crea una nueva mascota con los datos proporcionados. El campo 'breed_id' se valida primero, y si no es válido, se intenta validar 'breed_name'. Si ambos son inválidos, se devuelve un error.
-         * Parámetros de Solicitud:
-         * - name (string): Nombre de la mascota (requerido).
-         * - breed_id (integer, opcional): ID de la raza de la mascota. Si se proporciona y es inválido, se prueba con 'breed_name'.
-         * - breed_name (string, opcional): Nombre de la raza de la mascota. Se utiliza si 'breed_id' no es válido o no se proporciona.
-         * - size (string, opcional): Tamaño de la mascota.
-         * - date_of_birth (date, opcional): Fecha de nacimiento de la mascota. Formato: 'YYYY-MM-DD'.
-         * - age (string, opcional): Edad de la mascota.
-         * - gender (string, opcional): Género de la mascota. Valores permitidos: 'male', 'female'.
-         * - weight (numeric, opcional): Peso de la mascota.
-         * - height (numeric, opcional): Altura de la mascota.
-         * - weight_unit (string, opcional): Unidad de peso.
-         * - height_unit (string, opcional): Unidad de altura.
-         * - user_id (integer): ID del dueño de la mascota (requerido).
-         * - additional_info (string, opcional): Información adicional sobre la mascota.
-         * - status (boolean, opcional): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false. Por defecto es 1 (activo).
-         * - pet_image (string): Url de la magen de la mascota.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Mascota creada exitosamente",
-         *     "data": { ... }
-         * }
-         *
-         * Respuesta de Error (422):
-         * {
-         *     "message": "El breed_id o breed_name proporcionado no es válido."
-         *     // o
-         *     "message": "El usuario especificado no existe."
-         * }
-         */
-        Route::post('/pets', [PetController::class, 'store']);
-
-        /**
-         * Editar una mascota.
-         * Método HTTP: POST
-         * Ruta: /api/pets/{id}
-         * Descripción: Actualiza los datos de una mascota específica. Se puede enviar cualquier campo para ser actualizado.
-         * Parámetros de Solicitud (opcional):
-         * - name (string): Nombre de la mascota.
-         * - breed_id (integer): ID de la raza de la mascota.
-         * - breed_name (string): Nombre de la raza de la mascota.
-         * - size (string): Tamaño de la mascota.
-         * - date_of_birth (date): Fecha de nacimiento de la mascota. Formato: 'YYYY-MM-DD'.
-         * - age (string): Edad de la mascota.
-         * - gender (string): Género de la mascota. Valores permitidos: 'male', 'female'.
-         * - weight (numeric): Peso de la mascota.
-         * - height (numeric): Altura de la mascota.
-         * - weight_unit (string): Unidad de peso.
-         * - height_unit (string): Unidad de altura.
-         * - user_id (integer): ID del dueño de la mascota.
-         * - additional_info (string): Información adicional sobre la mascota.
-         * - status (boolean): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false.
-         * - pet_image (string): Url de la magen de la mascota.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Mascota actualizada exitosamente",
-         *     "data": { ... }
-         * }
-         *
-         * Respuesta de Error (422):
-         * {
-         *     "message": "El breed_id o breed_name proporcionado no es válido."
-         *     // o
-         *     "message": "El usuario especificado no existe."
-         * }
-         */
-        Route::post('/pets/{id}', [PetController::class, 'update']);
-
-        /**
-         * Ver detalles de una mascota.
-         * Método HTTP: GET
-         * Ruta: /api/pets/{id}
-         * Descripción: Recupera los detalles de una mascota específica por su ID.
-         * Parámetros de Solicitud: Ninguno
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": { ... },
-         *     "message": "Detalles de la mascota recuperados con éxito"
-         * }
-         *
-         * Respuesta de Error (404):
-         * {
-         *     "message": "Mascota no encontrada."
-         * }
-         */
-        Route::get('/pets/{id}', [PetController::class, 'show']);
-
-        /**
-         * Eliminar una mascota.
-         * Método HTTP: DELETE
-         * Ruta: /api/pets/{id}
-         * Descripción: Elimina una mascota específica por su ID.
-         * Parámetros de Solicitud: Ninguno
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Mascota eliminada exitosamente"
-         * }
-         *
-         * Respuesta de Error (404):
-         * {
-         *     "message": "Mascota no encontrada."
-         * }
-         */
-        Route::delete('/pets/{id}', [PetController::class, 'destroy']);
-
-        /**
-         * Obtener la lista de reservas.
-         * Método HTTP: GET
-         * Ruta: /api/bookings/get
-         * Descripción: Obtiene una lista de reservas filtradas según los parámetros proporcionados.
-         *
-         * Parámetros de Solicitud:
-         * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
-         * - booking_type: string (Opcional) - Tipo de reserva (e.g., 'training', 'veterinary').
-         * - nearby_booking: int (Opcional) - Si es 1, obtiene reservas cercanas.
-         * - system_service_name: string (Opcional) - Nombres de servicios del sistema, separados por comas.
-         * - status: string (Opcional) - Estados de reserva, separados por comas.
-         * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
-         * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
-         * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [
-         *         // Datos de las reservas
-         *     ],
-         *     "message": "Lista de reservas obtenida exitosamente."
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "status": false,
-         *     "message": "Error message"
-         * }
-         */
-        Route::get('/bookings/get', [BookingsController::class, 'bookingList'])->name('bookings.list');
-
-        /**
-         * Obtener la lista de reservas.
-         * Método HTTP: GET
-         * Ruta: /api/bookings/trainings/get
-         * Descripción: Obtiene una lista de reservas de entrenamientos filtradas según los parámetros proporcionados.
-         *
-         * Parámetros de Solicitud:
-         * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
-         * - nearby_booking: int (Opcional) - Si es 1, obtiene reservas cercanas.
-         * - system_service_name: string (Opcional) - Nombres de servicios del sistema, separados por comas.
-         * - status: string (Opcional) - Estados de reserva, separados por comas.
-         * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
-         * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
-         * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [
-         *         // Datos de las reservas
-         *     ],
-         *     "message": "Lista de reservas de entrenamiento obtenidas exitosamente."
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "status": false,
-         *     "message": "Error message"
-         * }
-         */
-        Route::get('/bookings/training/get', [BookingsController::class, 'bookingListTraining'])->name('bookings.list');
-
-        /**
-         * Crear o actualizar una reserva.
-         * Método HTTP: POST
-         * Ruta: /api/bookings/store
-         * Descripción: Crea o actualiza una reserva dependiendo de si se proporciona un ID en la solicitud.
-         *
-         * Parámetros de Solicitud:
-         * - booking_type: string (Requerido) - Tipo de reserva (e.g., 'veterinary', 'training')
-         * - date_time: string (Requerido) - Fecha y hora de la reserva
-         * - duration: string (Opcional) - Duración de la reserva
-         * - service_id: int (Opcional) - ID del servicio (solo para 'veterinary')
-         * - service_name: string (Opcional) - Nombre del servicio (solo para 'veterinary')
-         * - employee_id: int (Requerido) - ID del empleado (entrenador o veterinario)
-         * - reason: string (Opcional) - Razón de la consulta (solo para 'veterinary')
-         * - start_video_link: string (Opcional) - Enlace para iniciar la videollamada (solo para 'veterinary')
-         * - join_video_link: string (Opcional) - Enlace para unirse a la videollamada (solo para 'veterinary')
-         * - medical_report: file (Opcional) - Archivo del reporte médico (solo para 'veterinary')
-         * - training_id: int (Opcional) - ID del entrenamiento (solo para 'training')
-         * - user_id: int (Opcional) - ID del usuario (Se tomará el usuario autenticado, en caso de no estar definido)
-         * - service_amount: float - Monto del servicio
-         * - price: float - Precio del servicio
-         * - latitude: float (Opcional) - Para la notificación por ubicación
-         * - longitude: float (Opcional) - Para la notificación por ubicación
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "New Booking Added", // O "Booking Updated" si se actualizó una reserva existente
-         *     "status": true,
-         *     "data": object // Detalles de la reserva
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error message",
-         *     "status": false
-         * }
-         */
-        Route::post('/bookings/store', [BookingsController::class, 'store'])->name('bookings.store');
-
-        /**
-         * Actualizar el estado de una reserva.
-         * Método HTTP: PUT
-         * Ruta: /api/bookings/status
-         * Descripción: Actualiza el estado de una reserva existente por su ID.
-         *
-         * Parámetros de Solicitud:
-         * - id: int (Requerido) - ID de la reserva.
-         * - status: string (Requerido) - Nuevo estado de la reserva (completed, cancelled, in-progress, rejected, pending, confirmed).
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Estado de la reserva actualizado exitosamente",
-         *     "status": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error message",
-         *     "status": false
-         * }
-         */
-        Route::put('/bookings/status', [BookingsController::class, 'updateStatus'])->name('bookings.updateStatus');
-
-        /**
-         * Aceptar una reserva.
-         * Método HTTP: PUT
-         * Ruta: /api/bookings/status/confirmed
-         * Descripción: Acepta el estado de una reserva existente por su ID.
-         *
-         * Parámetros de Solicitud:
-         * - id: int (Requerido) - ID de la reserva.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Estado de la reserva actualizado exitosamente",
-         *     "status": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error message",
-         *     "status": false
-         * }
-         */
-        Route::put('/bookings/status/confirmed', [BookingsController::class, 'updateStatusConfirmed'])->name('bookings.updateStatusConfirmed');
-
-        /**
-         * Actualizar una reserva existente.
-         * Método HTTP: PUT
-         * Ruta: /api/bookings/{id}
-         * Descripción: Actualiza una reserva existente por su ID.
-         *
-         * Parámetros de Solicitud:
-         * - Cualquier parámetro que sea necesario para actualizar la reserva.
-         * - services: array (Opcional) - Servicios asociados a la reserva.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Reserva actualizada exitosamente",
-         *     "data": {
-         *         // Datos de la reserva actualizada
-         *     },
-         *     "status": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error message",
-         *     "status": false
-         * }
-         */
-        Route::put('/bookings/{id}', [BookingsController::class, 'update'])->name('bookings.update');
-
-        /**
-         * Obtener los detalles de una reserva.
-         * Método HTTP: GET
-         * Ruta: /api/bookings/detail
-         * Descripción: Obtiene los detalles de una reserva específica por su ID.
-         *
-         * Parámetros de Solicitud:
-         * - id: int (Requerido) - ID de la reserva.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": {
-         *         // Datos de la reserva
-         *     },
-         *     "customer_review": {
-         *         // Reseña del cliente
-         *     },
-         *     "message": "Detalles de la reserva obtenidos exitosamente."
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "status": false,
-         *     "message": "Reserva no encontrada."
-         * }
-         */
-        Route::get('/bookings/detail', [BookingsController::class, 'bookingDetail'])->name('bookings.detail');
-
-        /**
-         * Obtener la lista de estados de reservas.
-         * Método HTTP: GET
-         * Ruta: /api/bookings/status-list
-         * Descripción: Obtiene la lista de todos los estados de reservas.
-         *
-         * Parámetros de Solicitud: Ninguno
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [
-         *         {
-         *             "status": "estado",
-         *             "title": "título",
-         *             "is_disabled": boolean,
-         *             "next_status": "siguiente_estado" (opcional)
-         *         },
-         *         // Otros estados...
-         *     ],
-         *     "message": "Lista de estados de reservas obtenida exitosamente."
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "status": false,
-         *     "message": "Error message"
-         * }
-         */
-        Route::get('/bookings/status-list', [BookingsController::class, 'statusList'])->name('bookings.statusList');
-
-        /**
-         * Aceptar una reserva.
-         * Método HTTP: PUT
-         * Ruta: /api/bookings/accept/{id}
-         * Descripción: Permite que un empleado acepte una reserva, asignando su ID a la reserva y actualizando el estado de la solicitud.
-         *
-         * Parámetros de Solicitud:
-         * - {id}: int (Requerido) - ID de la reserva a aceptar.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Reserva aceptada exitosamente.",
-         *     "status": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "status": false,
-         *     "message": "La reserva ya ha sido aceptada."
-         * }
-         */
-        Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
-
-        /**
-         * Crear un nuevo servicio de entrenamiento.
-         * Método HTTP: POST
-         * Ruta: /api/service-training
-         * Descripción: Crea un nuevo servicio de entrenamiento y genera automáticamente un slug único a partir del nombre.
-         *
-         * Parámetros de Solicitud:
-         * - name: string (Requerido) - El nombre del servicio de entrenamiento.
-         * - description: string (Opcional) - La descripción del servicio de entrenamiento.
-         * - status: boolean (Opcional) - El estado del servicio de entrenamiento.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Formulario de creación de servicio enviado con éxito.",
-         *     "status": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Mensaje de error",
-         *     "status": false
-         * }
-         */
-        Route::post('/service-training', [ServiceTrainingController::class, 'store'])->name('service-training.store');
-
-        /**
-         * Obtener la lista de servicios de entrenamiento.
-         * Método HTTP: GET
-         * Ruta: /api/service-training/get
-         * Descripción: Obtiene una lista paginada de servicios de entrenamiento activos con opción de búsqueda.
-         *
-         * Parámetros de Solicitud:
-         * - per_page: int (Opcional) - Número de resultados por página. Predeterminado es 10.
-         * - search: string (Opcional) - Término de búsqueda para filtrar servicios de entrenamiento por nombre o descripción.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "status": true,
-         *     "data": [
-         *         {
-         *             "id": 1,
-         *             "slug": "entrenamiento-basico",
-         *             "name": "Entrenamiento Básico",
-         *             "description": "Un curso de entrenamiento básico para perros.",
-         *             "status": 1,
-         *             "created_by": null,
-         *             "updated_by": null,
-         *             "deleted_by": null,
-         *             "created_at": "2023-01-01T00:00:00.000000Z",
-         *             "updated_at": "2023-01-01T00:00:00.000000Z",
-         *             "deleted_at": null
-         *         },
-         *         // Otros servicios de entrenamiento...
-         *     ],
-         *     "message": "Lista de servicios de entrenamiento obtenida con éxito."
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "status": false,
-         *     "message": "Mensaje de error"
-         * }
-         */
-        Route::get('/service-training/get', [ServiceTrainingController::class, 'trainingList'])->name('service-training.list');
-
-        /**
-         * Obtener la lista de veterinarios para una mascota.
-         * Método HTTP: GET
-         * Ruta: /api/list-veterinaries/{petId}
-         * Descripción: Devuelve una lista de consultas veterinarias completadas para una mascota específica.
-         *
-         * Parámetros de Ruta:
-         * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las consultas veterinarias.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": [
-         *         {
-         *             "id": int, // ID de la reserva
-         *             "pet_id": int, // ID de la mascota
-         *             "status": string, // Estado de la reserva ('completed')
-         *             "booking_type": string, // Tipo de reserva ('veterinary')
-         *             // Otros detalles adicionales de la reserva...
-         *         },
-         *         // Más objetos de reserva...
-         *     ],
-         *     "message": "Lista de veterinarios.",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "error": "Error message",
-         *     "status": false
-         * }
-         */
-        Route::get('/list-veterinaries/{petId}', [VeterinaryController::class, 'listVeterinaries']);
-
-        /**
-         * Obtener la lista de entrenadores para una mascota.
-         * Método HTTP: GET
-         * Ruta: /api/list-trainers/{petId}
-         * Descripción: Devuelve una lista de sesiones de entrenamiento completadas para una mascota específica.
-         *
-         * Parámetros de Ruta:
-         * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las sesiones de entrenamiento.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": [
-         *         {
-         *             "id": int, // ID de la reserva de entrenamiento
-         *             "pet_id": int, // ID de la mascota
-         *             "status": string, // Estado de la reserva ('completed')
-         *             "booking_type": string, // Tipo de reserva ('training')
-         *             // Otros detalles adicionales de la reserva...
-         *         },
-         *         // Más objetos de reserva...
-         *     ],
-         *     "message": "List of trainers.",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "error": "Error message",
-         *     "status": false
-         * }
-         */
-        Route::get('/list-trainers/{petId}', [TrainerController::class, 'listTrainers']);
-
-        /**
-         * Obtener la lista combinada de reservas completadas de entrenadores y veterinarios para una mascota.
-         *
-         * Método HTTP: GET
-         * Ruta: /api/list-trainers-veterinaries/{petId}
-         * Descripción: Devuelve una lista combinada de reservas completadas de tipo 'training' y 'veterinary' para una mascota específica.
-         *
-         * Parámetros de Ruta:
-         * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las reservas.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": [
-         *         {
-         *             "id": int, // ID de la reserva
-         *             "pet_id": int, // ID de la mascota
-         *             "status": string, // Estado de la reserva ('completed')
-         *             "booking_type": string, // Tipo de reserva ('training' o 'veterinary')
-         *             // Otros detalles adicionales de la reserva...
-         *         },
-         *         // Más objetos de reserva...
-         *     ],
-         *     "message": "Lista de reservaciones de entrenadores y veterinarios",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error message",
-         *     "success": false
-         * }
-         */
-        Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
-
-        /**
-         * Obtener la lista de todos los chips.
-         *
-         * Método HTTP: GET
-         * Ruta: /api/chips
-         * Descripción: Devuelve una lista de todos los chips disponibles en la base de datos, incluyendo los detalles de la mascota y el fabricante asociados.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": [
-         *         {
-         *             "id": int, // ID del chip
-         *             "num_identificacion": int, // Número de identificación del chip
-         *             "pet_id": int, // ID de la mascota asociada
-         *             "fecha_implantacion": string, // Fecha de implantación del chip
-         *             "fabricante_id": int, // ID del fabricante del chip
-         *             "num_contacto": string, // Número de contacto asociado al chip
-         *             "pet": { // Detalles de la mascota
-         *                 "id": int,
-         *                 "name": string,
-         *                 // Otros detalles de la mascota...
-         *             },
-         *             "fabricante": { // Detalles del fabricante
-         *                 "id": int,
-         *                 "nombre": string,
-         *                 // Otros detalles del fabricante...
-         *             }
-         *         },
-         *         // Más objetos de chip...
-         *     ],
-         *     "message": "Lista de todos los chips",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error message",
-         *     "success": false
-         * }
-         */
-        Route::get('/chips', [ChipsController::class, 'index']);
-
-        /**
-         * Obtener los detalles de un chip específico.
-         *
-         * Método HTTP: GET
-         * Ruta: /api/chips/{id}
-         * Descripción: Devuelve los detalles de un chip específico identificado por su ID.
-         *
-         * Parámetros de Ruta:
-         * - id: int (Requerido) - ID del chip que se desea consultar.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": {
-         *         "id": int, // ID del chip
-         *         "num_identificacion": int, // Número de identificación del chip
-         *         "pet_id": int, // ID de la mascota asociada
-         *         "fecha_implantacion": string, // Fecha de implantación del chip
-         *         "fabricante_id": int, // ID del fabricante del chip
-         *         "num_contacto": string, // Número de contacto asociado al chip
-         *         "pet": { // Detalles de la mascota
-         *             "id": int,
-         *             "name": string,
-         *             // Otros detalles de la mascota...
-         *         },
-         *         "fabricante": { // Detalles del fabricante
-         *             "id": int,
-         *             "nombre": string,
-         *             // Otros detalles del fabricante...
-         *         }
-         *     },
-         *     "message": "Detalles del chip",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Chip no encontrado",
-         *     "success": false
-         * }
-         */
-        Route::get('/chips/{id}', [ChipsController::class, 'show']);
-
-        /**
-         * Crear un nuevo chip.
-         *
-         * Método HTTP: POST
-         * Ruta: /api/chips
-         * Descripción: Permite crear un nuevo chip en la base de datos.
-         *
-         * Parámetros de Solicitud (Body):
-         * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
-         * - pet_id: int (Requerido) - ID de la mascota asociada al chip.
-         * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
-         * - fabricante_id: int (Requerido) - ID del fabricante del chip.
-         * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": {
-         *         "id": int, // ID del chip recién creado
-         *         "num_identificacion": int, // Número de identificación del chip
-         *         "pet_id": int, // ID de la mascota asociada
-         *         "fecha_implantacion": string, // Fecha de implantación del chip
-         *         "fabricante_id": int, // ID del fabricante del chip
-         *         "num_contacto": string, // Número de contacto asociado al chip
-         *     },
-         *     "message": "Chip creado exitosamente",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error al crear el chip",
-         *     "success": false
-         * }
-         */
-        Route::post('/chips', [ChipsController::class, 'store']);
-
-        /**
-         * Actualizar un chip existente.
-         *
-         * Método HTTP: PUT
-         * Ruta: /api/chips/{id}
-         * Descripción: Permite actualizar los detalles de un chip específico identificado por su ID.
-         *
-         * Parámetros de Ruta:
-         * - id: int (Requerido) - ID del chip que se desea actualizar.
-         *
-         * Parámetros de Solicitud (Body):
-         * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
-         * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
-         * - fabricante_id: int (Requerido) - ID del fabricante del chip.
-         * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": {
-         *         "id": int, // ID del chip actualizado
-         *         "num_identificacion": int, // Número de identificación del chip
-         *         "pet_id": int, // ID de la mascota asociada
-         *         "fecha_implantacion": string, // Fecha de implantación del chip
-         *         "fabricante_id": int, // ID del fabricante del chip
-         *         "num_contacto": string, // Número de contacto asociado al chip
-         *     },
-         *     "message": "Chip actualizado exitosamente",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error al actualizar el chip",
-         *     "success": false
-         * }
-         */
-        Route::put('/chips/{id}', [ChipsController::class, 'update']);
-
-        /**
-         * Eliminar un chip.
-         *
-         * Método HTTP: DELETE
-         * Ruta: /api/chips/{id}
-         * Descripción: Permite eliminar un chip específico identificado por su ID.
-         *
-         * Parámetros de Ruta:
-         * - id: int (Requerido) - ID del chip que se desea eliminar.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Chip eliminado exitosamente",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error al eliminar el chip",
-         *     "success": false
-         * }
-         */
-        Route::delete('/chips/{id}', [ChipsController::class, 'destroy']);
-
-        /**
-         * Obtener el chip asociado a una mascota específica.
-         *
-         * Método HTTP: GET
-         * Ruta: /api/pets/{pet_id}/chip
-         * Descripción: Devuelve el chip asociado a la mascota identificada por su `pet_id`.
-         *
-         * Parámetros de Ruta:
-         * - pet_id: int (Requerido) - ID de la mascota para la cual se desea obtener el chip.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": {
-         *         "id": int, // ID del chip
-         *         "num_identificacion": int, // Número de identificación del chip
-         *         "pet_id": int, // ID de la mascota asociada
-         *         "fecha_implantacion": string, // Fecha de implantación del chip
-         *         "fabricante_id": int, // ID del fabricante del chip
-         *         "num_contacto": string, // Número de contacto asociado al chip
-         *         "pet": { // Detalles de la mascota
-         *             "id": int,
-         *             "name": string,
-         *             // Otros detalles de la mascota...
-         *         },
-         *         "fabricante": { // Detalles del fabricante
-         *             "id": int,
-         *             "nombre": string,
-         *             // Otros detalles del fabricante...
-         *         }
-         *     },
-         *     "message": "Detalles del chip asociado a la mascota",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Chip no encontrado para la mascota especificada",
-         *     "success": false
-         * }
-         */
-        Route::get('/pets/{pet_id}/chip', [ChipsController::class, 'getChipByPet']);
-
-        /**
-         * Obtener los niveles de actividad de una mascota específica.
-         *
-         * Método HTTP: GET
-         * Ruta: /api/pets/{pet_id}/activity-levels
-         * Descripción: Devuelve todos los registros de niveles de actividad asociados a la mascota identificada por su `pet_id`.
-         *
-         * Parámetros de Ruta:
-         * - pet_id: int (Requerido) - ID de la mascota para la cual se desean obtener los niveles de actividad.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": [
-         *         {
-         *             "id": int, // ID del nivel de actividad
-         *             "pet_id": int, // ID de la mascota
-         *             "daily_steps": int, // Número de pasos diarios
-         *             "distance_covered": float, // Distancia recorrida en kilómetros
-         *             "calories_burned": int, // Calorías quemadas
-         *             "active_minutes": int, // Minutos de actividad física
-         *             "goal_steps": int, // Meta de pasos diarios
-         *             "goal_distance": float, // Meta de distancia recorrida en kilómetros
-         *             "goal_calories": int, // Meta de calorías quemadas
-         *             "goal_active_minutes": int, // Meta de minutos de actividad física
-         *         },
-         *         // Más registros de niveles de actividad...
-         *     ],
-         *     "message": "Lista de niveles de actividad de la mascota",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Niveles de actividad no encontrados para la mascota especificada",
-         *     "success": false
-         * }
-         */
-        Route::get('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'index']);
-
-        /**
-         * Crear un nuevo nivel de actividad para una mascota específica.
-         *
-         * Método HTTP: POST
-         * Ruta: /api/pets/{pet_id}/activity-levels
-         * Descripción: Crea un nuevo registro de nivel de actividad para la mascota identificada por su `pet_id`.
-         *
-         * Parámetros de Ruta:
-         * - pet_id: int (Requerido) - ID de la mascota para la cual se va a crear el nivel de actividad.
-         *
-         * Parámetros del Cuerpo (Body):
-         * - daily_steps: int (Opcional) - Número de pasos diarios.
-         * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
-         * - calories_burned: int (Opcional) - Calorías quemadas.
-         * - active_minutes: int (Opcional) - Minutos de actividad física.
-         * - goal_steps: int (Opcional) - Meta de pasos diarios.
-         * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
-         * - goal_calories: int (Opcional) - Meta de calorías quemadas.
-         * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": {
-         *         "id": int, // ID del nivel de actividad creado
-         *         "pet_id": int, // ID de la mascota
-         *         "daily_steps": int, // Número de pasos diarios
-         *         "distance_covered": float, // Distancia recorrida en kilómetros
-         *         "calories_burned": int, // Calorías quemadas
-         *         "active_minutes": int, // Minutos de actividad física
-         *         "goal_steps": int, // Meta de pasos diarios
-         *         "goal_distance": float, // Meta de distancia recorrida en kilómetros
-         *         "goal_calories": int, // Meta de calorías quemadas
-         *         "goal_active_minutes": int, // Meta de minutos de actividad física
-         *     },
-         *     "message": "Nivel de actividad creado exitosamente",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error al crear el nivel de actividad",
-         *     "success": false
-         * }
-         */
-        Route::post('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'store']);
-
-        /**
-         * Actualizar un nivel de actividad existente para una mascota específica.
-         *
-         * Método HTTP: PUT
-         * Ruta: /api/activity-levels/{id}
-         * Descripción: Actualiza un registro de nivel de actividad para la mascota identificada por su `id`.
-         *
-         * Parámetros de Ruta:
-         * - id: int (Requerido) - ID del nivel de actividad que se va a actualizar.
-         *
-         * Parámetros del Cuerpo (Body):
-         * - daily_steps: int (Opcional) - Número de pasos diarios.
-         * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
-         * - calories_burned: int (Opcional) - Calorías quemadas.
-         * - active_minutes: int (Opcional) - Minutos de actividad física.
-         * - goal_steps: int (Opcional) - Meta de pasos diarios.
-         * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
-         * - goal_calories: int (Opcional) - Meta de calorías quemadas.
-         * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "data": {
-         *         "id": int, // ID del nivel de actividad actualizado
-         *         "pet_id": int, // ID de la mascota
-         *         "daily_steps": int, // Número de pasos diarios
-         *         "distance_covered": float, // Distancia recorrida en kilómetros
-         *         "calories_burned": int, // Calorías quemadas
-         *         "active_minutes": int, // Minutos de actividad física
-         *         "goal_steps": int, // Meta de pasos diarios
-         *         "goal_distance": float, // Meta de distancia recorrida en kilómetros
-         *         "goal_calories": int, // Meta de calorías quemadas
-         *         "goal_active_minutes": int, // Meta de minutos de actividad física
-         *     },
-         *     "message": "Nivel de actividad actualizado exitosamente",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error al actualizar el nivel de actividad",
-         *     "success": false
-         * }
-         */
-        Route::put('/activity-levels/{id}', [ActivityLevelController::class, 'update']);
-
-        /**
-         * Eliminar un nivel de actividad para una mascota específica.
-         *
-         * Método HTTP: DELETE
-         * Ruta: /api/activity-levels/{id}
-         * Descripción: Elimina un registro de nivel de actividad identificado por su `id`.
-         *
-         * Parámetros de Ruta:
-         * - id: int (Requerido) - ID del nivel de actividad que se va a eliminar.
-         *
-         * Respuesta Exitosa:
-         * {
-         *     "message": "Nivel de actividad eliminado exitosamente",
-         *     "success": true
-         * }
-         *
-         * Respuesta de Error:
-         * {
-         *     "message": "Error al eliminar el nivel de actividad",
-         *     "success": false
-         * }
-         */
-        Route::delete('/activity-levels/{id}', [ActivityLevelController::class, 'destroy']);
     });
-Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
+
+    /**
+     * Agregar un dueño compartido a una mascota.
+     * Método HTTP: POST
+     * Ruta: /api/pets/{petId}/shared-owners
+     * Descripción: Asocia un dueño secundario a una mascota específica utilizando el ID de la mascota y del usuario.
+     * Parámetros de Solicitud:
+     * - user_id (integer): El ID del usuario que se va a agregar como dueño compartido.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Shared owner added successfully"
+     * }
+     */
+    Route::post('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'addSharedOwner']);
+
+    /**
+     * Agregar un dueño compartido a una mascota usando el email.
+     * Método HTTP: POST
+     * Ruta: /api/pets/{petId}/shared-owners-with-email
+     * Descripción: Asocia un dueño secundario a una mascota específica utilizando el ID de la mascota y el correo del usuario.
+     * Parámetros de Solicitud:
+     * - email (string): El correo del usuario que se usara para buscar el id del mismo que se va a agregar como dueño compartido.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Shared owner added successfully"
+     * }
+     */
+    Route::post('/pets/{petId}/shared-owners-with-email', [SharedOwnerController::class, 'addSharedOwnerWithEmail']);
+
+    /**
+     * Eliminar un dueño compartido de una mascota.
+     * Método HTTP: DELETE
+     * Ruta: /api/pets/{petId}/shared-owners
+     * Descripción: Elimina la asociación de un dueño secundario con una mascota específica.
+     * Parámetros de Solicitud:
+     * - user_id (integer): El ID del usuario que se va a eliminar como dueño compartido.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Shared owner removed successfully"
+     * }
+     */
+    Route::delete('/pets/{petId}/shared-owners', [SharedOwnerController::class, 'removeSharedOwner']);
+
+    /**
+     * Obtener los dueños de una mascota.
+     * Método HTTP: GET
+     * Ruta: /api/pets/{petId}/owners
+     * Descripción: Recupera el dueño principal y los dueños compartidos de una mascota específica.
+     * Respuesta Exitosa:
+     * {
+     *     "primary_owner": { ... },
+     *     "shared_owners": [ ... ]
+     * }
+     */
+    Route::get('/pets/{petId}/owners', [SharedOwnerController::class, 'getOwners']);
+
+    // Retorna una lista paginada de tipos de mascotas, filtrada por estado activo y una búsqueda opcional.
+    /**
+     * Obtener una lista de tipos de mascotas.
+     * Método HTTP: GET
+     * Ruta: /api/pet-types
+     * Descripción: Recupera una lista de tipos de mascotas, con soporte para paginación y búsqueda opcional.
+     * Parámetros de Solicitud:
+     * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+     * - search (string, opcional): Texto de búsqueda para filtrar tipos de mascotas por nombre.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [ ... ],
+     *     "message": "Lista de tipos de mascotas recuperada con éxito"
+     * }
+     */
+    Route::get('/pet-types', [PetController::class, 'petTypeList']);
+
+    // Retorna una lista paginada de mascotas de un usuario específico, filtrada por estado, tipo de mascota y búsqueda opcional.
+    /**
+     * Obtener una lista de mascotas.
+     * Método HTTP: GET
+     * Ruta: /api/pets
+     * Descripción: Recupera una lista de mascotas asociadas a un usuario, con soporte para paginación, filtrado por tipo de mascota y búsqueda opcional.
+     * Parámetros de Solicitud:
+     * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+     * - search (string, opcional): Texto de búsqueda para filtrar mascotas por nombre.
+     * - user_id (integer, opcional): ID del usuario para filtrar las mascotas por dueño. Por defecto, el usuario autenticado.
+     * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las mascotas.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [ ... ],
+     *     "message": "Lista de mascotas recuperada con éxito"
+     * }
+     */
+    Route::get('/pets', [PetController::class, 'petList']);
+
+    // Retorna una lista paginada de razas, filtrada por estado, tipo de mascota y búsqueda opcional en el nombre o descripción.
+    /**
+     * Obtener una lista de razas de mascotas.
+     * Método HTTP: GET
+     * Ruta: /api/breeds
+     * Descripción: Recupera una lista de razas, con soporte para paginación, filtrado por tipo de mascota y búsqueda opcional en nombre o descripción.
+     * Parámetros de Solicitud:
+     * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+     * - search (string, opcional): Texto de búsqueda para filtrar razas por nombre o descripción.
+     * - pettype_id (integer, opcional): ID del tipo de mascota para filtrar las razas.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [ ... ],
+     *     "message": "Lista de razas recuperada con éxito"
+     * }
+     */
+    Route::get('/breeds', [PetController::class, 'breedList']);
+
+    // Retorna una lista paginada de notas de mascotas, filtrada por estado, privacidad y tipo de usuario (usuario o administrador).
+    /**
+     * Obtener una lista de notas de mascotas.
+     * Método HTTP: GET
+     * Ruta: /api/pet-notes
+     * Descripción: Recupera una lista de notas de mascotas, con soporte para paginación, filtrado por estado, privacidad y tipo de usuario.
+     * Parámetros de Solicitud:
+     * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+     * - search (string, opcional): Texto de búsqueda para filtrar notas de mascotas por nombre.
+     * - pet_id (integer, opcional): ID de la mascota para filtrar las notas.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [ ... ],
+     *     "message": "Lista de notas de mascotas recuperada con éxito"
+     * }
+     */
+    Route::get('/pet-notes', [PetController::class, 'petNoteList']);
+
+    // Retorna una lista paginada de dueños y sus mascotas, basándose en un employee_id y los datos de reserva.
+    /**
+     * Obtener una lista de dueños y sus mascotas.
+     * Método HTTP: GET
+     * Ruta: /api/owner-pets
+     * Descripción: Recupera una lista de dueños y sus mascotas, basándose en un ID de empleado y los datos de reserva, con soporte para paginación.
+     * Parámetros de Solicitud:
+     * - per_page (integer, opcional): Número de resultados por página. Por defecto 10.
+     * - employee_id (integer, opcional): ID del empleado para filtrar las reservas. Por defecto, el empleado autenticado.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [ ... ],
+     *     "message": "Lista de dueños y mascotas recuperada con éxito"
+     * }
+     */
+    Route::get('/owner-pets', [PetController::class, 'OwnerPetList']);
+
+    // Retorna los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
+    /**
+     * Obtener detalles de una mascota específica.
+     * Método HTTP: GET
+     * Ruta: /api/pet-details
+     * Descripción: Recupera los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
+     * Parámetros de Solicitud:
+     * - pet_id (integer, opcional): ID de la mascota para recuperar los detalles. Obligatorio si no se pasa por URL.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": { ... },
+     *     "message": "Detalles de la mascota recuperados con éxito"
+     * }
+     */
+    Route::get('/pet-details', [PetController::class, 'PetDetails']);
+
+    /**
+     * Crear una nueva mascota.
+     * Método HTTP: POST
+     * Ruta: /api/pets
+     * Descripción: Crea una nueva mascota con los datos proporcionados. El campo 'breed_id' se valida primero, y si no es válido, se intenta validar 'breed_name'. Si ambos son inválidos, se devuelve un error.
+     * Parámetros de Solicitud:
+     * - name (string): Nombre de la mascota (requerido).
+     * - breed_id (integer, opcional): ID de la raza de la mascota. Si se proporciona y es inválido, se prueba con 'breed_name'.
+     * - breed_name (string, opcional): Nombre de la raza de la mascota. Se utiliza si 'breed_id' no es válido o no se proporciona.
+     * - size (string, opcional): Tamaño de la mascota.
+     * - date_of_birth (date, opcional): Fecha de nacimiento de la mascota. Formato: 'YYYY-MM-DD'.
+     * - age (string, opcional): Edad de la mascota.
+     * - gender (string, opcional): Género de la mascota. Valores permitidos: 'male', 'female'.
+     * - weight (numeric, opcional): Peso de la mascota.
+     * - height (numeric, opcional): Altura de la mascota.
+     * - weight_unit (string, opcional): Unidad de peso.
+     * - height_unit (string, opcional): Unidad de altura.
+     * - user_id (integer): ID del dueño de la mascota (requerido).
+     * - additional_info (string, opcional): Información adicional sobre la mascota.
+     * - status (boolean, opcional): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false. Por defecto es 1 (activo).
+     * - pet_image (string): Url de la magen de la mascota.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Mascota creada exitosamente",
+     *     "data": { ... }
+     * }
+     *
+     * Respuesta de Error (422):
+     * {
+     *     "message": "El breed_id o breed_name proporcionado no es válido."
+     *     // o
+     *     "message": "El usuario especificado no existe."
+     * }
+     */
+    Route::post('/pets', [PetController::class, 'store']);
+
+    /**
+     * Editar una mascota.
+     * Método HTTP: POST
+     * Ruta: /api/pets/{id}
+     * Descripción: Actualiza los datos de una mascota específica. Se puede enviar cualquier campo para ser actualizado.
+     * Parámetros de Solicitud (opcional):
+     * - name (string): Nombre de la mascota.
+     * - breed_id (integer): ID de la raza de la mascota.
+     * - breed_name (string): Nombre de la raza de la mascota.
+     * - size (string): Tamaño de la mascota.
+     * - date_of_birth (date): Fecha de nacimiento de la mascota. Formato: 'YYYY-MM-DD'.
+     * - age (string): Edad de la mascota.
+     * - gender (string): Género de la mascota. Valores permitidos: 'male', 'female'.
+     * - weight (numeric): Peso de la mascota.
+     * - height (numeric): Altura de la mascota.
+     * - weight_unit (string): Unidad de peso.
+     * - height_unit (string): Unidad de altura.
+     * - user_id (integer): ID del dueño de la mascota.
+     * - additional_info (string): Información adicional sobre la mascota.
+     * - status (boolean): Estado activo o inactivo de la mascota. Valores permitidos: 1 o 0, true o false.
+     * - pet_image (string): Url de la magen de la mascota.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Mascota actualizada exitosamente",
+     *     "data": { ... }
+     * }
+     *
+     * Respuesta de Error (422):
+     * {
+     *     "message": "El breed_id o breed_name proporcionado no es válido."
+     *     // o
+     *     "message": "El usuario especificado no existe."
+     * }
+     */
+    Route::post('/pets/{id}', [PetController::class, 'update']);
+
+    /**
+     * Ver detalles de una mascota.
+     * Método HTTP: GET
+     * Ruta: /api/pets/{id}
+     * Descripción: Recupera los detalles de una mascota específica por su ID.
+     * Parámetros de Solicitud: Ninguno
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": { ... },
+     *     "message": "Detalles de la mascota recuperados con éxito"
+     * }
+     *
+     * Respuesta de Error (404):
+     * {
+     *     "message": "Mascota no encontrada."
+     * }
+     */
+    Route::get('/pets/{id}', [PetController::class, 'show']);
+
+    /**
+     * Eliminar una mascota.
+     * Método HTTP: DELETE
+     * Ruta: /api/pets/{id}
+     * Descripción: Elimina una mascota específica por su ID.
+     * Parámetros de Solicitud: Ninguno
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Mascota eliminada exitosamente"
+     * }
+     *
+     * Respuesta de Error (404):
+     * {
+     *     "message": "Mascota no encontrada."
+     * }
+     */
+    Route::delete('/pets/{id}', [PetController::class, 'destroy']);
+
+    /**
+     * Obtener la lista de reservas.
+     * Método HTTP: GET
+     * Ruta: /api/bookings/get
+     * Descripción: Obtiene una lista de reservas filtradas según los parámetros proporcionados.
+     *
+     * Parámetros de Solicitud:
+     * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
+     * - booking_type: string (Opcional) - Tipo de reserva (e.g., 'training', 'veterinary').
+     * - nearby_booking: int (Opcional) - Si es 1, obtiene reservas cercanas.
+     * - system_service_name: string (Opcional) - Nombres de servicios del sistema, separados por comas.
+     * - status: string (Opcional) - Estados de reserva, separados por comas.
+     * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
+     * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
+     * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [
+     *         // Datos de las reservas
+     *     ],
+     *     "message": "Lista de reservas obtenida exitosamente."
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Error message"
+     * }
+     */
+    Route::get('/bookings/get', [BookingsController::class, 'bookingList'])->name('bookings.list');
+
+    /**
+     * Obtener la lista de reservas.
+     * Método HTTP: GET
+     * Ruta: /api/bookings/trainings/get
+     * Descripción: Obtiene una lista de reservas de entrenamientos filtradas según los parámetros proporcionados.
+     *
+     * Parámetros de Solicitud:
+     * - user_id: int (Opcional) - ID del usuario (En caso, de no estar colocado, recibira las reservaciones del usuario que este autenticado).
+     * - nearby_booking: int (Opcional) - Si es 1, obtiene reservas cercanas.
+     * - system_service_name: string (Opcional) - Nombres de servicios del sistema, separados por comas.
+     * - status: string (Opcional) - Estados de reserva, separados por comas.
+     * - per_page: int|string (Opcional) - Número de resultados por página o 'all' para todos los resultados.
+     * - order_by: string (Opcional) - Orden de los resultados ('asc' o 'desc').
+     * - search: string (Opcional) - Término de búsqueda para filtrar reservas por ID, nombre de mascota, nombre de empleado o nombre de usuario.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [
+     *         // Datos de las reservas
+     *     ],
+     *     "message": "Lista de reservas de entrenamiento obtenidas exitosamente."
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Error message"
+     * }
+     */
+    Route::get('/bookings/training/get', [BookingsController::class, 'bookingListTraining'])->name('bookings.list');
+
+    /**
+     * Crear o actualizar una reserva.
+     * Método HTTP: POST
+     * Ruta: /api/bookings/store
+     * Descripción: Crea o actualiza una reserva dependiendo de si se proporciona un ID en la solicitud.
+     *
+     * Parámetros de Solicitud:
+     * - booking_type: string (Requerido) - Tipo de reserva (e.g., 'veterinary', 'training')
+     * - date_time: string (Requerido) - Fecha y hora de la reserva
+     * - duration: string (Opcional) - Duración de la reserva
+     * - service_id: int (Opcional) - ID del servicio (solo para 'veterinary')
+     * - service_name: string (Opcional) - Nombre del servicio (solo para 'veterinary')
+     * - employee_id: int (Requerido) - ID del empleado (entrenador o veterinario)
+     * - reason: string (Opcional) - Razón de la consulta (solo para 'veterinary')
+     * - start_video_link: string (Opcional) - Enlace para iniciar la videollamada (solo para 'veterinary')
+     * - join_video_link: string (Opcional) - Enlace para unirse a la videollamada (solo para 'veterinary')
+     * - medical_report: file (Opcional) - Archivo del reporte médico (solo para 'veterinary')
+     * - training_id: int (Opcional) - ID del entrenamiento (solo para 'training')
+     * - user_id: int (Opcional) - ID del usuario (Se tomará el usuario autenticado, en caso de no estar definido)
+     * - service_amount: float - Monto del servicio
+     * - price: float - Precio del servicio
+     * - latitude: float (Opcional) - Para la notificación por ubicación
+     * - longitude: float (Opcional) - Para la notificación por ubicación
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "New Booking Added", // O "Booking Updated" si se actualizó una reserva existente
+     *     "status": true,
+     *     "data": object // Detalles de la reserva
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error message",
+     *     "status": false
+     * }
+     */
+    Route::post('/bookings/store', [BookingsController::class, 'store'])->name('bookings.store');
+
+    /**
+     * Actualizar el estado de una reserva.
+     * Método HTTP: PUT
+     * Ruta: /api/bookings/status
+     * Descripción: Actualiza el estado de una reserva existente por su ID.
+     *
+     * Parámetros de Solicitud:
+     * - id: int (Requerido) - ID de la reserva.
+     * - status: string (Requerido) - Nuevo estado de la reserva (completed, cancelled, in-progress, rejected, pending, confirmed).
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Estado de la reserva actualizado exitosamente",
+     *     "status": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error message",
+     *     "status": false
+     * }
+     */
+    Route::put('/bookings/status', [BookingsController::class, 'updateStatus'])->name('bookings.updateStatus');
+
+    /**
+     * Aceptar una reserva.
+     * Método HTTP: PUT
+     * Ruta: /api/bookings/status/confirmed
+     * Descripción: Acepta el estado de una reserva existente por su ID.
+     *
+     * Parámetros de Solicitud:
+     * - id: int (Requerido) - ID de la reserva.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Estado de la reserva actualizado exitosamente",
+     *     "status": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error message",
+     *     "status": false
+     * }
+     */
+    Route::put('/bookings/status/confirmed', [BookingsController::class, 'updateStatusConfirmed'])->name('bookings.updateStatusConfirmed');
+
+    /**
+     * Actualizar una reserva existente.
+     * Método HTTP: PUT
+     * Ruta: /api/bookings/{id}
+     * Descripción: Actualiza una reserva existente por su ID.
+     *
+     * Parámetros de Solicitud:
+     * - Cualquier parámetro que sea necesario para actualizar la reserva.
+     * - services: array (Opcional) - Servicios asociados a la reserva.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Reserva actualizada exitosamente",
+     *     "data": {
+     *         // Datos de la reserva actualizada
+     *     },
+     *     "status": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error message",
+     *     "status": false
+     * }
+     */
+    Route::put('/bookings/{id}', [BookingsController::class, 'update'])->name('bookings.update');
+
+    /**
+     * Obtener los detalles de una reserva.
+     * Método HTTP: GET
+     * Ruta: /api/bookings/detail
+     * Descripción: Obtiene los detalles de una reserva específica por su ID.
+     *
+     * Parámetros de Solicitud:
+     * - id: int (Requerido) - ID de la reserva.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": {
+     *         // Datos de la reserva
+     *     },
+     *     "customer_review": {
+     *         // Reseña del cliente
+     *     },
+     *     "message": "Detalles de la reserva obtenidos exitosamente."
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Reserva no encontrada."
+     * }
+     */
+    Route::get('/bookings/detail', [BookingsController::class, 'bookingDetail'])->name('bookings.detail');
+
+    /**
+     * Obtener la lista de estados de reservas.
+     * Método HTTP: GET
+     * Ruta: /api/bookings/status-list
+     * Descripción: Obtiene la lista de todos los estados de reservas.
+     *
+     * Parámetros de Solicitud: Ninguno
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [
+     *         {
+     *             "status": "estado",
+     *             "title": "título",
+     *             "is_disabled": boolean,
+     *             "next_status": "siguiente_estado" (opcional)
+     *         },
+     *         // Otros estados...
+     *     ],
+     *     "message": "Lista de estados de reservas obtenida exitosamente."
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Error message"
+     * }
+     */
+    Route::get('/bookings/status-list', [BookingsController::class, 'statusList'])->name('bookings.statusList');
+
+    /**
+     * Aceptar una reserva.
+     * Método HTTP: PUT
+     * Ruta: /api/bookings/accept/{id}
+     * Descripción: Permite que un empleado acepte una reserva, asignando su ID a la reserva y actualizando el estado de la solicitud.
+     *
+     * Parámetros de Solicitud:
+     * - {id}: int (Requerido) - ID de la reserva a aceptar.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Reserva aceptada exitosamente.",
+     *     "status": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "La reserva ya ha sido aceptada."
+     * }
+     */
+    Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
+
+    /**
+     * Crear un nuevo servicio de entrenamiento.
+     * Método HTTP: POST
+     * Ruta: /api/service-training
+     * Descripción: Crea un nuevo servicio de entrenamiento y genera automáticamente un slug único a partir del nombre.
+     *
+     * Parámetros de Solicitud:
+     * - name: string (Requerido) - El nombre del servicio de entrenamiento.
+     * - description: string (Opcional) - La descripción del servicio de entrenamiento.
+     * - status: boolean (Opcional) - El estado del servicio de entrenamiento.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Formulario de creación de servicio enviado con éxito.",
+     *     "status": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Mensaje de error",
+     *     "status": false
+     * }
+     */
+    Route::post('/service-training', [ServiceTrainingController::class, 'store'])->name('service-training.store');
+
+    /**
+     * Obtener la lista de servicios de entrenamiento.
+     * Método HTTP: GET
+     * Ruta: /api/service-training/get
+     * Descripción: Obtiene una lista paginada de servicios de entrenamiento activos con opción de búsqueda.
+     *
+     * Parámetros de Solicitud:
+     * - per_page: int (Opcional) - Número de resultados por página. Predeterminado es 10.
+     * - search: string (Opcional) - Término de búsqueda para filtrar servicios de entrenamiento por nombre o descripción.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "status": true,
+     *     "data": [
+     *         {
+     *             "id": 1,
+     *             "slug": "entrenamiento-basico",
+     *             "name": "Entrenamiento Básico",
+     *             "description": "Un curso de entrenamiento básico para perros.",
+     *             "status": 1,
+     *             "created_by": null,
+     *             "updated_by": null,
+     *             "deleted_by": null,
+     *             "created_at": "2023-01-01T00:00:00.000000Z",
+     *             "updated_at": "2023-01-01T00:00:00.000000Z",
+     *             "deleted_at": null
+     *         },
+     *         // Otros servicios de entrenamiento...
+     *     ],
+     *     "message": "Lista de servicios de entrenamiento obtenida con éxito."
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::get('/service-training/get', [ServiceTrainingController::class, 'trainingList'])->name('service-training.list');
+
+    /**
+     * Obtener la lista de veterinarios para una mascota.
+     * Método HTTP: GET
+     * Ruta: /api/list-veterinaries/{petId}
+     * Descripción: Devuelve una lista de consultas veterinarias completadas para una mascota específica.
+     *
+     * Parámetros de Ruta:
+     * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las consultas veterinarias.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": [
+     *         {
+     *             "id": int, // ID de la reserva
+     *             "pet_id": int, // ID de la mascota
+     *             "status": string, // Estado de la reserva ('completed')
+     *             "booking_type": string, // Tipo de reserva ('veterinary')
+     *             // Otros detalles adicionales de la reserva...
+     *         },
+     *         // Más objetos de reserva...
+     *     ],
+     *     "message": "Lista de veterinarios.",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "error": "Error message",
+     *     "status": false
+     * }
+     */
+    Route::get('/list-veterinaries/{petId}', [VeterinaryController::class, 'listVeterinaries']);
+
+    /**
+     * Obtener la lista de entrenadores para una mascota.
+     * Método HTTP: GET
+     * Ruta: /api/list-trainers/{petId}
+     * Descripción: Devuelve una lista de sesiones de entrenamiento completadas para una mascota específica.
+     *
+     * Parámetros de Ruta:
+     * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las sesiones de entrenamiento.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": [
+     *         {
+     *             "id": int, // ID de la reserva de entrenamiento
+     *             "pet_id": int, // ID de la mascota
+     *             "status": string, // Estado de la reserva ('completed')
+     *             "booking_type": string, // Tipo de reserva ('training')
+     *             // Otros detalles adicionales de la reserva...
+     *         },
+     *         // Más objetos de reserva...
+     *     ],
+     *     "message": "List of trainers.",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "error": "Error message",
+     *     "status": false
+     * }
+     */
+    Route::get('/list-trainers/{petId}', [TrainerController::class, 'listTrainers']);
+
+    /**
+     * Obtener la lista combinada de reservas completadas de entrenadores y veterinarios para una mascota.
+     *
+     * Método HTTP: GET
+     * Ruta: /api/list-trainers-veterinaries/{petId}
+     * Descripción: Devuelve una lista combinada de reservas completadas de tipo 'training' y 'veterinary' para una mascota específica.
+     *
+     * Parámetros de Ruta:
+     * - petId: int (Requerido) - ID de la mascota para la cual se desean obtener las reservas.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": [
+     *         {
+     *             "id": int, // ID de la reserva
+     *             "pet_id": int, // ID de la mascota
+     *             "status": string, // Estado de la reserva ('completed')
+     *             "booking_type": string, // Tipo de reserva ('training' o 'veterinary')
+     *             // Otros detalles adicionales de la reserva...
+     *         },
+     *         // Más objetos de reserva...
+     *     ],
+     *     "message": "Lista de reservaciones de entrenadores y veterinarios",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error message",
+     *     "success": false
+     * }
+     */
+    Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
+ /**
+     * Acceder a la lista de mascotas asignadas para organizar sesiones de entrenamiento.
+     *
+     * Método HTTP: GET
+     * Ruta: /api/get-pets-assigned-to-the-trainer
+     * Descripción: Acceder a la lista de mascotas asignadas para organizar sesiones de entrenamiento.
+     *
+     * Parámetros de Ruta:
+     * - user_id: int (Requerido) - ID del entrenador
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": [
+     *       {
+     *       "name": "Daisy",
+     *       "breed": "Bulldog",
+     *       "age": "9 year",
+     *       "status": 1,
+     *       "pet_image": "http://localhost/balance-dog-admin-panel/public/img/default.png",
+     *       "bookings": [],
+     *       "media": []
+     *       },
+     *         // Más mascostas...
+     *     ],
+     *     "messages": "success"
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error message",
+     *     "success": false
+     * }
+     */
+
+    Route::get('/get-pets-assigned-to-the-trainer', [TrainerController::class, 'getPetsAssignedToTheTrainer']);
+    /**
+     * Obtener la lista de todos los chips.
+     *
+     * Método HTTP: GET
+     * Ruta: /api/chips
+     * Descripción: Devuelve una lista de todos los chips disponibles en la base de datos, incluyendo los detalles de la mascota y el fabricante asociados.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": [
+     *         {
+     *             "id": int, // ID del chip
+     *             "num_identificacion": int, // Número de identificación del chip
+     *             "pet_id": int, // ID de la mascota asociada
+     *             "fecha_implantacion": string, // Fecha de implantación del chip
+     *             "fabricante_id": int, // ID del fabricante del chip
+     *             "num_contacto": string, // Número de contacto asociado al chip
+     *             "pet": { // Detalles de la mascota
+     *                 "id": int,
+     *                 "name": string,
+     *                 // Otros detalles de la mascota...
+     *             },
+     *             "fabricante": { // Detalles del fabricante
+     *                 "id": int,
+     *                 "nombre": string,
+     *                 // Otros detalles del fabricante...
+     *             }
+     *         },
+     *         // Más objetos de chip...
+     *     ],
+     *     "message": "Lista de todos los chips",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error message",
+     *     "success": false
+     * }
+     */
+    Route::get('/chips', [ChipsController::class, 'index']);
+
+    /**
+     * Obtener los detalles de un chip específico.
+     *
+     * Método HTTP: GET
+     * Ruta: /api/chips/{id}
+     * Descripción: Devuelve los detalles de un chip específico identificado por su ID.
+     *
+     * Parámetros de Ruta:
+     * - id: int (Requerido) - ID del chip que se desea consultar.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": {
+     *         "id": int, // ID del chip
+     *         "num_identificacion": int, // Número de identificación del chip
+     *         "pet_id": int, // ID de la mascota asociada
+     *         "fecha_implantacion": string, // Fecha de implantación del chip
+     *         "fabricante_id": int, // ID del fabricante del chip
+     *         "num_contacto": string, // Número de contacto asociado al chip
+     *         "pet": { // Detalles de la mascota
+     *             "id": int,
+     *             "name": string,
+     *             // Otros detalles de la mascota...
+     *         },
+     *         "fabricante": { // Detalles del fabricante
+     *             "id": int,
+     *             "nombre": string,
+     *             // Otros detalles del fabricante...
+     *         }
+     *     },
+     *     "message": "Detalles del chip",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Chip no encontrado",
+     *     "success": false
+     * }
+     */
+    Route::get('/chips/{id}', [ChipsController::class, 'show']);
+
+    /**
+     * Crear un nuevo chip.
+     *
+     * Método HTTP: POST
+     * Ruta: /api/chips
+     * Descripción: Permite crear un nuevo chip en la base de datos.
+     *
+     * Parámetros de Solicitud (Body):
+     * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
+     * - pet_id: int (Requerido) - ID de la mascota asociada al chip.
+     * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
+     * - fabricante_id: int (Requerido) - ID del fabricante del chip.
+     * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": {
+     *         "id": int, // ID del chip recién creado
+     *         "num_identificacion": int, // Número de identificación del chip
+     *         "pet_id": int, // ID de la mascota asociada
+     *         "fecha_implantacion": string, // Fecha de implantación del chip
+     *         "fabricante_id": int, // ID del fabricante del chip
+     *         "num_contacto": string, // Número de contacto asociado al chip
+     *     },
+     *     "message": "Chip creado exitosamente",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error al crear el chip",
+     *     "success": false
+     * }
+     */
+    Route::post('/chips', [ChipsController::class, 'store']);
+
+    /**
+     * Actualizar un chip existente.
+     *
+     * Método HTTP: PUT
+     * Ruta: /api/chips/{id}
+     * Descripción: Permite actualizar los detalles de un chip específico identificado por su ID.
+     *
+     * Parámetros de Ruta:
+     * - id: int (Requerido) - ID del chip que se desea actualizar.
+     *
+     * Parámetros de Solicitud (Body):
+     * - num_identificacion: int (Requerido) - Número de identificación único para el chip.
+     * - fecha_implantacion: date (Requerido) - Fecha de implantación del chip.
+     * - fabricante_id: int (Requerido) - ID del fabricante del chip.
+     * - num_contacto: string (Requerido) - Número de contacto asociado al chip.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": {
+     *         "id": int, // ID del chip actualizado
+     *         "num_identificacion": int, // Número de identificación del chip
+     *         "pet_id": int, // ID de la mascota asociada
+     *         "fecha_implantacion": string, // Fecha de implantación del chip
+     *         "fabricante_id": int, // ID del fabricante del chip
+     *         "num_contacto": string, // Número de contacto asociado al chip
+     *     },
+     *     "message": "Chip actualizado exitosamente",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error al actualizar el chip",
+     *     "success": false
+     * }
+     */
+    Route::put('/chips/{id}', [ChipsController::class, 'update']);
+
+    /**
+     * Eliminar un chip.
+     *
+     * Método HTTP: DELETE
+     * Ruta: /api/chips/{id}
+     * Descripción: Permite eliminar un chip específico identificado por su ID.
+     *
+     * Parámetros de Ruta:
+     * - id: int (Requerido) - ID del chip que se desea eliminar.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Chip eliminado exitosamente",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error al eliminar el chip",
+     *     "success": false
+     * }
+     */
+    Route::delete('/chips/{id}', [ChipsController::class, 'destroy']);
+
+    /**
+     * Obtener el chip asociado a una mascota específica.
+     *
+     * Método HTTP: GET
+     * Ruta: /api/pets/{pet_id}/chip
+     * Descripción: Devuelve el chip asociado a la mascota identificada por su `pet_id`.
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota para la cual se desea obtener el chip.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": {
+     *         "id": int, // ID del chip
+     *         "num_identificacion": int, // Número de identificación del chip
+     *         "pet_id": int, // ID de la mascota asociada
+     *         "fecha_implantacion": string, // Fecha de implantación del chip
+     *         "fabricante_id": int, // ID del fabricante del chip
+     *         "num_contacto": string, // Número de contacto asociado al chip
+     *         "pet": { // Detalles de la mascota
+     *             "id": int,
+     *             "name": string,
+     *             // Otros detalles de la mascota...
+     *         },
+     *         "fabricante": { // Detalles del fabricante
+     *             "id": int,
+     *             "nombre": string,
+     *             // Otros detalles del fabricante...
+     *         }
+     *     },
+     *     "message": "Detalles del chip asociado a la mascota",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Chip no encontrado para la mascota especificada",
+     *     "success": false
+     * }
+     */
+    Route::get('/pets/{pet_id}/chip', [ChipsController::class, 'getChipByPet']);
+
+    /**
+     * Obtener los niveles de actividad de una mascota específica.
+     *
+     * Método HTTP: GET
+     * Ruta: /api/pets/{pet_id}/activity-levels
+     * Descripción: Devuelve todos los registros de niveles de actividad asociados a la mascota identificada por su `pet_id`.
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota para la cual se desean obtener los niveles de actividad.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": [
+     *         {
+     *             "id": int, // ID del nivel de actividad
+     *             "pet_id": int, // ID de la mascota
+     *             "daily_steps": int, // Número de pasos diarios
+     *             "distance_covered": float, // Distancia recorrida en kilómetros
+     *             "calories_burned": int, // Calorías quemadas
+     *             "active_minutes": int, // Minutos de actividad física
+     *             "goal_steps": int, // Meta de pasos diarios
+     *             "goal_distance": float, // Meta de distancia recorrida en kilómetros
+     *             "goal_calories": int, // Meta de calorías quemadas
+     *             "goal_active_minutes": int, // Meta de minutos de actividad física
+     *         },
+     *         // Más registros de niveles de actividad...
+     *     ],
+     *     "message": "Lista de niveles de actividad de la mascota",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Niveles de actividad no encontrados para la mascota especificada",
+     *     "success": false
+     * }
+     */
+    Route::get('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'index']);
+
+    /**
+     * Crear un nuevo nivel de actividad para una mascota específica.
+     *
+     * Método HTTP: POST
+     * Ruta: /api/pets/{pet_id}/activity-levels
+     * Descripción: Crea un nuevo registro de nivel de actividad para la mascota identificada por su `pet_id`.
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota para la cual se va a crear el nivel de actividad.
+     *
+     * Parámetros del Cuerpo (Body):
+     * - daily_steps: int (Opcional) - Número de pasos diarios.
+     * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
+     * - calories_burned: int (Opcional) - Calorías quemadas.
+     * - active_minutes: int (Opcional) - Minutos de actividad física.
+     * - goal_steps: int (Opcional) - Meta de pasos diarios.
+     * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
+     * - goal_calories: int (Opcional) - Meta de calorías quemadas.
+     * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": {
+     *         "id": int, // ID del nivel de actividad creado
+     *         "pet_id": int, // ID de la mascota
+     *         "daily_steps": int, // Número de pasos diarios
+     *         "distance_covered": float, // Distancia recorrida en kilómetros
+     *         "calories_burned": int, // Calorías quemadas
+     *         "active_minutes": int, // Minutos de actividad física
+     *         "goal_steps": int, // Meta de pasos diarios
+     *         "goal_distance": float, // Meta de distancia recorrida en kilómetros
+     *         "goal_calories": int, // Meta de calorías quemadas
+     *         "goal_active_minutes": int, // Meta de minutos de actividad física
+     *     },
+     *     "message": "Nivel de actividad creado exitosamente",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error al crear el nivel de actividad",
+     *     "success": false
+     * }
+     */
+    Route::post('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'store']);
+
+    /**
+     * Actualizar un nivel de actividad existente para una mascota específica.
+     *
+     * Método HTTP: PUT
+     * Ruta: /api/activity-levels/{id}
+     * Descripción: Actualiza un registro de nivel de actividad para la mascota identificada por su `id`.
+     *
+     * Parámetros de Ruta:
+     * - id: int (Requerido) - ID del nivel de actividad que se va a actualizar.
+     *
+     * Parámetros del Cuerpo (Body):
+     * - daily_steps: int (Opcional) - Número de pasos diarios.
+     * - distance_covered: float (Opcional) - Distancia recorrida en kilómetros.
+     * - calories_burned: int (Opcional) - Calorías quemadas.
+     * - active_minutes: int (Opcional) - Minutos de actividad física.
+     * - goal_steps: int (Opcional) - Meta de pasos diarios.
+     * - goal_distance: float (Opcional) - Meta de distancia recorrida en kilómetros.
+     * - goal_calories: int (Opcional) - Meta de calorías quemadas.
+     * - goal_active_minutes: int (Opcional) - Meta de minutos de actividad física.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": {
+     *         "id": int, // ID del nivel de actividad actualizado
+     *         "pet_id": int, // ID de la mascota
+     *         "daily_steps": int, // Número de pasos diarios
+     *         "distance_covered": float, // Distancia recorrida en kilómetros
+     *         "calories_burned": int, // Calorías quemadas
+     *         "active_minutes": int, // Minutos de actividad física
+     *         "goal_steps": int, // Meta de pasos diarios
+     *         "goal_distance": float, // Meta de distancia recorrida en kilómetros
+     *         "goal_calories": int, // Meta de calorías quemadas
+     *         "goal_active_minutes": int, // Meta de minutos de actividad física
+     *     },
+     *     "message": "Nivel de actividad actualizado exitosamente",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error al actualizar el nivel de actividad",
+     *     "success": false
+     * }
+     */
+    Route::put('/activity-levels/{id}', [ActivityLevelController::class, 'update']);
+
+    /**
+     * Eliminar un nivel de actividad para una mascota específica.
+     *
+     * Método HTTP: DELETE
+     * Ruta: /api/activity-levels/{id}
+     * Descripción: Elimina un registro de nivel de actividad identificado por su `id`.
+     *
+     * Parámetros de Ruta:
+     * - id: int (Requerido) - ID del nivel de actividad que se va a eliminar.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "message": "Nivel de actividad eliminado exitosamente",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error al eliminar el nivel de actividad",
+     *     "success": false
+     * }
+     */
+    Route::delete('/activity-levels/{id}', [ActivityLevelController::class, 'destroy']);
+});
+Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);

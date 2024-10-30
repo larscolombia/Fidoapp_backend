@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Traits\HasSlug;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use Modules\Booking\Models\Booking;
 
 class Pet extends BaseModel
 {
@@ -18,7 +19,7 @@ class Pet extends BaseModel
     use HasSlug;
 
     protected $table = 'pets';
-    protected $fillable = ['name', 'slug', 'pettype_id', 'breed_id', 'date_of_birth', 'age', 'gender', 'weight', 'height', 'weight_unit', 
+    protected $fillable = ['name', 'slug', 'pettype_id', 'breed_id', 'date_of_birth', 'age', 'gender', 'weight', 'height', 'weight_unit',
     'height_unit', 'additional_info', 'user_id', 'status', 'qr_code'];
     protected $appends = ['pet_image'];
 
@@ -40,7 +41,7 @@ class Pet extends BaseModel
     {
         return $this->belongsToMany(User::class, 'shared_owners', 'pet_id', 'user_id');
     }
-    
+
     protected function getPetImageAttribute()
     {
         $media = $this->getFirstMediaUrl('pet_image');
@@ -75,5 +76,10 @@ class Pet extends BaseModel
     public function activityLevel()
     {
         return $this->hasOne(ActivityLevel::class, 'pet_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'pet_id');
     }
 }
