@@ -333,7 +333,7 @@ class PetController extends Controller
         ], 201);
     }
 
-    public function update(UpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try{
             $pet = Pet::findOrFail($id);
