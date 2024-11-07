@@ -73,9 +73,9 @@ class VeterinaryController extends Controller
                'pet_id' => 'required|exists:pets,id',
                'veterinarian_id' => 'required|exists:users,id',
             ]);
-            $user = User::with(['pets','pets.bookings'])
-            ->whereHas('pets.bookings', function($q) use($data) {
-                return $q->where('employee_id', $data['veterinarian_id'])
+            $user = User::with(['pets','pets.histories'])
+            ->whereHas('pets.histories', function($q) use($data) {
+                return $q->where('veterinarian_id', $data['veterinarian_id'])
                             ->where('pet_id',$data['pet_id']);
             })
             ->select('users.id','users.first_name','users.last_name','users.email','users.mobile')
