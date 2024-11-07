@@ -6,6 +6,7 @@ use App\Models\CalendarEvent;
 use Carbon\Carbon;
 use Modules\Event\Models\Event;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
@@ -41,7 +42,7 @@ class GoogleCalendarController extends Controller
         }
 
         // Convertir las fechas al formato ISO 8601 con Carbon
-        $date_event = $event->date; 
+        $date_event = $event->date;
         $end_date_event = $event->end_date;
 
         if (empty($date_event) || empty($end_date_event)) {

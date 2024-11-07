@@ -1,0 +1,126 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Models\PetHistory;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class PetHistoryController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $histories = PetHistory::with(['pet','pet.vacunas', 'pet.antidesparasitantes','pet.antigarrapatas' ,'veterinarian'])->get();
+        return response()->json(['data' => $histories]);
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                'pet_id' => 'required|exists:pets,id',
+                'veterinarian_id' => 'required|exists:users,id',
+                'vacuna_id' => 'nullable|integer',
+                'antidesparasitante_id' => 'nullable|integer',
+                'antigarrapata_id' => 'nullable|integer',
+                'medical_conditions' => 'nullable|string',
+                'test_results' => 'nullable|string',
+                'vet_visits' => 'nullable|integer',
+            ]);
+
+            $history = PetHistory::create($request->all());
+            return response()->json([
+                'success' => true,
+                'data' => $history
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $history = PetHistory::with(['pet','pet.vacunas', 'pet.antidesparasitantes','pet.antigarrapatas' ,'veterinarian'])->find($id);
+        if (!$history) {
+            return response()->json(['message' => 'History not found'], 404);
+        }
+        return response()->json($history);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $history = PetHistory::find($id);
+            if (!$history) {
+                return response()->json(['message' => 'Historial no encontrado'], 404);
+            }
+
+            $request->validate([
+                'pet_id' => 'required|exists:pets,id',
+                'veterinarian_id' => 'required|exists:users,id',
+                'vacuna_id' => 'nullable|integer',
+                'antidesparasitante_id' => 'nullable|integer',
+                'antigarrapata_id' => 'nullable|integer',
+                'medical_conditions' => 'nullable|string',
+                'test_results' => 'nullable|string',
+                'vet_visits' => 'nullable|integer',
+            ]);
+
+            $history->update($request->all());
+            return response()->json([
+                'success' => true,
+                'data' => $history
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $history = PetHistory::find($id);
+        if (!$history) {
+            return response()->json(['message' => 'History not found'], 404);
+        }
+
+        $history->delete();
+        return response()->json(['message' => 'Successfully deleted history']);
+    }
+}

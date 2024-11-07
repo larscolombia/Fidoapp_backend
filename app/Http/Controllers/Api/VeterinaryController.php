@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\PetHistory;
+use Modules\Pet\Models\Pet;
 use Illuminate\Http\Request;
 use Modules\Booking\Models\Booking;
+use App\Http\Controllers\Controller;
 
 class VeterinaryController extends Controller
 {
@@ -19,5 +21,36 @@ class VeterinaryController extends Controller
             'message' => __('booking.List of veterinaries.'),
             'success' => true
         ]);
+    }
+
+    public function listPets(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|numeric'
+        ]);
+        $userId = $request['user_id'];
+        $pets = Pet::with('bookings')
+            ->whereHas('bookings',function($query) use ($userId) {
+                return $query->where('user_id',$userId);
+            })
+            ->get();
+
+        return response()->json(
+            [
+                'data' => $pets,
+                'message' => __('Exitoso'),
+                'success' => true
+            ]
+        );
+    }
+
+    public function petHistoryListByVeterinarian($id)
+    {
+        $history = PetHistory::with(['pet','pet.vacunas', 'pet.antidesparasitantes','pet.antigarrapatas' ,'veterinarian'])
+            ->where('veterinarian_id',$id)->get();
+        if (count($history) == 0) {
+            return response()->json(['message' => 'History not found'], 404);
+        }
+        return response()->json($history);
     }
 }

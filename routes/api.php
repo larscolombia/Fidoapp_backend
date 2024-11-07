@@ -1,29 +1,30 @@
 <?php
 
-use App\Http\Controllers\Api\ActivityLevelController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EBookController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Api\ChipsController;
 use App\Http\Controllers\Api\ClaseController;
-use App\Http\Controllers\Api\ComandoController;
-use App\Http\Controllers\Api\ComandoEquivalenteController;
-use App\Http\Controllers\Api\CursoPlataformaController;
-use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Api\EventController;
-use App\Http\Controllers\Api\GoogleCalendarController;
-use App\Http\Controllers\Api\HerramientaController;
-use App\Http\Controllers\Api\HerramientasEntrenamientoController;
-use App\Http\Controllers\Api\SharedOwnerController;
+use App\Http\Controllers\Api\VacunaController;
+use App\Http\Controllers\Api\ComandoController;
 use App\Http\Controllers\Api\TrainerController;
-use App\Http\Controllers\Api\VeterinaryController;
-use App\Http\Controllers\Auth\API\AuthController;
-use App\Http\Controllers\Backend\API\BranchController;
-use App\Http\Controllers\Backend\API\DashboardController;
-use App\Http\Controllers\Backend\API\NotificationsController;
-use App\Http\Controllers\Backend\API\SettingController;
-use App\Http\Controllers\Backend\API\UserApiController;
-use App\Http\Controllers\Backend\API\AddressController;
 use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\EBookController;
+use App\Http\Controllers\Api\EjercicioController;
+use App\Http\Controllers\Auth\API\AuthController;
+use App\Http\Controllers\Api\PetHistoryController;
+use App\Http\Controllers\Api\VeterinaryController;
+use App\Http\Controllers\Api\AntiWormersController;
+use App\Http\Controllers\Api\HerramientaController;
+use App\Http\Controllers\Api\SharedOwnerController;
+use App\Http\Controllers\Api\ActivityLevelController;
+use App\Http\Controllers\Api\AntiTickController;
+use App\Http\Controllers\Api\GoogleCalendarController;
+use App\Http\Controllers\Backend\API\BranchController;
+use App\Http\Controllers\Api\CursoPlataformaController;
+use App\Http\Controllers\Backend\API\AddressController;
+use App\Http\Controllers\Backend\API\SettingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,12 +35,15 @@ use App\Http\Controllers\EBookController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
-use Modules\Pet\Http\Controllers\Backend\API\PetController;
-use Modules\Pet\Http\Controllers\Backend\BreedController;
+use App\Http\Controllers\Backend\API\UserApiController;
 use Modules\Pet\Http\Controllers\Backend\PetsController;
+use App\Http\Controllers\Backend\API\DashboardController;
+use Modules\Pet\Http\Controllers\Backend\BreedController;
+use App\Http\Controllers\Api\ComandoEquivalenteController;
+use Modules\Pet\Http\Controllers\Backend\API\PetController;
+use App\Http\Controllers\Backend\API\NotificationsController;
+use App\Http\Controllers\Api\HerramientasEntrenamientoController;
+use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
 use Modules\Service\Http\Controllers\Backend\API\ServiceTrainingController;
 
 Route::get('branch-list', [BranchController::class, 'branchList']);
@@ -2077,7 +2081,195 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
- /**
+    route::middleware(['check_vet'])->group(function () {
+        Route::apiResource('/pet-histories', PetHistoryController::class);
+
+        Route::get('pet-history-list-by-veterinarian/{id}',[VeterinaryController::class,'petHistoryListByVeterinarian']);
+    });
+    Route::apiResource('/vacunas', VacunaController::class);
+    /**
+     * Listado de mascotas que tienen vacunas
+     *
+     * Método HTTP: GET
+     * Ruta: /api/vaccines-given-to-pet
+     * Descripción: Listado de mascotas que tienen vacunas
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota
+     *
+     * Respuesta Exitosa:
+     *{
+     *"success": true,
+     *"data": [
+     * {
+     *  "id": 2,
+     *  "pet_id": 1,
+     *  "vacuna_name": "Antirabica",
+     *  "fecha_aplicacion": "2024-11-07",
+     *  "fecha_refuerzo_vacuna": "2024-12-07",
+     *  "created_at": "2024-11-06T18:44:35.000000Z",
+     *  "updated_at": "2024-11-06T18:44:35.000000Z",
+     *  "pet": {
+     *    "id": 1,
+     *    "name": "Beau",
+     *    "slug": "beau",
+     *    "pettype_id": 1,
+     *    "breed_id": 1,
+     *    "size": null,
+     *    "date_of_birth": null,
+     *    "age": "13 year",
+     *    "gender": "male",
+     *    "weight": 31,
+     *    "height": 60,
+     *    "weight_unit": "kg",
+     *    "height_unit": "cm",
+     *    "user_id": 2,
+     *    "additional_info": null,
+     *    "status": 1,
+     *    "created_by": null,
+     *    "updated_by": null,
+     *    "deleted_by": null,
+     *    "created_at": "2024-08-14T05:52:08.000000Z",
+     *    "updated_at": "2024-08-14T05:52:08.000000Z",
+     *    "deleted_at": null,
+     *    "qr_code": "images/qr_codes/qr_code_1723614728.png",
+     *    "pet_image": "http://localhost/balance/storage/170/lqxRTGxYmMyuLBXh7MOUSf9jeHLyKnR5BbSUHPkX.png",
+     *   }
+     *  }
+     * ]
+     *}
+     *
+     * Respuesta de Error:
+     * {
+     *      "success": false
+     *     "message": "Error message",
+     *
+     * }
+     */
+    Route::get('vaccines-given-to-pet', [VacunaController::class, 'vaccinesGivenToPet']);
+    Route::apiResource('/anti-wormers', AntiWormersController::class);
+  /**
+     * Listado de mascotas que tienen Antigarrapatas
+     *
+     * Método HTTP: GET
+     * Ruta: /api/anti-wormers-given-pet
+     * Descripción: Listado de mascotas que tienen Antigarrapatas
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota
+     *
+     * Respuesta Exitosa:
+    * {
+    *  "success": true,
+    *  "data": [
+    *    {
+    *      "id": 1,
+    *      "pet_id": 1,
+    *      "antigarrapata_name": "Antigarrapatas",
+    *      "fecha_aplicacion": "2024-11-07",
+    *      "fecha_refuerzo_antigarrapata": "2024-12-07",
+    *      "created_at": "2024-11-06T20:59:13.000000Z",
+    *      "updated_at": "2024-11-06T20:59:13.000000Z",
+    *      "pet": {
+    *        "id": 1,
+    *        "name": "Beau",
+    *        "slug": "beau",
+    *        "pettype_id": 1,
+    *        "breed_id": 1,
+    *        "size": null,
+    *        "date_of_birth": null,
+    *        "age": "13 year",
+    *        "gender": "male",
+    *        "weight": 31,
+    *        "height": 60,
+    *        "weight_unit": "kg",
+    *        "height_unit": "cm",
+    *        "user_id": 2,
+    *        "additional_info": null,
+    *        "status": 1,
+    *        "created_by": null,
+    *        "updated_by": null,
+    *        "deleted_by": null,
+    *        "created_at": "2024-08-14T05:52:08.000000Z",
+    *        "updated_at": "2024-08-14T05:52:08.000000Z",
+    *        "deleted_at": null,
+    *        "qr_code": "images/qr_codes/qr_code_1723614728.png",
+    *        "pet_image": "http://localhost/balance/storage/170/lqxRTGxYmMyuLBXh7MOUSf9jeHLyKnR5BbSUHPkX.png",
+    *      }
+    *    }
+    *  ]
+    *}
+     *
+     * Respuesta de Error:
+     * {
+     *      "success": false
+     *     "message": "Error message",
+     *
+     * }
+     */
+    Route::get('/anti-wormers-given-pet', [AntiWormersController::class, 'antiWormersGivenToPet']);
+    Route::apiResource('/anti-ticks', AntiTickController::class);
+  /**
+     * Listado de mascotas que tienen Antidesparasitante
+     *
+     * Método HTTP: GET
+     * Ruta: /api/anti-wormers-given-pet
+     * Descripción: Listado de mascotas que tienen Antidesparasitante
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota
+     *
+     * Respuesta Exitosa:
+    * {
+    *  "success": true,
+    *  "data": [
+    *    {
+    *      "id": 1,
+    *      "pet_id": 1,
+    *      "antidesparasitante_name": "Antidesparasitante",
+    *      "fecha_aplicacion": "2024-11-07",
+    *      "fecha_refuerzo_antidesparasitante": "2024-12-07",
+    *      "created_at": "2024-11-06T20:59:13.000000Z",
+    *      "updated_at": "2024-11-06T20:59:13.000000Z",
+    *      "pet": {
+    *        "id": 1,
+    *        "name": "Beau",
+    *        "slug": "beau",
+    *        "pettype_id": 1,
+    *        "breed_id": 1,
+    *        "size": null,
+    *        "date_of_birth": null,
+    *        "age": "13 year",
+    *        "gender": "male",
+    *        "weight": 31,
+    *        "height": 60,
+    *        "weight_unit": "kg",
+    *        "height_unit": "cm",
+    *        "user_id": 2,
+    *        "additional_info": null,
+    *        "status": 1,
+    *        "created_by": null,
+    *        "updated_by": null,
+    *        "deleted_by": null,
+    *        "created_at": "2024-08-14T05:52:08.000000Z",
+    *        "updated_at": "2024-08-14T05:52:08.000000Z",
+    *        "deleted_at": null,
+    *        "qr_code": "images/qr_codes/qr_code_1723614728.png",
+    *        "pet_image": "http://localhost/balance/storage/170/lqxRTGxYmMyuLBXh7MOUSf9jeHLyKnR5BbSUHPkX.png",
+    *      }
+    *    }
+    *  ]
+    *}
+     *
+     * Respuesta de Error:
+     * {
+     *      "success": false
+     *     "message": "Error message",
+     *
+     * }
+     */
+    Route::get('/anti-tick-given-pet', [AntiTickController::class, 'antiTickGivenToPet']);
+    /**
      * Acceder a la lista de mascotas asignadas para organizar sesiones de entrenamiento.
      *
      * Método HTTP: GET

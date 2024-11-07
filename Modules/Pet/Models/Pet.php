@@ -2,15 +2,19 @@
 
 namespace Modules\Pet\Models;
 
-use App\Models\ActivityLevel;
-use App\Models\BaseModel;
 use App\Models\Chip;
-use App\Models\Diario;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Traits\HasSlug;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use App\Models\Diario;
+use App\Models\Vacuna;
+use App\Models\BaseModel;
+use App\Models\PetHistory;
+use App\Models\ActivityLevel;
+use App\Models\Traits\HasSlug;
+use App\Models\Antidesparasitante;
+use App\Models\Antigarrapata;
 use Modules\Booking\Models\Booking;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pet extends BaseModel
 {
@@ -81,5 +85,26 @@ class Pet extends BaseModel
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'pet_id');
+    }
+
+    public function vacunas()
+    {
+        return $this->hasMany(Vacuna::class, 'pet_id');
+    }
+
+    public function antidesparasitantes()
+    {
+        return $this->hasMany(Antidesparasitante::class, 'pet_id');
+    }
+
+    public function antigarrapatas()
+    {
+        return $this->hasMany(Antigarrapata::class, 'pet_id');
+    }
+
+
+    public function histories()
+    {
+        return $this->hasMany(PetHistory::class);
     }
 }
