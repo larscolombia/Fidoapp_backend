@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\PetHistory;
 use Modules\Pet\Models\Pet;
 use Illuminate\Http\Request;
@@ -58,6 +59,39 @@ class VeterinaryController extends Controller
                 'data' => $history
             ]);
         } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function petOwnerInformation(Request $request)
+    {
+        try{
+            $data = $request->validate([
+               'pet_id' => 'required|exists:pets,id',
+               'veterinarian_id' => 'required|exists:users,id',
+            ]);
+            $user = User::with(['pets','pets.bookings'])
+            ->whereHas('pets.bookings', function($q) use($data) {
+                return $q->where('employee_id', $data['veterinarian_id'])
+                            ->where('pet_id',$data['pet_id']);
+            })
+            ->select('users.id','users.first_name','users.last_name','users.email','users.mobile')
+            ->first();
+
+            if(!$user){
+                return response()->json(['success' => false, 'message' => 'User not found'], 404);
+            }
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'user_info' => $user,
+                    'profile_info' => $user->profile
+                ]
+            ]);
+        }catch(\Exception $e){
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()

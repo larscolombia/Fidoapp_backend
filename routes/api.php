@@ -2121,6 +2121,41 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
         Route::get('pet-history-list-by-veterinarian/{id}',[VeterinaryController::class,'petHistoryListByVeterinarian']);
+
+          /**
+     * Información de contacto del dueño de la mascota
+     *
+     * Método HTTP: GET
+     * Ruta: /api/pet-owner-information
+     * Descripción: Información de contacto del dueño de la mascota
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota
+     * - veterinarian_id: int (Requerido) - ID del veterinario
+     *
+     * Respuesta Exitosa:
+     *{
+     *"success": true,
+     * "data": {
+     * "user_info": {
+     * "id": 3,
+     * "first_name": "Robert",
+     * "last_name": "Martin",
+     * "email": "robert@gmail.com",
+     * "mobile": "1-7485961545",
+     * "full_name": "Robert Martin",
+     * "profile_image": "http://localhost/balance/storage/4/Md9nTd4DwKavmjnYPICwtabl74Pnype06ZVUmaYB.png",
+     * }
+     *}
+     *
+     * Respuesta de Error:
+     * {
+     *      "success": false
+     *     "message": "Error message",
+     *
+     * }
+     */
+        Route::get('pet-owner-information',[VeterinaryController::class,'petOwnerInformation']);
     });
     Route::apiResource('/vacunas', VacunaController::class);
     /**
