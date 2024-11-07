@@ -2159,11 +2159,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
     Route::apiResource('/vacunas', VacunaController::class);
     /**
-     * Listado de mascotas que tienen vacunas
+     * Listado de vacunas que tiene una mascota
      *
      * Método HTTP: GET
      * Ruta: /api/vaccines-given-to-pet
-     * Descripción: Listado de mascotas que tienen vacunas
+     * Descripción: Listado de vacunas que tiene una mascota
      *
      * Parámetros de Ruta:
      * - pet_id: int (Requerido) - ID de la mascota
@@ -2220,11 +2220,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('vaccines-given-to-pet', [VacunaController::class, 'vaccinesGivenToPet']);
     Route::apiResource('/anti-wormers', AntiWormersController::class);
   /**
-     * Listado de mascotas que tienen Antigarrapatas
+     * Listado de antigarrapatas que tiene una mascota
      *
      * Método HTTP: GET
      * Ruta: /api/anti-wormers-given-pet
-     * Descripción: Listado de mascotas que tienen Antigarrapatas
+     * Descripción: Listado de antigarrapatas que tiene una mascota
      *
      * Parámetros de Ruta:
      * - pet_id: int (Requerido) - ID de la mascota
@@ -2281,11 +2281,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/anti-wormers-given-pet', [AntiWormersController::class, 'antiWormersGivenToPet']);
     Route::apiResource('/anti-ticks', AntiTickController::class);
   /**
-     * Listado de mascotas que tienen Antidesparasitante
+     * Listado de antidesparasitante que tiene una mascota
      *
      * Método HTTP: GET
      * Ruta: /api/anti-tick-given-pet
-     * Descripción: Listado de mascotas que tienen Antidesparasitante
+     * Descripción: Listado de antidesparasitante que tiene una mascota
      *
      * Parámetros de Ruta:
      * - pet_id: int (Requerido) - ID de la mascota

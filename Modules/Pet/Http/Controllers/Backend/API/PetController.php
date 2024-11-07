@@ -31,14 +31,14 @@ class PetController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $pettype = PetType::where('status',1);
-      
+
         if ($request->has('search')) {
             $pettype->where('name', 'like', "%{$request->search}%");
         }
 
         $pettype = $pettype->paginate($perPage);
         $items = PetTypeResource::collection($pettype);
-      
+
 
         return response()->json([
             'status' => true,
@@ -54,7 +54,7 @@ class PetController extends Controller
         $perPage = $request->input('per_page', 10);
         $user_id = !empty($request->user_id) ? $request->user_id : auth()->user()->id;
         $pet = Pet::with(['pettype','breed'])->where('status',1)->where('user_id',$user_id);
-        
+
         if ($request->has('search')) {
             $pet->where('name', 'like', "%{$request->search}%");
         }
@@ -65,7 +65,7 @@ class PetController extends Controller
         }
         $pet = $pet->paginate($perPage);
         $items = PetResource::collection($pet);
-      
+
 
         return response()->json([
             'status' => true,
@@ -80,7 +80,7 @@ class PetController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $breed = Breed::where('status',1);
-      
+
         if ($request->has('search')) {
             $breed->where('name', 'like', "%{$request->search}%")
                 ->orWhere('description', 'like', "%{$request->search}%");
@@ -90,7 +90,7 @@ class PetController extends Controller
         }
         $breed = $breed->paginate($perPage);
         $items = BreedResource::collection($breed);
-      
+
 
         return response()->json([
             'status' => true,
@@ -130,11 +130,11 @@ class PetController extends Controller
                 $query->where('created_by',auth()->id())
 
                          ->Orwhere('is_private',0);
-                        
+
                   });
 
           }
-    
+
         if (!empty($request->pet_id)) {
             $pet_note->where('pet_id', $request->pet_id);
         }
@@ -145,7 +145,7 @@ class PetController extends Controller
 
         $pet_note = $pet_note->paginate($perPage);
         $items = PetNoteResource::collection($pet_note);
-      
+
         return response()->json([
             'status' => true,
             'data' => $items,
@@ -172,7 +172,7 @@ class PetController extends Controller
 
         $user = $users->paginate($perPage);
         $items = OwnerPetResource::collection($user);
-      
+
         return response()->json([
             'status' => true,
             'data' => $items,
@@ -189,13 +189,13 @@ class PetController extends Controller
         $pet_details = Pet::with(['pettype','breed','petnote'])->where('id', $pet_id)->first();
 
         $items =New PetDetailsResource($pet_details);
-      
+
         return response()->json([
             'status' => true,
             'data' => $items,
             'message' => 'Pet Details',
         ], 200);
-        
+
     }
 
     // Retorna las edades de una mascota y su dueño, basado en el id de la mascota.
@@ -226,7 +226,7 @@ class PetController extends Controller
     public function getAllPetsWithBreedInfo()
     {
         $pets = Pet::where('slug', 'dog')->with('breed')->get();
-        
+
         $result = $pets->map(function ($pet) {
             return [
                 'name' => $pet->name,
@@ -252,7 +252,7 @@ class PetController extends Controller
 
      /**
      * Crear una nueva mascota.
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -335,58 +335,69 @@ class PetController extends Controller
 
     public function update(UpdateRequest $request, $id)
     {
-        $pet = Pet::findOrFail($id);
+        try{
+            $pet = Pet::findOrFail($id);
 
-        $rules = [
-            'name' => 'sometimes|string|max:255',
-            'breed_id' => 'sometimes|exists:breeds,id',
-            'breed_name' => 'sometimes|string',
-            'size' => 'sometimes|string|max:50',
-            'date_of_birth' => 'sometimes|date',
-            'age' => 'sometimes|string|max:50',
-            'gender' => 'sometimes|in:male,female',
-            'weight' => 'sometimes|numeric',
-            'height' => 'sometimes|numeric',
-            'weight_unit' => 'sometimes|string|max:10',
-            'height_unit' => 'sometimes|string|max:10',
-            'user_id' => 'sometimes|exists:users,id',
-            'additional_info' => 'sometimes|string',
-            'status' => 'sometimes|boolean',
-            'pet_image' => 'sometimes',
-        ];
+            $rules = [
+                'name' => 'sometimes|string|max:255',
+                'breed_id' => 'sometimes|exists:breeds,id',
+                'breed_name' => 'sometimes|string',
+                'size' => 'sometimes|string|max:50',
+                'date_of_birth' => 'sometimes|date',
+                'age' => 'sometimes|string|max:50',
+                'gender' => 'sometimes|in:male,female',
+                'weight' => 'sometimes|numeric',
+                'height' => 'sometimes|numeric',
+                'weight_unit' => 'sometimes|string|max:10',
+                'height_unit' => 'sometimes|string|max:10',
+                'user_id' => 'sometimes|exists:users,id',
+                'additional_info' => 'sometimes|string',
+                'status' => 'sometimes|boolean',
+                'pet_image' => 'sometimes',
+            ];
 
-        $validatedData = $request->validate($rules);
+            $validatedData = $request->validate($rules);
 
-        if (isset($validatedData['breed_id'])) {
-            $breed = Breed::find($validatedData['breed_id']);
-        } elseif (isset($validatedData['breed_name'])) {
-            $breed = Breed::where('name', $validatedData['breed_name'])->first();
-            if ($breed) {
-                $validatedData['breed_id'] = $breed->id;
-            } else {
-                return response()->json([
-                    'message' => __('validation.invalid_breed'),
-                ], 422);
+            if (isset($validatedData['breed_id'])) {
+                $breed = Breed::find($validatedData['breed_id']);
+            } elseif (isset($validatedData['breed_name'])) {
+                $breed = Breed::where('name', $validatedData['breed_name'])->first();
+                if ($breed) {
+                    $validatedData['breed_id'] = $breed->id;
+                } else {
+                    return response()->json([
+                        'message' => __('validation.invalid_breed'),
+                    ], 422);
+                }
             }
-        }
 
-        if ($request->has('pet_image') && $request->hasFile('pet_image')) {
-            storeMediaFile($pet, $request->file('pet_image'), 'pet_image');
-        } elseif ( $request->has('pet_image') && $request->pet_image != null && $request->pet_image != '') {
-            $pet->clearMediaCollection('pet_image');
-            $pet->addMediaFromUrl($request['pet_image'])->toMediaCollection('pet_image');
-        } else {
+            if($request->has('pet_image')){
+                if ($request->hasFile('pet_image')) {
+                    storeMediaFile($pet, $request->file('pet_image'), 'pet_image');
+                } elseif ( $request->pet_image != null && $request->pet_image != '') {
+                    $pet->clearMediaCollection('pet_image');
+                    $pet->addMediaFromUrl($request['pet_image'])->toMediaCollection('pet_image');
+                } else {
+                    return response()->json([
+                        'message' => 'El campo pet_image debe ser un archivo o una URL válida.'
+                    ], 422);
+                }
+            }
+
+
+            $pet->update($validatedData);
+
             return response()->json([
-                'message' => 'El campo pet_image debe ser un archivo o una URL válida.'
-            ], 422);
+                'success' => true,
+                'message' => __('pet.pet_updated_successfully'),
+                'data' => $pet
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'message' => $e->getMessage(),
+                'success' => false
+            ]);
         }
-
-        $pet->update($validatedData);
-
-        return response()->json([
-            'message' => __('pet.pet_updated_successfully'),
-            'data' => $pet
-        ]);
     }
 
     public function show($id)
