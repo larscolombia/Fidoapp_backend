@@ -10,7 +10,8 @@ use App\Http\Controllers\Controller;
 
 class VeterinaryController extends Controller
 {
-    public function listVeterinaries ($petId) {
+    public function listVeterinaries($petId)
+    {
         $list_veterinaries = Booking::where('pet_id', $petId)
             ->where('status', 'completed')
             ->where('booking_type', 'veterinary')
@@ -30,8 +31,8 @@ class VeterinaryController extends Controller
         ]);
         $userId = $request['user_id'];
         $pets = Pet::with('bookings')
-            ->whereHas('bookings',function($query) use ($userId) {
-                return $query->where('user_id',$userId);
+            ->whereHas('bookings', function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
             })
             ->get();
 
@@ -46,11 +47,21 @@ class VeterinaryController extends Controller
 
     public function petHistoryListByVeterinarian($id)
     {
-        $history = PetHistory::with(['pet','pet.vacunas', 'pet.antidesparasitantes','pet.antigarrapatas' ,'veterinarian'])
-            ->where('veterinarian_id',$id)->get();
-        if (count($history) == 0) {
-            return response()->json(['message' => 'History not found'], 404);
+        try {
+            $history = PetHistory::with(['pet', 'pet.vacunas', 'pet.antidesparasitantes', 'pet.antigarrapatas', 'veterinarian'])
+                ->where('veterinarian_id', $id)->get();
+            if (count($history) == 0) {
+                return response()->json(['success' => false, 'message' => 'History not found'], 404);
+            }
+            return response()->json([
+                'success' => true,
+                'data' => $history
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
-        return response()->json($history);
     }
 }

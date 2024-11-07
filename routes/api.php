@@ -2084,6 +2084,42 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     route::middleware(['check_vet'])->group(function () {
         Route::apiResource('/pet-histories', PetHistoryController::class);
 
+        /**
+     * Historial de mascota por veterinario
+     *
+     * Método HTTP: GET
+     * Ruta: /api/pet-history-list-by-veterinarian/{id}
+     * Descripción: Historial de mascota por veterinario
+     *
+     * Parámetros de Ruta:
+     * - id: int (Requerido) - ID del usuario con rol veterinario
+     *
+     * Respuesta Exitosa:
+     *{
+     *"success": true,
+     *"data": [
+     *{
+     * "id": 1,
+     * "pet_id": 2,
+     * "vacuna_id": null,
+     * "antidesparasitante_id": null,
+     * "antigarrapata_id": 1,
+     * "veterinarian_id": 28,
+     * "medical_conditions": "Demo",
+     * "test_results": null,
+     * "vet_visits": 5,
+     * "created_at": "2024-11-07T15:18:23.000000Z",
+     * "updated_at": "2024-11-07T15:18:23.000000Z",
+     *}
+     *  ]
+     * }
+     * Respuesta de Error:
+     * {
+     *      "success": false
+     *     "message": "Error message",
+     *
+     * }
+     */
         Route::get('pet-history-list-by-veterinarian/{id}',[VeterinaryController::class,'petHistoryListByVeterinarian']);
     });
     Route::apiResource('/vacunas', VacunaController::class);
@@ -2213,7 +2249,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Listado de mascotas que tienen Antidesparasitante
      *
      * Método HTTP: GET
-     * Ruta: /api/anti-wormers-given-pet
+     * Ruta: /api/anti-tick-given-pet
      * Descripción: Listado de mascotas que tienen Antidesparasitante
      *
      * Parámetros de Ruta:
