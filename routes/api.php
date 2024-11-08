@@ -2081,15 +2081,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
-           /**
-     * Historial de mascota por veterinario
+          /**
+     * Historial de mascota por el dueño
      *
      * Método HTTP: GET
-     * Ruta: /api/pet-history-list-by-veterinarian/{id}
-     * Descripción: Historial de mascota por veterinario
+     * Ruta: /api/pet-clinical-history-for-owner
+     * Descripción: Historial de mascota por el dueño
      *
      * Parámetros de Ruta:
-     * - id: int (Requerido) - ID del usuario con rol veterinario
+     * - user_id: int (Requerido) - ID del usuario
+     * - pet_id: int (Requerido)  -ID de la mascota
      *
      * Respuesta Exitosa:
      *{
