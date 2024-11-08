@@ -107,4 +107,9 @@ class Pet extends BaseModel
     {
         return $this->hasMany(PetHistory::class);
     }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

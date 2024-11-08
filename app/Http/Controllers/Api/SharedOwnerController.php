@@ -66,12 +66,21 @@ class SharedOwnerController extends Controller
      */
     public function getOwners($petId)
     {
-        $pet = Pet::with('owner', 'sharedOwners')->findOrFail($petId);
+        try{
+            $pet = Pet::with('owner', 'sharedOwners')->findOrFail($petId);
 
-        return response()->json([
-            'primary_owner' => $pet->owner,
-            'shared_owners' => $pet->sharedOwners
-        ]);
+            return response()->json([
+                'success' => true,
+                'primary_owner' => $pet->owner,
+                'shared_owners' => $pet->sharedOwners
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
     }
 
     public function addSharedOwnerWithEmail(Request $request, $petId)

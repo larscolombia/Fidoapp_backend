@@ -107,6 +107,31 @@ class PetHistoryController extends Controller
         }
     }
 
+    public function petClinicalHistoryForOwner(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'user_id' =>'required|exists:users,id' ,
+                'pet_id' => 'required|exists:pets,id',
+            ]);
+            $history = PetHistory::with(['pet','pet.user'])
+                ->whereHas('pet',function($q) use ($data){
+                    return $q->where('user_id', $data['user_id'])
+                            ->where('id',$data['pet_id']);
+                })
+                ->get();
+            return response()->json([
+                'success' => true,
+                'data' => $history
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
