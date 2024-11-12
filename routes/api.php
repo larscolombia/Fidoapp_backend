@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\VacunaController;
 use App\Http\Controllers\Api\ComandoController;
 use App\Http\Controllers\Api\TrainerController;
+use App\Http\Controllers\Api\AntiTickController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Auth\API\AuthController;
@@ -19,12 +20,11 @@ use App\Http\Controllers\Api\AntiWormersController;
 use App\Http\Controllers\Api\HerramientaController;
 use App\Http\Controllers\Api\SharedOwnerController;
 use App\Http\Controllers\Api\ActivityLevelController;
-use App\Http\Controllers\Api\AntiTickController;
+use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Backend\API\AddressController;
-use App\Http\Controllers\Backend\API\SettingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Backend\API\SettingController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\Backend\API\UserApiController;
 use Modules\Pet\Http\Controllers\Backend\PetsController;
 use App\Http\Controllers\Backend\API\DashboardController;
@@ -1657,6 +1658,92 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('/pets/{id}', [PetController::class, 'destroy']);
 
     /**
+     * Rutas para trabajar con el diario de entrenamiento
+     * Metodo: POST
+     * Ruta:/api/training-diaries
+     * Parametros:{
+     *  pet_id: id de la mascota (requerido)
+     *   date: fecha del diario (requerido),
+     *   actividad: descripcion de la actidad realizada por la mascota (requerido),
+     *   notas: Comentarios adicionales (opcional),
+     *   "image": campo imagen de dicha actividad (opcional)
+     * }
+     *
+     *    * Respuesta Exitosa:
+     * {
+     *     "message": "Diario registrado exitosamente"
+     * }
+     *
+     * Respuesta de Error
+     * {
+     *     "message": "Mensaje de error."
+     * }
+     *
+     * Metodo: PUT
+     * Ruta:/api/training-diaries/1
+     * descripcion: Actualizar un diario
+     *  pet_id: id de la mascota (requerido)
+     *   date: fecha del diario (requerido),
+     *   actividad: descripcion de la actidad realizada por la mascota (requerido),
+     *   notas: Comentarios adicionales (opcional),
+     *   "image": campo imagen de dicha actividad (opcional)
+     * }
+     *
+     *   Respuesta Exitosa:
+     * {
+     *      "success": true,
+     *     "message": "Diario Actualizado exitosamente"
+     * }
+     *
+     * Respuesta de Error
+     * {
+     *     "success": false,
+     *     "message": "Mensaje de error."
+     * }
+     * Metodo: DELETE
+     * Ruta:/api/training-diaries/1
+     * descripcion: Eliminar un diario
+     * Parametros: id: ID del diario (requerido)
+     *
+     *   Respuesta Exitosa:
+     * {
+     *      "success": true,
+     *     "message": "Diario eliminado exitosamente"
+     * }
+     *
+     * Respuesta de Error
+     * {
+     *      "success": false,
+     *     "message": "mensaje de error."
+     * }
+
+     * Metodo: GET
+     * Ruta:/api/training-diaries/1
+     * descripcion: ver el detalle de un diario
+     * paramentro: id: campo requerido para ver el diario
+     * Respuesta Exitosa:
+     * {
+     * "success": true,
+     *"data": {
+     *   "id": 1,
+     *   "date": "2024-11-12 16:17:20",
+     *   "actividad": "Texto de prueba 2",
+     *   "notas": "Esto es una prueba 2",
+     *   "pet_id": 2,
+     *   "image": "https://placecats.com/neo_2/300/400",
+     *   "created_at": "2024-11-12T19:21:01.000000Z",
+     *   "updated_at": "2024-11-12T20:17:20.000000Z"
+     * }
+     *}
+     * Respuesta de Error
+     * {
+     *      "success": false,
+     *     "message": "mensaje de error."
+     * }
+     */
+
+    Route::resource('training-diaries', TrainingDiaryController::class);
+    /**
      * Obtener la lista de reservas.
      * Método HTTP: GET
      * Ruta: /api/bookings/get
@@ -1917,7 +2004,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
 
-  /**
+    /**
      * Listado de veterinarios y entrenadores que atendieron a una mascota.
      * Método HTTP: GET
      * Ruta: /api/get-who-cared-for-my-pet
@@ -1947,7 +2034,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "Mensaje de error"
      * }
      */
-    Route::get('get-who-cared-for-my-pet',[BookingsController::class, 'getWhoCaredForMyPet']);
+    Route::get('get-who-cared-for-my-pet', [BookingsController::class, 'getWhoCaredForMyPet']);
     /**
      * Crear un nuevo servicio de entrenamiento.
      * Método HTTP: POST
@@ -2112,7 +2199,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
-          /**
+    /**
      * Historial de mascota por el dueño
      *
      * Método HTTP: GET
@@ -2149,82 +2236,82 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *
      * }
      */
-    Route::get('pet-clinical-history-for-owner', [PetHistoryController::class,'petClinicalHistoryForOwner']);
+    Route::get('pet-clinical-history-for-owner', [PetHistoryController::class, 'petClinicalHistoryForOwner']);
     route::middleware(['check_vet'])->group(function () {
         Route::apiResource('/pet-histories', PetHistoryController::class);
 
         /**
-     * Historial de mascota por veterinario
-     *
-     * Método HTTP: GET
-     * Ruta: /api/pet-history-list-by-veterinarian/{id}
-     * Descripción: Historial de mascota por veterinario
-     *
-     * Parámetros de Ruta:
-     * - id: int (Requerido) - ID del usuario con rol veterinario
-     *
-     * Respuesta Exitosa:
-     *{
-     *"success": true,
-     *"data": [
-     *{
-     * "id": 1,
-     * "pet_id": 2,
-     * "vacuna_id": null,
-     * "antidesparasitante_id": null,
-     * "antigarrapata_id": 1,
-     * "veterinarian_id": 28,
-     * "medical_conditions": "Demo",
-     * "test_results": null,
-     * "vet_visits": 5,
-     * "created_at": "2024-11-07T15:18:23.000000Z",
-     * "updated_at": "2024-11-07T15:18:23.000000Z",
-     *}
-     *  ]
-     * }
-     * Respuesta de Error:
-     * {
-     *      "success": false
-     *     "message": "Error message",
-     *
-     * }
-     */
-        Route::get('pet-history-list-by-veterinarian/{id}',[VeterinaryController::class,'petHistoryListByVeterinarian']);
+         * Historial de mascota por veterinario
+         *
+         * Método HTTP: GET
+         * Ruta: /api/pet-history-list-by-veterinarian/{id}
+         * Descripción: Historial de mascota por veterinario
+         *
+         * Parámetros de Ruta:
+         * - id: int (Requerido) - ID del usuario con rol veterinario
+         *
+         * Respuesta Exitosa:
+         *{
+         *"success": true,
+         *"data": [
+         *{
+         * "id": 1,
+         * "pet_id": 2,
+         * "vacuna_id": null,
+         * "antidesparasitante_id": null,
+         * "antigarrapata_id": 1,
+         * "veterinarian_id": 28,
+         * "medical_conditions": "Demo",
+         * "test_results": null,
+         * "vet_visits": 5,
+         * "created_at": "2024-11-07T15:18:23.000000Z",
+         * "updated_at": "2024-11-07T15:18:23.000000Z",
+         *}
+         *  ]
+         * }
+         * Respuesta de Error:
+         * {
+         *      "success": false
+         *     "message": "Error message",
+         *
+         * }
+         */
+        Route::get('pet-history-list-by-veterinarian/{id}', [VeterinaryController::class, 'petHistoryListByVeterinarian']);
 
-          /**
-     * Información de contacto del dueño de la mascota
-     *
-     * Método HTTP: GET
-     * Ruta: /api/pet-owner-information
-     * Descripción: Información de contacto del dueño de la mascota
-     *
-     * Parámetros de Ruta:
-     * - pet_id: int (Requerido) - ID de la mascota
-     * - veterinarian_id: int (Requerido) - ID del veterinario
-     *
-     * Respuesta Exitosa:
-     *{
-     *"success": true,
-     * "data": {
-     * "user_info": {
-     * "id": 3,
-     * "first_name": "Robert",
-     * "last_name": "Martin",
-     * "email": "robert@gmail.com",
-     * "mobile": "1-7485961545",
-     * "full_name": "Robert Martin",
-     * "profile_image": "http://localhost/balance/storage/4/Md9nTd4DwKavmjnYPICwtabl74Pnype06ZVUmaYB.png",
-     * }
-     *}
-     *
-     * Respuesta de Error:
-     * {
-     *      "success": false
-     *     "message": "Error message",
-     *
-     * }
-     */
-        Route::get('pet-owner-information',[VeterinaryController::class,'petOwnerInformation']);
+        /**
+         * Información de contacto del dueño de la mascota
+         *
+         * Método HTTP: GET
+         * Ruta: /api/pet-owner-information
+         * Descripción: Información de contacto del dueño de la mascota
+         *
+         * Parámetros de Ruta:
+         * - pet_id: int (Requerido) - ID de la mascota
+         * - veterinarian_id: int (Requerido) - ID del veterinario
+         *
+         * Respuesta Exitosa:
+         *{
+         *"success": true,
+         * "data": {
+         * "user_info": {
+         * "id": 3,
+         * "first_name": "Robert",
+         * "last_name": "Martin",
+         * "email": "robert@gmail.com",
+         * "mobile": "1-7485961545",
+         * "full_name": "Robert Martin",
+         * "profile_image": "http://localhost/balance/storage/4/Md9nTd4DwKavmjnYPICwtabl74Pnype06ZVUmaYB.png",
+         * }
+         *}
+         *
+         * Respuesta de Error:
+         * {
+         *      "success": false
+         *     "message": "Error message",
+         *
+         * }
+         */
+        Route::get('pet-owner-information', [VeterinaryController::class, 'petOwnerInformation']);
     });
     Route::apiResource('/vacunas', VacunaController::class);
     /**
@@ -2288,7 +2375,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('vaccines-given-to-pet', [VacunaController::class, 'vaccinesGivenToPet']);
     Route::apiResource('/anti-wormers', AntiWormersController::class);
-  /**
+    /**
      * Listado de antigarrapatas que tiene una mascota
      *
      * Método HTTP: GET
@@ -2299,46 +2386,46 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * - pet_id: int (Requerido) - ID de la mascota
      *
      * Respuesta Exitosa:
-    * {
-    *  "success": true,
-    *  "data": [
-    *    {
-    *      "id": 1,
-    *      "pet_id": 1,
-    *      "antigarrapata_name": "Antigarrapatas",
-    *      "fecha_aplicacion": "2024-11-07",
-    *      "fecha_refuerzo_antigarrapata": "2024-12-07",
-    *      "created_at": "2024-11-06T20:59:13.000000Z",
-    *      "updated_at": "2024-11-06T20:59:13.000000Z",
-    *      "pet": {
-    *        "id": 1,
-    *        "name": "Beau",
-    *        "slug": "beau",
-    *        "pettype_id": 1,
-    *        "breed_id": 1,
-    *        "size": null,
-    *        "date_of_birth": null,
-    *        "age": "13 year",
-    *        "gender": "male",
-    *        "weight": 31,
-    *        "height": 60,
-    *        "weight_unit": "kg",
-    *        "height_unit": "cm",
-    *        "user_id": 2,
-    *        "additional_info": null,
-    *        "status": 1,
-    *        "created_by": null,
-    *        "updated_by": null,
-    *        "deleted_by": null,
-    *        "created_at": "2024-08-14T05:52:08.000000Z",
-    *        "updated_at": "2024-08-14T05:52:08.000000Z",
-    *        "deleted_at": null,
-    *        "qr_code": "images/qr_codes/qr_code_1723614728.png",
-    *        "pet_image": "http://localhost/balance/storage/170/lqxRTGxYmMyuLBXh7MOUSf9jeHLyKnR5BbSUHPkX.png",
-    *      }
-    *    }
-    *  ]
-    *}
+     * {
+     *  "success": true,
+     *  "data": [
+     *    {
+     *      "id": 1,
+     *      "pet_id": 1,
+     *      "antigarrapata_name": "Antigarrapatas",
+     *      "fecha_aplicacion": "2024-11-07",
+     *      "fecha_refuerzo_antigarrapata": "2024-12-07",
+     *      "created_at": "2024-11-06T20:59:13.000000Z",
+     *      "updated_at": "2024-11-06T20:59:13.000000Z",
+     *      "pet": {
+     *        "id": 1,
+     *        "name": "Beau",
+     *        "slug": "beau",
+     *        "pettype_id": 1,
+     *        "breed_id": 1,
+     *        "size": null,
+     *        "date_of_birth": null,
+     *        "age": "13 year",
+     *        "gender": "male",
+     *        "weight": 31,
+     *        "height": 60,
+     *        "weight_unit": "kg",
+     *        "height_unit": "cm",
+     *        "user_id": 2,
+     *        "additional_info": null,
+     *        "status": 1,
+     *        "created_by": null,
+     *        "updated_by": null,
+     *        "deleted_by": null,
+     *        "created_at": "2024-08-14T05:52:08.000000Z",
+     *        "updated_at": "2024-08-14T05:52:08.000000Z",
+     *        "deleted_at": null,
+     *        "qr_code": "images/qr_codes/qr_code_1723614728.png",
+     *        "pet_image": "http://localhost/balance/storage/170/lqxRTGxYmMyuLBXh7MOUSf9jeHLyKnR5BbSUHPkX.png",
+     *      }
+     *    }
+     *  ]
+     *}
      *
      * Respuesta de Error:
      * {
@@ -2349,7 +2436,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/anti-wormers-given-pet', [AntiWormersController::class, 'antiWormersGivenToPet']);
     Route::apiResource('/anti-ticks', AntiTickController::class);
-  /**
+    /**
      * Listado de antidesparasitante que tiene una mascota
      *
      * Método HTTP: GET
@@ -2360,46 +2447,46 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * - pet_id: int (Requerido) - ID de la mascota
      *
      * Respuesta Exitosa:
-    * {
-    *  "success": true,
-    *  "data": [
-    *    {
-    *      "id": 1,
-    *      "pet_id": 1,
-    *      "antidesparasitante_name": "Antidesparasitante",
-    *      "fecha_aplicacion": "2024-11-07",
-    *      "fecha_refuerzo_antidesparasitante": "2024-12-07",
-    *      "created_at": "2024-11-06T20:59:13.000000Z",
-    *      "updated_at": "2024-11-06T20:59:13.000000Z",
-    *      "pet": {
-    *        "id": 1,
-    *        "name": "Beau",
-    *        "slug": "beau",
-    *        "pettype_id": 1,
-    *        "breed_id": 1,
-    *        "size": null,
-    *        "date_of_birth": null,
-    *        "age": "13 year",
-    *        "gender": "male",
-    *        "weight": 31,
-    *        "height": 60,
-    *        "weight_unit": "kg",
-    *        "height_unit": "cm",
-    *        "user_id": 2,
-    *        "additional_info": null,
-    *        "status": 1,
-    *        "created_by": null,
-    *        "updated_by": null,
-    *        "deleted_by": null,
-    *        "created_at": "2024-08-14T05:52:08.000000Z",
-    *        "updated_at": "2024-08-14T05:52:08.000000Z",
-    *        "deleted_at": null,
-    *        "qr_code": "images/qr_codes/qr_code_1723614728.png",
-    *        "pet_image": "http://localhost/balance/storage/170/lqxRTGxYmMyuLBXh7MOUSf9jeHLyKnR5BbSUHPkX.png",
-    *      }
-    *    }
-    *  ]
-    *}
+     * {
+     *  "success": true,
+     *  "data": [
+     *    {
+     *      "id": 1,
+     *      "pet_id": 1,
+     *      "antidesparasitante_name": "Antidesparasitante",
+     *      "fecha_aplicacion": "2024-11-07",
+     *      "fecha_refuerzo_antidesparasitante": "2024-12-07",
+     *      "created_at": "2024-11-06T20:59:13.000000Z",
+     *      "updated_at": "2024-11-06T20:59:13.000000Z",
+     *      "pet": {
+     *        "id": 1,
+     *        "name": "Beau",
+     *        "slug": "beau",
+     *        "pettype_id": 1,
+     *        "breed_id": 1,
+     *        "size": null,
+     *        "date_of_birth": null,
+     *        "age": "13 year",
+     *        "gender": "male",
+     *        "weight": 31,
+     *        "height": 60,
+     *        "weight_unit": "kg",
+     *        "height_unit": "cm",
+     *        "user_id": 2,
+     *        "additional_info": null,
+     *        "status": 1,
+     *        "created_by": null,
+     *        "updated_by": null,
+     *        "deleted_by": null,
+     *        "created_at": "2024-08-14T05:52:08.000000Z",
+     *        "updated_at": "2024-08-14T05:52:08.000000Z",
+     *        "deleted_at": null,
+     *        "qr_code": "images/qr_codes/qr_code_1723614728.png",
+     *        "pet_image": "http://localhost/balance/storage/170/lqxRTGxYmMyuLBXh7MOUSf9jeHLyKnR5BbSUHPkX.png",
+     *      }
+     *    }
+     *  ]
+     *}
      *
      * Respuesta de Error:
      * {

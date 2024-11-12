@@ -12,9 +12,13 @@ class Diario extends Model
 
     protected $table = 'diarios';
     protected $guarded = [];
-
+    protected $appends = ['image'];
     public function pet()
     {
         return $this->belongsTo(Pet::class);
+    }
+    public function getImageAttribute()
+    {
+        return asset($this->attributes['image']);
     }
 }
