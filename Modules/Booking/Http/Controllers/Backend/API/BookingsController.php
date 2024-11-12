@@ -715,7 +715,9 @@ class BookingsController extends Controller
             $data = $request->validate([
                 'pet_id' => 'required|integer|exists:pets,id'
             ]);
-            $users = User::with('employeeBooking')
+            $users = User::with(['employeeBooking' => function($query) {
+                $query->where('status', 'completed');
+            }])
                 ->whereHas('employeeBooking', function ($q) use ($data) {
                     return $q->where('pet_id', $data['pet_id'])
                         ->whereIn('booking_type', ['veterinary', 'training']);
