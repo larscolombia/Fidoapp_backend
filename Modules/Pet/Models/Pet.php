@@ -25,7 +25,7 @@ class Pet extends BaseModel
     protected $table = 'pets';
     protected $fillable = ['name', 'slug', 'pettype_id', 'breed_id', 'date_of_birth', 'age', 'gender', 'weight', 'height', 'weight_unit',
     'height_unit', 'additional_info', 'user_id', 'status', 'qr_code'];
-    protected $appends = ['pet_image'];
+    protected $appends = ['pet_image','qr_code'];
 
     /**
      * Create a new factory instance for the model.
@@ -51,6 +51,11 @@ class Pet extends BaseModel
         $media = $this->getFirstMediaUrl('pet_image');
 
         return isset($media) && ! empty($media) ? $media : default_feature_image();
+    }
+
+    public function getQrCodeAttribute()
+    {
+        return asset($this->attributes['qr_code']);
     }
 
     public function pettype()

@@ -32,6 +32,7 @@ class PetResource extends JsonResource
             'height_unit' => $this->height_unit,
             'user_id' => $this->user_id,
             'status' => $this->status,
+            'qr_code'=> $this->qr_code,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
