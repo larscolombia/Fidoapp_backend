@@ -159,7 +159,7 @@ class BookingsController extends Controller
                 ];
                 BookingVeterinaryMapping::updateOrCreate(['booking_id'=>$booking->id],$veterinary);
                 break;
-            
+
             default:
                 # code...
                 break;
@@ -192,8 +192,8 @@ class BookingsController extends Controller
         }
         return response()->json(
             [
-                'message' => $message, 
-                'status' => true, 
+                'message' => $message,
+                'status' => true,
                 'data' => $booking
             ], 200);
     }
@@ -214,7 +214,7 @@ class BookingsController extends Controller
         return response()->json(
             [
                 'message' => $message,
-                'data' => $booking, 
+                'data' => $booking,
                 'status' => true
             ], 200
         );
@@ -232,7 +232,7 @@ class BookingsController extends Controller
 
         return response()->json(
             [
-                'message' => $message, 
+                'message' => $message,
                 'status' => true,
                 'data' => $data
             ], 200);
@@ -250,7 +250,7 @@ class BookingsController extends Controller
 
         return response()->json(
             [
-                'message' => $message, 
+                'message' => $message,
                 'status' => true,
                 'data' => $data
             ], 200);
@@ -270,7 +270,7 @@ class BookingsController extends Controller
 
             $booking = Booking::where('employee_id', $user->id);
         }
-        
+
         if ($request->has('booking_type') && isset($request->booking_type)) {
             $booking->where('booking_type', $request->booking_type);
         }
@@ -286,7 +286,7 @@ class BookingsController extends Controller
             $bookingIds = $bookingRequestQuery->pluck('booking_id');
 
             $booking->whereIn('id', $bookingIds);
-    
+
         }
 
         $booking = $booking->with(['boarding','training','daycare','walking','bookingTransaction','systemservice']);
@@ -295,19 +295,19 @@ class BookingsController extends Controller
 
         if ($request->has('system_service_name') && isset($request->system_service_name)) {
             $serviceNames = explode(',', $request->system_service_name);
-        
+
             $booking->whereHas('systemservice', function ($query) use ($serviceNames) {
                 $query->whereIn('name', $serviceNames);
             });
         }
 
-      
+
 
         if ($request->has('status') && isset($request->status)) {
 
-             $status = explode(',', $request->status); 
+             $status = explode(',', $request->status);
              $booking->whereIn('status', $status);
-               
+
         }
         $per_page = $request->input('per_page', 10);
         if ($request->has('per_page') && ! empty($request->per_page)) {
@@ -327,7 +327,7 @@ class BookingsController extends Controller
             $search = $request->search;
             $booking->where(function ($query) use ($search) {
                 $query->where('id', 'LIKE', "%$search%")
-                    
+
                     ->orWhereHas('pet', function ($petQuery) use ($search) {
                         $petQuery->where('name', 'LIKE', "%$search%");
                     })
@@ -349,7 +349,7 @@ class BookingsController extends Controller
         }
 
         $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
-        
+
         // if($request->booking_type === 'boarding'){
         //     $items = BookingBoardingResource::collection($booking);
         // }
@@ -390,7 +390,7 @@ class BookingsController extends Controller
 
             $booking = Booking::where('employee_id', $user->id);
         }
-        
+
         $booking->where('booking_type', 'training');
 
         if($request->has('nearby_booking') && $request->nearby_booking==1){
@@ -404,7 +404,7 @@ class BookingsController extends Controller
             $bookingIds = $bookingRequestQuery->pluck('booking_id');
 
             $booking->whereIn('id', $bookingIds);
-    
+
         }
 
         $booking = $booking->with(['boarding','training','daycare','walking','bookingTransaction','systemservice']);
@@ -413,19 +413,19 @@ class BookingsController extends Controller
 
         if ($request->has('system_service_name') && isset($request->system_service_name)) {
             $serviceNames = explode(',', $request->system_service_name);
-        
+
             $booking->whereHas('systemservice', function ($query) use ($serviceNames) {
                 $query->whereIn('name', $serviceNames);
             });
         }
 
-      
+
 
         if ($request->has('status') && isset($request->status)) {
 
-             $status = explode(',', $request->status); 
+             $status = explode(',', $request->status);
              $booking->whereIn('status', $status);
-               
+
         }
         $per_page = $request->input('per_page', 10);
         if ($request->has('per_page') && ! empty($request->per_page)) {
@@ -445,7 +445,7 @@ class BookingsController extends Controller
             $search = $request->search;
             $booking->where(function ($query) use ($search) {
                 $query->where('id', 'LIKE', "%$search%")
-                    
+
                     ->orWhereHas('pet', function ($petQuery) use ($search) {
                         $petQuery->where('name', 'LIKE', "%$search%");
                     })
@@ -508,11 +508,11 @@ class BookingsController extends Controller
             }
         }
 
-      
+
         return response()->json([
             'status' => true,
             'data' => $booking_detail,
-            'customer_review' => $customer_review,    
+            'customer_review' => $customer_review,
             'message' => __('booking.booking_detail'),
         ], 200);
     }
@@ -604,7 +604,7 @@ class BookingsController extends Controller
             $walking_data->fill($data);
 
             $walking_data->save();
-          
+
         }
         if($booking->booking_type === 'daycare'){
 
@@ -613,7 +613,7 @@ class BookingsController extends Controller
             $daycare_data->fill($data);
 
             $daycare_data->save();
-          
+
         }
         if($booking->booking_type === 'training'){
 
@@ -641,7 +641,7 @@ class BookingsController extends Controller
 
             $grooming_data->save();
 
-         
+
         }
 
       if($request->has('services') && $request->services != null){
@@ -659,11 +659,11 @@ class BookingsController extends Controller
     public function accept_booking($id) {
 
         $employee_id=auth()->id();
-  
+
         $booking=Booking::where('id',$id)->first();
-  
+
         if($booking->employee_id ==null){
-  
+
          Booking::where('id',$id)->update(['employee_id'=>$employee_id]);
 
          $payment = BookingTransaction::where('booking_id', $id)->first();
@@ -671,19 +671,19 @@ class BookingsController extends Controller
          if($payment){
 
             $earning_data = $this->commissionData($payment);
- 
+
             $booking->commission()->save(new CommissionEarning($earning_data['commission_data']));
-    
+
          }
 
          BookingRequestMapping::where('booking_id',$id)->update(['status'=>1]);
-  
+
          $booking=Booking::where('id',$id)->with('user','systemservice','employee')->first();
-  
+
          $notify_type='accept_booking_request';
-  
+
          $notification_data = [
-  
+
           'id' => $booking->id,
           'user_id' => $booking->user_id,
           'user_name' => $booking->user->first_name ,
@@ -696,9 +696,9 @@ class BookingsController extends Controller
           'booking_date_and_time' => DateTime::createFromFormat('Y-m-d H:i', $booking->start_date_time),
           'latitude' =>  null,
           'longitude' => null,
-          
+
        ];
-  
+
           if (isset($notify_type)) {
               try {
                   $this->sendNotificationOnBookingUpdate($notify_type, $notification_data);
@@ -706,16 +706,36 @@ class BookingsController extends Controller
                   \Log::error($e->getMessage());
               }
           }
-      
-  
+
+
           $message = __('booking.booking_accepted');
-  
+
           return response()->json(['message' => $message, 'status' => true], 200);
-  
+
         }
-  
+
         return response()->json(['status' => false, 'message' => __('booking.Booking already accepted')]);
-  
+
     }
-  
+
+    public function getWhoCaredForMyPet(Request $request)
+    {
+        try{
+            $data = $request->validate([
+                'pet_id' => 'required|integer|exists:pets,id',
+                'search' => 'string'
+           ]);
+           $users = User::with('booking')
+               ->whereHas('booking',function($q) use ($data) {
+                    return $q->where('pet_id',$data['pet_id']);
+               })
+               ->whereIn('booking_type',['veterinary','training'])
+               ->select('users.first_name','users.last_name')
+               ->get();
+        }catch(\Exception $e){
+            return response()->json(['success' => false, 'message' =>$e->getMessage()]);
+        }
+
+    }
+
 }
