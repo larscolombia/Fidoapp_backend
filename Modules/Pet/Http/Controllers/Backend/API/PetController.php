@@ -231,7 +231,7 @@ class PetController extends Controller
             return [
                 'name' => $pet->name,
                 'age' => $pet->age,
-                'qr_code' => $pet->qr_code,
+                'qr_code' => asset($pet->qr_code),
                 'breed' => [
                     'name' => $pet->breed->name,
                     'description' => $pet->breed->description,
