@@ -1917,6 +1917,37 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
 
+  /**
+     * Listado de veterinarios y entrenadores que atendieron a una mascota.
+     * Método HTTP: GET
+     * Ruta: /api/get-who-cared-for-my-pet
+     * Descripción: Permite obtener el listado de veterinarios y entrenadores que atendieron a una mascota.
+     *
+     * Parámetros de Solicitud:
+     * - pet_id: int (Requerido) - ID de la mascota.
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "message": "Query completed successfully",
+     *  "data": [
+     *  {
+     *   "first_name": "Wade",
+     *   "last_name": "Allen",
+     *   "specialty": "veterinary",
+     *   "date": "01/08/2023",
+     *   "note": null,
+     *   "booking_extra_info": ""
+     * }
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::get('get-who-cared-for-my-pet',[BookingsController::class, 'getWhoCaredForMyPet']);
     /**
      * Crear un nuevo servicio de entrenamiento.
      * Método HTTP: POST
