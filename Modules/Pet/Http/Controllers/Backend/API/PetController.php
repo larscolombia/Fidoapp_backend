@@ -404,9 +404,38 @@ class PetController extends Controller
     public function show($id)
     {
         $pet = Pet::with(['pettype', 'breed'])->findOrFail($id);
-
+        $result =  [
+            'id' => $pet->id,
+            'name' => $pet->name,
+            'slug' => $pet->slug,
+            'pettype_id' => $pet->pettype_id,
+            'breed_id' => $pet->breed_id,
+            'size' => $pet->size,
+            'date_of_birth' => $pet->date_of_birth,
+            'age' => $pet->age,
+            'gender' => $pet->gender,
+            'weight' => $pet->weight,
+            'height' => $pet->height,
+            'weight_unit' => $pet->weight_unit,
+            'height_unit' => $pet->height_unit,
+            'user_id' => $pet->user_id,
+            'additional_info' => $pet->additional_info,
+            'status' => $pet->status,
+            'created_by' => $pet->created_by,
+            'updated_by' => $pet->updated_by,
+            'deleted_by' => $pet->deleted_by,
+            'created_at' => $pet->created_at,
+            'updated_at' => $pet->updated_at,
+            'deleted_at' => $pet->deleted_at,
+            'qr_code' => $pet->qr_code,
+            'pet_image' => $pet->pet_image,
+            // Agregar descripción de la raza
+            'description' => optional($pet->breed)->description, // Usamos optional para evitar errores si breed es null
+            // Agregar nombre del tipo de mascota
+            'pettype' => optional($pet->pettype)->name, // Usamos optional para evitar errores si pettype es null
+        ];
         return response()->json([
-            'data' => $pet,
+            'data' => $result,
             'message' => __('pet.pet_retrieved_successfully'),
         ]);
     }
