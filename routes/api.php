@@ -37,6 +37,7 @@ use App\Http\Controllers\Backend\API\AddressController;
 */
 use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\Backend\API\UserApiController;
+use App\Http\Controllers\Api\SpecialConditionController;
 use Modules\Pet\Http\Controllers\Backend\PetsController;
 use App\Http\Controllers\Backend\API\DashboardController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
@@ -1506,6 +1507,80 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('/pet-notes', [PetController::class, 'petNoteList']);
+
+
+    /**
+     * Metodo: POST
+     * Ruta: '/api/special-conditions
+     * Parametros:
+     * "pet_id": ID de la mascota (Requerido),
+     *  "allergies": Descripcion de la alergia (opcional),
+     *   "chronic_diseases": Descripcion de la enfermedad cronica (opcional),
+     *  "disabilities": Descripcion de la discapacidad (opcional),
+     *   "food_needs": Descripcion de la necesidad de alimento (opcional),
+     *   "medications": Descripcion de los medicamentos (opcional),
+     * Respuesta exitosa
+     * {
+     *"success": true,
+     *"message": "record updated successfully",
+     *"data": {
+     *  "id": 1,
+     *  "pet_id": 1,
+     *  "allergies": "Posee alergias",
+     *  "chronic_diseases": null,
+     *  "disabilities": null,
+     *  "food_needs": null,
+     *  "medications": null,
+     *  "created_at": "2024-11-13T16:03:55.000000Z",
+     *  "updated_at": "2024-11-13T16:10:38.000000Z"
+     *}
+     *}
+     * Respuesta fallida
+     * {
+     *  "success":false,
+     *  "message": "Mensaje de error"
+     * }
+     * Metodo: PUT
+     * Ruta: '/api/special-conditions/{id}
+     * Similar al metodo anterior en parametros y la respuesta
+     *
+     * Metodo: DELETE
+     * Ruta:/api/special-conditions/{id}
+     * Respuesta exitosa
+     * {
+     *  "success":true,
+     *  "message": "Registro eliminado con exito"
+     * }
+     * Respuesta fallida:
+     * {
+     *  "success":false,
+     *  "message": "Mensaje de error"
+     * }
+     * Metodo: GET
+     * Ruta: '/api/special-conditions/{id}
+     * Respuesta exitosa
+     * {
+     *  "success":true,
+     *  "data": {
+     *"id": 1,
+     *"pet_id": 1,
+     *"allergies": "Posee alergias",
+     *"chronic_diseases": null,
+     *"disabilities": null,
+     *"food_needs": null,
+     *"medications": null,
+     *"created_at": "2024-11-13T16:03:55.000000Z",
+     *"updated_at": "2024-11-13T16:10:38.000000Z"
+     *}
+     * Respuesta fallida
+     * {
+     *  "success":false,
+     *  "message": "Mensaje de error"
+     * }
+     *
+     */
+
+    Route::resource('special-conditions', SpecialConditionController::class);
 
     // Retorna una lista paginada de dueños y sus mascotas, basándose en un employee_id y los datos de reserva.
     /**
