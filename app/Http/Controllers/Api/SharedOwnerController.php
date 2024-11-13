@@ -67,7 +67,7 @@ class SharedOwnerController extends Controller
     public function getOwners($petId)
     {
         try{
-            $pet = Pet::with('owner','owner.profile', 'sharedOwners')->findOrFail($petId);
+            $pet = Pet::with('owner','owner.profile','owner.rating' ,'sharedOwners')->findOrFail($petId);
 
             return response()->json([
                 'success' => true,
