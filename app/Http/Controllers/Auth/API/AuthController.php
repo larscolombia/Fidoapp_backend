@@ -57,7 +57,7 @@ class AuthController extends Controller
             if($user->email_verified_at == null){
 
                 return response()->json(['status' => false, 'message' => __('messages.account_not_verify') ]);
-          
+
             }
          }
 
@@ -96,7 +96,7 @@ class AuthController extends Controller
         } else {
             $user_data = User::where('email', $input['email'])->first();
         }
-     
+
 
         if ($user_data != null) {
 
@@ -108,11 +108,11 @@ class AuthController extends Controller
             $usertype = $user_data->user_type;
 
             if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
-    
+
                 if($user_data->email_verified_at == null){
-    
+
                     return response()->json(['status' => false, 'message' => __('messages.account_not_verify') ]);
-              
+
                 }
              }
 
@@ -191,7 +191,7 @@ class AuthController extends Controller
                     'employee_id' => $user->id,
                     'commission_id' => $commission->id,
                 ]);
-    
+
                 $branch_data = [
                     'employee_id' => $user->id,
                     'branch_id' => 1,
@@ -199,7 +199,7 @@ class AuthController extends Controller
                 BranchEmployee::create($branch_data);
              }
 
-                 
+
             \Illuminate\Support\Facades\Artisan::call('view:clear');
             \Illuminate\Support\Facades\Artisan::call('cache:clear');
             \Illuminate\Support\Facades\Artisan::call('route:clear');
@@ -220,11 +220,11 @@ class AuthController extends Controller
             $usertype = $user_data->user_type;
 
             if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
-    
+
                 if($user_data->email_verified_at == null){
-    
+
                     return response()->json(['status' => false, 'message' => __('messages.account_not_verify') ]);
-              
+
                 }
              }
 
@@ -357,20 +357,23 @@ class AuthController extends Controller
             $request->file('profile_image');
 
             storeMediaFile($user_data, $request->file('profile_image'), 'profile_image');
-        }     
+        }
 
         $user_profile = UserProfile::where('user_id', $user->id)->first();
 
 
          if(!$user_profile) {
-   
+
             $user_profile = new UserProfile();
             $user_profile->user_id = $user->id;
          }
 
-     
+
         if ($request->has('expert')) {
             $user_profile->expert = $request->expert;
+        }
+        if($request->has('description')){
+            $user_profile->description = $request->description;
         }
         if ($request->has('about_self')) {
             $user_profile->about_self = $request->about_self;
@@ -391,7 +394,7 @@ class AuthController extends Controller
         if($user_profile !=''){
 
             $user_profile->save();
-   
+
          }
 
         $user_data->save();
