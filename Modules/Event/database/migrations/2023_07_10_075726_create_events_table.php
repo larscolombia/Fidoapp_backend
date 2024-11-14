@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->dateTime('date')->nullable();
             $table->dateTime('end_date')->nullable();
+            $table->time('event_time')->nullable();
             $table->string('image')->nullable();
-            
+
             $table->string('slug')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->longText('description')->nullable();
@@ -28,12 +29,12 @@ return new class extends Migration
             $table->enum('tipo', ['salud', 'entrenamiento']);
 
             $table->foreign('user_id')
-            ->references('id')
-            ->on('users')
-            ->onDelete('cascade');
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
 
             $table->boolean('status')->default(1);
-            
+
             $table->integer('created_by')->unsigned()->nullable();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->integer('deleted_by')->unsigned()->nullable();

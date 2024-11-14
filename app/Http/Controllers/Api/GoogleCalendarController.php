@@ -41,21 +41,22 @@ class GoogleCalendarController extends Controller
             return response()->json(['error' => 'Event not found.'], 404);
         }
 
-        // Convertir las fechas al formato ISO 8601 con Carbon
+        // Convertir las fechas al formato ISO 8601 con Carbon y agregar la hora del evento
         $date_event = $event->date;
         $end_date_event = $event->end_date;
+        $event_time = $event->event_time; // Captura la hora del evento
 
-        if (empty($date_event) || empty($end_date_event)) {
-            return response()->json(['error' => 'Fechas no proporcionadas o incorrectas.'], 400);
+        if (empty($date_event) || empty($end_date_event) || empty($event_time)) {
+            return response()->json(['error' => 'Fecha o hora no proporcionadas o incorrectas.'], 400);
         }
 
-        // Formatear fechas correctamente
-        $startDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $date_event, 'America/Bogota')
-                                ->format(\DateTime::ATOM);
-        $endDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $end_date_event, 'America/Bogota')
-                                ->format(\DateTime::ATOM);
+        // Concatenar la fecha con la hora y formatear a ISO 8601 para Google Calendar
+        $startDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $date_event . ' ' . $event_time, 'America/Bogota')
+        ->format(\DateTime::ATOM);
+        $endDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $end_date_event . ' ' . $event_time, 'America/Bogota')
+        ->format(\DateTime::ATOM);
 
-        // Crear un nuevo evento de Google Calendar
+        // Crear un nuevo evento de Google Calendar con fecha y hora
         $googleEvent = new Google_Service_Calendar_Event([
             'summary' => $event->name,
             'location' => $event->location,
@@ -95,4 +96,5 @@ class GoogleCalendarController extends Controller
             return response()->json(['error' => 'Error al crear el evento: ' . $e->getMessage()], 500);
         }
     }
+
 }

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-     /**
+    /**
      * Obtener todos los eventos.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -37,39 +37,45 @@ class EventController extends Controller
         ]);
     }
 
-    public function store (StoreRequest $request) {
+    public function store(StoreRequest $request)
+    {
         $validatedData = $request->validated();
 
         $event = Event::create([
-            'name' => $request->input('name'),
-            'date' => $request->input('date'),
-            'slug' => $request->input('slug'),
-            'user_id' => $request->input('user_id'),
+            'name'        => $request->input('name'),
+            'date'        => $request->input('date'),
+            'end_date'    => $request->input('end_date'),
+            'event_time'  => $request->input('event_time'),
+            'slug'        => $request->input('slug'),
+            'user_id'     => $request->input('user_id'),
             'description' => $request->input('description'),
-            'location' => $request->input('location'),
-            'tipo' => $request->input('tipo'),
-            'status' => $request->input('status'),
+            'location'    => $request->input('location'),
+            'tipo'        => $request->input('tipo'),
+            'status'      => $request->input('status'),
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Evento creado exitosamente',
-            'data' => $event,
+            'data'    => $event,
         ], 201);
     }
 
-    public function update (UpdateRequest $request, $id) {
+    public function update(UpdateRequest $request, $id)
+    {
         $event = Event::findOrFail($id);
 
         $event->update([
-            'name' => $request->input('name', $event->name),
-            'date' => $request->input('date', $event->date),
-            'slug' => $request->input('slug', $event->slug),
-            'user_id' => $request->input('user_id', $event->user_id),
+            'name'        => $request->input('name', $event->name),
+            'date'        => $request->input('date', $event->date),
+            'end_date'    => $request->input('end_date', $event->end_date),
+            'event_time'  => $request->input('event_time', $event->event_time),
+            'slug'        => $request->input('slug', $event->slug),
+            'user_id'     => $request->input('user_id', $event->user_id),
             'description' => $request->input('description', $event->description),
-            'location' => $request->input('location', $event->location),
-            'tipo' => $request->input('tipo', $event->tipo),
-            'status' => $request->input('status', $event->status),
+            'location'    => $request->input('location', $event->location),
+            'tipo'        => $request->input('tipo', $event->tipo),
+            'status'      => $request->input('status', $event->status),
         ]);
 
         return response()->json([
