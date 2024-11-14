@@ -8,17 +8,60 @@ use App\Http\Controllers\Controller;
 
 class PetHistoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $histories = PetHistory::with(['pet','pet.vacunas', 'pet.antidesparasitantes','pet.antigarrapatas' ,'veterinarian'])->get();
-        return response()->json(['data' => $histories]);
-    }
 
+    public function medicalHistoryPerPet(Request $request)
+    {
+        try {
+
+            $data = $request->validate([
+                'pet_id' => 'required|exists:pets,id',
+                'search' => 'nullable|string',
+            ]);
+            $query = PetHistory::with(['pet', 'pet.vacunas', 'pet.antidesparasitantes', 'pet.antigarrapatas', 'veterinarian'])
+                ->where('pet_id', $data['pet_id']);
+
+            // Si hay un término de búsqueda, aplica filtros
+            if (!empty($data['search'])) {
+                $query->where(function ($q) use ($data) {
+                    $q->where('medical_conditions', 'like', '%' . $data['search'] . '%')
+                        ->orWhere('test_results', 'like', '%' . $data['search'] . '%')
+                        ->orWhereHas('pet.vacunas', function ($q) use ($data) {
+                            $q->where('vacuna_name', 'like', '%' . $data['search'] . '%');
+                        })
+                        ->orWhereHas('pet.antidesparasitantes', function ($q) use ($data) {
+                            $q->where('antidesparasitante_name', 'like', '%' . $data['search'] . '%');
+                        })
+                        ->orWhereHas('pet.antigarrapatas', function ($q) use ($data) {
+                            $q->where('antigarrapata_name', 'like', '%' . $data['search'] . '%');
+                        });
+                });
+            }
+
+            // Obtención de historiales paginados
+            $histories = $query->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $histories,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation Error',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pet not found',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -61,7 +104,7 @@ class PetHistoryController extends Controller
      */
     public function show($id)
     {
-        $history = PetHistory::with(['pet','pet.vacunas', 'pet.antidesparasitantes','pet.antigarrapatas' ,'veterinarian'])->find($id);
+        $history = PetHistory::with(['pet', 'pet.vacunas', 'pet.antidesparasitantes', 'pet.antigarrapatas', 'veterinarian'])->find($id);
         if (!$history) {
             return response()->json(['message' => 'History not found'], 404);
         }
@@ -111,13 +154,13 @@ class PetHistoryController extends Controller
     {
         try {
             $data = $request->validate([
-                'user_id' =>'required|exists:users,id' ,
+                'user_id' => 'required|exists:users,id',
                 'pet_id' => 'required|exists:pets,id',
             ]);
-            $history = PetHistory::with(['pet','pet.user'])
-                ->whereHas('pet',function($q) use ($data){
+            $history = PetHistory::with(['pet', 'pet.user'])
+                ->whereHas('pet', function ($q) use ($data) {
                     return $q->where('user_id', $data['user_id'])
-                            ->where('id',$data['pet_id']);
+                        ->where('id', $data['pet_id']);
                 })
                 ->get();
             return response()->json([
