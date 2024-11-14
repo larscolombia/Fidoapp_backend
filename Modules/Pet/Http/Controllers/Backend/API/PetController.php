@@ -259,79 +259,91 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        // Define las reglas de validación
-        $rules = [
-            'name' => 'sometimes|string|max:255',
-            'breed_id' => 'sometimes|exists:breeds,id',
-            'breed_name' => 'sometimes|string',
-            'size' => 'sometimes|string|max:50',
-            'date_of_birth' => 'sometimes|date',
-            'age' => 'sometimes|string|max:50',
-            'gender' => 'sometimes|in:male,female',
-            'weight' => 'sometimes|numeric',
-            'height' => 'sometimes|numeric',
-            'weight_unit' => 'sometimes|string|max:10',
-            'height_unit' => 'sometimes|string|max:10',
-            'user_id' => 'sometimes|exists:users,id',
-            'additional_info' => 'sometimes|string',
-            'status' => 'sometimes|boolean',
-            'pet_image' => 'sometimes',
-        ];
+        try {
+            // Define las reglas de validación
+            $rules = [
+                'name' => 'sometimes|string|max:255',
+                'breed_id' => 'sometimes|exists:breeds,id',
+                'breed_name' => 'sometimes|string',
+                'size' => 'sometimes|string|max:50',
+                'date_of_birth' => 'sometimes|date',
+                'age' => 'sometimes|string|max:50',
+                'gender' => 'sometimes|in:male,female',
+                'weight' => 'sometimes|numeric',
+                'height' => 'sometimes|numeric',
+                'weight_unit' => 'sometimes|string|max:10',
+                'height_unit' => 'sometimes|string|max:10',
+                'user_id' => 'sometimes|exists:users,id',
+                'additional_info' => 'sometimes|string',
+                'status' => 'sometimes|boolean',
+                'pet_image' => 'sometimes|file|mimes:jpeg,png,jpg,gif|max:2048', // Validaciones para la imagen
+                'qr_code' => 'sometimes',
+            ];
 
-        // Obtener los datos validados
-        $validatedData = $request->validate($rules);
+            // Obtener los datos validados
+            $validatedData = $request->validate($rules);
 
-        // Manejo de breed_id y breed_name
-        $breed = null;
+            // Manejo de breed_id y breed_name
+            $breed = null;
 
-        if (!empty($validatedData['breed_id'])) {
-            $breed = Breed::find($validatedData['breed_id']);
-        }
+            if (!empty($validatedData['breed_id'])) {
+                $breed = Breed::find($validatedData['breed_id']);
+            }
 
-        if (!$breed && !empty($validatedData['breed_name'])) {
-            $breed = Breed::where('name', $validatedData['breed_name'])->first();
-        }
+            if (!$breed && !empty($validatedData['breed_name'])) {
+                $breed = Breed::where('name', $validatedData['breed_name'])->first();
+            }
 
-        if (!$breed) {
+            if (!isset($validatedData['qr_code'])) {
+                $validatedData['qr_code'] = null;
+            }
+
+            if (!$breed) {
+                return response()->json([
+                    'message' => __('pet.invalid_breed'),
+                ], 422);
+            }
+
+            $validatedData['breed_id'] = $breed->id;
+
+            // Generar el slug automáticamente si no está presente
+            $slug = Str::slug($validatedData['name']);
+            $slugCount = Pet::where('slug', 'LIKE', "{$slug}%")->count();
+            if ($slugCount > 0) {
+                $slug .= '-' . ($slugCount + 1);
+            }
+
+            $validatedData['pettype_id'] = PetType::where('slug', 'dog')->first()->id;
+            $validatedData['slug'] = $slug;
+
+            // Manejo de la imagen de la mascota
+            if ($request->hasFile('pet_image')) {
+                $image = $request->file('pet_image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imagePath = 'images/pets/' . $imageName;
+
+                // Mueve la imagen a la carpeta public/images/pets
+                $image->move(public_path('images/pets'), $imageName);
+                $validatedData['pet_image'] = $imagePath;
+            }
+
+            // Crear la nueva mascota
+            $pet = Pet::create($validatedData);
+
             return response()->json([
-                'message' => __('pet.invalid_breed'),
-            ], 422);
+                'message' => __('pet.pet_created_successfully'),
+                'data' => $pet
+            ], 201);
+
+        } catch (\Exception $e) {
+            // Manejo de excepciones generales
+            \Log::error('Error al crear la mascota: '.$e->getMessage());
+
+            return response()->json([
+                'message' => __('pet.creation_failed'),
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        $validatedData['breed_id'] = $breed->id;
-
-        // Generar el slug automáticamente si no está presente
-        $slug = Str::slug($validatedData['name']);
-        $slugCount = Pet::where('slug', 'LIKE', "{$slug}%")->count();
-        if ($slugCount > 0) {
-            $slug .= '-' . ($slugCount + 1);
-        }
-
-        $validatedData['pettype_id'] = PetType::where('slug', 'dog')->first()->id;
-        $validatedData['slug'] = $slug;
-
-        // Manejo de la imagen de la mascota
-         if ($request->hasFile('pet_image')) {
-            $image = $request->file('pet_image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = 'images/pets/' . $imageName;
-
-            // Mueve la imagen a la carpeta public/images/pets
-            $image->move(public_path('images/pets'), $imageName);
-        }
-
-        // Crear la nueva mascota
-        $pet = Pet::create($validatedData);
-
-        if (!empty($request['pet_image'])) {
-            // $media = $pet->addMediaFromUrl($request['pet_image'])->toMediaCollection('pet_image');
-            storeMediaFile($pet, $request->file('pet_image'), 'pet_image');
-        }
-
-        return response()->json([
-            'message' => __('pet.pet_created_successfully'),
-            'data' => $pet
-        ], 201);
     }
 
     public function update(Request $request, $id)
@@ -355,6 +367,7 @@ class PetController extends Controller
                 'additional_info' => 'sometimes|string',
                 'status' => 'sometimes|boolean',
                 'pet_image' => 'sometimes',
+                'qr_code' => 'sometimes',
             ];
 
             $validatedData = $request->validate($rules);
