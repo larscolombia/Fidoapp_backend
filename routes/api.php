@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\VacunaController;
 use App\Http\Controllers\Api\ComandoController;
 use App\Http\Controllers\Api\TrainerController;
 use App\Http\Controllers\Api\AntiTickController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Auth\API\AuthController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Api\CursoPlataformaController;
-use App\Http\Controllers\Backend\API\AddressController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Backend\API\AddressController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Backend\API\AddressController;
 use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\Backend\API\UserApiController;
 use App\Http\Controllers\Api\SpecialConditionController;
@@ -2078,7 +2079,111 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
-
+    /**
+     * Agregar calificacion y raiting
+     * Método HTTP: POST
+     * Ruta: /api/raiting-user
+     * Descripción: Agregar calificacion y raiting al usuario
+     *
+     * Parámetros de Solicitud:
+     * - user_id: int (Requerido) - ID del usuario.
+     * - employee_id: int (Requerido) -ID del empleado
+     * -review_msg: string (opcional) Comentario
+     * -rating: int (opcional) calificacion
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "data": [
+     *  {
+     *   Datos de la calificacion
+     * }
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::post('raiting-user',[EmployeeController::class,'ratingUserStore']);
+    /**
+     * Actualizar calificacion y raiting
+     * Método HTTP: PUT
+     * Ruta: /api/raiting-user/{id}
+     * Descripción: Actualizar calificacion y raiting al usuario
+     *
+     * Parámetros de Solicitud:
+     * -id: int (Requerido) -ID de la calificacion
+     * - user_id: int (Requerido) - ID del usuario.
+     * - employee_id: int (Requerido) -ID del empleado
+     * -review_msg: string (opcional) Comentario
+     * -rating: int (opcional) calificacion
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "data": [
+     *  {
+     *   Datos de la calificacion
+     * }
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::put('raiting-user/{id}',[EmployeeController::class,'updateRaiting']);
+      /**
+     * Listado de raiting
+     * Método HTTP: POST
+     * Ruta: /api/raiting-user
+     * Descripción: Listado de raiting del usuario
+     *
+     * Parámetros de Solicitud:
+     * - user_id: int (opcional) - ID del usuario.
+     * - employee_id: int (opcional) -ID del empleado
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "data": [
+     *  {
+     *   Datos de la calificacion
+     * }
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::get('raiting-user',[EmployeeController::class,'getRating']);
+         /**
+     * Eliminar calificacion
+     * Método HTTP: POST
+     * Ruta: /api/raiting-user/{id}
+     * Descripción: Eliminar calificacion del usuario
+     *
+     * Parámetros de Solicitud:
+     * - id: int (Requerido) - ID de la calificacion.
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "message":"calificacion eliminada"
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::delete('raiting-user/{id}',[EmployeeController::class,'destroyRaiting']);
     /**
      * Listado de veterinarios y entrenadores que atendieron a una mascota.
      * Método HTTP: GET
