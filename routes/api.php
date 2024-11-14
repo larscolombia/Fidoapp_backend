@@ -855,6 +855,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * {
      *     "name": "Evento 1",
      *     "date": "2024-07-13T00:00:00.000000Z",
+     *     "end_date":"2024-07-13T00:00:00.000000Z",
+     *     "event_time": "10:00:00",
      *     "slug": "evento-1",
      *     "user_id": 1,
      *     "description": "Descripción del evento 1",
@@ -2208,7 +2210,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/list-veterinaries/{petId}', [VeterinaryController::class, 'listVeterinaries']);
 
-     /**
+    /**
      * Obtener la lista de mascotas asignadas al veterinario.
      * Método HTTP: GET
      * Ruta: /api/pet-list
@@ -2235,7 +2237,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "status": false
      * }
      */
-    Route::get('pet-list-by-veterinarian',[VeterinaryController::class,'petListByVeterinarian']);
+    Route::get('pet-list-by-veterinarian', [VeterinaryController::class, 'petListByVeterinarian']);
     /**
      * Obtener la lista de entrenadores para una mascota.
      * Método HTTP: GET
@@ -2340,44 +2342,44 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('pet-clinical-history-for-owner', [PetHistoryController::class, 'petClinicalHistoryForOwner']);
-     /**
-         * Historial de mascota por id
-         *
-         * Método HTTP: GET
-         * Ruta: /api/medical-history-per-pet
-         * Descripción: Historial de mascota por veterinario
-         *
-         * Parámetros de Ruta:
-         * - pet_id: int (Requerido) - ID de la mascota
-         * -search: string (opcional) - parametro de busqueda
-         *
-         * Respuesta Exitosa:
-         *{
-         *"success": true,
-         *"data": [
-         *{
-         * "id": 1,
-         * "pet_id": 2,
-         * "vacuna_id": null,
-         * "antidesparasitante_id": null,
-         * "antigarrapata_id": 1,
-         * "veterinarian_id": 28,
-         * "medical_conditions": "Demo",
-         * "test_results": null,
-         * "vet_visits": 5,
-         * "created_at": "2024-11-07T15:18:23.000000Z",
-         * "updated_at": "2024-11-07T15:18:23.000000Z",
-         *}
-         *  ]
-         * }
-         * Respuesta de Error:
-         * {
-         *      "success": false
-         *     "message": "Error message",
-         *
-         * }
-         */
-    Route::get('medical-history-per-pet',[PetHistoryController::class,'medicalHistoryPerPet']);
+    /**
+     * Historial de mascota por id
+     *
+     * Método HTTP: GET
+     * Ruta: /api/medical-history-per-pet
+     * Descripción: Historial de mascota por veterinario
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota
+     * -search: string (opcional) - parametro de busqueda
+     *
+     * Respuesta Exitosa:
+     *{
+     *"success": true,
+     *"data": [
+     *{
+     * "id": 1,
+     * "pet_id": 2,
+     * "vacuna_id": null,
+     * "antidesparasitante_id": null,
+     * "antigarrapata_id": 1,
+     * "veterinarian_id": 28,
+     * "medical_conditions": "Demo",
+     * "test_results": null,
+     * "vet_visits": 5,
+     * "created_at": "2024-11-07T15:18:23.000000Z",
+     * "updated_at": "2024-11-07T15:18:23.000000Z",
+     *}
+     *  ]
+     * }
+     * Respuesta de Error:
+     * {
+     *      "success": false
+     *     "message": "Error message",
+     *
+     * }
+     */
+    Route::get('medical-history-per-pet', [PetHistoryController::class, 'medicalHistoryPerPet']);
     route::middleware(['check_vet'])->group(function () {
         Route::apiResource('/pet-histories', PetHistoryController::class);
 
