@@ -17,7 +17,7 @@ class Event extends BaseModel
     
 
     protected $table = 'events';
-    protected $fillable = ['name', 'date', 'end_date', 'user_id', 'location', 'description', 'status', 'image'];
+    protected $fillable = ['name', 'date', 'end_date', 'event_time', 'user_id', 'location', 'description', 'status', 'image'];
     protected $appends = ['event_image'];
 
     /**
