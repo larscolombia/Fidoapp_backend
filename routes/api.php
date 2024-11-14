@@ -2208,6 +2208,34 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/list-veterinaries/{petId}', [VeterinaryController::class, 'listVeterinaries']);
 
+     /**
+     * Obtener la lista de mascotas asignadas al veterinario.
+     * Método HTTP: GET
+     * Ruta: /api/pet-list
+     * Descripción: Obtener la lista de mascotas asignadas al veterinario.
+     *
+     * Parámetros de Ruta:
+     * - user_id: int (Requerido) - ID del veterinario
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": [
+     *         {
+     *          "informacion de la mascota"
+     *         },
+     *
+     *     ],
+     *
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "error": "Error message",
+     *     "status": false
+     * }
+     */
+    Route::get('pet-list-by-veterinarian',[VeterinaryController::class,'petListByVeterinarian']);
     /**
      * Obtener la lista de entrenadores para una mascota.
      * Método HTTP: GET

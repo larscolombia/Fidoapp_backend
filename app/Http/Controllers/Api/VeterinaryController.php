@@ -46,6 +46,27 @@ class VeterinaryController extends Controller
         );
     }
 
+    public function petListByVeterinarian(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|numeric'
+        ]);
+        $userId = $request['user_id'];
+        $pets = Pet::with('bookings')
+            ->whereHas('bookings', function ($query) use ($userId) {
+                return $query->where('employee_id', $userId);
+            })
+            ->get();
+
+        return response()->json(
+            [
+                'data' => $pets,
+                'message' => __('Exitoso'),
+                'success' => true
+            ]
+        );
+    }
+
     public function petHistoryListByVeterinarian($id)
     {
         try {
