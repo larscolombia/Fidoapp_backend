@@ -13,18 +13,22 @@ class AntiWormersController extends Controller
         try {
             // Validación de los datos recibidos
             $request->validate([
-                'antidesparasitante_name' => 'required|string|max:255',
+                'name' => 'required|string|max:255',
                 'fecha_aplicacion' => 'required|date',
                 'pet_id' => 'required|exists:pets,id',
-                'fecha_refuerzo_antidesparasitante' => 'required|date|after_or_equal:fecha_aplicacion',
+                'fecha_refuerzo' => 'required|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
 
             // Crear la nueva Antidesparasitante asociada a la mascota
             $antiWormer = new Antidesparasitante();
             $antiWormer->pet_id = $request->pet_id;
-            $antiWormer->antidesparasitante_name = $request->antidesparasitante_name;
+            $antiWormer->antidesparasitante_name = $request->name;
             $antiWormer->fecha_aplicacion = $request->fecha_aplicacion;
-            $antiWormer->fecha_refuerzo_antidesparasitante = $request->fecha_refuerzo_antidesparasitante;
+            $antiWormer->fecha_refuerzo_antidesparasitante = $request->fecha_refuerzo;
+            $antiWormer->weight = $request->weight;
+            $antiWormer->additional_notes = $request->notes;
             $antiWormer->save();
             return response()->json([
                 'success' => true,
@@ -68,9 +72,11 @@ class AntiWormersController extends Controller
         try {
             // Validar los datos actualizados
             $request->validate([
-                'antidesparasitante_name' => 'required|string|max:255',
-                'fecha_aplicacion' => 'required|date',
-                'fecha_refuerzo_antidesparasitante' => 'required|date|after_or_equal:fecha_aplicacion',
+                'name' => 'required|string|max:255',
+                'fecha_aplicacion' => 'nullable|date',
+                'fecha_refuerzo' => 'nullable|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
 
             $antiWormer = Antidesparasitante::find($id);
@@ -82,9 +88,21 @@ class AntiWormersController extends Controller
                 ], 404);
             }
             // Actualizar los datos de la vacuna
-            $antiWormer->antidesparasitante_name = $request->antidesparasitante_name;
-            $antiWormer->fecha_aplicacion = $request->fecha_aplicacion;
-            $antiWormer->fecha_refuerzo_antidesparasitante = $request->fecha_refuerzo_antidesparasitante;
+            $antiWormer->antidesparasitante_name = $request->name;
+            if(!is_null($request->fecha_aplicacion)){
+                $antiWormer->fecha_aplicacion = $request->fecha_aplicacion;
+            }
+            if(!is_null($request->fecha_refuerzo)){
+                $antiWormer->fecha_refuerzo_antidesparasitante = $request->fecha_refuerzo;
+            }
+            if(!is_null($request->weight)){
+                $antiWormer->weight = $request->weight;
+            }
+
+            if(!is_null($request->notes)){
+                $antiWormer->additional_notes = $request->notes;
+            }
+
             $antiWormer->save();
 
             // Retornar la respuesta exitosa

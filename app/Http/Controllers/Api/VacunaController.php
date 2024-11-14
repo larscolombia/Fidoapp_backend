@@ -14,18 +14,22 @@ class VacunaController extends Controller
         try {
             // Validación de los datos recibidos
             $request->validate([
-                'vacuna_name' => 'required|string|max:255',
+                'name' => 'required|string|max:255',
                 'fecha_aplicacion' => 'required|date',
                 'pet_id' => 'required|exists:pets,id',
-                'fecha_refuerzo_vacuna' => 'required|date|after_or_equal:fecha_aplicacion',
+                'fecha_refuerzo' => 'required|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
 
             // Crear la nueva vacuna asociada a la mascota
             $vacuna = new Vacuna();
             $vacuna->pet_id = $request->pet_id;
-            $vacuna->vacuna_name = $request->vacuna_name;
+            $vacuna->vacuna_name = $request->name;
             $vacuna->fecha_aplicacion = $request->fecha_aplicacion;
-            $vacuna->fecha_refuerzo_vacuna = $request->fecha_refuerzo_vacuna;
+            $vacuna->fecha_refuerzo_vacuna = $request->fecha_refuerzo;
+            $vacuna->weight = $request->weight;
+            $vacuna->additional_notes = $request->notes;
             $vacuna->save();
             return response()->json([
                 'success' => true,
@@ -69,9 +73,11 @@ class VacunaController extends Controller
         try {
             // Validar los datos actualizados
             $request->validate([
-                'vacuna_name' => 'required|string|max:255',
-                'fecha_aplicacion' => 'required|date',
-                'fecha_refuerzo_vacuna' => 'required|date|after_or_equal:fecha_aplicacion',
+                'name' => 'required|string|max:255',
+                'fecha_aplicacion' => 'nullable|date',
+                'fecha_refuerzo' => 'nullable|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
 
             $vacuna = Vacuna::find($id);
@@ -83,9 +89,22 @@ class VacunaController extends Controller
                 ], 404);
             }
             // Actualizar los datos de la vacuna
-            $vacuna->vacuna_name = $request->vacuna_name;
-            $vacuna->fecha_aplicacion = $request->fecha_aplicacion;
-            $vacuna->fecha_refuerzo_vacuna = $request->fecha_refuerzo_vacuna;
+            $vacuna->vacuna_name = $request->name;
+            if(!is_null($request->fecha_aplicacion)){
+                $vacuna->fecha_aplicacion = $request->fecha_aplicacion;
+            }
+
+            if(!is_null($request->fecha_refuerzo)){
+                $vacuna->fecha_refuerzo_vacuna = $request->fecha_refuerzo;
+            }
+
+            if(!is_null($request->weight)){
+                $vacuna->weight = $request->weight;
+            }
+            if(!is_null($request->notes)){
+                $vacuna->additional_notes = $request->notes;
+            }
+
             $vacuna->save();
 
             // Retornar la respuesta exitosa
