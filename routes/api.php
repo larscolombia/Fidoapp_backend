@@ -2138,7 +2138,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('raiting-user/{id}',[EmployeeController::class,'updateRaiting']);
       /**
      * Listado de raiting
-     * Método HTTP: POST
+     * Método HTTP: GET
      * Ruta: /api/raiting-user
      * Descripción: Listado de raiting del usuario
      *
@@ -2164,7 +2164,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('raiting-user',[EmployeeController::class,'getRating']);
          /**
      * Eliminar calificacion
-     * Método HTTP: POST
+     * Método HTTP: DELETE
      * Ruta: /api/raiting-user/{id}
      * Descripción: Eliminar calificacion del usuario
      *
