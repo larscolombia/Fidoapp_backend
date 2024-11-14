@@ -32,6 +32,7 @@ class AntiWormersController extends Controller
             $antiWormer->save();
             return response()->json([
                 'success' => true,
+                'data' => $antiWormer,
                 'message' => __('Antidesparasitante creada exitosamente.')
             ], 201);
         } catch (\Exception $e) {

@@ -81,9 +81,31 @@ class PetHistoryController extends Controller
                 'medical_conditions' => 'nullable|string',
                 'test_results' => 'nullable|string',
                 'vet_visits' => 'nullable|integer',
+                'category' => 'nullable|in:1,2,3',
+                'date' => 'nullable|date',
+                'name' => 'nullable|string',
+                'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
+            $data = $request->all();
+              // Manejar el archivo si se proporciona
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('pet_histories'), $fileName);
+            $data['file'] = 'pet_histories/' . $fileName;
+        }
 
-            $history = PetHistory::create($request->all());
+        // Manejar la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('pet_histories'), $imageName);
+            $data['image'] = 'pet_histories/' . $imageName;
+        }
+
+        // Crear el historial con los datos procesados
+        $history = PetHistory::create($data);
             return response()->json([
                 'success' => true,
                 'data' => $history
@@ -121,11 +143,13 @@ class PetHistoryController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            // Buscar el historial por ID
             $history = PetHistory::find($id);
             if (!$history) {
                 return response()->json(['message' => 'Historial no encontrado'], 404);
             }
 
+            // Validar los datos entrantes
             $request->validate([
                 'pet_id' => 'required|exists:pets,id',
                 'veterinarian_id' => 'required|exists:users,id',
@@ -135,17 +159,50 @@ class PetHistoryController extends Controller
                 'medical_conditions' => 'nullable|string',
                 'test_results' => 'nullable|string',
                 'vet_visits' => 'nullable|integer',
+                'category' => 'nullable|in:1,2,3',
+                'date' => 'nullable|date',
+                'name' => 'nullable|string',
+                'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
-            $history->update($request->all());
+            // Obtener todos los datos del request
+            $data = $request->all();
+
+            if ($request->hasFile('file')) {
+                // Eliminar el archivo anterior si existe
+                if ($history->file && file_exists(public_path($history->file))) {
+                    unlink(public_path($history->file)); // Elimina el archivo anterior
+                }
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('pet_histories'), $fileName);
+                $data['file'] = 'pet_histories/' . $fileName; // Guarda la nueva ruta
+            }
+
+            // Manejar la imagen si se proporciona
+            if ($request->hasFile('image')) {
+                // Eliminar la imagen anterior si existe
+                if ($history->image && file_exists(public_path($history->image))) {
+                    unlink(public_path($history->image)); // Elimina la imagen anterior
+                }
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('pet_histories'), $imageName);
+                $data['image'] = 'pet_histories/' . $imageName; // Guarda la nueva ruta
+            }
+
+            // Actualizar el historial con los nuevos datos
+            $history->update($data);
+
             return response()->json([
                 'success' => true,
                 'data' => $history
-            ], 201);
+            ], 200); // Cambiar a 200 para indicar una actualización exitosa
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Ocurrió un error al actualizar el historial: ' . $e->getMessage()
             ], 500);
         }
     }

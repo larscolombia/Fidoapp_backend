@@ -32,6 +32,7 @@ class AntiTickController extends Controller
             $antiTick->save();
             return response()->json([
                 'success' => true,
+                'data' => $antiTick,
                 'message' => __('Antigarrapata creada exitosamente.')
             ], 201);
         } catch (\Exception $e) {

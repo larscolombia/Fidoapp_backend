@@ -33,6 +33,7 @@ class VacunaController extends Controller
             $vacuna->save();
             return response()->json([
                 'success' => true,
+                'data' => $vacuna,
                 'message' => __('Vacuna creada exitosamente.')
             ], 201);
         } catch (\Exception $e) {
