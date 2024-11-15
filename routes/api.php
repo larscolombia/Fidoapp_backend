@@ -47,6 +47,7 @@ use Modules\Pet\Http\Controllers\Backend\API\PetController;
 use App\Http\Controllers\Backend\API\NotificationsController;
 use App\Http\Controllers\Api\HerramientasEntrenamientoController;
 use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
+use Modules\Category\Http\Controllers\Backend\API\CategoryController;
 use Modules\Service\Http\Controllers\Backend\API\ServiceTrainingController;
 
 Route::get('branch-list', [BranchController::class, 'branchList']);
@@ -2411,6 +2412,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
+
+    Route::get('list-category',[CategoryController::class,'categoryList']);
     /**
      * Historial de mascota por el dueño
      *
