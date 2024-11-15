@@ -2316,12 +2316,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      /**
      * Obtener la lista de mascotas asignadas al veterinario.
      * Método HTTP: GET
-     * Ruta: /api/pet-list
+     * Ruta: /api/pet-list-by-veterinarian
      * Descripción: Obtener la lista de mascotas asignadas al veterinario.
      *
      * Parámetros de Ruta:
      * - user_id: int (Requerido) - ID del veterinario
-     *
+     * - most_recent: string (opcional) - mostrar los mas recientes
+     * - sort_asc_alphabetically: string (opcional) - ordenar de la A-Z
+     * - sort_desc_alphabetically: string (opcional) - ordenar de la Z-A
+     * - category: array int (opcional) - array te ID de categorias
+     * - date: date (opcional)  fecha de asignacion
      * Respuesta Exitosa:
      * {
      *     "data": [
