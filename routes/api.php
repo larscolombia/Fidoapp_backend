@@ -2413,6 +2413,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
 
+    Route::post('request-permission',[AuthController::class,'requestPermission']);
+
+    Route::put('request-permission/{id}',[AuthController::class,'respondToRequest']);
+    Route::get('get-user-social-network',[TrainerController::class,'getUserSocialNetwork']);
     Route::get('list-category',[CategoryController::class,'categoryList']);
     /**
      * Historial de mascota por el dueño
