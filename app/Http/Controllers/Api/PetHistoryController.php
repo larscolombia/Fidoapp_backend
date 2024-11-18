@@ -74,38 +74,55 @@ class PetHistoryController extends Controller
         try {
             $request->validate([
                 'pet_id' => 'required|exists:pets,id',
+                'report_type' => 'required|integer',
                 'veterinarian_id' => 'required|exists:users,id',
                 'vacuna_id' => 'nullable|integer',
                 'antidesparasitante_id' => 'nullable|integer',
                 'antigarrapata_id' => 'nullable|integer',
+                'application_date' => 'nullable|date',
                 'medical_conditions' => 'nullable|string',
                 'test_results' => 'nullable|string',
                 'vet_visits' => 'nullable|integer',
                 'category' => 'nullable|integer',
                 'date' => 'nullable|date',
-                'name' => 'nullable|string',
+                'report_name' => 'nullable|string',
                 'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'name' => 'required|string|max:255',
+                'fecha_aplicacion' => 'required|date',
+                'fecha_refuerzo' => 'required|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
             $data = $request->all();
-              // Manejar el archivo si se proporciona
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('pet_histories'), $fileName);
-            $data['file'] = 'pet_histories/' . $fileName;
-        }
+            // Asignar IDs según el tipo de reporte
+            if (isset($data['report_type'])) {
+                if ($data['report_type'] === 1) {
+                    $data['vacuna_id'] = $this->createReportType($data);
+                } elseif ($data['report_type'] === 2) {
+                    $data['antidesparasitante_id'] = $this->createReportType($data);
+                } elseif ($data['report_type'] === 3) {
+                    $data['antigarrapata_id'] = $this->createReportType($data);
+                }
+            }
+            // Manejar el archivo si se proporciona
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('pet_histories'), $fileName);
+                $data['file'] = 'pet_histories/' . $fileName;
+            }
 
-        // Manejar la imagen si se proporciona
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('pet_histories'), $imageName);
-            $data['image'] = 'pet_histories/' . $imageName;
-        }
-
-        // Crear el historial con los datos procesados
-        $history = PetHistory::create($data);
+            // Manejar la imagen si se proporciona
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('pet_histories'), $imageName);
+                $data['image'] = 'pet_histories/' . $imageName;
+            }
+            $data['name'] = $data['report_name'];
+            // Crear el historial con los datos procesados
+            $history = PetHistory::create($data);
             return response()->json([
                 'success' => true,
                 'data' => $history
@@ -162,6 +179,7 @@ class PetHistoryController extends Controller
                 'category' => 'nullable|integer',
                 'date' => 'nullable|date',
                 'name' => 'nullable|string',
+                'report_name' => 'string',
                 'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
@@ -247,5 +265,45 @@ class PetHistoryController extends Controller
 
         $history->delete();
         return response()->json(['message' => 'Successfully deleted history']);
+    }
+
+    public function createReportType($data)
+    {
+        // Mapeo de tipos de reportes a controladores
+        $controllers = [
+            1 => VacunaController::class,
+            2 => AntiWormersController::class,
+            3 => AntiTickController::class,
+        ];
+
+        // Verificar si el tipo de reporte existe en el mapeo
+        if (!array_key_exists($data['report_type'], $controllers)) {
+            throw new \Exception('Tipo de reporte no válido.');
+        }
+
+        // Crear un nuevo Request
+        $request = new Request([
+            'name' => $data['name'],
+            'fecha_aplicacion' => $data['fecha_aplicacion'],
+            'pet_id' => $data['pet_id'],
+            'fecha_refuerzo' => $data['fecha_refuerzo'],
+            'weight' => isset($data['weight']) && !is_null($data['weight']) ? $data['weight'] :null,
+            'notes' => isset($data['medical_conditions']) && !is_null($data['medical_conditions']) ? $data['medical_conditions'] :null,
+        ]);
+
+        // Instanciar el controlador correspondiente
+        $controller = app($controllers[$data['report_type']]);
+
+        // Llamar al método store del controlador
+        $response = $controller->store($request);
+
+        // Si la respuesta es exitosa, asigna el ID al request original
+        if ($response->getStatusCode() === 201) {
+            $data = json_decode($response->getContent(), true);
+            return $data['data']['id']; // Retorna el ID del registro creado
+        }
+
+        // Manejar el caso en que la creación falla
+        throw new \Exception('Error al crear el registro: ' . $response->getContent());
     }
 }
