@@ -74,7 +74,7 @@ class PetHistoryController extends Controller
         try {
             $request->validate([
                 'pet_id' => 'required|exists:pets,id',
-                'report_type' => 'required|integer',
+                'report_type' => 'required|integer|between:1,3',
                 'veterinarian_id' => 'required|exists:users,id',
                 'vacuna_id' => 'nullable|integer',
                 'antidesparasitante_id' => 'nullable|integer',
