@@ -149,11 +149,14 @@ class PetHistoryController extends Controller
         }
         $reportData = $this->getReportData($history);
         $response = [
+            'report_id' => $history->id,
             'report_name' => $history->name,
             'report_type' =>  $reportData['report_type'],
             'application_date' => $history->application_date ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : null,
+            'pet_id' => $history->pet->id,
             'pet_name' => $history->pet->name,
             'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
+            'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] :null,
             'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] :null,
             'fecha_aplicacion' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_aplicacion'])
             ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_aplicacion'])->format('d-m-Y')
@@ -163,6 +166,7 @@ class PetHistoryController extends Controller
             : null,
             'weight' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['weight']) ? $reportData['detail_type']['weight'] :null,
             'notes' =>!is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['notes'])  ? $reportData['detail_type']['notes'] : null,
+            'veterinarian_id' => $history->veterinarian->id,
             'veterinarian_name' => $history->veterinarian->full_name,
             'medical_conditions' => $history->medical_conditions,
             'test_results' => $history->test_results,
@@ -336,6 +340,7 @@ class PetHistoryController extends Controller
             return [
                 'report_type' => 1,
                 'detail_type' => [
+                    'id' => $history->vacuna->id,
                     'name' => $history->vacuna->vacuna_name,
                     'fecha_aplicacion' => $history->vacuna->fecha_aplicacion,
                     'fecha_refuerzo' => $history->vacuna->fecha_refuerzo_vacuna,
@@ -349,6 +354,7 @@ class PetHistoryController extends Controller
             return [
                 'report_type' => 2,
                 'detail_type' => [
+                    'id' => $history->antiparasitante->id,
                     'name' =>  $history->antiparasitante->antidesparasitante_name,
                     'fecha_aplicacion' =>  $history->antiparasitante->fecha_aplicacion,
                     'fecha_refuerzo' =>  $history->antiparasitante->fecha_refuerzo_antidesparasitante,
@@ -362,6 +368,7 @@ class PetHistoryController extends Controller
             return [
                 'report_type' => 3,
                 'detail_type' => [
+                    'id' => $history->antigarrapata->id,
                     'name' =>  $history->antigarrapata->antigarrapata_name,
                     'fecha_aplicacion' =>  $history->antigarrapata->fecha_aplicacion,
                     'fecha_refuerzo' =>  $history->antigarrapata->fecha_refuerzo_antigarrapata,
