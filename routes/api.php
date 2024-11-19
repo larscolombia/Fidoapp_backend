@@ -2495,7 +2495,42 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          */
     Route::get('medical-history-per-pet',[PetHistoryController::class,'medicalHistoryPerPet']);
     route::middleware(['check_vet'])->group(function () {
-        Route::apiResource('/pet-histories', PetHistoryController::class);
+        /**
+         * Crear historial clinico de la mascota
+         * Método HTTP: POST
+         * Ruta: /api/pet-histories
+         * Descripción: Crear el historial clinico de la mascota
+         * Parametros:
+         * - pet_id: int (Requerido) - ID de la mascota
+         * report_type: int (Requerido) -Tipo de reporte (1.Vacuna, 2.Antiparasitante, 3.Antigarrapata)
+         * veterinarian_id: int (Requerido) - ID del veterinario
+         * application_date: date (opcional) - fecha de la solicitud
+         * medical_conditions: string (opcional) - Condicion medica
+         * test_results: string (opcional) - Resultado de los examenes
+         * vet_visits: int (opcional) - numero de visitas del veterinario
+         * category: int (opcional) - ID de la categoria
+         * report_name: string (Requerido) - Nombre del Historial
+         * file: string (opcional) - Archivo subido
+         * image: string (opcional) - Imagen subida
+         * name: string (Requerido) - Nombre del tipo de reporte(Si es vacuna, antiparasitante o antigarrapata)
+         * fecha_aplicacion: date (Requerido) - Fecha aplicada del punto anterior.
+         * fecha_refuerzo: date (Requerido) - Fecha del refuero (vacuna, antiparasitante o antigarrapata)
+         * weight: string (opcional) - Peso de la mascota
+         * notes: string (opcional) - Notas adicionales
+         *
+         * Respuesta Exitosa:
+         * {
+         *  'success' => true,
+         *  'data' => $history
+         * }
+         *
+         * Respuesta fallida:
+         * {
+         *  'success' => false,
+         *  'message' => 'Mensaje de error'
+         * }
+        */
+         Route::apiResource('/pet-histories', PetHistoryController::class);
 
         /**
          * Historial de mascota por veterinario

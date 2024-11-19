@@ -85,7 +85,7 @@ class PetHistoryController extends Controller
                 'vet_visits' => 'nullable|integer',
                 'category' => 'nullable|integer',
                 'date' => 'nullable|date',
-                'report_name' => 'nullable|string',
+                'report_name' => 'required|string',
                 'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
                 'name' => 'required|string|max:255',
@@ -143,11 +143,34 @@ class PetHistoryController extends Controller
      */
     public function show($id)
     {
-        $history = PetHistory::with(['pet', 'pet.vacunas', 'pet.antidesparasitantes', 'pet.antigarrapatas', 'veterinarian'])->find($id);
+        $history = PetHistory::find($id);
         if (!$history) {
             return response()->json(['message' => 'History not found'], 404);
         }
-        return response()->json($history);
+        $reportData = $this->getReportData($history);
+        $response = [
+            'report_name' => $history->name,
+            'report_type' =>  $reportData['report_type'],
+            'application_date' => $history->application_date ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : null,
+            'pet_name' => $history->pet->name,
+            'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
+            'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] :null,
+            'fecha_aplicacion' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_aplicacion'])
+            ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_aplicacion'])->format('d-m-Y')
+            : null,
+            'fecha_refuerzo' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_refuerzo'])
+            ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_refuerzo'])->format('d-m-Y')
+            : null,
+            'weight' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['weight']) ? $reportData['detail_type']['weight'] :null,
+            'notes' =>!is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['notes'])  ? $reportData['detail_type']['notes'] : null,
+            'veterinarian_name' => $history->veterinarian->full_name,
+            'medical_conditions' => $history->medical_conditions,
+            'test_results' => $history->test_results,
+            'vet_visits' => $history->vet_visits,
+            'file' => !is_null($history->file) ? asset($history->file) : null,
+            'image' => !is_null($history->image) ? asset($history->image): null
+        ];
+        return response()->json($response);
     }
 
     /**
@@ -287,8 +310,8 @@ class PetHistoryController extends Controller
             'fecha_aplicacion' => $data['fecha_aplicacion'],
             'pet_id' => $data['pet_id'],
             'fecha_refuerzo' => $data['fecha_refuerzo'],
-            'weight' => isset($data['weight']) && !is_null($data['weight']) ? $data['weight'] :null,
-            'notes' => isset($data['medical_conditions']) && !is_null($data['medical_conditions']) ? $data['medical_conditions'] :null,
+            'weight' => isset($data['weight']) && !is_null($data['weight']) ? $data['weight'] : null,
+            'notes' => isset($data['medical_conditions']) && !is_null($data['medical_conditions']) ? $data['medical_conditions'] : null,
         ]);
 
         // Instanciar el controlador correspondiente
@@ -305,5 +328,52 @@ class PetHistoryController extends Controller
 
         // Manejar el caso en que la creación falla
         throw new \Exception('Error al crear el registro: ' . $response->getContent());
+    }
+
+    private function getReportData($history)
+    {
+        if (!is_null($history->vacuna_id)) {
+            return [
+                'report_type' => 1,
+                'detail_type' => [
+                    'name' => $history->vacuna->vacuna_name,
+                    'fecha_aplicacion' => $history->vacuna->fecha_aplicacion,
+                    'fecha_refuerzo' => $history->vacuna->fecha_refuerzo_vacuna,
+                    'weight' => $history->vacuna->weight,
+                    'notes' => $history->vacuna->additional_notes
+                ]
+            ];
+        }
+
+        if (!is_null($history->antidesparasitante_id)) {
+            return [
+                'report_type' => 2,
+                'detail_type' => [
+                    'name' =>  $history->antiparasitante->antidesparasitante_name,
+                    'fecha_aplicacion' =>  $history->antiparasitante->fecha_aplicacion,
+                    'fecha_refuerzo' =>  $history->antiparasitante->fecha_refuerzo_antidesparasitante,
+                    'weight' =>  $history->antiparasitante->weight,
+                    'notes' =>  $history->antiparasitante->additional_notes
+                ]
+            ];
+        }
+
+        if (!is_null($history->antigarrapata_id)) {
+            return [
+                'report_type' => 3,
+                'detail_type' => [
+                    'name' =>  $history->antigarrapata->antigarrapata_name,
+                    'fecha_aplicacion' =>  $history->antigarrapata->fecha_aplicacion,
+                    'fecha_refuerzo' =>  $history->antigarrapata->fecha_refuerzo_antigarrapata,
+                    'weight' =>  $history->antigarrapata->weight,
+                    'notes' =>  $history->antigarrapata->additional_notes
+                ]
+            ];
+        }
+
+        return [
+            'report_type' => null,
+            'detail_type' => null
+        ];
     }
 }
