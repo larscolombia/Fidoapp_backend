@@ -112,7 +112,7 @@ class VacunaController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $vacuna
-            ]);
+            ],201);
         } catch (\Exception $e) {
             // Retornar la respuesta exitosa
             return response()->json([

@@ -110,7 +110,7 @@ class AntiWormersController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $antiWormer
-            ]);
+            ],201);
         } catch (\Exception $e) {
             // Retornar la respuesta exitosa
             return response()->json([

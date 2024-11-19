@@ -110,7 +110,7 @@ class AntiTickController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $antiTick
-            ]);
+            ],201);
         } catch (\Exception $e) {
             // Retornar la respuesta exitosa
             return response()->json([
