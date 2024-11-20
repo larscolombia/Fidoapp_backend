@@ -2,10 +2,11 @@
 
 namespace Modules\Pet\Transformers;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Pet\Transformers\PetNoteResource;
 use Auth;
 use App\Models\User;
+use Modules\Pet\Transformers\PetNoteResource;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Pet\Transformers\SharedOwnerResource;
 
 class PetDetailsResource extends JsonResource
 {
@@ -54,7 +55,6 @@ class PetDetailsResource extends JsonResource
           };
 
 
-        $ownerUser = User::find($this->user_id);
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -72,7 +72,8 @@ class PetDetailsResource extends JsonResource
             'height' => $this->height,
             'height_unit' => $this->height_unit,
             'user_id' => $this->user_id,
-            'user_name' => optional($ownerUser)->full_name,
+            'owner' => new OwnerPetResource($this->owner),
+            'shared_owners' => SharedOwnerResource::collection($this->sharedOwners),
             'status' => $this->status,
             'pet_notes' => $this->when($user_type == 'user', function () use ($user_id) {
                 return PetNoteResource::collection($this->petnote()->where(function ($query) use ($user_id) {

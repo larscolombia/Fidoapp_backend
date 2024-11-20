@@ -184,18 +184,25 @@ class PetController extends Controller
     // Retorna los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
     public function PetDetails(Request $request){
 
-        $pet_id = $request->has('pet_id') ? $request->input('pet_id') : null;
+        try{
+            $pet_id = $request->has('pet_id') ? $request->input('pet_id') : null;
 
-        $pet_details = Pet::with(['pettype','breed','petnote'])->where('id', $pet_id)->first();
+            $pet_details = Pet::with(['pettype','breed','petnote','sharedOwners','owner'])->where('id', $pet_id)->first();
 
-        $items =New PetDetailsResource($pet_details);
+            $items =New PetDetailsResource($pet_details);
 
-        return response()->json([
-            'status' => true,
-            'data' => $items,
-            'message' => 'Pet Details',
-        ], 200);
+            return response()->json([
+                'status' => true,
+                'data' => $items,
+                'message' => 'Pet Details',
+            ], 200);
 
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     // Retorna las edades de una mascota y su dueño, basado en el id de la mascota.
