@@ -26,7 +26,7 @@ class PetDetailsResource extends JsonResource
         }
         $user_type=$user->user_type;
         $user_id=$user->id;
- 
+
         if($user_type =='user'){
 
             $pet_note->where(function ($query) use ($user_id)  {
@@ -48,13 +48,13 @@ class PetDetailsResource extends JsonResource
                 $query->where('created_by',auth()->id())
 
                          ->Orwhere('is_private',0);
-                        
+
                   });
 
           };
 
 
-    
+        $ownerUser = User::find($this->user_id);
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -72,7 +72,8 @@ class PetDetailsResource extends JsonResource
             'height' => $this->height,
             'height_unit' => $this->height_unit,
             'user_id' => $this->user_id,
-            'status' => $this->status,         
+            'user_name' => optional($ownerUser)->full_name,
+            'status' => $this->status,
             'pet_notes' => $this->when($user_type == 'user', function () use ($user_id) {
                 return PetNoteResource::collection($this->petnote()->where(function ($query) use ($user_id) {
                     $query->where('created_by', $user_id)
