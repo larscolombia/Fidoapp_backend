@@ -63,11 +63,23 @@ class TrainingDiaryController extends Controller
                     'message' => 'Record not found'
                 ], 404);
             }
-
+            $formattedDate = date("d-m-Y", strtotime($trainingDiary->date));
+            $data = [
+                'id' => $trainingDiary->id,
+                'category_id' => $trainingDiary->category_id,
+                'category_name' => $trainingDiary->category->name,
+                'date' =>  $formattedDate,
+                'actividad' => $trainingDiary->actividad,
+                'notas' => $trainingDiary->notas,
+                'pet_id' => $trainingDiary->pet_id,
+                'image' => $trainingDiary->image,
+                'created_at' => $trainingDiary->created_at,
+                'updated_at' => $trainingDiary->updated_at
+            ];
             // Retornar la respuesta exitosa
             return response()->json([
                 'success' => true,
-                'data' => $trainingDiary
+                'data' => $data
             ]);
         } catch (\Exception $e) {
             return response()->json([
