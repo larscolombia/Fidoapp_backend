@@ -15,13 +15,16 @@ class TrainingDiaryController extends Controller
                 'date' => 'required|date',
                 'actividad' => 'required|string',
                 'notas' => 'string',
+                'category_id' => 'required|integer',
                 'pet_id' => 'required|exists:pets,id',
-                'image' => 'sometimes',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
-
+            if(!isset($request->image)){
+                $data['image'] = null;
+            }
             // Manejo de la imagen del diario
-            if ($request->hasFile('image')) {
+            if (!is_null($data['image']) && $request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 $imagePath = 'images/training_diary/' . $imageName;
@@ -33,8 +36,8 @@ class TrainingDiaryController extends Controller
             // Crear la nueva mascota
             $trainingDiary = Diario::create($data);
 
-            if (!empty($request['image'])) {
-                storeMediaFile($trainingDiary, $request->file('image'), 'image');
+            if (!is_null($data['image'])) {
+                storeMediaFile($trainingDiary, $data['image'], 'image');
             }
             return response()->json([
                 'success' => true,
@@ -81,10 +84,14 @@ class TrainingDiaryController extends Controller
                 'date' => 'required|date',
                 'actividad' => 'required|string',
                 'notas' => 'string',
+                'category_id' => 'required|integer',
                 'pet_id' => 'required|exists:pets,id',
-                'image' => 'sometimes',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
+            if(!isset($request->image)){
+                $data['image'] = null;
+            }
             $trainingDiary = Diario::find($id);
             if (!$trainingDiary) {
                 return response()->json([
@@ -93,11 +100,11 @@ class TrainingDiaryController extends Controller
                 ], 404);
             }
             // Manejo de la imagen del diario
-            if ($request->hasFile('image')) {
+            if (!is_null($data['image']) && $request->hasFile('image')) {
                 $imagePath = $this->handleImageUpload($request->file('image'));
             }
 
-            if (!empty($request['image'])) {
+            if (!is_null($data['image']) && !empty($request['image'])) {
                 storeMediaFile($trainingDiary, $request->file('image'), 'image');
             }
 

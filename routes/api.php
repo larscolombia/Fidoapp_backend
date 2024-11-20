@@ -1739,7 +1739,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Metodo: POST
      * Ruta:/api/training-diaries
      * Parametros:{
-     *  pet_id: id de la mascota (requerido)
+     *  pet_id: id de la mascota (requerido),
+     * category_id: Id de la categoria (requerido),
      *   date: fecha del diario (requerido),
      *   actividad: descripcion de la actidad realizada por la mascota (requerido),
      *   notas: Comentarios adicionales (opcional),
@@ -1760,6 +1761,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Ruta:/api/training-diaries/1
      * descripcion: Actualizar un diario
      *  pet_id: id de la mascota (requerido)
+     *  category_id: Id de la categoria (requerido),
      *   date: fecha del diario (requerido),
      *   actividad: descripcion de la actidad realizada por la mascota (requerido),
      *   notas: Comentarios adicionales (opcional),
