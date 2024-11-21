@@ -426,7 +426,7 @@ class AuthController extends Controller
         $user['instagram_link'] = $user->profile->instagram_link ?? null;
         $user['twitter_link'] = $user->profile->twitter_link ?? null;
         $user['dribbble_link'] = $user->profile->dribbble_link ?? null;
-
+        $user['raiting'] = $user->raiting;
         if (!$user) {
             return response()->json(['status' => false, 'message' => __('messages.user_notfound')], 404);
         }
