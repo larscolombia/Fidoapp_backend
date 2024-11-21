@@ -190,6 +190,7 @@ class PetHistoryController extends Controller
             'application_date' => $history->application_date ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : null,
             'pet_id' => $history->pet->id,
             'pet_name' => $history->pet->name,
+            'category_id' => $history->category,
             'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
             'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] : null,
             'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] : null,
