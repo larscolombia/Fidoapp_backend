@@ -34,6 +34,7 @@ class StoreRequest extends FormRequest
             'location' => 'nullable|string',
             'tipo' => 'required|in:salud,entrenamiento',
             'status' => 'required|boolean',
+            'pet_id' => 'required|integer',
         ];
     }
 

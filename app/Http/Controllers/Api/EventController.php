@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Event\UpdateRequest;
-use App\Http\Requests\Api\Event\StoreRequest;
-use Modules\Event\Models\Event;
+use Carbon\Carbon;
+use App\Models\EventDetail;
 use Illuminate\Http\Request;
+use Modules\Event\Models\Event;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Event\StoreRequest;
+use App\Http\Requests\Api\Event\UpdateRequest;
 
 class EventController extends Controller
 {
@@ -39,50 +41,83 @@ class EventController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $validatedData = $request->validated();
+        try {
+            $validatedData = $request->validated();
+            $eventTime = $request->input('event_time')
+            ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+            $event = Event::create([
+                'name'        => $request->input('name'),
+                'date'        => $request->input('date'),
+                'end_date'    => $request->input('end_date'),
+                'event_time'  => $eventTime,
+                'slug'        => $request->input('slug'),
+                'user_id'     => $request->input('user_id'),
+                'description' => $request->input('description'),
+                'location'    => $request->input('location'),
+                'tipo'        => $request->input('tipo'),
+                'status'      => $request->input('status'),
+            ]);
 
-        $event = Event::create([
-            'name'        => $request->input('name'),
-            'date'        => $request->input('date'),
-            'end_date'    => $request->input('end_date'),
-            'event_time'  => $request->input('event_time'),
-            'slug'        => $request->input('slug'),
-            'user_id'     => $request->input('user_id'),
-            'description' => $request->input('description'),
-            'location'    => $request->input('location'),
-            'tipo'        => $request->input('tipo'),
-            'status'      => $request->input('status'),
-        ]);
+            $detailEvent = EventDetail::create([
+                'event_id' => $event->id,
+                'pet_id' => $request->input('pet_id'),
+                'owner_id' => $request->input('owner_id'),
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Evento creado exitosamente',
-            'data'    => $event,
-        ], 201);
+            return response()->json([
+                'success' => true,
+                'message' => 'Evento creado exitosamente',
+                'data'    =>  [
+                    'event'       => $event,
+                    'detail_event' => $detailEvent,
+                ],
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el evento: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function update(UpdateRequest $request, $id)
     {
-        $event = Event::findOrFail($id);
+        try{
+            $event = Event::findOrFail($id);
+            $detailEvent = EventDetail::where('event_id', $event->id)->firstOrFail();
+            $eventTime = $request->input('event_time')
+            ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+            $event->update([
+                'name'        => $request->input('name', $event->name),
+                'date'        => $request->input('date', $event->date),
+                'end_date'    => $request->input('end_date', $event->end_date),
+                'event_time'  => !is_null($eventTime) ? $eventTime : $event->event_time,
+                'slug'        => $request->input('slug', $event->slug),
+                'user_id'     => $request->input('user_id', $event->user_id),
+                'description' => $request->input('description', $event->description),
+                'location'    => $request->input('location', $event->location),
+                'tipo'        => $request->input('tipo', $event->tipo),
+                'status'      => $request->input('status', $event->status),
+            ]);
+            $detailEvent->update([
+                'pet_id'   => $request->input('pet_id',$detailEvent->pet_id) ,
+                'owner_id' => $request->input('owner_id',$detailEvent->owner_id),
+            ]);
 
-        $event->update([
-            'name'        => $request->input('name', $event->name),
-            'date'        => $request->input('date', $event->date),
-            'end_date'    => $request->input('end_date', $event->end_date),
-            'event_time'  => $request->input('event_time', $event->event_time),
-            'slug'        => $request->input('slug', $event->slug),
-            'user_id'     => $request->input('user_id', $event->user_id),
-            'description' => $request->input('description', $event->description),
-            'location'    => $request->input('location', $event->location),
-            'tipo'        => $request->input('tipo', $event->tipo),
-            'status'      => $request->input('status', $event->status),
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Evento actualizado exitosamente',
-            'data' => $event,
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Evento actualizado exitosamente',
+                'data' =>  [
+                    'event'       => $event,
+                    'detail_event' => $detailEvent,
+                ],
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el evento: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
