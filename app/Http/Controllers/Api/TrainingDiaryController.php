@@ -20,7 +20,7 @@ class TrainingDiaryController extends Controller
                 'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
-            if(!isset($request->image)){
+            if (!isset($request->image)) {
                 $data['image'] = null;
             }
             // Manejo de la imagen del diario
@@ -89,6 +89,40 @@ class TrainingDiaryController extends Controller
         }
     }
 
+    public function getDiario(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'pet_id' => 'required|exists:pets,id',
+            ]);
+            $trainingDiaries = Diario::where('pet_id', $data['pet_id'])->get();
+            $formattedDiaries = $trainingDiaries->map(function ($trainingDiary) {
+                $formattedDate = date("d-m-Y", strtotime($trainingDiary->date));
+                return [
+                    'id' => $trainingDiary->id,
+                    'category_id' => $trainingDiary->category_id,
+                    'category_name' => $trainingDiary->category->name,
+                    'date' => $formattedDate,
+                    'actividad' => $trainingDiary->actividad,
+                    'notas' => $trainingDiary->notas,
+                    'pet_id' => $trainingDiary->pet_id,
+                    'image' => $trainingDiary->image,
+                    'created_at' => $trainingDiary->created_at,
+                    'updated_at' => $trainingDiary->updated_at
+                ];
+            });
+            return response()->json([
+                'success' => true,
+                'data' => $formattedDiaries
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function update(Request $request, $id)
     {
         try {
@@ -101,7 +135,7 @@ class TrainingDiaryController extends Controller
                 'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
-            if(!isset($request->image)){
+            if (!isset($request->image)) {
                 $data['image'] = null;
             }
             $trainingDiary = Diario::find($id);

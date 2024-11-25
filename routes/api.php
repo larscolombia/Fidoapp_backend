@@ -1822,6 +1822,31 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
 
     Route::resource('training-diaries', TrainingDiaryController::class);
+    /* Metodo: GET
+    * Ruta:/api/get-diary
+    * descripcion: Obtener todo el listado del diario de una mascota
+    * paramentro: pet_id: ID de la mascota
+    * Respuesta Exitosa:
+    * {
+    * "success": true,
+    *"data": {
+    *   "id": 1,
+    *   "date": "2024-11-12 16:17:20",
+    *   "actividad": "Texto de prueba 2",
+    *   "notas": "Esto es una prueba 2",
+    *   "pet_id": 2,
+    *   "image": "https://placecats.com/neo_2/300/400",
+    *   "created_at": "2024-11-12T19:21:01.000000Z",
+    *   "updated_at": "2024-11-12T20:17:20.000000Z"
+    * }
+    *}
+    * Respuesta de Error
+    * {
+    *      "success": false,
+    *     "message": "mensaje de error."
+    * }
+    */
+    Route::get('get-diary',[ TrainingDiaryController::class,'getDiario']);
     /**
      * Obtener la lista de reservas.
      * Método HTTP: GET
