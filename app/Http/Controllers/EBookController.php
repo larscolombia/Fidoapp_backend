@@ -65,11 +65,11 @@ class EBookController extends Controller
             ->editColumn('description', function ($data) {
                 return $data->description ?? 'N/A';
             })
-          
+
 
             ->editColumn('title', function ($data) {
                 return $data->title;
-            })  
+            })
 
             // ->orderColumn('total_amount', function ($query, $order) {
             //     $query->select('orders.*')
@@ -97,7 +97,7 @@ class EBookController extends Controller
                 if ($data->updated_at === null) {
                     return 'N/A'; // O cualquier otro valor predeterminado adecuado
                 }
-            
+
                 $diff = Carbon::now()->diffInHours($data->updated_at);
                 if ($diff < 25) {
                     return $data->updated_at->diffForHumans();
@@ -245,8 +245,12 @@ class EBookController extends Controller
 
     public function get()
     {
-        $ebooks = EBook::all();
-        
+        $ebooks = EBook::all()->map(function ($ebook) {
+            // Asegúrate de que 'cover_image' sea una propiedad válida
+            $ebook->cover_image = asset($ebook->cover_image);
+            return $ebook;
+        });
+
         return response()->json([
             'success' => true,
             'message' => __('messages.ebooks_retrieved_successfully'),
@@ -259,6 +263,7 @@ class EBookController extends Controller
         $ebook = EBook::find($id);
 
         if ($ebook) {
+            $ebook->cover_image = asset($ebook->cover_image);
             return response()->json([
                 'success' => true,
                 'message' => __('messages.ebook_retrieved_successfully'),
