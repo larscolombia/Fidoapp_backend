@@ -268,7 +268,7 @@ class EBookController extends Controller
 
     public function getById($id)
     {
-        $ebook = EBook::find($id);
+        $ebook = EBook::with('book_ratings')->find($id);
 
         if ($ebook) {
             $ebook->cover_image = asset($ebook->cover_image);
