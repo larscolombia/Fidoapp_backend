@@ -191,6 +191,27 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::delete('e-book-rating/{id}',[EBookController::class, 'deleteBookRating']);
+
+
+    /**
+     * Obtener el rating de un e-book en especifico de manera paginada
+     * Método HTTP: GET
+     * Ruta: /get-book-rating-by-id-ebook
+     * Descripción: Obtener el rating de un e-book en especifico de manera paginada
+     * Parámetros:
+     * - e_book_id: ID del e_book.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [BookRating]
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::get('get-book-rating-by-id-ebook',[EBookController::class,'getBookRatingByIdEbook']);
     /**
      * Obtener Todos los Cursos
      * Método HTTP: GET

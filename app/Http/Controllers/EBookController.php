@@ -309,6 +309,28 @@ class EBookController extends Controller
         }
     }
 
+    public function getBookRatingByIdEbook(Request $request)
+    {
+        $data = $request->validate([
+            'e_book_id' => 'required|exists:e_book,id',
+        ]);
+
+        $bookRating = BookRating::where('e_book_id', $data['e_book_id'])->paginate(10);
+
+        if ($bookRating->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No hay calificaciones disponibles para este libro.'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $bookRating
+        ], 200);
+    }
+
+
     public function deleteBookRating($id)
     {
         try{
