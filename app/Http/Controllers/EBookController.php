@@ -315,7 +315,7 @@ class EBookController extends Controller
             'e_book_id' => 'required|exists:e_book,id',
         ]);
 
-        $bookRating = BookRating::where('e_book_id', $data['e_book_id'])->paginate(10);
+        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->paginate(10);
 
         if ($bookRating->isEmpty()) {
             return response()->json([
@@ -323,6 +323,17 @@ class EBookController extends Controller
                 'message' => 'No hay calificaciones disponibles para este libro.'
             ], 404);
         }
+
+        $bookRating->getCollection()->transform(function ($rating) {
+            return [
+                'id' => $rating->id,
+                'rating' => $rating->rating,
+                'review_msg' => $rating->review_msg,
+                'user_id' => $rating->user->id,
+                'user_full_name' => $rating->user->full_name,
+                'user_avatar' => asset($rating->user->avatar)
+            ];
+        });
 
         return response()->json([
             'status' => true,
