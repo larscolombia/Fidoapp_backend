@@ -105,9 +105,9 @@ class EBookController extends Controller
                     return $data->updated_at->isoFormat('llll');
                 }
             })
-              ->orderColumns(['id'], '-:column $1')
-              ->rawColumns(['action', 'check'])
-              ->toJson();
+            ->orderColumns(['id'], '-:column $1')
+            ->rawColumns(['action', 'check'])
+            ->toJson();
     }
 
     /**
@@ -135,10 +135,12 @@ class EBookController extends Controller
             'author' => 'nullable|string|max:255',
             'url' => 'required|url',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'number_of_pages' => 'nullable|integer|min:1',
+            'language' => 'nullable|string|max:255',
         ]);
 
         // Manejar la carga de la imagen
-       // Manejar la carga de la imagen
+        // Manejar la carga de la imagen
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
             $imageName = time() . '.avif';
@@ -161,6 +163,8 @@ class EBookController extends Controller
             'author' => $request->author,
             'url' => $request->url,
             'cover_image' => $pathRegister,
+            'number_of_pages' => $request->number_of_pages,
+            'language' => $request->language,
         ]);
 
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been created successfully'));
@@ -205,6 +209,8 @@ class EBookController extends Controller
             'author' => 'nullable|string|max:255',
             'url' => 'required|url',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'number_of_pages' => 'nullable|integer|min:1',
+            'language' => 'nullable|string|max:255',
         ]);
 
         $ebook = EBook::find($id);
@@ -224,6 +230,8 @@ class EBookController extends Controller
             'author' => $request->author,
             'url' => $request->url,
             'cover_image' => $imageName,
+            'number_of_pages' => $request->number_of_pages,
+            'language' => $request->language,
         ]);
 
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been updateds successfully'));
@@ -240,7 +248,6 @@ class EBookController extends Controller
         $ebook = EBook::find($id);
         $ebook->delete();
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been deleted successfully'));
-
     }
 
     public function get()
