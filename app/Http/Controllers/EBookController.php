@@ -253,12 +253,12 @@ class EBookController extends Controller
 
     public function get()
     {
-        $ebooks = EBook::all()->map(function ($ebook) {
-            // Asegúrate de que 'cover_image' sea una propiedad válida
+        $ebooks = EBook::with('book_ratings')
+        ->get()
+        ->transform(function ($ebook) {
             $ebook->cover_image = asset($ebook->cover_image);
             return $ebook;
         });
-
         return response()->json([
             'success' => true,
             'message' => __('messages.ebooks_retrieved_successfully'),
