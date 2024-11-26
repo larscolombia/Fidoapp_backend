@@ -138,6 +138,7 @@ class EBookController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'number_of_pages' => 'nullable|integer|min:1',
             'language' => 'nullable|string|max:255',
+            'price' => 'nullable|numeric',
         ]);
 
         // Manejar la carga de la imagen
@@ -166,6 +167,7 @@ class EBookController extends Controller
             'cover_image' => $pathRegister,
             'number_of_pages' => $request->number_of_pages,
             'language' => $request->language,
+            'price' => $request->price,
         ]);
 
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been created successfully'));
@@ -212,6 +214,7 @@ class EBookController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'number_of_pages' => 'nullable|integer|min:1',
             'language' => 'nullable|string|max:255',
+            'price' => 'nullable|numeric',
         ]);
 
         $ebook = EBook::find($id);
@@ -233,6 +236,7 @@ class EBookController extends Controller
             'cover_image' => $imageName,
             'number_of_pages' => $request->number_of_pages,
             'language' => $request->language,
+            'price' => $request->price,
         ]);
 
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been updateds successfully'));
