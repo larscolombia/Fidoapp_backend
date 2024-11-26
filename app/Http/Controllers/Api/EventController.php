@@ -44,7 +44,7 @@ class EventController extends Controller
         try {
             $validatedData = $request->validated();
             $eventTime = $request->input('event_time')
-            ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+                ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
             $event = Event::create([
                 'name'        => $request->input('name'),
                 'date'        => $request->input('date'),
@@ -82,11 +82,11 @@ class EventController extends Controller
 
     public function update(UpdateRequest $request, $id)
     {
-        try{
+        try {
             $event = Event::findOrFail($id);
             $detailEvent = EventDetail::where('event_id', $event->id)->firstOrFail();
             $eventTime = $request->input('event_time')
-            ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+                ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
             $event->update([
                 'name'        => $request->input('name', $event->name),
                 'date'        => $request->input('date', $event->date),
@@ -100,8 +100,8 @@ class EventController extends Controller
                 'status'      => $request->input('status', $event->status),
             ]);
             $detailEvent->update([
-                'pet_id'   => $request->input('pet_id',$detailEvent->pet_id) ,
-                'owner_id' => $request->input('owner_id',$detailEvent->owner_id),
+                'pet_id'   => $request->input('pet_id', $detailEvent->pet_id),
+                'owner_id' => $request->input('owner_id', $detailEvent->owner_id),
             ]);
 
             return response()->json([
@@ -112,7 +112,7 @@ class EventController extends Controller
                     'detail_event' => $detailEvent,
                 ],
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al actualizar el evento: ' . $e->getMessage(),
@@ -135,6 +135,46 @@ class EventController extends Controller
             'message' => 'Evento recuperado exitosamente',
             'data' => $event,
         ]);
+    }
+
+    public function acceptOrRejectEvent(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'confirm' => 'required|boolean',
+                'user_id' => 'required|exists:users,id',
+                'event_id' => 'required|exists:events,id'
+            ]);
+
+            $eventDetail = EventDetail::where('event_id', $data['event_id'])
+                ->where('owner_id', $data['user_id'])
+                ->where('confirm', 'P')
+                ->first();
+
+            if ($eventDetail) {
+                $eventDetail->update([
+                    'confirm' => $data['confirm'] ? 'A' : 'R'
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Evento actualizado exitosamente',
+                    'data' => [
+                        'event' => $eventDetail->event,
+                        'detail_event' => $eventDetail,
+                    ],
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontró el detalle del evento o ya ha sido actualizado.',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error interno del servidor: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

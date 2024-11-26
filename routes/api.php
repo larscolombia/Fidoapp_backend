@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('verify-slot', [BranchController::class, 'verifySlot']);
 
-        /**
+    /**
      * Obtener todos los usuarios por el user_type
      * Método HTTP: GET
      * Ruta: /get-user-by-type
@@ -114,7 +114,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "data": [ Array de usuarios ]
      * }
      */
-    Route::get('get-user-by-type',[UserController::class,'getUserByType']);
+    Route::get('get-user-by-type', [UserController::class, 'getUserByType']);
     /**
      * Obtener Todos los E-Books
      * Método HTTP: GET
@@ -940,8 +940,33 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::put('events/{id}', [EventController::class, 'update'])->name('events.update');
-
     /**
+     * Aceptar o rechazar el evento.
+     * Método HTTP: PUT
+     * Ruta: /api/accept-or-reject-event
+     * Descripción: Acepta o rechaza el evento el usuario invitado a dicho evento.
+     * Parametros:
+     * confirm: bool
+     * user_id: Id del usuario invitado
+     * event_id: Id del evento
+     * Respuesta Exitosa:
+     * {
+     *     'success' => true,
+     *     'message' => 'Evento actualizado exitosamente',
+     *     'data' =>  [
+        *    'event'       => $eventDetail->event,
+        *    'detail_event' => $eventDetail,
+     *      ],
+     * }
+     *
+     * Respuesta fallida:
+     * {
+     *  'success' => false,
+     *  'message' => 'No se encontró el detalle del evento o ya ha sido actualizado.',
+     * }
+     */
+    Route::put('accept-or-reject-event', [EventController::class, 'acceptOrRejectEvent']);
+     /**
      * Eliminar un evento por ID.
      * Método HTTP: DELETE
      * Ruta: /api/events/{id}
@@ -1859,7 +1884,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     *     "message": "mensaje de error."
     * }
     */
-    Route::get('get-diary',[ TrainingDiaryController::class,'getDiario']);
+    Route::get('get-diary', [TrainingDiaryController::class, 'getDiario']);
     /**
      * Obtener la lista de reservas.
      * Método HTTP: GET
@@ -2147,7 +2172,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "Mensaje de error"
      * }
      */
-    Route::post('raiting-user',[EmployeeController::class,'ratingUserStore']);
+    Route::post('raiting-user', [EmployeeController::class, 'ratingUserStore']);
     /**
      * Actualizar calificacion y raiting
      * Método HTTP: PUT
@@ -2176,8 +2201,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "Mensaje de error"
      * }
      */
-    Route::put('raiting-user/{id}',[EmployeeController::class,'updateRaiting']);
-      /**
+    Route::put('raiting-user/{id}', [EmployeeController::class, 'updateRaiting']);
+    /**
      * Listado de raiting
      * Método HTTP: GET
      * Ruta: /api/raiting-user
@@ -2202,8 +2227,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "Mensaje de error"
      * }
      */
-    Route::get('raiting-user',[EmployeeController::class,'getRating']);
-         /**
+    Route::get('raiting-user', [EmployeeController::class, 'getRating']);
+    /**
      * Eliminar calificacion
      * Método HTTP: DELETE
      * Ruta: /api/raiting-user/{id}
@@ -2224,7 +2249,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "Mensaje de error"
      * }
      */
-    Route::delete('raiting-user/{id}',[EmployeeController::class,'destroyRaiting']);
+    Route::delete('raiting-user/{id}', [EmployeeController::class, 'destroyRaiting']);
     /**
      * Listado de veterinarios y entrenadores que atendieron a una mascota.
      * Método HTTP: GET
@@ -2354,7 +2379,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/list-veterinaries/{petId}', [VeterinaryController::class, 'listVeterinaries']);
 
-     /**
+    /**
      * Obtener la lista de mascotas asignadas al veterinario.
      * Método HTTP: GET
      * Ruta: /api/pet-list-by-veterinarian
@@ -2385,7 +2410,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "status": false
      * }
      */
-    Route::get('pet-list-by-veterinarian',[VeterinaryController::class,'petListByVeterinarian']);
+    Route::get('pet-list-by-veterinarian', [VeterinaryController::class, 'petListByVeterinarian']);
     /**
      * Obtener la lista de entrenadores para una mascota.
      * Método HTTP: GET
@@ -2453,11 +2478,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
 
-    Route::post('request-permission',[AuthController::class,'requestPermission']);
+    Route::post('request-permission', [AuthController::class, 'requestPermission']);
 
-    Route::put('request-permission/{id}',[AuthController::class,'respondToRequest']);
-    Route::get('get-user-social-network',[TrainerController::class,'getUserSocialNetwork']);
-    Route::get('list-category',[CategoryController::class,'categoryList']);
+    Route::put('request-permission/{id}', [AuthController::class, 'respondToRequest']);
+    Route::get('get-user-social-network', [TrainerController::class, 'getUserSocialNetwork']);
+    Route::get('list-category', [CategoryController::class, 'categoryList']);
     /**
      * Historial de mascota por el dueño
      *
@@ -2496,44 +2521,44 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('pet-clinical-history-for-owner', [PetHistoryController::class, 'petClinicalHistoryForOwner']);
-     /**
-         * Historial de mascota por id
-         *
-         * Método HTTP: GET
-         * Ruta: /api/medical-history-per-pet
-         * Descripción: Historial de mascota por veterinario
-         *
-         * Parámetros de Ruta:
-         * - pet_id: int (Requerido) - ID de la mascota
-         * -search: string (opcional) - parametro de busqueda
-         *
-         * Respuesta Exitosa:
-         *{
-         *"success": true,
-         *"data": [
-         *{
-         * "id": 1,
-         * "pet_id": 2,
-         * "vacuna_id": null,
-         * "antidesparasitante_id": null,
-         * "antigarrapata_id": 1,
-         * "veterinarian_id": 28,
-         * "medical_conditions": "Demo",
-         * "test_results": null,
-         * "vet_visits": 5,
-         * "created_at": "2024-11-07T15:18:23.000000Z",
-         * "updated_at": "2024-11-07T15:18:23.000000Z",
-         *}
-         *  ]
-         * }
-         * Respuesta de Error:
-         * {
-         *      "success": false
-         *     "message": "Error message",
-         *
-         * }
-         */
-    Route::get('medical-history-per-pet',[PetHistoryController::class,'medicalHistoryPerPet']);
+    /**
+     * Historial de mascota por id
+     *
+     * Método HTTP: GET
+     * Ruta: /api/medical-history-per-pet
+     * Descripción: Historial de mascota por veterinario
+     *
+     * Parámetros de Ruta:
+     * - pet_id: int (Requerido) - ID de la mascota
+     * -search: string (opcional) - parametro de busqueda
+     *
+     * Respuesta Exitosa:
+     *{
+     *"success": true,
+     *"data": [
+     *{
+     * "id": 1,
+     * "pet_id": 2,
+     * "vacuna_id": null,
+     * "antidesparasitante_id": null,
+     * "antigarrapata_id": 1,
+     * "veterinarian_id": 28,
+     * "medical_conditions": "Demo",
+     * "test_results": null,
+     * "vet_visits": 5,
+     * "created_at": "2024-11-07T15:18:23.000000Z",
+     * "updated_at": "2024-11-07T15:18:23.000000Z",
+     *}
+     *  ]
+     * }
+     * Respuesta de Error:
+     * {
+     *      "success": false
+     *     "message": "Error message",
+     *
+     * }
+     */
+    Route::get('medical-history-per-pet', [PetHistoryController::class, 'medicalHistoryPerPet']);
     route::middleware(['check_vet'])->group(function () {
         /**
          * Crear historial clinico de la mascota
@@ -2569,8 +2594,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *  'success' => false,
          *  'message' => 'Mensaje de error'
          * }
-        */
-         Route::apiResource('/pet-histories', PetHistoryController::class);
+         */
+        Route::apiResource('/pet-histories', PetHistoryController::class);
 
         /**
          * Historial de mascota por veterinario
