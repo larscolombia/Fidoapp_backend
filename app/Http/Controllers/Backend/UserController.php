@@ -61,7 +61,7 @@ class UserController extends Controller
     public function index(UserDataTable $dataTable)
     {
 
-      return $dataTable->render('global.datatable');
+        return $dataTable->render('global.datatable');
         $module_title = $this->module_title;
         if (isset($roleBaseList) && $roleBaseList !== 'all') {
             $role = Role::where('name', $roleBaseList)->first();
@@ -78,7 +78,7 @@ class UserController extends Controller
         $module_action = 'List';
 
         $page_heading = ucfirst($module_title);
-        $title = $page_heading.' '.ucfirst($module_action);
+        $title = $page_heading . ' ' . ucfirst($module_action);
 
         $$module_name = $module_model::paginate();
 
@@ -121,7 +121,7 @@ class UserController extends Controller
 
             ->editColumn('status', function ($data) {
                 $return_data = $data->status_label;
-                $return_data .= '<br>'.$data->confirmed_label;
+                $return_data .= '<br>' . $data->confirmed_label;
 
                 return $return_data;
             })
@@ -158,7 +158,7 @@ class UserController extends Controller
         $module_action = 'List';
 
         $page_heading = label_case($module_title);
-        $title = $page_heading.' '.label_case($module_action);
+        $title = $page_heading . ' ' . label_case($module_action);
 
         $term = trim($request->q);
 
@@ -173,7 +173,7 @@ class UserController extends Controller
         foreach ($query_data as $row) {
             $$module_name[] = [
                 'id' => $row->id,
-                'text' => $row->name.' (Email: '.$row->email.')',
+                'text' => $row->name . ' (Email: ' . $row->email . ')',
             ];
         }
 
@@ -197,7 +197,7 @@ class UserController extends Controller
         foreach ($query_data as $row) {
             $data[] = [
                 'id' => $row->id,
-                'first_name' => $row->first_name.' '.$row->last_name,
+                'first_name' => $row->first_name . ' ' . $row->last_name,
             ];
         }
         return response()->json($data);
@@ -222,13 +222,13 @@ class UserController extends Controller
 
             $data[] = [
                 'id' => $row->id,
-                'first_name' => $row->first_name.' '.$row->last_name.' ('.ucwords(str_replace('_',' ',$userType)).')',
+                'first_name' => $row->first_name . ' ' . $row->last_name . ' (' . ucwords(str_replace('_', ' ', $userType)) . ')',
             ];
         }
         return response()->json($data);
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -279,7 +279,7 @@ class UserController extends Controller
         ]);
 
         $data_array = $request->except('_token', 'roles', 'permissions', 'password_confirmation');
-        $data_array['name'] = $request->first_name.' '.$request->last_name;
+        $data_array['name'] = $request->first_name . ' ' . $request->last_name;
         $data_array['password'] = Hash::make($request->password);
 
         if ($request->confirmed == 1) {
@@ -316,7 +316,7 @@ class UserController extends Controller
 
         event(new UserCreated($$module_name_singular));
 
-        Flash::success("<i class='fas fa-check'></i> New '".Str::singular($module_title)."' Created")->important();
+        Flash::success("<i class='fas fa-check'></i> New '" . Str::singular($module_title) . "' Created")->important();
 
         if ($request->email_credentials == 1) {
             $data = [
@@ -328,7 +328,7 @@ class UserController extends Controller
                 \Log::error($e->getMessage());
             }
 
-            Flash::success(icon('fas fa-envelope').' Account Credentials Sent to User.')->important();
+            Flash::success(icon('fas fa-envelope') . ' Account Credentials Sent to User.')->important();
         }
 
         return redirect("app/$module_name");
@@ -454,11 +454,11 @@ class UserController extends Controller
 
         $data_array = $request->except('avatar');
         $data_array['avatar'] = $$module_name_singular->avatar;
-        $data_array['name'] = $request->first_name.' '.$request->last_name;
+        $data_array['name'] = $request->first_name . ' ' . $request->last_name;
 
         $user_profile->update($data_array);
 
-        Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Updated Successfully!')->important();
+        Flash::success('<i class="fas fa-check"></i> ' . label_case($module_name_singular) . ' Updated Successfully!')->important();
 
         return redirect(route('backend.users.profile', $$module_name_singular->id));
     }
@@ -517,7 +517,7 @@ class UserController extends Controller
 
         $$module_name_singular->update($request_data);
 
-        Flash::success(icon()." '".Str::singular($module_title)."' Updated Successfully")->important();
+        Flash::success(icon() . " '" . Str::singular($module_title) . "' Updated Successfully")->important();
 
         return redirect("app/$module_name/profile/$id");
     }
@@ -540,7 +540,7 @@ class UserController extends Controller
         $module_action = 'Change Password';
 
         $page_heading = label_case($module_title);
-        $title = $page_heading.' '.label_case($module_action);
+        $title = $page_heading . ' ' . label_case($module_action);
 
         if (! auth()->user()->can('edit_users')) {
             $id = auth()->user()->id;
@@ -584,7 +584,7 @@ class UserController extends Controller
 
         $$module_name_singular->update($request_data);
 
-        Flash::success("<i class='fas fa-check'></i> '".Str::singular($module_title)."' Updated Successfully")->important();
+        Flash::success("<i class='fas fa-check'></i> '" . Str::singular($module_title) . "' Updated Successfully")->important();
 
         return redirect("app/$module_name");
     }
@@ -688,7 +688,7 @@ class UserController extends Controller
 
         event(new UserUpdated($$module_name_singular));
 
-        Flash::success("<i class='fas fa-check'></i> '".Str::singular($module_title)."' Updated Successfully")->important();
+        Flash::success("<i class='fas fa-check'></i> '" . Str::singular($module_title) . "' Updated Successfully")->important();
 
         return redirect("app/$module_name");
     }
@@ -723,7 +723,7 @@ class UserController extends Controller
 
         event(new UserUpdated($$module_name_singular));
 
-        flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' User Successfully Deleted!')->success();
+        flash('<i class="fas fa-check"></i> ' . $$module_name_singular->name . ' User Successfully Deleted!')->success();
 
         return redirect("app/$module_name");
     }
@@ -777,7 +777,7 @@ class UserController extends Controller
 
         event(new UserUpdated($$module_name_singular));
 
-        flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' Successfully Restoreded!')->success();
+        flash('<i class="fas fa-check"></i> ' . $$module_name_singular->name . ' Successfully Restoreded!')->success();
 
         return redirect("app/$module_name");
     }
@@ -815,7 +815,7 @@ class UserController extends Controller
 
             event(new UserUpdated($$module_name_singular));
 
-            flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' User Successfully Blocked!')->success();
+            flash('<i class="fas fa-check"></i> ' . $$module_name_singular->name . ' User Successfully Blocked!')->success();
 
             return redirect()->back();
         } catch (Exception $e) {
@@ -855,7 +855,7 @@ class UserController extends Controller
 
             event(new UserUpdated($$module_name_singular));
 
-            flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' User Successfully Unblocked!')->success();
+            flash('<i class="fas fa-check"></i> ' . $$module_name_singular->name . ' User Successfully Unblocked!')->success();
 
 
             return redirect()->back();
@@ -893,7 +893,7 @@ class UserController extends Controller
             if ($user_id == $user_provider->user->id) {
                 $user_provider->delete();
 
-                flash('<i class="fas fa-exclamation-triangle"></i> Unlinked from User, "'.$user_provider->user->name.'"!')->success();
+                flash('<i class="fas fa-exclamation-triangle"></i> Unlinked from User, "' . $user_provider->user->name . '"!')->success();
 
                 return redirect()->back();
             } else {
@@ -935,7 +935,7 @@ class UserController extends Controller
 
                 return redirect()->back();
             } else {
-                flash($user->name.', You already confirmed your email address at '.$user->email_verified_at->isoFormat('LL'))->success()->important();
+                flash($user->name . ', You already confirmed your email address at ' . $user->email_verified_at->isoFormat('LL'))->success()->important();
 
                 return redirect()->back();
             }
@@ -947,13 +947,12 @@ class UserController extends Controller
         $term = trim($request->q);
         $role = $request->role;
 
-        if($role == 'user'){
+        if ($role == 'user') {
             $queryBuilder = User::query();
-        }
-        else{
+        } else {
             $queryBuilder = User::query()->whereNotNull('email_verified_at');
         }
-        
+
 
         if ($role == 'user') {
             $queryBuilder->role(['user'])->active();
@@ -974,12 +973,11 @@ class UserController extends Controller
         }
 
 
-        if(isset($request->service_id)){
-            
-           $employee_ids=ServiceEmployee::where('service_id',$request->service_id)->pluck('employee_id');
+        if (isset($request->service_id)) {
 
-           $queryBuilder->whereIn('id', $employee_ids);
+            $employee_ids = ServiceEmployee::where('service_id', $request->service_id)->pluck('employee_id');
 
+            $queryBuilder->whereIn('id', $employee_ids);
         }
 
         $query_data = $queryBuilder->where(function ($q) use ($term) {
@@ -989,7 +987,7 @@ class UserController extends Controller
             }
         })->with('media')->get();
 
-        
+
 
         $data = [];
 
@@ -1071,7 +1069,7 @@ class UserController extends Controller
         ]);
 
         $data_array = $request->except('_token', 'roles', 'permissions', 'password_confirmation');
-        $data_array['name'] = $request->first_name.' '.$request->last_name;
+        $data_array['name'] = $request->first_name . ' ' . $request->last_name;
 
         if ($request->confirmed == 1) {
             $data_array = Arr::add($data_array, 'email_verified_at', Carbon::now());
@@ -1099,7 +1097,7 @@ class UserController extends Controller
 
             try {
                 $user->notify(new UserAccountCreated($data));
-            } catch (\Exception $e) { 
+            } catch (\Exception $e) {
                 \Log::error($e->getMessage());
             }
 
@@ -1178,13 +1176,12 @@ class UserController extends Controller
         $message = __('messages.password_update');
 
         return response()->json(['message' => $message, 'status' => true], 200);
-
     }
-    
+
     public function getAllUsersWithProfiles()
     {
         $users = User::whereNotIn('user_type', ['admin', 'user'])->with('profile')->get();
-        
+
         $result = $users->map(function ($user) {
             return [
                 'name' => $user->name,
@@ -1206,4 +1203,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function getUserByType(Request $request)
+    {
+        $data = $request->validate([
+            'user_type' => 'required|string'
+        ]);
+        $users = User::where('user_type', $data['user_type'])->get();
+
+        // Retornar respuesta
+        return response()->json([
+            'success' => true,
+            'data' => $users
+        ], 200);
+    }
 }

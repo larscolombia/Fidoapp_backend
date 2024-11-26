@@ -102,6 +102,19 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('verify-slot', [BranchController::class, 'verifySlot']);
 
+        /**
+     * Obtener todos los usuarios por el user_type
+     * Método HTTP: GET
+     * Ruta: /get-user-by-type
+     * Descripción: Recupera todos los usuarios en base al user_type
+     * Parametro: user_type: string, ejemplo vet
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [ Array de usuarios ]
+     * }
+     */
+    Route::get('get-user-by-type',[UserController::class,'getUserByType']);
     /**
      * Obtener Todos los E-Books
      * Método HTTP: GET
