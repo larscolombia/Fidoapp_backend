@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class BookRating extends Model
 {
     use HasFactory;
-    protected $table = 'e_book';
+    protected $table = 'book_ratings';
     protected $guarded = ['id'];
 }

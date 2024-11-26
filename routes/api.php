@@ -149,6 +149,48 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/e-books/{id}', [EBookController::class, 'getById']);
 
+   /**
+     * Calificar libro
+     * Método HTTP: POST
+     * Ruta: /e-book-rating
+     * Descripción: Agrega una calificacion a un libro en especifico
+     * Parámetros:
+     * - e_book_id: ID del e-book.
+     * - user_id: ID del usuario
+     * - review_msg: Mensaje o comentario
+     * - rating: calificacion del libro
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": { Datos del BookRating }
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::post('e-book-rating',[EBookController::class, 'bookRating']);
+
+    /**
+     * Eliminar calificacion del libro
+     * Método HTTP: DELETE
+     * Ruta: /e-book-rating/{id}
+     * Descripción: Elimina una calificacion del libro
+     * Parámetros:
+     * - id: ID del BookRating.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "book rating deleted successfully"
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::delete('e-book-rating/{id}',[EBookController::class, 'deleteBookRating']);
     /**
      * Obtener Todos los Cursos
      * Método HTTP: GET

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEBookRequest;
-use App\Models\EBook;
 use Carbon\Carbon;
+use App\Models\EBook;
+use App\Models\BookRating;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\StoreEBookRequest;
 
 class EBookController extends Controller
 {
@@ -281,6 +282,40 @@ class EBookController extends Controller
                 'success' => false,
                 'message' => __('messages.ebook_not_found')
             ], 404);
+        }
+    }
+
+    public function bookRating(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'e_book_id' => 'required|exists:e_book,id',
+                'user_id' => 'required|exists:users,id',
+                'review_msg' => 'nullable|string',
+                'rating' => 'nullable|numeric|min:1|max:5'
+            ]);
+
+            $bookRating = BookRating::create($data);
+            return response()->json(['status' => true, 'data' => $bookRating],200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteBookRating($id)
+    {
+        try{
+            $bookRating = BookRating::findOrFail($id);
+            $bookRating->delete();
+            return response()->json(['status' => true, 'message' => 'book rating deleted successfully'],200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }
