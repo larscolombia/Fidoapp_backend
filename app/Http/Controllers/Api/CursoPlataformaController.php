@@ -75,10 +75,20 @@ class CursoPlataformaController extends Controller
     public function show($id)
     {
         $course = CursoPlataforma::findOrFail($id);
+        $data =   [
+            'id' => $course->id,
+            'name' => $course->name,
+            'description' => $course->description,
+            'image' => asset($course->image),
+            'duration' => $course->duration,
+            'price' => $course->price,
+            'difficulty' => $course->difficulty,
+            'videos' => $course->videos,
+        ];
         return response()->json([
             'success' => true,
             'message' => 'Curso de la plataforma recuperado exitosamente',
-            'data' => $course,
+            'data' => $data,
         ]);
     }
 

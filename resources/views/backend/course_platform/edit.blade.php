@@ -36,7 +36,7 @@
                         @if ($course_platform->videos)
                             @foreach ($course_platform->videos as $video)
                             <video width="320" height="180" controls>
-                                <source src="{{ asset($video->video) }}" type="video/mp4">
+                                <source src="{{ $video->url }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             @endforeach
