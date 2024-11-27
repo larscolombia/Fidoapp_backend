@@ -18,7 +18,20 @@ class CursoPlataformaController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Cursos de la plataforma recuperados exitosamente',
-            'data' => $courses,
+            'data' => [
+                'courses' => $courses->map(function ($course) {
+                    return [
+                        'id' => $course->id,
+                        'name' => $course->name,
+                        'description' => $course->description,
+                        'image' => asset($course->image),
+                        'duration' => $course->duration,
+                        'price' => $course->price,
+                        'difficulty' => $course->difficulty,
+                        'videos' => $course->videos,
+                    ];
+                }),
+            ],
         ]);
     }
 
@@ -82,7 +95,7 @@ class CursoPlataformaController extends Controller
         }
 
         // Filtra solo los campos presentes en la solicitud
-        $data = $request->only(['name', 'description', 'url', 'price', 'duration','difficulty']);
+        $data = $request->only(['name', 'description', 'url', 'price', 'duration', 'difficulty']);
 
         // Manejar la carga de la imagen si está presente
         if ($request->hasFile('image')) {
@@ -123,18 +136,18 @@ class CursoPlataformaController extends Controller
             $courses = CursoPlataforma::where(function ($query) use ($search) {
                 // Buscar coincidencias con el término completo
                 $query->where('description', 'LIKE', '%' . $search . '%')
-                      ->orWhere('name', 'LIKE', '%' . $search . '%');
+                    ->orWhere('name', 'LIKE', '%' . $search . '%');
             })
-            ->orWhere(function ($query) use ($searchTerms) {
-                // Buscar coincidencias con cada palabra
-                foreach ($searchTerms as $term) {
-                    $query->orWhere(function ($q) use ($term) {
-                        $q->where('description', 'LIKE', '%' . $term . '%')
-                          ->orWhere('name', 'LIKE', '%' . $term . '%');
-                    });
-                }
-            })
-            ->get();
+                ->orWhere(function ($query) use ($searchTerms) {
+                    // Buscar coincidencias con cada palabra
+                    foreach ($searchTerms as $term) {
+                        $query->orWhere(function ($q) use ($term) {
+                            $q->where('description', 'LIKE', '%' . $term . '%')
+                                ->orWhere('name', 'LIKE', '%' . $term . '%');
+                        });
+                    }
+                })
+                ->get();
         }
 
         // Comprobar si no se encontraron resultados
