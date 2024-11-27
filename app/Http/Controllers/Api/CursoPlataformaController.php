@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use Http;
+use Illuminate\Http\Request;
+use App\Models\CursoPlataforma;
+use App\Models\CoursePlatformVideo;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CursoPlataformaStoreRequest;
 use App\Http\Requests\Api\CursoPlataformaUpdateRequest;
-use App\Models\CursoPlataforma;
-use Http;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CursoPlataformaController extends Controller
 {
@@ -35,41 +36,74 @@ class CursoPlataformaController extends Controller
         ]);
     }
 
-    public function store(CursoPlataformaStoreRequest $request)
+    public function store(Request $request)
     {
-        // Verificar si la URL del video es válida
-        if (!$this->isValidVideoUrl($request->input('url'))) {
+        try {
+            // Validación de los datos de entrada
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'duration' => 'required|integer|min:0',
+                'difficulty' => 'required',
+                // Validación para cada video
+                'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
+            ]);
+
+            // Manejar la carga de la imagen
+            $imageName = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/cursos_plataforma'), $imageName);
+            }
+
+            // Crear el curso
+            $curso = CursoPlataforma::create([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'price' => $request->input('price'),
+                'image' => $imageName ? 'images/cursos_plataforma/' . $imageName : null,
+                'duration' => $request->input('duration'),
+                'difficulty' => $request->input('difficulty'),
+            ]);
+
+            // Manejar la carga de archivos de video
+            if ($request->hasFile('video')) {
+                foreach ($request->file('video') as $video) {
+                    if ($video) { // Asegurarse de que el archivo no sea nulo
+                        // Generar un nombre único para cada video
+                        $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+                        // Mover el video a la carpeta correspondiente
+                        $video->move(public_path('videos/cursos_plataforma'), $videoName);
+
+                        // Guardar cada video en la tabla CoursePlatformVideo
+                        CoursePlatformVideo::create([
+                            'course_platform_id' => $curso->id,
+                            'url' => url('videos/cursos_plataforma/' . $videoName),
+                            'video' => $videoName,
+                        ]);
+                    }
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => __('course_platform.created_successfully'),
+                'data' => [
+                    'course' => $curso,
+                    'videos' => $curso->videos
+                ]
+            ], 201); // Código 201 para creación exitosa
+
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'La URL del video no es válida o el video no está disponible.',
-            ], 422);
+                'message' => __('course_platform.creation_failed'),
+                'error' => $e->getMessage(),
+            ], 500); // Código 500 para error interno del servidor
         }
-
-        // Manejar la carga de la imagen
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/cursos_plataforma'), $imageName);
-            $imagePath = 'images/cursos_plataforma/' . $imageName;
-        } else {
-            $imagePath = null;
-        }
-
-        $course = CursoPlataforma::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'url' => $request->input('url'),
-            'price' => $request->input('price'),
-            'duration' => $request->input('duration'),
-            'image' => $imagePath,
-            'difficulty' => $request->input('difficulty')
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Curso de la plataforma creado exitosamente',
-            'data' => $course,
-        ]);
     }
 
     public function show($id)
@@ -92,45 +126,84 @@ class CursoPlataformaController extends Controller
         ]);
     }
 
-    public function update(CursoPlataformaUpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $course = CursoPlataforma::findOrFail($id);
+        try {
+            // Validar los datos de entrada
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
+                'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'duration' => 'required|integer|min:0',
+                'difficulty' => 'required',
+                // Validación para cada video
+                'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
+            ]);
 
-        // Verificar si la URL del video es válida, si está presente en la solicitud
-        if ($request->has('url') && !$this->isValidVideoUrl($request->input('url'))) {
-            return response()->json([
-                'success' => false,
-                'message' => 'La URL del video no es válida o el video no está disponible.',
-            ], 422);
-        }
+            // Encontrar el curso por ID
+            $curso = CursoPlataforma::findOrFail($id);
 
-        // Filtra solo los campos presentes en la solicitud
-        $data = $request->only(['name', 'description', 'url', 'price', 'duration', 'difficulty']);
+            // Manejar la carga de la imagen (opcional)
+            if ($request->hasFile('image')) {
+                // Eliminar la imagen anterior si existe
+                if ($curso->image) {
+                    $previousImagePath = public_path($curso->image);
+                    if (file_exists($previousImagePath)) {
+                        unlink($previousImagePath); // Eliminar la imagen anterior
+                    }
+                }
 
-        // Manejar la carga de la imagen si está presente
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/cursos_plataforma'), $imageName);
-            $data['image'] = 'images/cursos_plataforma/' . $imageName;
+                // Cargar la nueva imagen
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/cursos_plataforma'), $imageName);
+                $curso->image = 'images/cursos_plataforma/' . $imageName; // Actualizar el campo de imagen
+            }
 
-            // Eliminar la imagen anterior si existe
-            if ($course->image) {
-                $oldImagePath = public_path($course->image);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
+            // Actualizar otros campos del curso
+            $curso->name = $request->input('name');
+            $curso->description = $request->input('description');
+            $curso->price = $request->input('price');
+            $curso->duration = $request->input('duration');
+            $curso->difficulty = $request->input('difficulty');
+            $curso->save(); // Guardar los cambios
+
+            // Manejar la carga de archivos de video (opcional)
+            if ($request->hasFile('video')) {
+                foreach ($request->file('video') as $video) {
+                    if ($video) { // Asegurarse de que el archivo no sea nulo
+                        // Generar un nombre único para cada video
+                        $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+                        // Mover el video a la carpeta correspondiente
+                        $video->move(public_path('videos/cursos_plataforma'), $videoName);
+
+                        // Guardar cada video en la tabla CoursePlatformVideo
+                        CoursePlatformVideo::create([
+                            'course_platform_id' => $curso->id,
+                            'url' => url('videos/cursos_plataforma/' . $videoName),
+                            'video' => $videoName,
+                        ]);
+                    }
                 }
             }
+
+            return response()->json([
+                'success' => true,
+                'message' => __('course_platform.updated_successfully'),
+                'data' => [
+                    'course' => $curso,
+                    'videos' => $curso->videos
+                ]
+            ], 200); // Código 200 para actualización exitosa
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('course_platform.update_failed'),
+                'error' => $e->getMessage(),
+            ], 500); // Código 500 para error interno del servidor
         }
-
-        // Actualiza los campos presentes
-        $course->update($data);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Curso de la plataforma actualizado exitosamente',
-            'data' => $course,
-        ]);
     }
 
     //Buscar por tema o palabra clave
