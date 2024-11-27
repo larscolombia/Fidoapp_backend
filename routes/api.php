@@ -43,6 +43,7 @@ use Modules\Pet\Http\Controllers\Backend\PetsController;
 use App\Http\Controllers\Backend\API\DashboardController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
 use App\Http\Controllers\Api\ComandoEquivalenteController;
+use App\Http\Controllers\Api\CoursePlatformUserController;
 use Modules\Pet\Http\Controllers\Backend\API\PetController;
 use App\Http\Controllers\Backend\API\NotificationsController;
 use App\Http\Controllers\Api\HerramientasEntrenamientoController;
@@ -604,6 +605,64 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          * }
          */
         Route::delete('{course_platform}/delete-video/{video}',[CursoPlataformaController::class, 'deleteVideo']);
+
+            /**
+         * Suscribirse a un curso de la plataforma
+         * Método HTTP: POST
+         * Ruta: /api/course-platform/subscribe
+         * Descripción: Suscribirse a un curso de la plataforma
+         * Parametros:
+         * user_id: Id del usuario
+         * course_platform_id: id del curso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data de la suscripcion"
+         * }
+         * Respuesta fallida:
+         * {
+         *     "success": false,
+         *     "message": "mensaje de error"
+         * }
+         */
+        Route::post('subscribe',[CoursePlatformUserController::class,'subscribe']);
+            /**
+         * Actualizar progreso
+         * Método HTTP: PUT
+         * Ruta: /api/course-platform/subscribe/mark-video-as-watched
+         * Descripción: Actualizar progreso
+         * Parametros:
+         * user_id: Id del usuario
+         * course_platform_id: id del curso
+         * course_platform_video_id: Id del video del curso
+         * watched: valor booleano para el progreso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data de la suscripcion"
+         * }
+         * Respuesta fallida:
+         * {
+         *     "success": false,
+         *     "message": "mensaje de error"
+         * }
+         */
+        Route::put('subscribe/mark-video-as-watched',[CoursePlatformUserController::class,'markVideoAsWatched']);
+         /**
+         * Obtener todos los cursos por user_id
+         * Método HTTP: PUT
+         * Ruta: /api/course-platform/subscribe/mark-video-as-watched
+         * Descripción: Obtener todos los cursos por user_id
+         * Parametros:
+         * user_id: Id del usuario
+         * per_page: numero para paginacion
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data de la suscripcion"
+         * }
+         */
+        Route::get('subscribe/all-courses-user',[CoursePlatformUserController::class,'allCoursesUser']);
     });
 
 
