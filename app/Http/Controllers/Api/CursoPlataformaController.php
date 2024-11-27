@@ -260,6 +260,70 @@ class CursoPlataformaController extends Controller
         ]);
     }
 
+    public function deleteAllVideos($id)
+    {
+        try {
+            // Buscar el curso por ID
+            $curso = CursoPlataforma::findOrFail($id);
+
+            // Obtener todos los videos asociados al curso
+            $videos = CoursePlatformVideo::where('curso_id', $curso->id)->get();
+
+            // Verificar si hay videos y eliminarlos
+            if ($videos->isNotEmpty()) {
+                foreach ($videos as $video) {
+                    // Verificar si el archivo existe y eliminarlo
+                    if (file_exists(public_path($video->video))) {
+                        unlink(public_path($video->video)); // Eliminar el archivo del sistema
+                    }
+                }
+
+                // Eliminar todos los registros de videos asociados al curso
+                CoursePlatformVideo::where('curso_id', $curso->id)->delete();
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => __('course_platform.videos_deleted_successfully'), // Mensaje de éxito
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('course_platform.update_failed'),
+                'error' => $e->getMessage(),
+            ], 500); // Código 500 para error interno del servidor
+        }
+    }
+
+    public function deleteVideo($cursoId, $videoId)
+    {
+        try {
+            // Buscar el curso por ID
+            $curso = CursoPlataforma::findOrFail($cursoId);
+
+            // Buscar el video por ID
+            $video = CoursePlatformVideo::where('id', $videoId)->where('curso_id', $curso->id)->firstOrFail();
+
+            // Verificar si el archivo existe y eliminarlo
+            if (file_exists(public_path($video->url))) {
+                unlink(public_path($video->url)); // Eliminar el archivo del sistema
+            }
+
+            // Eliminar el registro del video de la base de datos
+            $video->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('course_platform.video_deleted_successfully'), // Mensaje de éxito
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500); // Código 500 para error interno del servidor
+        }
+    }
+
     private function isValidVideoUrl($url)
     {
         if (strpos($url, 'youtube.com') !== false || strpos($url, 'youtu.be') !== false) {

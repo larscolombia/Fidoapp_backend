@@ -580,7 +580,32 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          * }
          */
         Route::delete('{course_platform}', [CursoPlataformaController::class, 'destroy'])->name('course_platform.destroy');
+   /**
+         * Eliminar todos los videos de un curso
+         * Método HTTP: DELETE
+         * Ruta: /api/course-platform/delete-all-videos
+         * Descripción: Elimina todos los videos de un curso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Videos del Curso de la plataforma eliminado exitosamente"
+         * }
+         */
+        Route::delete('{course_platform}/delete-all-videos',[CursoPlataformaController::class, 'deleteAllVideos']);
+         /**
+         * Eliminar un video de un curso
+         * Método HTTP: DELETE
+         * Ruta: /api/course-platform/delete-video/{video}
+         * Descripción: Eliminar un video de un curso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Video del Curso de la plataforma eliminado exitosamente"
+         * }
+         */
+        Route::delete('{course_platform}/delete-video/{video}',[CursoPlataformaController::class, 'deleteVideo']);
     });
+
 
     /**
      * Rutas para la gestión de clases dentro de un curso de la plataforma
