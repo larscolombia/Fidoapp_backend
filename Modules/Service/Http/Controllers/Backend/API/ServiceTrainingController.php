@@ -62,6 +62,19 @@ class ServiceTrainingController extends Controller
         // Añadir el usuario que crea el registro
         $validatedData['created_by'] = auth()->id();
 
+        if ($request->hasFile('image')) {
+            // Obtener el archivo de imagen
+            $image = $request->file('image');
+
+            // Crear un nombre único para la imagen
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Guardar la imagen en public/images/service_training
+            $image->move(public_path('images/service_training'), $imageName);
+
+            // Agregar el nombre de la imagen a los datos validados
+            $validatedData['image'] = 'images/service_training/' . $imageName;
+        }
         // Crear el registro en la base de datos
         $data = ServiceTraining::create($validatedData);
 
@@ -76,7 +89,9 @@ class ServiceTrainingController extends Controller
     {
         // Buscar el registro por ID
         $serviceTraining = ServiceTraining::findOrFail($id);
-
+        if ($serviceTraining->image) {
+            $serviceTraining->image = asset($serviceTraining->image);
+        }
         // Devolver la respuesta JSON con el registro encontrado
         return response()->json([
             'data' => $serviceTraining,
@@ -106,6 +121,19 @@ class ServiceTrainingController extends Controller
             // Asignar el nuevo slug a los datos validados
             $validatedData['slug'] = $slug;
 
+            if ($request->hasFile('image')) {
+                // Obtener el archivo de imagen
+                $image = $request->file('image');
+
+                // Crear un nombre único para la imagen
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+                // Guardar la imagen en public/images/service_training
+                $image->move(public_path('images/service_training'), $imageName);
+
+                // Agregar el nombre de la imagen a los datos validados
+                $validatedData['image'] = 'images/service_training/' . $imageName;
+            }
             // Actualizar el registro con los datos validados
             $serviceTraining->update($validatedData);
 
