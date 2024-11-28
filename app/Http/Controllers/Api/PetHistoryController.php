@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\PetHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Trait\Notification;
 class PetHistoryController extends Controller
 {
+    use Notification;
 
     public function medicalHistoryPerPet(Request $request)
     {
@@ -158,6 +159,8 @@ class PetHistoryController extends Controller
             $data['name'] = $data['report_name'];
             // Crear el historial con los datos procesados
             $history = PetHistory::create($data);
+            //notify
+            $this->sendNotification('history',$history,'history');
             return response()->json([
                 'success' => true,
                 'data' => $history

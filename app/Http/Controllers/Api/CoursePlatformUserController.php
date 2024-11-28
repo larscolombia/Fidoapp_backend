@@ -7,9 +7,11 @@ use App\Models\CoursePlatformVideo;
 use App\Http\Controllers\Controller;
 use App\Models\CoursePlatformUserProgress;
 use App\Models\CoursePlatformUserSubscription;
+use App\Trait\Notification;
 
 class CoursePlatformUserController extends Controller
 {
+    use Notification;
     public function markVideoAsWatched(Request $request)
     {
         try {
@@ -80,6 +82,9 @@ class CoursePlatformUserController extends Controller
                 'course_platform_id' => 'required|exists:courses_platform,id'
             ]);
             $subscription = CoursePlatformUserSubscription::create($data);
+
+            //notify
+            $this->sendNotification('subscribe',$subscription,'suscription');
             return response()->json([
                 'success' => true,
                 'data' => $subscription
