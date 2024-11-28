@@ -160,7 +160,7 @@ class PetHistoryController extends Controller
             // Crear el historial con los datos procesados
             $history = PetHistory::create($data);
             //notify
-            $this->sendNotification('history',$history,'history');
+           // $this->sendNotification('history',$history,'history');
             return response()->json([
                 'success' => true,
                 'data' => $history

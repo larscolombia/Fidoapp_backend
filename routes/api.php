@@ -39,6 +39,7 @@ use App\Http\Controllers\Backend\API\AddressController;
 use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\Backend\API\UserApiController;
 use App\Http\Controllers\Api\SpecialConditionController;
+use App\Http\Controllers\Api\UserNotificationController;
 use Modules\Pet\Http\Controllers\Backend\PetsController;
 use App\Http\Controllers\Backend\API\DashboardController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
@@ -116,6 +117,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('get-user-by-type', [UserController::class, 'getUserByType']);
+
+    Route::get('user-notification',[UserNotificationController::class,'getNotification']);
     /**
      * Obtener Todos los E-Books
      * Método HTTP: GET

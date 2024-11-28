@@ -2,16 +2,14 @@
 
 namespace App\trait;
 
-use App\Jobs\BulkNotification;
+use App\Jobs\UserNotification;
 
 trait Notification
 {
-    protected function sendNotification($type, $data,$service)
+    protected function sendNotification($title, $data,$user,$description)
     {
-        $array = mail_footer($type, $data);
+        $data = [$title,$data,$user,$description];
 
-        $array[$service] = $data;
-
-        BulkNotification::dispatch($array);
+        UserNotification::dispatch($data);
     }
 }
