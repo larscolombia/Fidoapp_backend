@@ -2709,8 +2709,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('medical-history-per-pet', [PetHistoryController::class, 'medicalHistoryPerPet']);
     route::middleware(['check_vet'])->group(function () {
-<<<<<<< HEAD
-=======
         /**
          * Crear historial clinico de la mascota
          * Método HTTP: POST
@@ -2746,7 +2744,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *  'message' => 'Mensaje de error'
          * }
          */
->>>>>>> d996d01845df427cd690104667114c30c3be3ac6
         Route::apiResource('/pet-histories', PetHistoryController::class);
 
         /**
