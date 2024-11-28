@@ -19,7 +19,7 @@ class BlogController extends Controller
         // $branchId = $request->input('branch_id');
 
         $blog = Blog::with('media')->where('status', 1);
-        
+
         $blog = $blog->orderBy('updated_at','desc')->paginate($perPage);
         $items = BlogResource::collection($blog);
 
@@ -29,5 +29,17 @@ class BlogController extends Controller
             'message' => __('blog.blog_list'),
         ], 200);
     }
- 
+
+    public function show($id)
+    {
+
+        $blog = Blog::findOrFail($id);
+
+        return response()->json([
+            'status' => true,
+            'data' => $blog,
+            'message' => __('blog.blog_list'),
+        ], 200);
+    }
+
 }
