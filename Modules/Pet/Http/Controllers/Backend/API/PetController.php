@@ -381,7 +381,9 @@ class PetController extends Controller
             ];
 
             $validatedData = $request->validate($rules);
-
+            if (!file_exists(public_path('images/pets'))) {
+                mkdir(public_path('images/pets'), 0755, true);
+            }
             if (isset($validatedData['breed_id'])) {
                 $breed = Breed::find($validatedData['breed_id']);
             } elseif (isset($validatedData['breed_name'])) {
