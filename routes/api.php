@@ -651,7 +651,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          /**
          * Obtener todos los cursos por user_id
          * Método HTTP: GET
-         * Ruta: /api/course-platform/subscribe/mark-video-as-watched
+         * Ruta: /api/course-platform/subscribe/all-courses-user
          * Descripción: Obtener todos los cursos por user_id
          * Parametros:
          * user_id: Id del usuario

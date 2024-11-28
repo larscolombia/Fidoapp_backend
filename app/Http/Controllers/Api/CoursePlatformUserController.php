@@ -96,16 +96,13 @@ class CoursePlatformUserController extends Controller
     {
         $data = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'per_page' => 'integer|min:1|max:100', // Opcional: para definir cuántos cursos por página
         ]);
 
-        // Establecer el número de elementos por página (puedes cambiarlo o hacerlo configurable)
-        $perPage = $request->input('per_page', 10); // Por defecto, 10 elementos por página
 
         // Usar paginate en lugar de get
         $coursesPlatformUser = CoursePlatformUserSubscription::where('user_id', $data['user_id'])
             ->with(['course_platform', 'user']) // Cargar relaciones para evitar N+1
-            ->paginate($perPage);
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -126,14 +123,7 @@ class CoursePlatformUserController extends Controller
                         'user_name' => $coursePlatformUser->user->full_name,
                         'avatar' => asset($coursePlatformUser->user->avatar)
                     ];
-                }),
-                // Añadir información de paginación
-                'pagination' => [
-                    'total' => $coursesPlatformUser->total(),
-                    'current_page' => $coursesPlatformUser->currentPage(),
-                    'last_page' => $coursesPlatformUser->lastPage(),
-                    'per_page' => $coursesPlatformUser->perPage(),
-                ],
+                })
             ],
         ]);
     }
