@@ -650,7 +650,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::put('subscribe/mark-video-as-watched',[CoursePlatformUserController::class,'markVideoAsWatched']);
          /**
          * Obtener todos los cursos por user_id
-         * Método HTTP: PUT
+         * Método HTTP: GET
          * Ruta: /api/course-platform/subscribe/mark-video-as-watched
          * Descripción: Obtener todos los cursos por user_id
          * Parametros:
@@ -663,6 +663,50 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          * }
          */
         Route::get('subscribe/all-courses-user',[CoursePlatformUserController::class,'allCoursesUser']);
+
+            /**
+         * Obtener el rating por video del curso
+         * Método HTTP: GET
+         * Ruta: /api/course-platform/subscribe/get-rating-course-video
+         * Descripción: Obtener el rating por video del curso
+         * Parametros:
+         * user_id: Id del usuario
+         * course_platform_video_id: Id del video
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data del rating"
+         * }
+         * Respuesta Fallida:
+         * {
+         *  "success":false,
+         *  "message": "No ratings found for the specified user"
+         * }
+         */
+        Route::get('subscribe/get-rating-course-video',[CursoPlataformaController::class,'getRatingCourseVideo']);
+
+             /**
+         * Calificar el video del curso
+         * Método HTTP: POST
+         * Ruta: /api/course-platform/subscribe/get-rating-course-video
+         * Descripción: Calificar el video del curso
+         * Parametros:
+         * user_id: Id del usuario
+         * review_msg: mensaje o comentario
+         * rating: calificacion del video
+         * course_platform_video_id: Id del video
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data del rating"
+         * }
+         * Respuesta Fallida:
+         * {
+         *  "success":false,
+         *  "message": "No ratings found for the specified user"
+         * }
+         */
+        Route::post('subscribe/rating-course-video',[CursoPlataformaController::class,'ratingCoursePlatformVideo']);
     });
 
 

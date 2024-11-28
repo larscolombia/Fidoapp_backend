@@ -8,6 +8,7 @@ use App\Models\CursoPlataforma;
 use App\Models\CoursePlatformVideo;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\CoursePlatformVideoRating;
 use App\Http\Requests\Api\CursoPlataformaStoreRequest;
 use App\Http\Requests\Api\CursoPlataformaUpdateRequest;
 
@@ -367,5 +368,89 @@ class CursoPlataformaController extends Controller
             return $response->ok();
         }
         return false;
+    }
+
+    public function ratingCoursePlatformVideo(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'review_msg' => 'nullable|string|max:255',
+                'rating' => 'nullable|numeric|min:1|max:5',
+                'course_platform_video_id' => 'required|exists:course_platform_videos,id',
+            ]);
+
+            $coursePlatformVideoRating = CoursePlatformVideoRating::create($data);
+            return response()->json([
+                'success' => true,
+                'data' => $coursePlatformVideoRating
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->validator->errors()
+            ], 422);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al guardar la calificación.'
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getRatingCourseVideo(Request $request)
+    {
+        // Validación de datos
+        $data = $request->validate([
+            'course_platform_video_id' => 'required|exists:course_platform_videos,id',
+            'user_id' => 'nullable|integer',
+        ]);
+
+        // Inicializar la consulta
+        $query = CoursePlatformVideoRating::query()
+            ->select('course_platform_video_ratings.*', 'users.first_name', 'users.last_name', 'users.avatar as user_avatar')
+            ->leftJoin('users', 'course_platform_video_ratings.user_id', '=', 'users.id')
+            ->where('course_platform_video_id', $data['course_platform_video_id']);
+
+        // Filtrar por user_id si se proporciona
+        if (isset($data['user_id']) && !is_null($data['user_id'])) {
+            $query->where('course_platform_video_ratings.user_id', $data['user_id']);
+        }
+
+        // Obtener las calificaciones
+        $coursePlatformVideoRatings = $query->get();
+
+        // Manejo de errores: si no se encuentra ninguna calificación
+        if ($coursePlatformVideoRatings->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No ratings found for the specified user'
+            ], 404);
+        }
+
+        // Procesar los resultados para incluir full_name y el avatar con URL completa
+        foreach ($coursePlatformVideoRatings as $rating) {
+            // Crear el campo full_name
+            $rating->user_full_name = trim($rating->first_name . ' ' . $rating->last_name);
+
+            // Procesar el avatar para incluir la URL completa
+            if ($rating->user_avatar) {
+                $rating->user_avatar = asset($rating->user_avatar);
+            }
+
+            // Opcional: eliminar los campos first_name y last_name si no son necesarios en la respuesta
+            unset($rating->first_name, $rating->last_name);
+        }
+
+        // Respuesta exitosa
+        return response()->json([
+            'success' => true,
+            'data' => $coursePlatformVideoRatings
+        ]);
     }
 }
