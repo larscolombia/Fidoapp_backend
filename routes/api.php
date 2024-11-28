@@ -119,6 +119,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('get-user-by-type', [UserController::class, 'getUserByType']);
 
     Route::get('user-notification',[UserNotificationController::class,'getNotification']);
+
+    Route::put('user-notification/{id}',[UserNotificationController::class,'updateRead']);
     /**
      * Obtener Todos los E-Books
      * Método HTTP: GET
