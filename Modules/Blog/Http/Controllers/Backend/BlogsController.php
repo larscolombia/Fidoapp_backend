@@ -245,13 +245,13 @@ class BlogsController extends Controller
                     $data['url'] = $videoUrl;
                     $data['video'] = $videoName;
         }
-t $request, $id)
-    {
-        $query = Blog::findOrFail($id);
+        $query->update($data);
 
-        $data = $request->except('event_image');
-return Response
-     */
+        storeMediaFile($query, $request->file('event_image'), 'event_image');
+        $message = __('messages.update_form', ['form' => __($this->module_title)]);
+
+        return response()->json(['message' => $message, 'status' => true], 200);
+    }
     public function destroy($id)
     {
         $data = Blog::findOrFail($id);
