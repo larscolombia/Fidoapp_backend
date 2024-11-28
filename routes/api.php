@@ -1061,6 +1061,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * {
      *     "name": "Evento 1",
      *     "date": "2024-07-13T00:00:00.000000Z",
+     *     "end_date":"2024-07-13T00:00:00.000000Z",
+     *     "event_time": "10:00:00",
      *     "slug": "evento-1",
      *     "user_id": 1,
      *     "description": "Descripción del evento 1",
