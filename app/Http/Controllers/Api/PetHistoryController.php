@@ -39,10 +39,43 @@ class PetHistoryController extends Controller
 
             // Obtención de historiales paginados
             $histories = $query->get();
+            // Filtrando y estructurando la respuesta
+            $formattedHistories = $histories->map(function ($history) {
+                $reportData = $this->getReportData($history);
+                return [
+                    'id' => $history->id,
+                    'report_name' => $history->name,
+                    'report_type' =>  $reportData['report_type'],
+                    'application_date' => $history->application_date ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : null,
+                    'medical_conditions' => $history->medical_conditions,
+                    'test_results' => $history->test_results,
+                    'vet_visits' => $history->vet_visits,
+                    'file' => !is_null($history->file) ? asset($history->file) : null,
+                    'image' => !is_null($history->image) ? asset($history->image) : null,
+                    // Filtrando pet
+                    'pet_id' => $history->pet->id,
+                    'pet_name' => $history->pet->name,
+                    // Filtrando veterinarian
+                    'veterinarian_id' => $history->veterinarian->id,
+                    'veterinarian_name' => $history->veterinarian->full_name,
+                    //filtrato tipo de reporte
+                    'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
+                    'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] : null,
+                    'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] : null,
+                    'fecha_aplicacion' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_aplicacion'])
+                        ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_aplicacion'])->format('d-m-Y')
+                        : null,
+                    'fecha_refuerzo' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_refuerzo'])
+                        ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_refuerzo'])->format('d-m-Y')
+                        : null,
+                    'weight' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['weight']) ? $reportData['detail_type']['weight'] : null,
+                    'notes' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['notes'])  ? $reportData['detail_type']['notes'] : null,
+                ];
+            });
 
             return response()->json([
                 'success' => true,
-                'data' => $histories,
+                'data' => $formattedHistories,
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -74,16 +107,57 @@ class PetHistoryController extends Controller
         try {
             $request->validate([
                 'pet_id' => 'required|exists:pets,id',
+                'report_type' => 'required|integer|between:1,3',
                 'veterinarian_id' => 'required|exists:users,id',
                 'vacuna_id' => 'nullable|integer',
                 'antidesparasitante_id' => 'nullable|integer',
                 'antigarrapata_id' => 'nullable|integer',
+                'application_date' => 'nullable|date',
                 'medical_conditions' => 'nullable|string',
                 'test_results' => 'nullable|string',
                 'vet_visits' => 'nullable|integer',
+                'category' => 'nullable|integer',
+                'date' => 'nullable|date',
+                'report_name' => 'required|string',
+                'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'name' => 'required|string|max:255',
+                'fecha_aplicacion' => 'required|date',
+                'fecha_refuerzo' => 'required|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
+            $request->merge(['method' => 'store']);
+            $data = $request->all();
 
-            $history = PetHistory::create($request->all());
+            // Asignar IDs según el tipo de reporte
+            if (isset($data['report_type'])) {
+                if ($data['report_type'] === 1) {
+                    $data['vacuna_id'] = $this->createReportType($data);
+                } elseif ($data['report_type'] === 2) {
+                    $data['antidesparasitante_id'] = $this->createReportType($data);
+                } elseif ($data['report_type'] === 3) {
+                    $data['antigarrapata_id'] = $this->createReportType($data);
+                }
+            }
+            // Manejar el archivo si se proporciona
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('pet_histories'), $fileName);
+                $data['file'] = 'pet_histories/' . $fileName;
+            }
+
+            // Manejar la imagen si se proporciona
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('pet_histories'), $imageName);
+                $data['image'] = 'pet_histories/' . $imageName;
+            }
+            $data['name'] = $data['report_name'];
+            // Crear el historial con los datos procesados
+            $history = PetHistory::create($data);
             return response()->json([
                 'success' => true,
                 'data' => $history
@@ -104,11 +178,39 @@ class PetHistoryController extends Controller
      */
     public function show($id)
     {
-        $history = PetHistory::with(['pet', 'pet.vacunas', 'pet.antidesparasitantes', 'pet.antigarrapatas', 'veterinarian'])->find($id);
+        $history = PetHistory::find($id);
         if (!$history) {
             return response()->json(['message' => 'History not found'], 404);
         }
-        return response()->json($history);
+        $reportData = $this->getReportData($history);
+        $response = [
+            'report_id' => $history->id,
+            'report_name' => $history->name,
+            'report_type' =>  $reportData['report_type'],
+            'application_date' => $history->application_date ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : null,
+            'pet_id' => $history->pet->id,
+            'pet_name' => $history->pet->name,
+            'category_id' => $history->category,
+            'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
+            'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] : null,
+            'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] : null,
+            'fecha_aplicacion' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_aplicacion'])
+                ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_aplicacion'])->format('d-m-Y')
+                : null,
+            'fecha_refuerzo' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_refuerzo'])
+                ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_refuerzo'])->format('d-m-Y')
+                : null,
+            'weight' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['weight']) ? $reportData['detail_type']['weight'] : null,
+            'notes' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['notes'])  ? $reportData['detail_type']['notes'] : null,
+            'veterinarian_id' => $history->veterinarian->id,
+            'veterinarian_name' => $history->veterinarian->full_name,
+            'medical_conditions' => $history->medical_conditions,
+            'test_results' => $history->test_results,
+            'vet_visits' => $history->vet_visits,
+            'file' => !is_null($history->file) ? asset($history->file) : null,
+            'image' => !is_null($history->image) ? asset($history->image) : null
+        ];
+        return response()->json($response);
     }
 
     /**
@@ -121,31 +223,83 @@ class PetHistoryController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            // Buscar el historial por ID
             $history = PetHistory::find($id);
             if (!$history) {
                 return response()->json(['message' => 'Historial no encontrado'], 404);
             }
 
+            // Validar los datos entrantes
             $request->validate([
                 'pet_id' => 'required|exists:pets,id',
+                'report_type' => 'required|integer|between:1,3',
                 'veterinarian_id' => 'required|exists:users,id',
                 'vacuna_id' => 'nullable|integer',
                 'antidesparasitante_id' => 'nullable|integer',
                 'antigarrapata_id' => 'nullable|integer',
+                'detail_history_id' => 'required|integer',
+                'application_date' => 'nullable|date',
                 'medical_conditions' => 'nullable|string',
                 'test_results' => 'nullable|string',
                 'vet_visits' => 'nullable|integer',
+                'category' => 'nullable|integer',
+                'date' => 'nullable|date',
+                'report_name' => 'required|string',
+                'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'name' => 'required|string|max:255',
+                'fecha_aplicacion' => 'required|date',
+                'fecha_refuerzo' => 'required|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
 
-            $history->update($request->all());
+            // Obtener todos los datos del request
+            $request->merge(['method' => 'update']);
+            $data = $request->all();
+            if (isset($data['report_type'])) {
+                if ($data['report_type'] === 1) {
+                    $data['vacuna_id'] = $this->createReportType($data);
+                } elseif ($data['report_type'] === 2) {
+                    $data['antidesparasitante_id'] = $this->createReportType($data);
+                } elseif ($data['report_type'] === 3) {
+                    $data['antigarrapata_id'] = $this->createReportType($data);
+                }
+            }
+            if ($request->hasFile('file')) {
+                // Eliminar el archivo anterior si existe
+                if ($history->file && file_exists(public_path($history->file))) {
+                    unlink(public_path($history->file)); // Elimina el archivo anterior
+                }
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('pet_histories'), $fileName);
+                $data['file'] = 'pet_histories/' . $fileName; // Guarda la nueva ruta
+            }
+
+            // Manejar la imagen si se proporciona
+            if ($request->hasFile('image')) {
+                // Eliminar la imagen anterior si existe
+                if ($history->image && file_exists(public_path($history->image))) {
+                    unlink(public_path($history->image)); // Elimina la imagen anterior
+                }
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('pet_histories'), $imageName);
+                $data['image'] = 'pet_histories/' . $imageName; // Guarda la nueva ruta
+            }
+
+            // Actualizar el historial con los nuevos datos
+            $history->update($data);
+
             return response()->json([
                 'success' => true,
                 'data' => $history
-            ], 201);
+            ], 200); // Cambiar a 200 para indicar una actualización exitosa
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Ocurrió un error al actualizar el historial: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -190,5 +344,105 @@ class PetHistoryController extends Controller
 
         $history->delete();
         return response()->json(['message' => 'Successfully deleted history']);
+    }
+
+    public function createReportType($data)
+    {
+        // Mapeo de tipos de reportes a controladores
+        $controllers = [
+            1 => VacunaController::class,
+            2 => AntiWormersController::class,
+            3 => AntiTickController::class,
+        ];
+
+        // Verificar si el tipo de reporte existe en el mapeo
+        if (!array_key_exists($data['report_type'], $controllers)) {
+            throw new \Exception('Tipo de reporte no válido.');
+        }
+
+        // Crear un nuevo Request
+        $request = new Request([
+            'name' => $data['name'],
+            'fecha_aplicacion' => $data['fecha_aplicacion'],
+            'pet_id' => $data['pet_id'],
+            'fecha_refuerzo' => $data['fecha_refuerzo'],
+            'weight' => isset($data['weight']) && !is_null($data['weight']) ? $data['weight'] : null,
+            'notes' => isset($data['medical_conditions']) && !is_null($data['medical_conditions']) ? $data['medical_conditions'] : null,
+        ]);
+
+        // Instanciar el controlador correspondiente
+        $controller = app($controllers[$data['report_type']]);
+
+        // Llamar al método store del controlador
+        if ($data['method'] == 'store') {
+            $response = $controller->store($request);
+        } else {
+            $id = $data['detail_history_id'];
+            $response = $controller->update($request, $id);
+        }
+
+
+        // Si la respuesta es exitosa, asigna el ID al request original
+        if ($response->getStatusCode() === 201 || $response->getStatusCode() === 200) {
+            if ($data['method'] == 'store') {
+                $data = json_decode($response->getContent(), true);
+                return $data['data']['id']; // Retorna el ID del registro creado
+            } else {
+                return $data['detail_history_id'];
+            }
+        }
+
+        // Manejar el caso en que la creación falla
+        throw new \Exception('Error al crear el registro: ' . $response->getContent());
+    }
+
+    private function getReportData($history)
+    {
+        if (!is_null($history->vacuna_id)) {
+            return [
+                'report_type' => 1,
+                'detail_type' => [
+                    'id' => $history->vacuna->id,
+                    'name' => $history->vacuna->vacuna_name,
+                    'fecha_aplicacion' => $history->vacuna->fecha_aplicacion,
+                    'fecha_refuerzo' => $history->vacuna->fecha_refuerzo_vacuna,
+                    'weight' => $history->vacuna->weight,
+                    'notes' => $history->vacuna->additional_notes
+                ]
+            ];
+        }
+
+        if (!is_null($history->antidesparasitante_id)) {
+            return [
+                'report_type' => 2,
+                'detail_type' => [
+                    'id' => $history->antiparasitante->id,
+                    'name' =>  $history->antiparasitante->antidesparasitante_name,
+                    'fecha_aplicacion' =>  $history->antiparasitante->fecha_aplicacion,
+                    'fecha_refuerzo' =>  $history->antiparasitante->fecha_refuerzo_antidesparasitante,
+                    'weight' =>  $history->antiparasitante->weight,
+                    'notes' =>  $history->antiparasitante->additional_notes
+                ]
+            ];
+        }
+
+        if (!is_null($history->antigarrapata_id)) {
+            return [
+                'report_type' => 3,
+                'detail_type' => [
+                    'id' => $history->antigarrapata->id,
+                    'name' =>  $history->antigarrapata->antigarrapata_name,
+                    'fecha_aplicacion' =>  $history->antigarrapata->fecha_aplicacion,
+                    'fecha_refuerzo' =>  $history->antigarrapata->fecha_refuerzo_antigarrapata,
+                    'weight' =>  $history->antigarrapata->weight,
+                    'notes' =>  $history->antigarrapata->additional_notes
+                ]
+            ];
+        }
+
+        return [
+            'report_type' => null,
+            'detail_type' => null
+        ];
     }
 }

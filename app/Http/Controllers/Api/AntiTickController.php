@@ -13,21 +13,26 @@ class AntiTickController extends Controller
         try {
             // Validación de los datos recibidos
             $request->validate([
-                'antigarrapata_name' => 'required|string|max:255',
+                'name' => 'required|string|max:255',
                 'fecha_aplicacion' => 'required|date',
                 'pet_id' => 'required|exists:pets,id',
-                'fecha_refuerzo_antigarrapata' => 'required|date|after_or_equal:fecha_aplicacion',
+                'fecha_refuerzo' => 'required|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
 
             // Crear la nueva Antigarrapata asociada a la mascota
             $antiTick = new Antigarrapata();
             $antiTick->pet_id = $request->pet_id;
-            $antiTick->antigarrapata_name = $request->antigarrapata_name;
+            $antiTick->antigarrapata_name = $request->name;
             $antiTick->fecha_aplicacion = $request->fecha_aplicacion;
-            $antiTick->fecha_refuerzo_antigarrapata = $request->fecha_refuerzo_antigarrapata;
+            $antiTick->fecha_refuerzo_antigarrapata = $request->fecha_refuerzo;
+            $antiTick->weight = $request->weight;
+            $antiTick->additional_notes = $request->notes;
             $antiTick->save();
             return response()->json([
                 'success' => true,
+                'data' => $antiTick,
                 'message' => __('Antigarrapata creada exitosamente.')
             ], 201);
         } catch (\Exception $e) {
@@ -68,9 +73,11 @@ class AntiTickController extends Controller
         try {
             // Validar los datos actualizados
             $request->validate([
-                'antigarrapata_name' => 'required|string|max:255',
-                'fecha_aplicacion' => 'required|date',
-                'fecha_refuerzo_antigarrapata' => 'required|date|after_or_equal:fecha_aplicacion',
+                'name' => 'required|string|max:255',
+                'fecha_aplicacion' => 'nullable|date',
+                'fecha_refuerzo' => 'nullable|date|after_or_equal:fecha_aplicacion',
+                'weight' => 'nullable|string',
+                'notes' => 'nullable|string'
             ]);
 
             $antiTick = Antigarrapata::find($id);
@@ -82,16 +89,28 @@ class AntiTickController extends Controller
                 ], 404);
             }
             // Actualizar los datos de la Antigarrapata
-            $antiTick->antigarrapata_name = $request->antigarrapata_name;
-            $antiTick->fecha_aplicacion = $request->fecha_aplicacion;
-            $antiTick->fecha_refuerzo_antigarrapata = $request->fecha_refuerzo_antigarrapata;
+            $antiTick->antigarrapata_name = $request->name;
+
+
+            if(!is_null($request->fecha_aplicacion)){
+                $antiTick->fecha_aplicacion = $request->fecha_aplicacion;
+            }
+            if(!is_null($request->fecha_refuerzo)){
+                $antiTick->fecha_refuerzo_antigarrapata = $request->fecha_refuerzo;
+            }
+            if(!is_null($request->weight)){
+                $antiTick->weight = $request->weight;
+            }
+            if(!is_null($request->notes)){
+                $antiTick->additional_notes = $request->notes;
+            }
             $antiTick->save();
 
             // Retornar la respuesta exitosa
             return response()->json([
                 'success' => true,
                 'data' => $antiTick
-            ]);
+            ],201);
         } catch (\Exception $e) {
             // Retornar la respuesta exitosa
             return response()->json([

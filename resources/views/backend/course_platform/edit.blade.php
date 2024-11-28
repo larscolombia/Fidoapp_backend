@@ -31,13 +31,16 @@
 
                 <div class="mb-3">
                     <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
-                    <input type="file" class="form-control" id="video" name="video" accept="video/*">
-                    <div id="video-preview" class="mt-3 border p-3" style="width: 320px; height: 180px;">
-                        @if ($course_platform->file)
+                    <input type="file" class="form-control" id="video" name="video" accept="video/*" multiple>
+                    <div id="video-preview" class="mt-3 border p-3 d-flex" style="width: 320px; height: 180px;">
+                        @if ($course_platform->videos)
+                            @foreach ($course_platform->videos as $video)
                             <video width="320" height="180" controls>
-                                <source src="{{ asset($course_platform->file) }}" type="video/mp4">
+                                <source src="{{ $video->url }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
+                            @endforeach
+
                         @endif
                     </div>
                 </div>
@@ -84,28 +87,35 @@
 @push('after-scripts')
 <script>
     document.getElementById('video').addEventListener('change', function(event) {
-        const file = event.target.files[0];
+        const files = event.target.files; // Obtener todos los archivos seleccionados
         const videoPreview = document.getElementById('video-preview');
-        videoPreview.innerHTML = ''; // Clear the previous preview
+        videoPreview.innerHTML = ''; // Limpiar las vistas previas anteriores
 
-        if (file) {
-            const videoElement = document.createElement('video');
-            videoElement.src = URL.createObjectURL(file);
-            videoElement.controls = true;
-            videoElement.width = 320; // Set the width of the video element
-            videoElement.height = 180; // Set the height of the video element
-            videoElement.currentTime = 0;
-            videoElement.addEventListener('loadedmetadata', function() {
-                if (videoElement.duration > 10) {
-                    videoElement.currentTime = 10;
-                }
-            });
-            videoElement.addEventListener('timeupdate', function() {
-                if (videoElement.currentTime >= 10) {
-                    videoElement.pause();
-                }
-            });
-            videoPreview.appendChild(videoElement);
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file) {
+                const videoElement = document.createElement('video');
+                videoElement.src = URL.createObjectURL(file);
+                videoElement.controls = true;
+                videoElement.width = 320; // Establecer el ancho del elemento de video
+                videoElement.height = 180; // Establecer la altura del elemento de video
+
+                // Agregar eventos para pausar después de 10 segundos
+                videoElement.currentTime = 0;
+                videoElement.addEventListener('loadedmetadata', function() {
+                    if (videoElement.duration > 10) {
+                        videoElement.currentTime = 10;
+                    }
+                });
+                videoElement.addEventListener('timeupdate', function() {
+                    if (videoElement.currentTime >= 10) {
+                        videoElement.pause();
+                    }
+                });
+
+                // Agregar el elemento de video al contenedor de previsualización
+                videoPreview.appendChild(videoElement);
+            }
         }
     });
 </script>

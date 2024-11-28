@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\CoursePlatformVideo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CursoPlataforma extends Model
 {
@@ -15,5 +16,10 @@ class CursoPlataforma extends Model
     public function clases()
     {
         return $this->hasMany(Clase::class, 'course_id', 'id');
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(CoursePlatformVideo::class, 'course_platform_id','id');
     }
 }

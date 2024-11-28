@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\CursoPlataforma;
-use Http;
-use Illuminate\Http\Request;
 use Log;
+use Http;
+use App\Models\Course;
+use Illuminate\Http\Request;
+use App\Models\CursoPlataforma;
 use Yajra\DataTables\DataTables;
+use App\Models\CoursePlatformVideo;
 
 
 class CursoPlataformaController extends Controller
@@ -91,21 +92,13 @@ class CursoPlataformaController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'sometimes|url',
-            'video' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'duration' => 'required|integer|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'duration' => 'required|string|max:255',
             'difficulty' => 'required',
+            // Validación para cada video
+            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
         ]);
-
-        // Verificar si la URL del video es válida (solo si se proporciona una URL)
-        $url = $request->input('url');
-        if ($url && !$this->isValidVideoUrl($url)) {
-            return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
-        }
 
         // Manejar la carga de la imagen
         $imageName = null;
@@ -115,24 +108,37 @@ class CursoPlataformaController extends Controller
             $image->move(public_path('images/cursos_plataforma'), $imageName);
         }
 
-        // Manejar la carga del archivo de video
-        $videoName = null;
-        if ($request->hasFile('video')) {
-            $video = $request->file('video');
-            $videoName = time() . '.' . $video->getClientOriginalExtension();
-            $video->move(public_path('videos/cursos_plataforma'), $videoName);
-        }
-
-        CursoPlataforma::create([
+        // Crear el curso
+        $curso = CursoPlataforma::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'url' => $url, // Guardar la URL si se proporciona
-            'file' => $videoName ? 'videos/cursos_plataforma/' . $videoName : null,
             'price' => $request->input('price'),
             'image' => $imageName ? 'images/cursos_plataforma/' . $imageName : null,
             'duration' => $request->input('duration'),
             'difficulty' => $request->input('difficulty'),
         ]);
+
+        // Manejar la carga de archivos de video
+        if ($request->hasFile('video')) {
+            foreach ($request->file('video') as $video) {
+                if ($video) { // Asegurarse de que el archivo no sea nulo
+                    // Generar un nombre único para cada video
+                    $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+                    // Mover el video a la carpeta correspondiente
+                    $video->move(public_path('videos/cursos_plataforma'), $videoName);
+
+                    // Generar la URL del video
+                    $videoUrl = url('videos/cursos_plataforma/' . $videoName);
+
+                    // Guardar cada video en la tabla CoursePlatformVideo
+                    CoursePlatformVideo::create([
+                        'course_platform_id' => $curso->id,
+                        'url' => $videoUrl,
+                        'video' => $videoName,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.created_successfully'));
     }
@@ -198,53 +204,60 @@ class CursoPlataformaController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Validar la solicitud
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'sometimes|url',
-            'video' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
-            'price' => 'required|numeric',
-            'duration' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'difficulty' => 'required'
+            'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // La imagen es opcional en la actualización
+            'duration' => 'required|integer|min:0',
+            'difficulty' => 'required',
+            // Validación para cada video
+            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
         ]);
 
-        $course_platform = CursoPlataforma::findOrFail($id);
-
-        // Verificar si la URL del video es válida (solo si se proporciona una URL)
-        $url = $request->input('url');
-        if ($url && !$this->isValidVideoUrl($url)) {
-            return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
-        }
+        // Buscar el curso existente
+        $curso = CursoPlataforma::findOrFail($id);
 
         // Manejar la carga de la imagen
         if ($request->hasFile('image')) {
+            // Si hay una nueva imagen, moverla y actualizar el nombre
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images/cursos_plataforma'), $imageName);
-            $course_platform->image = 'images/cursos_plataforma/' . $imageName;
+            $curso->image = 'images/cursos_plataforma/' . $imageName; // Actualizar el campo de imagen
         }
 
-        $course_platform->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'url' => $url,
-            'price' => $request->input('price'),
-            'duration' => $request->input('duration'),
-            'image' => $course_platform->image ?? $course_platform->image,
-            'difficulty' => $request->input('difficulty')
-        ]);
+        // Actualizar otros campos del curso
+        $curso->name = $request->input('name');
+        $curso->description = $request->input('description');
+        $curso->price = $request->input('price');
+        $curso->duration = $request->input('duration');
+        $curso->difficulty = $request->input('difficulty');
+        // Guardar los cambios en el curso
+        $curso->save();
 
-        // Manejar la carga del archivo de video
+        // Manejar la carga de archivos de video
         if ($request->hasFile('video')) {
-            $video = $request->file('video');
-            $videoName = time() . '.' . $video->getClientOriginalExtension();
-            $video->move(public_path('videos/cursos_plataforma'), $videoName);
-            $data['file'] = 'videos/cursos_plataforma/' . $videoName;
-        }
+            foreach ($request->file('video') as $video) {
+                if ($video) { // Asegurarse de que el archivo no sea nulo
+                    // Generar un nombre único para cada video
+                    $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+                    // Mover el video a la carpeta correspondiente
+                    $video->move(public_path('videos/cursos_plataforma'), $videoName);
 
-        // Actualizar el modelo con los datos
-        $course_platform->update($data);
+                    // Generar la URL del video
+                    $videoUrl = url('videos/cursos_plataforma/' . $videoName);
+
+                    // Guardar cada nuevo video en la tabla CoursePlatformVideo
+                    CoursePlatformVideo::create([
+                        'course_platform_id' => $curso->id,
+                        'url' => $videoUrl,
+                        'video' => $videoName,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));
     }

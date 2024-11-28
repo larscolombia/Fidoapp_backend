@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEBookRequest;
-use App\Models\EBook;
 use Carbon\Carbon;
+use App\Models\EBook;
+use App\Models\BookRating;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\StoreEBookRequest;
 
 class EBookController extends Controller
 {
@@ -65,11 +66,11 @@ class EBookController extends Controller
             ->editColumn('description', function ($data) {
                 return $data->description ?? 'N/A';
             })
-          
+
 
             ->editColumn('title', function ($data) {
                 return $data->title;
-            })  
+            })
 
             // ->orderColumn('total_amount', function ($query, $order) {
             //     $query->select('orders.*')
@@ -97,7 +98,7 @@ class EBookController extends Controller
                 if ($data->updated_at === null) {
                     return 'N/A'; // O cualquier otro valor predeterminado adecuado
                 }
-            
+
                 $diff = Carbon::now()->diffInHours($data->updated_at);
                 if ($diff < 25) {
                     return $data->updated_at->diffForHumans();
@@ -105,9 +106,9 @@ class EBookController extends Controller
                     return $data->updated_at->isoFormat('llll');
                 }
             })
-              ->orderColumns(['id'], '-:column $1')
-              ->rawColumns(['action', 'check'])
-              ->toJson();
+            ->orderColumns(['id'], '-:column $1')
+            ->rawColumns(['action', 'check'])
+            ->toJson();
     }
 
     /**
@@ -135,10 +136,13 @@ class EBookController extends Controller
             'author' => 'nullable|string|max:255',
             'url' => 'required|url',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'number_of_pages' => 'nullable|integer|min:1',
+            'language' => 'nullable|string|max:255',
+            'price' => 'nullable|numeric',
         ]);
 
         // Manejar la carga de la imagen
-       // Manejar la carga de la imagen
+        // Manejar la carga de la imagen
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
             $imageName = time() . '.avif';
@@ -161,6 +165,9 @@ class EBookController extends Controller
             'author' => $request->author,
             'url' => $request->url,
             'cover_image' => $pathRegister,
+            'number_of_pages' => $request->number_of_pages,
+            'language' => $request->language,
+            'price' => $request->price,
         ]);
 
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been created successfully'));
@@ -205,6 +212,9 @@ class EBookController extends Controller
             'author' => 'nullable|string|max:255',
             'url' => 'required|url',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'number_of_pages' => 'nullable|integer|min:1',
+            'language' => 'nullable|string|max:255',
+            'price' => 'nullable|numeric',
         ]);
 
         $ebook = EBook::find($id);
@@ -224,6 +234,9 @@ class EBookController extends Controller
             'author' => $request->author,
             'url' => $request->url,
             'cover_image' => $imageName,
+            'number_of_pages' => $request->number_of_pages,
+            'language' => $request->language,
+            'price' => $request->price,
         ]);
 
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been updateds successfully'));
@@ -240,13 +253,16 @@ class EBookController extends Controller
         $ebook = EBook::find($id);
         $ebook->delete();
         return redirect()->route('backend.e-books.index')->with('success', __('EBooks.EBook has been deleted successfully'));
-
     }
 
     public function get()
     {
-        $ebooks = EBook::all();
-        
+        $ebooks = EBook::with('book_ratings')
+        ->get()
+        ->transform(function ($ebook) {
+            $ebook->cover_image = asset($ebook->cover_image);
+            return $ebook;
+        });
         return response()->json([
             'success' => true,
             'message' => __('messages.ebooks_retrieved_successfully'),
@@ -256,9 +272,10 @@ class EBookController extends Controller
 
     public function getById($id)
     {
-        $ebook = EBook::find($id);
+        $ebook = EBook::with('book_ratings')->find($id);
 
         if ($ebook) {
+            $ebook->cover_image = asset($ebook->cover_image);
             return response()->json([
                 'success' => true,
                 'message' => __('messages.ebook_retrieved_successfully'),
@@ -269,6 +286,73 @@ class EBookController extends Controller
                 'success' => false,
                 'message' => __('messages.ebook_not_found')
             ], 404);
+        }
+    }
+
+    public function bookRating(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'e_book_id' => 'required|exists:e_book,id',
+                'user_id' => 'required|exists:users,id',
+                'review_msg' => 'nullable|string',
+                'rating' => 'nullable|numeric|min:1|max:5'
+            ]);
+
+            $bookRating = BookRating::create($data);
+            return response()->json(['status' => true, 'data' => $bookRating],200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getBookRatingByIdEbook(Request $request)
+    {
+        $data = $request->validate([
+            'e_book_id' => 'required|exists:e_book,id',
+        ]);
+
+        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->paginate(10);
+
+        if ($bookRating->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No hay calificaciones disponibles para este libro.'
+            ], 404);
+        }
+
+        $bookRating->getCollection()->transform(function ($rating) {
+            return [
+                'id' => $rating->id,
+                'rating' => $rating->rating,
+                'review_msg' => $rating->review_msg,
+                'user_id' => $rating->user->id,
+                'user_full_name' => $rating->user->full_name,
+                'user_avatar' => asset($rating->user->avatar)
+            ];
+        });
+
+        return response()->json([
+            'status' => true,
+            'data' => $bookRating
+        ], 200);
+    }
+
+
+    public function deleteBookRating($id)
+    {
+        try{
+            $bookRating = BookRating::findOrFail($id);
+            $bookRating->delete();
+            return response()->json(['status' => true, 'message' => 'book rating deleted successfully'],200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }

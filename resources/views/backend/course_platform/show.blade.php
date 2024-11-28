@@ -23,14 +23,16 @@
 
             <div class="mb-3">
                 <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
-                <div id="video-preview" class="mt-3">
-                    @if($course_platform->file)
+                <input type="file" class="form-control" id="video" name="video" accept="video/*" multiple>
+                <div id="video-preview" class="mt-3 border p-3 d-flex" style="width: 320px; height: 180px;">
+                    @if ($course_platform->videos)
+                        @foreach ($course_platform->videos as $video)
                         <video width="320" height="180" controls>
-                            <source src="{{ asset($course_platform->file) }}" type="video/mp4">
+                            <source src="{{ $video->url }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
-                    @else
-                        <p>{{ __('course_platform.no_video') }}</p>
+                        @endforeach
+
                     @endif
                 </div>
             </div>

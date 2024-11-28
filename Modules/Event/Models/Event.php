@@ -4,6 +4,7 @@ namespace Modules\Event\Models;
 
 use App\Models\BaseModel;
 use App\Models\CalendarEvent;
+use App\Models\EventDetail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
@@ -14,7 +15,7 @@ class Event extends BaseModel
     use HasFactory;
     use SoftDeletes;
     use HasSlug;
-    
+
 
     protected $table = 'events';
     protected $fillable = ['name', 'date', 'end_date', 'event_time', 'user_id', 'location', 'description', 'status', 'image'];
@@ -39,7 +40,7 @@ class Event extends BaseModel
     {
         return $this->hasMany(CalendarEvent::class);
     }
-    
+
     protected function getEventImageAttribute()
     {
         $media = $this->getFirstMediaUrl('event_image');
@@ -48,18 +49,21 @@ class Event extends BaseModel
     }
 
     public function scopeWithDistance($query, $latitude, $longitude)
-{
-    $unit_value = 6371; // Earth's radius in kilometers, you can change this if you want miles
+    {
+        $unit_value = 6371; // Earth's radius in kilometers, you can change this if you want miles
 
-    return $query
-        ->selectRaw("*, (
+        return $query
+            ->selectRaw("*, (
             {$unit_value} * acos(
                 cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) +
                 sin(radians(?)) * sin(radians(latitude))
             )
         ) AS distance", [$latitude, $longitude, $latitude])
-        ->orderBy('distance', 'asc');
-}
+            ->orderBy('distance', 'asc');
+    }
 
-  
+    public function detailEvent()
+    {
+        return $this->hasMany(EventDetail::class,'event_id');
+    }
 }

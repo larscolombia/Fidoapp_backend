@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Auth\API;
 
-use App\Http\Controllers\Auth\Trait\AuthTrait;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Resources\LoginResource;
-use App\Http\Resources\RegisterResource;
-use App\Http\Resources\SocialLoginResource;
-use App\Models\User;
-use App\Models\UserProfile;
+use DB;
 use Auth;
 use Hash;
+use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
-use DB;
+use App\Models\PermissionRequest;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\LoginResource;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\RegisterResource;
 use Illuminate\Support\Facades\Password;
-use Modules\Commission\Models\EmployeeCommission;
 use Modules\Commission\Models\Commission;
+use App\Http\Resources\SocialLoginResource;
 use Modules\Employee\Models\BranchEmployee;
+use App\Http\Controllers\Auth\Trait\AuthTrait;
+use Modules\Commission\Models\EmployeeCommission;
 
 class AuthController extends Controller
 {
@@ -46,20 +47,19 @@ class AuthController extends Controller
         if ($user == null) {
             return response()->json(['status' => false, 'message' => __('messages.register_before_login')]);
         }
-        $isActive= $this->checkService($request);
-        if($isActive == 0){
+        $isActive = $this->checkService($request);
+        if ($isActive == 0) {
             return response()->json(['status' => false, 'message' => __('messages.service_inactive')]);
         }
-         $usertype = $user->user_type;
+        $usertype = $user->user_type;
 
-        if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
+        if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
 
-            if($user->email_verified_at == null){
+            if ($user->email_verified_at == null) {
 
-                return response()->json(['status' => false, 'message' => __('messages.account_not_verify') ]);
-
+                return response()->json(['status' => false, 'message' => __('messages.account_not_verify')]);
             }
-         }
+        }
 
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
@@ -100,21 +100,20 @@ class AuthController extends Controller
 
         if ($user_data != null) {
 
-            $isActive= $this->checkService($request);
-            if($isActive == 0){
+            $isActive = $this->checkService($request);
+            if ($isActive == 0) {
                 return response()->json(['status' => false, 'message' => 'This service is inactive. Please contact your Administration.']);
             }
 
             $usertype = $user_data->user_type;
 
-            if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
+            if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
 
-                if($user_data->email_verified_at == null){
+                if ($user_data->email_verified_at == null) {
 
-                    return response()->json(['status' => false, 'message' => __('messages.account_not_verify') ]);
-
+                    return response()->json(['status' => false, 'message' => __('messages.account_not_verify')]);
                 }
-             }
+            }
 
 
 
@@ -130,7 +129,7 @@ class AuthController extends Controller
             $message = __('messages.login_success');
         } else {
 
-            if ($request->login_type === 'google' ||$request->login_type === 'apple') {
+            if ($request->login_type === 'google' || $request->login_type === 'apple') {
                 $key = 'email';
                 $value = $request->email;
             } else {
@@ -185,7 +184,7 @@ class AuthController extends Controller
 
             $user->save();
 
-            if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
+            if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
                 $commission = Commission::first();
                 EmployeeCommission::create([
                     'employee_id' => $user->id,
@@ -197,7 +196,7 @@ class AuthController extends Controller
                     'branch_id' => 1,
                 ];
                 BranchEmployee::create($branch_data);
-             }
+            }
 
 
             \Illuminate\Support\Facades\Artisan::call('view:clear');
@@ -219,15 +218,13 @@ class AuthController extends Controller
 
             $usertype = $user_data->user_type;
 
-            if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
+            if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
 
-                if($user_data->email_verified_at == null){
+                if ($user_data->email_verified_at == null) {
 
-                    return response()->json(['status' => false, 'message' => __('messages.account_not_verify') ]);
-
+                    return response()->json(['status' => false, 'message' => __('messages.account_not_verify')]);
                 }
-             }
-
+            }
         }
 
         if (request('player_id') != null) {
@@ -235,8 +232,8 @@ class AuthController extends Controller
             $user_data->save();
         }
 
-        $isActive= $this->checkService($request);
-        if($isActive == 0){
+        $isActive = $this->checkService($request);
+        if ($isActive == 0) {
             return response()->json(['status' => false, 'message' => 'This service is inactive. Please contact your Administration.']);
         }
 
@@ -362,17 +359,17 @@ class AuthController extends Controller
         $user_profile = UserProfile::where('user_id', $user->id)->first();
 
 
-         if(!$user_profile) {
+        if (!$user_profile) {
 
             $user_profile = new UserProfile();
             $user_profile->user_id = $user->id;
-         }
+        }
 
 
         if ($request->has('expert')) {
             $user_profile->expert = $request->expert;
         }
-        if($request->has('description')){
+        if ($request->has('description')) {
             $user_profile->description = $request->description;
         }
         if ($request->has('about_self')) {
@@ -391,11 +388,10 @@ class AuthController extends Controller
             $user_profile->dribbble_link = $request->dribbble_link;
         }
 
-        if($user_profile !=''){
+        if ($user_profile != '') {
 
             $user_profile->save();
-
-         }
+        }
 
         $user_data->save();
 
@@ -430,7 +426,7 @@ class AuthController extends Controller
         $user['instagram_link'] = $user->profile->instagram_link ?? null;
         $user['twitter_link'] = $user->profile->twitter_link ?? null;
         $user['dribbble_link'] = $user->profile->dribbble_link ?? null;
-
+        $user['raiting'] = $user->raiting;
         if (!$user) {
             return response()->json(['status' => false, 'message' => __('messages.user_notfound')], 404);
         }
@@ -458,5 +454,80 @@ class AuthController extends Controller
             'status' => true,
             'message' => $message,
         ], 200);
+    }
+
+    public function requestPermission(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'trainer_id' => 'required|exists:users,id',
+                'user_id' => 'required|exists:users,id'
+            ]);
+            $permissionRequest = new PermissionRequest();
+            $permissionRequest->requester_id = $data['trainer_id'];
+            $permissionRequest->target_id = $data['user_id'];
+            $permissionRequest->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Request created',
+                'data' => $permissionRequest,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function respondToRequest(Request $request, $requestId)
+    {
+        try{
+            $permissionRequest = PermissionRequest::findOrFail($requestId);
+
+            if ($request->input('response') == 'accept') {
+                $permissionRequest->accepted = true;
+
+            } else {
+                $permissionRequest->accepted = false;
+            }
+
+            $permissionRequest->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Request updated',
+                'data' => $permissionRequest
+            ],201);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function requestPermissionForUser(Request $request)
+    {
+        try{
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'accepted' => 'nullable|boolean'
+            ]);
+            $accepted = (isset($data['accepted']) && !is_null($data['accepted'])) ? $data['accepted'] :null;
+            $permissionRequest = PermissionRequest::where('user_id',$data['user_id'])
+            ->where('accepted',$accepted)
+            ->get();
+            return response()->json([
+                'success' => true,
+                'data' => $permissionRequest
+            ],200);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

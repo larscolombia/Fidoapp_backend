@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\VacunaController;
 use App\Http\Controllers\Api\ComandoController;
 use App\Http\Controllers\Api\TrainerController;
 use App\Http\Controllers\Api\AntiTickController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Auth\API\AuthController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Api\CursoPlataformaController;
-use App\Http\Controllers\Backend\API\AddressController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Backend\API\AddressController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Backend\API\AddressController;
 use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\Backend\API\UserApiController;
 use App\Http\Controllers\Api\SpecialConditionController;
@@ -42,10 +43,12 @@ use Modules\Pet\Http\Controllers\Backend\PetsController;
 use App\Http\Controllers\Backend\API\DashboardController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
 use App\Http\Controllers\Api\ComandoEquivalenteController;
+use App\Http\Controllers\Api\CoursePlatformUserController;
 use Modules\Pet\Http\Controllers\Backend\API\PetController;
 use App\Http\Controllers\Backend\API\NotificationsController;
 use App\Http\Controllers\Api\HerramientasEntrenamientoController;
 use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
+use Modules\Category\Http\Controllers\Backend\API\CategoryController;
 use Modules\Service\Http\Controllers\Backend\API\ServiceTrainingController;
 
 Route::get('branch-list', [BranchController::class, 'branchList']);
@@ -101,6 +104,19 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('verify-slot', [BranchController::class, 'verifySlot']);
 
     /**
+     * Obtener todos los usuarios por el user_type
+     * Método HTTP: GET
+     * Ruta: /get-user-by-type
+     * Descripción: Recupera todos los usuarios en base al user_type
+     * Parametro: user_type: string, ejemplo vet
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [ Array de usuarios ]
+     * }
+     */
+    Route::get('get-user-by-type', [UserController::class, 'getUserByType']);
+    /**
      * Obtener Todos los E-Books
      * Método HTTP: GET
      * Ruta: /e-books
@@ -134,6 +150,69 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/e-books/{id}', [EBookController::class, 'getById']);
 
+   /**
+     * Calificar libro
+     * Método HTTP: POST
+     * Ruta: /e-book-rating
+     * Descripción: Agrega una calificacion a un libro en especifico
+     * Parámetros:
+     * - e_book_id: ID del e-book.
+     * - user_id: ID del usuario
+     * - review_msg: Mensaje o comentario
+     * - rating: calificacion del libro
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": { Datos del BookRating }
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::post('e-book-rating',[EBookController::class, 'bookRating']);
+
+    /**
+     * Eliminar calificacion del libro
+     * Método HTTP: DELETE
+     * Ruta: /e-book-rating/{id}
+     * Descripción: Elimina una calificacion del libro
+     * Parámetros:
+     * - id: ID del BookRating.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "message": "book rating deleted successfully"
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::delete('e-book-rating/{id}',[EBookController::class, 'deleteBookRating']);
+
+
+    /**
+     * Obtener el rating de un e-book en especifico de manera paginada
+     * Método HTTP: GET
+     * Ruta: /get-book-rating-by-id-ebook
+     * Descripción: Obtener el rating de un e-book en especifico de manera paginada
+     * Parámetros:
+     * - e_book_id: ID del e_book.
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [BookRating]
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::get('get-book-rating-by-id-ebook',[EBookController::class,'getBookRatingByIdEbook']);
     /**
      * Obtener Todos los Cursos
      * Método HTTP: GET
@@ -502,7 +581,90 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          * }
          */
         Route::delete('{course_platform}', [CursoPlataformaController::class, 'destroy'])->name('course_platform.destroy');
+   /**
+         * Eliminar todos los videos de un curso
+         * Método HTTP: DELETE
+         * Ruta: /api/course-platform/delete-all-videos
+         * Descripción: Elimina todos los videos de un curso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Videos del Curso de la plataforma eliminado exitosamente"
+         * }
+         */
+        Route::delete('{course_platform}/delete-all-videos',[CursoPlataformaController::class, 'deleteAllVideos']);
+         /**
+         * Eliminar un video de un curso
+         * Método HTTP: DELETE
+         * Ruta: /api/course-platform/delete-video/{video}
+         * Descripción: Eliminar un video de un curso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "message": "Video del Curso de la plataforma eliminado exitosamente"
+         * }
+         */
+        Route::delete('{course_platform}/delete-video/{video}',[CursoPlataformaController::class, 'deleteVideo']);
+
+            /**
+         * Suscribirse a un curso de la plataforma
+         * Método HTTP: POST
+         * Ruta: /api/course-platform/subscribe
+         * Descripción: Suscribirse a un curso de la plataforma
+         * Parametros:
+         * user_id: Id del usuario
+         * course_platform_id: id del curso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data de la suscripcion"
+         * }
+         * Respuesta fallida:
+         * {
+         *     "success": false,
+         *     "message": "mensaje de error"
+         * }
+         */
+        Route::post('subscribe',[CoursePlatformUserController::class,'subscribe']);
+            /**
+         * Actualizar progreso
+         * Método HTTP: PUT
+         * Ruta: /api/course-platform/subscribe/mark-video-as-watched
+         * Descripción: Actualizar progreso
+         * Parametros:
+         * user_id: Id del usuario
+         * course_platform_id: id del curso
+         * course_platform_video_id: Id del video del curso
+         * watched: valor booleano para el progreso
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data de la suscripcion"
+         * }
+         * Respuesta fallida:
+         * {
+         *     "success": false,
+         *     "message": "mensaje de error"
+         * }
+         */
+        Route::put('subscribe/mark-video-as-watched',[CoursePlatformUserController::class,'markVideoAsWatched']);
+         /**
+         * Obtener todos los cursos por user_id
+         * Método HTTP: PUT
+         * Ruta: /api/course-platform/subscribe/mark-video-as-watched
+         * Descripción: Obtener todos los cursos por user_id
+         * Parametros:
+         * user_id: Id del usuario
+         * per_page: numero para paginacion
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data de la suscripcion"
+         * }
+         */
+        Route::get('subscribe/all-courses-user',[CoursePlatformUserController::class,'allCoursesUser']);
     });
+
 
     /**
      * Rutas para la gestión de clases dentro de un curso de la plataforma
@@ -927,8 +1089,33 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::put('events/{id}', [EventController::class, 'update'])->name('events.update');
-
     /**
+     * Aceptar o rechazar el evento.
+     * Método HTTP: PUT
+     * Ruta: /api/accept-or-reject-event
+     * Descripción: Acepta o rechaza el evento el usuario invitado a dicho evento.
+     * Parametros:
+     * confirm: bool
+     * user_id: Id del usuario invitado
+     * event_id: Id del evento
+     * Respuesta Exitosa:
+     * {
+     *     'success' => true,
+     *     'message' => 'Evento actualizado exitosamente',
+     *     'data' =>  [
+        *    'event'       => $eventDetail->event,
+        *    'detail_event' => $eventDetail,
+     *      ],
+     * }
+     *
+     * Respuesta fallida:
+     * {
+     *  'success' => false,
+     *  'message' => 'No se encontró el detalle del evento o ya ha sido actualizado.',
+     * }
+     */
+    Route::put('accept-or-reject-event', [EventController::class, 'acceptOrRejectEvent']);
+     /**
      * Eliminar un evento por ID.
      * Método HTTP: DELETE
      * Ruta: /api/events/{id}
@@ -1739,7 +1926,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Metodo: POST
      * Ruta:/api/training-diaries
      * Parametros:{
-     *  pet_id: id de la mascota (requerido)
+     *  pet_id: id de la mascota (requerido),
+     * category_id: Id de la categoria (requerido),
      *   date: fecha del diario (requerido),
      *   actividad: descripcion de la actidad realizada por la mascota (requerido),
      *   notas: Comentarios adicionales (opcional),
@@ -1760,6 +1948,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Ruta:/api/training-diaries/1
      * descripcion: Actualizar un diario
      *  pet_id: id de la mascota (requerido)
+     *  category_id: Id de la categoria (requerido),
      *   date: fecha del diario (requerido),
      *   actividad: descripcion de la actidad realizada por la mascota (requerido),
      *   notas: Comentarios adicionales (opcional),
@@ -1820,6 +2009,31 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
 
     Route::resource('training-diaries', TrainingDiaryController::class);
+    /* Metodo: GET
+    * Ruta:/api/get-diary
+    * descripcion: Obtener todo el listado del diario de una mascota
+    * paramentro: pet_id: ID de la mascota
+    * Respuesta Exitosa:
+    * {
+    * "success": true,
+    *"data": {
+    *   "id": 1,
+    *   "date": "2024-11-12 16:17:20",
+    *   "actividad": "Texto de prueba 2",
+    *   "notas": "Esto es una prueba 2",
+    *   "pet_id": 2,
+    *   "image": "https://placecats.com/neo_2/300/400",
+    *   "created_at": "2024-11-12T19:21:01.000000Z",
+    *   "updated_at": "2024-11-12T20:17:20.000000Z"
+    * }
+    *}
+    * Respuesta de Error
+    * {
+    *      "success": false,
+    *     "message": "mensaje de error."
+    * }
+    */
+    Route::get('get-diary', [TrainingDiaryController::class, 'getDiario']);
     /**
      * Obtener la lista de reservas.
      * Método HTTP: GET
@@ -2080,7 +2294,111 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::put('/bookings/accept/{id}', [BookingsController::class, 'accept_booking'])->name('bookings.accept');
-
+    /**
+     * Agregar calificacion y raiting
+     * Método HTTP: POST
+     * Ruta: /api/raiting-user
+     * Descripción: Agregar calificacion y raiting al usuario
+     *
+     * Parámetros de Solicitud:
+     * - user_id: int (Requerido) - ID del usuario.
+     * - employee_id: int (Requerido) -ID del empleado
+     * -review_msg: string (opcional) Comentario
+     * -rating: int (opcional) calificacion
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "data": [
+     *  {
+     *   Datos de la calificacion
+     * }
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::post('raiting-user', [EmployeeController::class, 'ratingUserStore']);
+    /**
+     * Actualizar calificacion y raiting
+     * Método HTTP: PUT
+     * Ruta: /api/raiting-user/{id}
+     * Descripción: Actualizar calificacion y raiting al usuario
+     *
+     * Parámetros de Solicitud:
+     * -id: int (Requerido) -ID de la calificacion
+     * - user_id: int (Requerido) - ID del usuario.
+     * - employee_id: int (Requerido) -ID del empleado
+     * -review_msg: string (opcional) Comentario
+     * -rating: int (opcional) calificacion
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "data": [
+     *  {
+     *   Datos de la calificacion
+     * }
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::put('raiting-user/{id}', [EmployeeController::class, 'updateRaiting']);
+    /**
+     * Listado de raiting
+     * Método HTTP: GET
+     * Ruta: /api/raiting-user
+     * Descripción: Listado de raiting del usuario
+     *
+     * Parámetros de Solicitud:
+     * - user_id: int (opcional) - ID del usuario.
+     * - employee_id: int (opcional) -ID del empleado
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "data": [
+     *  {
+     *   Datos de la calificacion
+     * }
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::get('raiting-user', [EmployeeController::class, 'getRating']);
+    /**
+     * Eliminar calificacion
+     * Método HTTP: DELETE
+     * Ruta: /api/raiting-user/{id}
+     * Descripción: Eliminar calificacion del usuario
+     *
+     * Parámetros de Solicitud:
+     * - id: int (Requerido) - ID de la calificacion.
+     *
+     * Respuesta Exitosa:
+     * {
+     *  "success": true,
+     *  "message":"calificacion eliminada"
+     * ]
+     *
+     * Respuesta de Error:
+     * {
+     *     "status": false,
+     *     "message": "Mensaje de error"
+     * }
+     */
+    Route::delete('raiting-user/{id}', [EmployeeController::class, 'destroyRaiting']);
     /**
      * Listado de veterinarios y entrenadores que atendieron a una mascota.
      * Método HTTP: GET
@@ -2213,12 +2531,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     /**
      * Obtener la lista de mascotas asignadas al veterinario.
      * Método HTTP: GET
-     * Ruta: /api/pet-list
+     * Ruta: /api/pet-list-by-veterinarian
      * Descripción: Obtener la lista de mascotas asignadas al veterinario.
      *
      * Parámetros de Ruta:
      * - user_id: int (Requerido) - ID del veterinario
-     *
+     * - most_recent: string (opcional) - mostrar los mas recientes
+     * - sort_asc_alphabetically: string (opcional) - ordenar de la A-Z
+     * - sort_desc_alphabetically: string (opcional) - ordenar de la Z-A
+     * - category: array int (opcional) - array te ID de categorias
+     * - date: date (opcional)  fecha de asignacion
      * Respuesta Exitosa:
      * {
      *     "data": [
@@ -2304,6 +2626,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('/list-trainers-veterinaries/{petId}', [TrainerController::class, 'listTrainersVeterinaries']);
+
+    Route::post('request-permission', [AuthController::class, 'requestPermission']);
+
+    Route::put('request-permission/{id}', [AuthController::class, 'respondToRequest']);
+    Route::get('get-user-social-network', [TrainerController::class, 'getUserSocialNetwork']);
+    Route::get('list-category', [CategoryController::class, 'categoryList']);
     /**
      * Historial de mascota por el dueño
      *
@@ -2381,6 +2709,44 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('medical-history-per-pet', [PetHistoryController::class, 'medicalHistoryPerPet']);
     route::middleware(['check_vet'])->group(function () {
+<<<<<<< HEAD
+=======
+        /**
+         * Crear historial clinico de la mascota
+         * Método HTTP: POST
+         * Ruta: /api/pet-histories
+         * Descripción: Crear el historial clinico de la mascota
+         * Parametros:
+         * - pet_id: int (Requerido) - ID de la mascota
+         * report_type: int (Requerido) -Tipo de reporte (1.Vacuna, 2.Antiparasitante, 3.Antigarrapata)
+         * veterinarian_id: int (Requerido) - ID del veterinario
+         * application_date: date (opcional) - fecha de la solicitud
+         * medical_conditions: string (opcional) - Condicion medica
+         * test_results: string (opcional) - Resultado de los examenes
+         * vet_visits: int (opcional) - numero de visitas del veterinario
+         * category: int (opcional) - ID de la categoria
+         * report_name: string (Requerido) - Nombre del Historial
+         * file: string (opcional) - Archivo subido
+         * image: string (opcional) - Imagen subida
+         * name: string (Requerido) - Nombre del tipo de reporte(Si es vacuna, antiparasitante o antigarrapata)
+         * fecha_aplicacion: date (Requerido) - Fecha aplicada del punto anterior.
+         * fecha_refuerzo: date (Requerido) - Fecha del refuero (vacuna, antiparasitante o antigarrapata)
+         * weight: string (opcional) - Peso de la mascota
+         * notes: string (opcional) - Notas adicionales
+         *
+         * Respuesta Exitosa:
+         * {
+         *  'success' => true,
+         *  'data' => $history
+         * }
+         *
+         * Respuesta fallida:
+         * {
+         *  'success' => false,
+         *  'message' => 'Mensaje de error'
+         * }
+         */
+>>>>>>> d996d01845df427cd690104667114c30c3be3ac6
         Route::apiResource('/pet-histories', PetHistoryController::class);
 
         /**

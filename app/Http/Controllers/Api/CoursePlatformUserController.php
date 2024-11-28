@@ -1,0 +1,141 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use Illuminate\Http\Request;
+use App\Models\CoursePlatformVideo;
+use App\Http\Controllers\Controller;
+use App\Models\CoursePlatformUserProgress;
+use App\Models\CoursePlatformUserSubscription;
+
+class CoursePlatformUserController extends Controller
+{
+    public function markVideoAsWatched(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'course_platform_id' => 'required|exists:courses_platform,id',
+                'course_platform_video_id' => 'required|exists:course_platform_videos,id',
+                'watched' => 'required|boolean'
+            ]);
+            // Verificar si el usuario está suscrito al curso
+            $subscription = CoursePlatformUserSubscription::where('user_id', $data['user_id'])
+                ->where('course_platform_id', $data['course_platform_id'])
+                ->firstOrFail();
+
+            // Marcar el video como visto
+            CoursePlatformUserProgress::updateOrCreate(
+                [
+                    'user_id' => $data['user_id'],
+                    'course_platform_video_id' =>$data['course_platform_video_id'],
+                ],
+                ['watched' => $data['watched']]
+            );
+
+            // Calcular el nuevo progreso total
+            $totalVideos = CoursePlatformVideo::where('course_platform_id', $data['course_platform_id'])->count();
+
+            // Contar videos vistos utilizando whereIn
+            $watchedVideos = CoursePlatformUserProgress::whereIn(
+                'course_platform_video_id',
+                CoursePlatformVideo::where('course_platform_id', $data['course_platform_id'])->pluck('id')
+            )
+                ->where('user_id', $data['user_id'])
+                ->where('watched', true)
+                ->count();
+
+            // Calcular porcentaje
+            $newProgress = ($totalVideos > 0) ? ($watchedVideos / $totalVideos) * 100 : 0;
+
+            // Actualizar progreso en la suscripción
+            $subscription->progress = (int)$newProgress;
+            $subscription->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('Video marcado como visto'),
+                'progress' => (int)$newProgress,
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Suscripción no encontrada'),
+                'error' => $e->getMessage(),
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Error al marcar video como visto'),
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function subscribe(Request $request)
+    {
+        try{
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'course_platform_id' => 'required|exists:courses_platform,id'
+            ]);
+            $subscription = CoursePlatformUserSubscription::create($data);
+            return response()->json([
+                'success' => true,
+                'data' => $subscription
+            ], 200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function allCoursesUser(Request $request)
+    {
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'per_page' => 'integer|min:1|max:100', // Opcional: para definir cuántos cursos por página
+        ]);
+
+        // Establecer el número de elementos por página (puedes cambiarlo o hacerlo configurable)
+        $perPage = $request->input('per_page', 10); // Por defecto, 10 elementos por página
+
+        // Usar paginate en lugar de get
+        $coursesPlatformUser = CoursePlatformUserSubscription::where('user_id', $data['user_id'])
+            ->with(['course_platform', 'user']) // Cargar relaciones para evitar N+1
+            ->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cursos del usuario recuperados exitosamente',
+            'data' => [
+                'courses' => $coursesPlatformUser->map(function ($coursePlatformUser) {
+                    return [
+                        'id' => $coursePlatformUser->id,
+                        'progress' => $coursePlatformUser->progress,
+                        'name' => $coursePlatformUser->course_platform->name,
+                        'description' => $coursePlatformUser->course_platform->description,
+                        'image' => asset($coursePlatformUser->course_platform->image),
+                        'duration' => $coursePlatformUser->course_platform->duration,
+                        'price' => $coursePlatformUser->course_platform->price,
+                        'difficulty' => $coursePlatformUser->course_platform->difficulty,
+                        'video' => optional($coursePlatformUser->course_platform->videos->first())->url,
+                        'user_id' => $coursePlatformUser->user_id,
+                        'user_name' => $coursePlatformUser->user->full_name,
+                        'avatar' => asset($coursePlatformUser->user->avatar)
+                    ];
+                }),
+                // Añadir información de paginación
+                'pagination' => [
+                    'total' => $coursesPlatformUser->total(),
+                    'current_page' => $coursesPlatformUser->currentPage(),
+                    'last_page' => $coursesPlatformUser->lastPage(),
+                    'per_page' => $coursesPlatformUser->perPage(),
+                ],
+            ],
+        ]);
+    }
+
+}

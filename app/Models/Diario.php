@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Modules\Pet\Models\Pet;
+use Modules\Category\Models\Category;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Diario extends Model
 {
@@ -20,5 +21,10 @@ class Diario extends Model
     public function getImageAttribute()
     {
         return asset($this->attributes['image']);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class,'category_id');
     }
 }

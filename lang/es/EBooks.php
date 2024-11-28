@@ -12,6 +12,8 @@ return [
   'Enter_url' => 'Ingrese el enlace',
   'cover_image' => 'Imagen de portada',
   'Enter_cover_image' => 'Ingrese la imagen de portada',
+  "Enter_number_of_pages" => 'Ingrese el número de páginas',
+  "Enter_language" => "Ingrese el idioma",
   'optional' => '(Opcional)',
   'create' => 'Crear',
   'Delete' => 'Eliminar',
@@ -25,5 +27,7 @@ return [
   'Confirm Deletion' => 'Confirmar eliminación',
   "No_cover_image" => "Sin imagen de portada",
   "back" => "Atrás",
+  "number_of_pages" => "Número de páginas",
+  "language" => 'Idioma',
   'Are you sure you want to delete this eBook?' => '¿Estás seguro de que quieres eliminar este libro electrónico?',
 ];

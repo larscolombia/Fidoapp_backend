@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Api\Event;
+namespace App\Http\Requests\Api;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
-class StoreRequest extends FormRequest
+class ServiceTrainingUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,14 +27,9 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'date' => 'required|date',
-            'slug' => 'required|string|max:255|unique:events',
-            'user_id' => 'required|exists:users,id',
             'description' => 'nullable|string',
-            'location' => 'nullable|string',
-            'tipo' => 'required|in:salud,entrenamiento',
-            'status' => 'required|boolean',
-            'pet_id' => 'required|integer',
+            'status' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 

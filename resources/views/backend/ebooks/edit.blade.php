@@ -20,13 +20,29 @@
 
                 <div class="mb-3">
                     <label for="description" class="form-label">{{ __('EBooks.description') }}</label>
-                    <textarea class="form-control" id="description" name="description" value="{{ $ebook->description }}" rows="3" placeholder="{{ __('EBooks.Enter_description') . ' ' . __('EBooks.optional') }}"></textarea>
+                    <textarea class="form-control" id="description" name="description" value="{{ $ebook->description }}" rows="3" placeholder="{{ __('EBooks.Enter_description') . ' ' . __('EBooks.optional') }}">{{ $ebook->description }}</textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="author" class="form-label">{{ __('EBooks.author') }}</label>
                     <input type="text" class="form-control" id="author" name="author" value="{{ $ebook->author }}" placeholder="{{ __('EBooks.Enter_author') . ' ' . __('EBooks.optional') }}">
                 </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
+                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $ebook->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="number_of_pages" class="form-label">{{ __('EBooks.number_of_pages') }}</label>
+                    <input type="number" class="form-control" min="1" id="number_of_pages" value="{{ $ebook->number_of_pages }}" name="number_of_pages" placeholder="{{ __('EBooks.Enter_number_of_pages') . ' ' . __('EBooks.optional') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="language" class="form-label">{{ __('EBooks.language') }}</label>
+                    <input class="form-control" id="language" name="language" value="{{ $ebook->language }}" placeholder="{{ __('EBooks.Enter_language') . ' ' . __('EBooks.optional') }}" />
+                </div>
+
 
                 <div class="mb-3">
                     <label for="cover_image" class="form-label">{{ __('EBooks.cover_image') }}</label>

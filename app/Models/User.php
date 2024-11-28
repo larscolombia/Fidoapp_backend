@@ -191,7 +191,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
         return $this->hasMany(Booking::class, 'employee_id')->with('payment');
     }
-    
+
     public function employeeEarnings()
     {
         return $this->hasMany(EmployeeEarning::class, 'employee_id');
@@ -287,5 +287,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function location()
     {
         return $this->hasOne(UserLocation::class);
+    }
+
+    // Relación para las solicitudes de permiso enviadas por el usuario
+    public function permissionRequestsSent()
+    {
+        return $this->hasMany(PermissionRequest::class, 'requester_id');
+    }
+
+    // Relación para las solicitudes de permiso recibidas por el usuario
+    public function permissionRequestsReceived()
+    {
+        return $this->hasMany(PermissionRequest::class, 'target_id');
     }
 }

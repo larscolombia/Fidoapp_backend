@@ -33,8 +33,8 @@
 
                 <div class="mb-3">
                     <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
-                    <input type="file" class="form-control @error('video') is-invalid @enderror" id="video" name="video" accept="video/*" required>
-                    @error('video')
+                    <input type="file" class="form-control @error('video.*') is-invalid @enderror" id="video" name="video[]" accept="video/*" multiple required>
+                    @error('video.*')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -77,8 +77,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="video-preview" class="form-label">{{ __('course_platform.video_preview') }}</label>
-                    <div id="video-preview" class="border p-3" style="width: 320px; height: 180px;"></div>
+                        <label for="video-preview" class="form-label">{{ __('course_platform.video_preview') }}</label>
+                    <div id="video-preview" class="border p-3 d-flex" style="width: 320px; height: 180px;"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary my-3" id="submit-button" >{{ __('course_platform.create') }}</button>
@@ -95,28 +95,35 @@
 <script src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 <script>
     document.getElementById('video').addEventListener('change', function(event) {
-        const file = event.target.files[0];
+        const files = event.target.files; // Obtener todos los archivos seleccionados
         const videoPreview = document.getElementById('video-preview');
-        videoPreview.innerHTML = ''; // Clear the previous preview
+        videoPreview.innerHTML = ''; // Limpiar las vistas previas anteriores
 
-        if (file) {
-            const videoElement = document.createElement('video');
-            videoElement.src = URL.createObjectURL(file);
-            videoElement.controls = true;
-            videoElement.width = 320; // Set the width of the video element
-            videoElement.height = 180; // Set the height of the video element
-            videoElement.currentTime = 0;
-            videoElement.addEventListener('loadedmetadata', function() {
-                if (videoElement.duration > 10) {
-                    videoElement.currentTime = 10;
-                }
-            });
-            videoElement.addEventListener('timeupdate', function() {
-                if (videoElement.currentTime >= 10) {
-                    videoElement.pause();
-                }
-            });
-            videoPreview.appendChild(videoElement);
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file) {
+                const videoElement = document.createElement('video');
+                videoElement.src = URL.createObjectURL(file);
+                videoElement.controls = true;
+                videoElement.width = 320; // Establecer el ancho del elemento de video
+                videoElement.height = 180; // Establecer la altura del elemento de video
+
+                // Agregar eventos para pausar después de 10 segundos
+                videoElement.currentTime = 0;
+                videoElement.addEventListener('loadedmetadata', function() {
+                    if (videoElement.duration > 10) {
+                        videoElement.currentTime = 10;
+                    }
+                });
+                videoElement.addEventListener('timeupdate', function() {
+                    if (videoElement.currentTime >= 10) {
+                        videoElement.pause();
+                    }
+                });
+
+                // Agregar el elemento de video al contenedor de previsualización
+                videoPreview.appendChild(videoElement);
+            }
         }
     });
 </script>

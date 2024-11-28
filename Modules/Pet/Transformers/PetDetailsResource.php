@@ -2,10 +2,11 @@
 
 namespace Modules\Pet\Transformers;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Pet\Transformers\PetNoteResource;
 use Auth;
 use App\Models\User;
+use Modules\Pet\Transformers\PetNoteResource;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Pet\Transformers\SharedOwnerResource;
 
 class PetDetailsResource extends JsonResource
 {
@@ -26,7 +27,7 @@ class PetDetailsResource extends JsonResource
         }
         $user_type=$user->user_type;
         $user_id=$user->id;
- 
+
         if($user_type =='user'){
 
             $pet_note->where(function ($query) use ($user_id)  {
@@ -48,13 +49,12 @@ class PetDetailsResource extends JsonResource
                 $query->where('created_by',auth()->id())
 
                          ->Orwhere('is_private',0);
-                        
+
                   });
 
           };
 
 
-    
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -72,7 +72,9 @@ class PetDetailsResource extends JsonResource
             'height' => $this->height,
             'height_unit' => $this->height_unit,
             'user_id' => $this->user_id,
-            'status' => $this->status,         
+            'owner' => new OwnerPetResource($this->owner),
+            'shared_owners' => SharedOwnerResource::collection($this->sharedOwners),
+            'status' => $this->status,
             'pet_notes' => $this->when($user_type == 'user', function () use ($user_id) {
                 return PetNoteResource::collection($this->petnote()->where(function ($query) use ($user_id) {
                     $query->where('created_by', $user_id)
