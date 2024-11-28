@@ -114,21 +114,21 @@ class BlogsController extends Controller
                         })
                         ->editColumn('date', function ($data) {
                             return $data->created_at->format('Y-m-d');
-                        })   
+                        })
                         ->orderColumn('date', function ($query, $order) {
                             $query->orderBy('created_at', $order);
-                        }, 1) 
+                        }, 1)
                         ->filterColumn('date', function ($query, $keyword) {
                             if (! empty($keyword)) {
                                 $query->where('created_at', 'like', '%'.$keyword.'%');
                             }
-                        })                                            
+                        })
                         ->editColumn('status', function ($row) {
                             $checked = '';
                             if ($row->status) {
                                 $checked = 'checked="checked"';
                             }
-            
+
                             return '
                             <div class="form-check form-switch ">
                                 <input type="checkbox" data-url="'.route('backend.blogs.update_status', $row->id).'" data-token="'.csrf_token().'" class="switch-status-change form-check-input"  id="datatable-row-'.$row->id.'"  name="status" value="'.$row->id.'" '.$checked.'>
@@ -159,7 +159,6 @@ class BlogsController extends Controller
     public function create()
     {
         $module_action = 'Create';
-
         return view('blog::backend.blogs.create', compact('module_action'));
     }
 
@@ -172,6 +171,18 @@ class BlogsController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('blog_image');
+        if ($request->hasFile('video')) {
+            $video = $request->input('video');
+                    $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+                    // Mover el video a la carpeta correspondiente
+                    $video->move(public_path('videos/blog'), $videoName);
+
+                    // Generar la URL del video
+                    $videoUrl = url('videos/blog/' . $videoName);
+                    //agregar a data
+                    $data['url'] = $videoUrl;
+                    $data['video'] = $videoName;
+        }
         $query = Blog::create($data);
 
         storeMediaFile($query, $request->file('blog_image'), 'blog_image');
@@ -203,7 +214,7 @@ class BlogsController extends Controller
      */
     public function edit($id)
     {
-        $data = Blog::findOrFail($id);  
+        $data = Blog::findOrFail($id);
 
         $data['blog_image'] = $data->blog_image;
         $data['tags'] = explode(',', $data->tags);
@@ -222,6 +233,18 @@ class BlogsController extends Controller
         $query = Blog::findOrFail($id);
 
         $data = $request->except('event_image');
+        if ($request->hasFile('video')) {
+            $video = $request->input('video');
+                    $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+                    // Mover el video a la carpeta correspondiente
+                    $video->move(public_path('videos/blog'), $videoName);
+
+                    // Generar la URL del video
+                    $videoUrl = url('videos/blog/' . $videoName);
+                    //agregar a data
+                    $data['url'] = $videoUrl;
+                    $data['video'] = $videoName;
+        }
         $query->update($data);
 
         storeMediaFile($query, $request->file('event_image'), 'event_image');

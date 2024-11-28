@@ -13,7 +13,7 @@ class Blog extends BaseModel
 
     protected $table = 'blogs';
     protected $appends = ['blog_image'];
-    protected $fillable = ['name', 'tags', 'description', 'status'];
+    protected $fillable = ['name', 'tags', 'description','video','url', 'status'];
 
     /**
      * Create a new factory instance for the model.
