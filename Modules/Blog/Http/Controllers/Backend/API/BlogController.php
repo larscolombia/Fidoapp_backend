@@ -3,15 +3,14 @@
 namespace Modules\Blog\Http\Controllers\Backend\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlogRating;
 use Illuminate\Http\Request;
 use Modules\Blog\Models\Blog;
 use Modules\Blog\Transformers\BlogResource;
 
 class BlogController extends Controller
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function blogList(Request $request)
     {
@@ -19,8 +18,8 @@ class BlogController extends Controller
         // $branchId = $request->input('branch_id');
 
         $blog = Blog::with('media')->where('status', 1);
-        
-        $blog = $blog->orderBy('updated_at','desc')->paginate($perPage);
+
+        $blog = $blog->orderBy('updated_at', 'desc')->paginate($perPage);
         $items = BlogResource::collection($blog);
 
         return response()->json([
@@ -29,5 +28,92 @@ class BlogController extends Controller
             'message' => __('blog.blog_list'),
         ], 200);
     }
- 
+
+    public function show($id)
+    {
+
+        $blog = Blog::findOrFail($id);
+
+        return response()->json([
+            'status' => true,
+            'data' => $blog,
+            'message' => __('blog.blog_list'),
+        ], 200);
+    }
+
+    public function rating(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'review_msg' => 'nullable|string|max:255',
+                'rating' => 'nullable|numeric|min:1|max:5',
+                'blog_id' => 'required|exists:blogs,id',
+            ]);
+
+            $blogRating = BlogRating::create($data);
+            return response()->json([
+                'success' => true,
+                'data' => $blogRating
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->validator->errors()
+            ], 422);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al guardar la calificación.'
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getBlogRating(Request $request)
+    {
+        $data = $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'blog_id' => 'nullable|exists:blogs,id'
+        ]);
+
+        $blogRatings = BlogRating::query();
+        if (isset($data['blog_id']) && $data['blog_id']) {
+            $blogRatings->where('blog_id', $data['blog_id']);
+        }
+
+        if (isset($data['user_id']) && $data['user_id']) {
+            $blogRatings->where('user_id', $data['user_id']);
+        }
+
+        $blogRatings = $blogRatings->orderByDesc('id')->get();
+
+        if ($blogRatings->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'There are no ratings'
+            ], 404);
+        }
+        // Formatear la respuesta para incluir solo los campos necesarios
+        $formattedRatings = $blogRatings->map(function ($rating) {
+            return [
+                'id' => $rating->id,
+                'rating' => $rating->rating,
+                'review_msg' => $rating->review_msg,
+                'user_name' => $rating->user->full_name,
+                'user_avatar' => asset($rating->user->avatar),
+                'blog_name' => $rating->blog->name,
+                'blog_description' => $rating->blog->description,
+                'blog_tags' => $rating->blog->tags,
+            ];
+        });
+        return response()->json([
+            'success' => true,
+            'data' =>  $formattedRatings
+        ], 200);
+    }
 }

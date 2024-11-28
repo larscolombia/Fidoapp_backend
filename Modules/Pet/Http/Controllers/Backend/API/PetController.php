@@ -331,7 +331,7 @@ class PetController extends Controller
 
                 // Mueve la imagen a la carpeta public/images/pets
                 $image->move(public_path('images/pets'), $imageName);
-                $validatedData['pet_image'] = $imagePath;
+                $validatedData['pet_image'] = $imageName;
             }
 
             // Crear la nueva mascota
