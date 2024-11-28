@@ -245,19 +245,12 @@ class BlogsController extends Controller
                     $data['url'] = $videoUrl;
                     $data['video'] = $videoName;
         }
-        $query->update($data);
+t $request, $id)
+    {
+        $query = Blog::findOrFail($id);
 
-        storeMediaFile($query, $request->file('event_image'), 'event_image');
-        $message = __('messages.update_form', ['form' => __($this->module_title)]);
-
-        return response()->json(['message' => $message, 'status' => true], 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+        $data = $request->except('event_image');
+return Response
      */
     public function destroy($id)
     {
