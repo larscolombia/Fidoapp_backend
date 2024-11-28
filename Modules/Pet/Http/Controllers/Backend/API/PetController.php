@@ -323,6 +323,9 @@ class PetController extends Controller
             $validatedData['pettype_id'] = PetType::where('slug', 'dog')->first()->id;
             $validatedData['slug'] = $slug;
 
+            if (!file_exists(public_path('images/pets'))) {
+                mkdir(public_path('images/pets'), 0755, true);
+            }
             // Manejo de la imagen de la mascota
             if ($request->hasFile('pet_image')) {
                 $image = $request->file('pet_image');
@@ -331,7 +334,7 @@ class PetController extends Controller
 
                 // Mueve la imagen a la carpeta public/images/pets
                 $image->move(public_path('images/pets'), $imageName);
-                $validatedData['pet_image'] = $imageName;
+                $validatedData['pet_image'] = $imagePath;
             }
 
             // Crear la nueva mascota
