@@ -6,9 +6,11 @@ use App\Models\User;
 use Modules\Pet\Models\Pet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Trait\Notification;
 
 class SharedOwnerController extends Controller
 {
+    use Notification;
      /**
      * Agregar un dueño compartido a una mascota.
      *
@@ -30,6 +32,7 @@ class SharedOwnerController extends Controller
         if (!$pet->sharedOwners->contains($userId)) {
             // Agrega el dueño compartido con la fecha de creación
             $pet->sharedOwners()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
+            $this->sendNotification('shared-owner',$pet,[$request->input('user_id')],__('shared_owner.shared_owner_added_successfully'));
         }
 
         return response()->json(['message' => __('shared_owner.shared_owner_added_successfully')]);
@@ -54,7 +57,7 @@ class SharedOwnerController extends Controller
 
         // Eliminar el dueño compartido
         $pet->sharedOwners()->detach($userId);
-
+        $this->sendNotification('shared-owner',$pet,[$userId], __('shared_owner.shared_owner_removed_successfully'));
         return response()->json(['message' => __('shared_owner.shared_owner_removed_successfully')]);
     }
 
@@ -98,6 +101,7 @@ class SharedOwnerController extends Controller
         if (!$pet->sharedOwners->contains($userId)) {
             // Agrega el dueño compartido con la fecha de creación
             $pet->sharedOwners()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
+            $this->sendNotification('shared-owner',$pet,[$userId],__('shared_owner.shared_owner_added_successfully'));
         }
 
         return response()->json(['message' => __('shared_owner.shared_owner_added_successfully')]);

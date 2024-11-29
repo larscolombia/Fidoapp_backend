@@ -22,9 +22,11 @@ use App\Models\User;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Log;
+use App\Trait\Notification;
 
 class PetController extends Controller
 {
+    use Notification;
     // Retorna una lista paginada de tipos de mascotas, filtrada por estado activo y una búsqueda opcional.
     public function petTypeList(Request $request)
     {
@@ -340,6 +342,8 @@ class PetController extends Controller
             // Crear la nueva mascota
             $pet = Pet::create($validatedData);
 
+            //notification
+            $this->sendNotification('pets',$pet,[$request->input('user_id')],__('pet.pet_created_successfully'));
             return response()->json([
                 'message' => __('pet.pet_created_successfully'),
                 'data' => $pet
@@ -412,7 +416,8 @@ class PetController extends Controller
 
 
             $pet->update($validatedData);
-
+            //notification
+            $this->sendNotification('pets',$pet,[$request->input('user_id')],__('pet.pet_updated_successfully'));
             return response()->json([
                 'success' => true,
                 'message' => __('pet.pet_updated_successfully'),
