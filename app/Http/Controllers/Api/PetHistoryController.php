@@ -141,20 +141,29 @@ class PetHistoryController extends Controller
                     $data['antigarrapata_id'] = $this->createReportType($data);
                 }
             }
+            if (!file_exists(public_path('images/pet_histories'))) {
+                mkdir(public_path('images/pet_histories'), 0755, true);
+            }
+            if (!file_exists(public_path('files/pet_histories'))) {
+                mkdir(public_path('files/pet_histories'), 0755, true);
+            }
             // Manejar el archivo si se proporciona
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('pet_histories'), $fileName);
-                $data['file'] = 'pet_histories/' . $fileName;
+                $file->move(public_path('files/pet_histories'), $fileName);
+                $filePath = 'files/pet_histories/' . $fileName;
+                $data['file'] = 'pet_histories/' . $filePath;
             }
+
 
             // Manejar la imagen si se proporciona
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('pet_histories'), $imageName);
-                $data['image'] = 'pet_histories/' . $imageName;
+                $image->move(public_path('images/pet_histories'), $imageName);
+                $imagePath = 'images/pet_histories/' . $imageName;
+                $data['image'] = $imagePath;
             }
             $data['name'] = $data['report_name'];
             // Crear el historial con los datos procesados
@@ -257,6 +266,13 @@ class PetHistoryController extends Controller
                 'notes' => 'nullable|string'
             ]);
 
+            if (!file_exists(public_path('images/pet_histories'))) {
+                mkdir(public_path('images/pet_histories'), 0755, true);
+            }
+            if (!file_exists(public_path('files/pet_histories'))) {
+                mkdir(public_path('files/pet_histories'), 0755, true);
+            }
+
             // Obtener todos los datos del request
             $request->merge(['method' => 'update']);
             $data = $request->all();
@@ -276,8 +292,9 @@ class PetHistoryController extends Controller
                 }
                 $file = $request->file('file');
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('pet_histories'), $fileName);
-                $data['file'] = 'pet_histories/' . $fileName; // Guarda la nueva ruta
+                $file->move(public_path('files/pet_histories'), $fileName);
+                $filePath = 'files/pet_histories/' . $fileName;
+                $data['file'] = 'pet_histories/' . $filePath;
             }
 
             // Manejar la imagen si se proporciona
@@ -288,8 +305,9 @@ class PetHistoryController extends Controller
                 }
                 $image = $request->file('image');
                 $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('pet_histories'), $imageName);
-                $data['image'] = 'pet_histories/' . $imageName; // Guarda la nueva ruta
+                $image->move(public_path('images/pet_histories'), $imageName);
+                $imagePath = 'images/pet_histories/' . $imageName;
+                $data['image'] = $imagePath;
             }
 
             // Actualizar el historial con los nuevos datos
