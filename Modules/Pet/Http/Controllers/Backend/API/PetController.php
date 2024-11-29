@@ -474,7 +474,7 @@ class PetController extends Controller
     {
         $petSelected = Pet::find($id);
         $petSelected->delete();
-
+        $this->sendNotification('pets',$petSelected,[$petSelected->user_id],__('pet.pet_deleted_successfully'));
         return response()->json([
             'success' => true,
             'message' => __('pet.pet_deleted_successfully'),
