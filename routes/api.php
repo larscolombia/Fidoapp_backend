@@ -117,9 +117,31 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('get-user-by-type', [UserController::class, 'getUserByType']);
-
+    /**
+     * Obtener listado de notificaciones por usuario
+     * Método HTTP: GET
+     * Ruta: /api/user-notification
+     * Descripción:Obtener listado de notificaciones por usuario
+     * Parametro: user_id: Id de usuario
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [ Array de notificaciones ]
+     * }
+     */
     Route::get('user-notification',[UserNotificationController::class,'getNotification']);
-
+  /**
+     * Marcar notificacion como leida
+     * Método HTTP: PUT
+     * Ruta: /api/user-notification/{id}
+     * Descripción:Marcar notificacion como leida
+     * Parametro: user_id: Id de usuario
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [ Array de notificacion ]
+     * }
+     */
     Route::put('user-notification/{id}',[UserNotificationController::class,'updateRead']);
     /**
      * Obtener Todos los E-Books
