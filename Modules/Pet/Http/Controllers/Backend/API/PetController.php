@@ -22,9 +22,11 @@ use App\Models\User;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Log;
+use App\Trait\Notification;
 
 class PetController extends Controller
 {
+    use Notification;
     // Retorna una lista paginada de tipos de mascotas, filtrada por estado activo y una búsqueda opcional.
     public function petTypeList(Request $request)
     {
@@ -323,6 +325,9 @@ class PetController extends Controller
             $validatedData['pettype_id'] = PetType::where('slug', 'dog')->first()->id;
             $validatedData['slug'] = $slug;
 
+            if (!file_exists(public_path('images/pets'))) {
+                mkdir(public_path('images/pets'), 0755, true);
+            }
             // Manejo de la imagen de la mascota
             if ($request->hasFile('pet_image')) {
                 $image = $request->file('pet_image');
@@ -331,12 +336,14 @@ class PetController extends Controller
 
                 // Mueve la imagen a la carpeta public/images/pets
                 $image->move(public_path('images/pets'), $imageName);
-                $validatedData['pet_image'] = $imageName;
+                $validatedData['pet_image'] = $imagePath;
             }
 
             // Crear la nueva mascota
             $pet = Pet::create($validatedData);
 
+            //notification
+            $this->sendNotification('pets',$pet,[$request->input('user_id')],__('pet.pet_created_successfully'));
             return response()->json([
                 'message' => __('pet.pet_created_successfully'),
                 'data' => $pet
@@ -378,7 +385,9 @@ class PetController extends Controller
             ];
 
             $validatedData = $request->validate($rules);
-
+            if (!file_exists(public_path('images/pets'))) {
+                mkdir(public_path('images/pets'), 0755, true);
+            }
             if (isset($validatedData['breed_id'])) {
                 $breed = Breed::find($validatedData['breed_id']);
             } elseif (isset($validatedData['breed_name'])) {
@@ -407,7 +416,8 @@ class PetController extends Controller
 
 
             $pet->update($validatedData);
-
+            //notification
+            $this->sendNotification('pets',$pet,[$request->input('user_id')],__('pet.pet_updated_successfully'));
             return response()->json([
                 'success' => true,
                 'message' => __('pet.pet_updated_successfully'),
@@ -464,7 +474,7 @@ class PetController extends Controller
     {
         $petSelected = Pet::find($id);
         $petSelected->delete();
-
+        $this->sendNotification('pets',$petSelected,[$petSelected->user_id],__('pet.pet_deleted_successfully'));
         return response()->json([
             'success' => true,
             'message' => __('pet.pet_deleted_successfully'),

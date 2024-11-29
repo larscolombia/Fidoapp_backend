@@ -59,4 +59,6 @@ return [
     'qr_code_image' => 'Imagen del Código QR',
     'update' => 'Actualizar',
     'invalid_image_format' => 'El formato de la imagen no es válido. Los formatos permitidos son jpeg, png, jpg, gif.',
+    'pet_history_create' => 'Creado el historial clinico de la mascota',
+    'pet_history_update' => 'Actualizado el historial clinico de la mascota',
 ];

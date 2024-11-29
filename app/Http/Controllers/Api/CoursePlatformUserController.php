@@ -84,7 +84,7 @@ class CoursePlatformUserController extends Controller
             $subscription = CoursePlatformUserSubscription::create($data);
 
             //notify
-            $this->sendNotification('subscribe',$subscription,'suscription');
+            //$this->sendNotification('subscribe',$subscription,'suscription');
             return response()->json([
                 'success' => true,
                 'data' => $subscription

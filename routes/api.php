@@ -39,6 +39,7 @@ use App\Http\Controllers\Backend\API\AddressController;
 use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\Backend\API\UserApiController;
 use App\Http\Controllers\Api\SpecialConditionController;
+use App\Http\Controllers\Api\UserNotificationController;
 use Modules\Pet\Http\Controllers\Backend\PetsController;
 use App\Http\Controllers\Backend\API\DashboardController;
 use Modules\Pet\Http\Controllers\Backend\BreedController;
@@ -108,7 +109,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Método HTTP: GET
      * Ruta: /get-user-by-type
      * Descripción: Recupera todos los usuarios en base al user_type
-     * Parametro: user_type: string, ejemplo vet
+     * Parametro:
+     *  user_type: string, ejemplo vet
+     *  search: para buscar por correo (opcional)
      * Respuesta Exitosa:
      * {
      *     "success": true,
@@ -116,6 +119,32 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::get('get-user-by-type', [UserController::class, 'getUserByType']);
+    /**
+     * Obtener listado de notificaciones por usuario
+     * Método HTTP: GET
+     * Ruta: /api/user-notification
+     * Descripción:Obtener listado de notificaciones por usuario
+     * Parametro: user_id: Id de usuario
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [ Array de notificaciones ]
+     * }
+     */
+    Route::get('user-notification',[UserNotificationController::class,'getNotification']);
+  /**
+     * Marcar notificacion como leida
+     * Método HTTP: PUT
+     * Ruta: /api/user-notification/{id}
+     * Descripción:Marcar notificacion como leida
+     * Parametro: user_id: Id de usuario
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [ Array de notificacion ]
+     * }
+     */
+    Route::put('user-notification/{id}',[UserNotificationController::class,'updateRead']);
     /**
      * Obtener Todos los E-Books
      * Método HTTP: GET

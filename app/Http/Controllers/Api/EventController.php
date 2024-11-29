@@ -9,9 +9,12 @@ use Modules\Event\Models\Event;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Event\StoreRequest;
 use App\Http\Requests\Api\Event\UpdateRequest;
+use App\Trait\Notification;
+
 
 class EventController extends Controller
 {
+    use Notification;
     /**
      * Obtener todos los eventos.
      *
@@ -63,7 +66,7 @@ class EventController extends Controller
                 'pet_id' => $request->input('pet_id'),
                 'owner_id' => $request->input('owner_id'),
             ]);
-
+            $this->sendNotification('event',$event,[$request->input('owner_id')],$event->name);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento creado exitosamente',
