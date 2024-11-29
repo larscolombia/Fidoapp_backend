@@ -38,6 +38,7 @@ class UserNotification implements ShouldQueue
         foreach ($userIds as $userId) {
             UserNotificationModel::create([
                 'user_id' => $userId,
+                'type' => $title,
                 'description' => $description,
                 'is_read' => false,
             ]);

@@ -37,5 +37,7 @@ return [
     'action' => 'Action',
     'pettype_name' => 'Pettype Name',
     'owners_and_pets' => 'Owners And Pets',
-    'lbl_private'=>'Private Note'
+    'lbl_private'=>'Private Note',
+    'pet_history_create' => 'Created the pet\'s medical history',
+    'pet_history_update' => 'Updated the pet\'s medical history',
 ];
