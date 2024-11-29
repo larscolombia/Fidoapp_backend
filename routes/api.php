@@ -109,7 +109,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Método HTTP: GET
      * Ruta: /get-user-by-type
      * Descripción: Recupera todos los usuarios en base al user_type
-     * Parametro: user_type: string, ejemplo vet
+     * Parametro:
+     *  user_type: string, ejemplo vet
+     *  search: para buscar por correo (opcional)
      * Respuesta Exitosa:
      * {
      *     "success": true,

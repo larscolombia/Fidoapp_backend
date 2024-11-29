@@ -1206,11 +1206,22 @@ class UserController extends Controller
     public function getUserByType(Request $request)
     {
         $data = $request->validate([
+            'search' => 'nullable|string',
             'user_type' => 'required|string'
         ]);
-        $users = User::where('user_type', $data['user_type'])->get();
 
-        // Retornar respuesta
+        // Start the query
+        $query = User::where('user_type', $data['user_type']);
+
+        // If 'search' is provided, add a where clause for email
+        if (isset($data['search']) && !empty($data['search'])) {
+            $query->where('email', 'like', '%' . $data['search'] . '%');
+        }
+
+        // Execute the query
+        $users = $query->get();
+
+        // Return response
         return response()->json([
             'success' => true,
             'data' => $users
