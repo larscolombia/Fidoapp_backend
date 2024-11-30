@@ -116,4 +116,27 @@ class BlogController extends Controller
             'data' =>  $formattedRatings
         ], 200);
     }
+
+    public function updateVisualization($id)
+    {
+        try {
+            // Buscar el video por ID
+            $blog = Blog::findOrFail($id);
+
+            // Incrementar el campo visualizations
+            $blog->increment('visualizations');
+
+            // Retornar una respuesta JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Visualización actualizada correctamente',
+                'visualizations' => $blog->visualizations,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
