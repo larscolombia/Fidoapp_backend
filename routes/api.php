@@ -756,7 +756,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         /**
          * Calificar el video del curso
          * Método HTTP: POST
-         * Ruta: /api/course-platform/subscribe/get-rating-course-video
+         * Ruta: /api/course-platform/subscribe/rating-course-video
          * Descripción: Calificar el video del curso
          * Parametros:
          * user_id: Id del usuario
