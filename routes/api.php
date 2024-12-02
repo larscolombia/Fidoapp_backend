@@ -1246,6 +1246,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::put('accept-or-reject-event', [EventController::class, 'acceptOrRejectEvent']);
+
+    Route::get('get-pets-by-event',[EventController::class,'getPetByEvent']);
     /**
      * Eliminar un evento por ID.
      * Método HTTP: DELETE
