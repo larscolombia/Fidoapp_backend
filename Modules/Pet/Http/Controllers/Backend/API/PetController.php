@@ -287,6 +287,7 @@ class PetController extends Controller
                 'status' => 'sometimes|boolean',
                 'pet_image' => 'sometimes|file|mimes:jpeg,png,jpg,gif|max:2048', // Validaciones para la imagen
                 'qr_code' => 'sometimes',
+                'passport' => 'nullable|string'
             ];
 
             // Obtener los datos validados
@@ -382,6 +383,7 @@ class PetController extends Controller
                 'status' => 'sometimes|boolean',
                 'pet_image' => 'sometimes',
                 'qr_code' => 'sometimes',
+                'passport' => 'nullable|string',
             ];
 
             $validatedData = $request->validate($rules);
@@ -451,6 +453,7 @@ class PetController extends Controller
             'user_id' => $pet->user_id,
             'additional_info' => $pet->additional_info,
             'status' => $pet->status,
+            'passport' => $pet->passport,
             'created_by' => $pet->created_by,
             'updated_by' => $pet->updated_by,
             'deleted_by' => $pet->deleted_by,

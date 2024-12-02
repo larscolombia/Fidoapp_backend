@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\EBook;
+use App\Models\EBookUser;
 use App\Models\BookRating;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -258,11 +259,11 @@ class EBookController extends Controller
     public function get()
     {
         $ebooks = EBook::with('book_ratings')
-        ->get()
-        ->transform(function ($ebook) {
-            $ebook->cover_image = asset($ebook->cover_image);
-            return $ebook;
-        });
+            ->get()
+            ->transform(function ($ebook) {
+                $ebook->cover_image = asset($ebook->cover_image);
+                return $ebook;
+            });
         return response()->json([
             'success' => true,
             'message' => __('messages.ebooks_retrieved_successfully'),
@@ -300,7 +301,7 @@ class EBookController extends Controller
             ]);
 
             $bookRating = BookRating::create($data);
-            return response()->json(['status' => true, 'data' => $bookRating],200);
+            return response()->json(['status' => true, 'data' => $bookRating], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -315,7 +316,7 @@ class EBookController extends Controller
             'e_book_id' => 'required|exists:e_book,id',
         ]);
 
-        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->paginate(10);
+        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->get();
 
         if ($bookRating->isEmpty()) {
             return response()->json([
@@ -324,7 +325,7 @@ class EBookController extends Controller
             ], 404);
         }
 
-        $bookRating->getCollection()->transform(function ($rating) {
+        $results = $bookRating->map(function ($rating) {
             return [
                 'id' => $rating->id,
                 'rating' => $rating->rating,
@@ -337,22 +338,82 @@ class EBookController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => $bookRating
+            'data' =>  $results
         ], 200);
     }
 
 
     public function deleteBookRating($id)
     {
-        try{
+        try {
             $bookRating = BookRating::findOrFail($id);
             $bookRating->delete();
-            return response()->json(['status' => true, 'message' => 'book rating deleted successfully'],200);
-        }catch(\Exception $e){
+            return response()->json(['status' => true, 'message' => 'book rating deleted successfully'], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function buyBook(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'e_book_id' => 'required|exists:e_book,id',
+                'user_id' => 'required|exists:users,id',
+            ]);
+
+            $eBookUser = EBookUser::create($data);
+
+            return response()->json([
+                'status' => true,
+                'data' =>  $eBookUser
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getBooksUser(Request $request)
+    {
+      try{
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $eBooksUser = EBookUser::where('user_id',$data['user_id'])->orderByDesc('id')->get();
+        $results = $eBooksUser->map(function ( $eBookUser) {
+            return [
+                'id' =>  $eBookUser->id,
+                'e_book_id' => $eBookUser->e_book->id,
+                'e_book_title' =>  $eBookUser->e_book->title,
+                'e_book_url' =>  $eBookUser->e_book->url,
+                'e_book_author' =>  $eBookUser->e_book->author,
+                'e_book_image' => !empty($eBookUser->e_book->cover_image) ?  $eBookUser->e_book->cover_image : null,
+                'e_book_description' => $eBookUser->e_book->description,
+                'e_book_language' => $eBookUser->e_book->language,
+                'user_id' => $eBookUser->user_id,
+                'user_full_name' => $eBookUser->user->full_name,
+                'user_avatar' =>   asset($eBookUser->user->avatar),
+                'created_at' => $eBookUser->created_at
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $results,
+        ]);
+
+      }catch(\Exception $e){
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+      }
     }
 }

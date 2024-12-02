@@ -66,7 +66,7 @@ class EventController extends Controller
                 'pet_id' => $request->input('pet_id'),
                 'owner_id' => $request->input('owner_id'),
             ]);
-            $this->sendNotification('event',$event,[$request->input('owner_id')],$event->name);
+            $this->sendNotification('event', $event, [$request->input('owner_id')], $event->name);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento creado exitosamente',
@@ -172,6 +172,43 @@ class EventController extends Controller
                 'success' => false,
                 'message' => 'No se encontró el detalle del evento o ya ha sido actualizado.',
             ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error interno del servidor: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getPetByEvent(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+            ]);
+            $eventDetails = EventDetail::where('owner_id', $data['user_id'])
+                ->where('confirm', 'A')
+                ->get();
+            $results = $eventDetails->map(function ($eventDetail) {
+                return [
+                    'event_id' => $eventDetail->event->id,
+                    'event_detail_id' => $eventDetail->id,
+                    'event_date' => $eventDetail->event->date,
+                    'event_end_date' => $eventDetail->event->end_date,
+                    'event_name' => $eventDetail->event->name,
+                    'event_time' => $eventDetail->event->event_time,
+                    'pet_id' => $eventDetail->pet->id,
+                    'pet_name' => $eventDetail->pet->name,
+                    'pet_qr_code' => is_null($eventDetail->pet->qr_code) || empty($eventDetail->pet->qr_code) ? null : asset($eventDetail->pet->qr_code),
+                    'user_id' => $eventDetail->pet->user_id,
+                    'user_full_name' => $eventDetail->pet->user->full_name,
+                    'user_avatar' => is_null($eventDetail->pet->user->avatar) || empty($eventDetail->pet->user->avatar) ? null : asset($eventDetail->pet->user->avatar)
+                ];
+            });
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

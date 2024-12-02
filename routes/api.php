@@ -131,8 +131,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "data": [ Array de notificaciones ]
      * }
      */
-    Route::get('user-notification',[UserNotificationController::class,'getNotification']);
-  /**
+    Route::get('user-notification', [UserNotificationController::class, 'getNotification']);
+    /**
      * Marcar notificacion como leida
      * Método HTTP: PUT
      * Ruta: /api/user-notification/{id}
@@ -144,7 +144,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "data": [ Array de notificacion ]
      * }
      */
-    Route::put('user-notification/{id}',[UserNotificationController::class,'updateRead']);
+    Route::put('user-notification/{id}', [UserNotificationController::class, 'updateRead']);
     /**
      * Obtener Todos los E-Books
      * Método HTTP: GET
@@ -179,7 +179,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/e-books/{id}', [EBookController::class, 'getById']);
 
-   /**
+    /**
      * Calificar libro
      * Método HTTP: POST
      * Ruta: /e-book-rating
@@ -200,7 +200,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "mensaje de error"
      * }
      */
-    Route::post('e-book-rating',[EBookController::class, 'bookRating']);
+    Route::post('e-book-rating', [EBookController::class, 'bookRating']);
 
     /**
      * Eliminar calificacion del libro
@@ -220,7 +220,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "mensaje de error"
      * }
      */
-    Route::delete('e-book-rating/{id}',[EBookController::class, 'deleteBookRating']);
+    Route::delete('e-book-rating/{id}', [EBookController::class, 'deleteBookRating']);
 
 
     /**
@@ -241,7 +241,46 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "mensaje de error"
      * }
      */
-    Route::get('get-book-rating-by-id-ebook',[EBookController::class,'getBookRatingByIdEbook']);
+    Route::get('get-book-rating-by-id-ebook', [EBookController::class, 'getBookRatingByIdEbook']);
+    /**
+     * Comprar un e-book
+     * Método HTTP: POST
+     * Ruta: /api/buy-e-books
+     * Descripción: Comprar un e-book
+     * Parámetros:
+     * - e_book_id: ID del e_book.
+     * - user_id: ID del usuario
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [datos del registro]
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::post('buy-e-books', [EBookController::class, 'buyBook']);
+       /**
+     * Obtener libros comprados de un usuario
+     * Método HTTP: GET
+     * Ruta: /api/get-books-user
+     * Descripción: Obtener libros comprados de un usuario
+     * Parámetros:
+     * - user_id: ID del usuario
+     * Respuesta Exitosa:
+     * {
+     *     "success": true,
+     *     "data": [Listado de e-book]
+     * }
+     * Respuesta de Error:
+     * {
+     *     "success": false,
+     *     "message": "mensaje de error"
+     * }
+     */
+    Route::get('get-books-user', [EBookController::class, 'getBooksUser']);
     /**
      * Obtener Todos los Cursos
      * Método HTTP: GET
@@ -610,7 +649,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          * }
          */
         Route::delete('{course_platform}', [CursoPlataformaController::class, 'destroy'])->name('course_platform.destroy');
-   /**
+        /**
          * Eliminar todos los videos de un curso
          * Método HTTP: DELETE
          * Ruta: /api/course-platform/delete-all-videos
@@ -621,8 +660,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     "message": "Videos del Curso de la plataforma eliminado exitosamente"
          * }
          */
-        Route::delete('{course_platform}/delete-all-videos',[CursoPlataformaController::class, 'deleteAllVideos']);
-         /**
+        Route::delete('{course_platform}/delete-all-videos', [CursoPlataformaController::class, 'deleteAllVideos']);
+        /**
          * Eliminar un video de un curso
          * Método HTTP: DELETE
          * Ruta: /api/course-platform/delete-video/{video}
@@ -633,9 +672,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     "message": "Video del Curso de la plataforma eliminado exitosamente"
          * }
          */
-        Route::delete('{course_platform}/delete-video/{video}',[CursoPlataformaController::class, 'deleteVideo']);
+        Route::delete('{course_platform}/delete-video/{video}', [CursoPlataformaController::class, 'deleteVideo']);
 
-            /**
+        /**
          * Suscribirse a un curso de la plataforma
          * Método HTTP: POST
          * Ruta: /api/course-platform/subscribe
@@ -654,8 +693,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     "message": "mensaje de error"
          * }
          */
-        Route::post('subscribe',[CoursePlatformUserController::class,'subscribe']);
-            /**
+        Route::post('subscribe', [CoursePlatformUserController::class, 'subscribe']);
+        /**
          * Actualizar progreso
          * Método HTTP: PUT
          * Ruta: /api/course-platform/subscribe/mark-video-as-watched
@@ -676,8 +715,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     "message": "mensaje de error"
          * }
          */
-        Route::put('subscribe/mark-video-as-watched',[CoursePlatformUserController::class,'markVideoAsWatched']);
-         /**
+        Route::put('subscribe/mark-video-as-watched', [CoursePlatformUserController::class, 'markVideoAsWatched']);
+        /**
          * Obtener todos los cursos por user_id
          * Método HTTP: GET
          * Ruta: /api/course-platform/subscribe/all-courses-user
@@ -691,9 +730,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     "data": "data de la suscripcion"
          * }
          */
-        Route::get('subscribe/all-courses-user',[CoursePlatformUserController::class,'allCoursesUser']);
+        Route::get('subscribe/all-courses-user', [CoursePlatformUserController::class, 'allCoursesUser']);
 
-            /**
+        /**
          * Obtener el rating por video del curso
          * Método HTTP: GET
          * Ruta: /api/course-platform/subscribe/get-rating-course-video
@@ -712,9 +751,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *  "message": "No ratings found for the specified user"
          * }
          */
-        Route::get('subscribe/get-rating-course-video',[CursoPlataformaController::class,'getRatingCourseVideo']);
+        Route::get('subscribe/get-rating-course-video', [CursoPlataformaController::class, 'getRatingCourseVideo']);
 
-             /**
+        /**
          * Calificar el video del curso
          * Método HTTP: POST
          * Ruta: /api/course-platform/subscribe/get-rating-course-video
@@ -735,7 +774,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *  "message": "No ratings found for the specified user"
          * }
          */
-        Route::post('subscribe/rating-course-video',[CursoPlataformaController::class,'ratingCoursePlatformVideo']);
+        Route::post('subscribe/rating-course-video', [CursoPlataformaController::class, 'ratingCoursePlatformVideo']);
         /**
          * Actualizar visualizaciones del video
          * Método HTTP: PUT
@@ -754,7 +793,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *  "message": "mensaje de error"
          * }
          */
-        Route::put('subscribe/{id}/visualization',[CursoPlataformaController::class, 'updateVisualization']);
+        Route::put('subscribe/{id}/visualization', [CursoPlataformaController::class, 'updateVisualization']);
     });
 
 
@@ -1195,8 +1234,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     'success' => true,
      *     'message' => 'Evento actualizado exitosamente',
      *     'data' =>  [
-        *    'event'       => $eventDetail->event,
-        *    'detail_event' => $eventDetail,
+     *    'event'       => $eventDetail->event,
+     *    'detail_event' => $eventDetail,
      *      ],
      * }
      *
@@ -1207,7 +1246,27 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::put('accept-or-reject-event', [EventController::class, 'acceptOrRejectEvent']);
-     /**
+    /**
+     * Obtener las mascotas del evento.
+     * Método HTTP: GET
+     * Ruta: /api/get-pets-by-event
+     * Descripción: Obtener las mascotas del evento asociado al veterinario o entrenador.
+     * Parametros:
+     * user_id: Id del entrenador o veterinario
+     * Respuesta Exitosa:
+     * {
+     *     'success' => true
+     *     'data' => $detailEvent
+     * }
+     *
+     * Respuesta fallida:
+     * {
+     *  'success' => false,
+     *  'message' => 'Mensaje de error',
+     * }
+     */
+    Route::get('get-pets-by-event',[EventController::class,'getPetByEvent']);
+    /**
      * Eliminar un evento por ID.
      * Método HTTP: DELETE
      * Ruta: /api/events/{id}
