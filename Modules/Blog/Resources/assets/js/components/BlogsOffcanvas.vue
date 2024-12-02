@@ -1,9 +1,9 @@
 <template>
-    <form @submit="formSubmit">
+    <form @submit="formSubmit" enctype="multipart/form-data">
       <div class="offcanvas offcanvas-end offcanvas-booking" tabindex="-1" id="form-offcanvas" aria-labelledby="form-offcanvasLabel">
         <FormHeader :currentId="currentId" :editTitle="editTitle" :createTitle="createTitle"></FormHeader>
         <div class="offcanvas-body">
-  
+
           <div class="form-group">
               <div class="text-center">
                 <img :src="ImageViewer || props.defaultImage" alt="blog-image" class="img-fluid mb-2 avatar avatar-140 avatar-rounded" />
@@ -19,7 +19,7 @@
             </div>
 
           <InputField class="col-md-12" type="text" :is-required="true" :label="$t('blog.lbl_blog_name')" placeholder="" v-model="name" :error-message="errors['name']" :error-messages="errorMessages['name']"></InputField>
-  
+
           <div class="form-group">
               <label class="form-label" for="tags">{{ $t('blog.lbl_tags') }}</label>
               <Multiselect id="tags" v-model="tags" :multiple="true" :value="tags"
@@ -32,7 +32,7 @@
               </span>
               <span class="text-danger">{{ errors.tags }}</span>
             </div>
-  
+
             <div class="form-group">
               <label class="form-label" for="description">{{ $t('blog.lbl_description') }}</label>
               <!-- Add Quill editor here -->
@@ -44,7 +44,16 @@
               </span>
               <span class="text-danger">{{ errors.description }}</span>
             </div>
-  
+
+            <div class="form-group">
+                    <label for="video" class="form-label">{{ $t('course_platform.video') }}</label>
+                    <input type="file" class="form-control" :value="video" id="video" name="video" accept="video/*" @change="videoUpload">
+                    <span class="text-danger">{{ errors.video }}</span>
+                    <ul class="text-danger">
+                  <li v-for="err in errorMessages['video']" :key="err">{{ err }}</li>
+                </ul>
+                  </div>
+
           <div class="form-group">
             <div class="d-flex justify-content-between align-items-center">
               <label class="form-label" for="category-status">{{ $t('blog.lbl_status') }}</label>
@@ -58,13 +67,13 @@
       </div>
     </form>
   </template>
-  
+
   <script setup>
   import { ref, onMounted } from 'vue'
   import { EDIT_URL, STORE_URL, UPDATE_URL} from '../constant/blog'
   import { useField, useForm } from 'vee-validate'
   import InputField from '@/vue/components/form-elements/InputField.vue'
-  
+
   import { useModuleId, useRequest, useOnOffcanvasHide } from '@/helpers/hooks/useCrudOpration'
   import * as yup from 'yup'
   import flatPickr from 'vue-flatpickr-component'
@@ -83,7 +92,7 @@
 
   // Quill setup
   let quillInstance;
-  
+
   // props
   const props = defineProps({
     createTitle: { type: String, default: '' },
@@ -102,9 +111,9 @@
 
   // const CURRENCY_SYMBOL = ref(window.defaultCurrencySymbol)
   const { getRequest, storeRequest, updateRequest, listingRequest } = useRequest()
-  
+
   // onMounted(() => {
-  
+
   //   setFormData(defaultData())
   // })
 
@@ -118,8 +127,13 @@ const fileUpload = async (e) => {
   })
     blog_image.value = file
 }
-  
-  
+
+const videoUpload = async(e) => {
+  let file = e.target.files[0];
+  video.value =file;
+}
+
+
   // Edit Form Or Create Form
   const currentId = useModuleId(() => {
     // if (currentId.value > 0) {
@@ -139,7 +153,7 @@ const fileUpload = async (e) => {
         setFormData(defaultData())
       }
     })
-  
+
   /*
    * Form Data & Validation & Handeling
    */
@@ -152,9 +166,10 @@ const fileUpload = async (e) => {
       description: '',
       status: 1,
       blog_image: null,
+      video: null,
     }
   }
-  
+
   //  Reset Form
   const setFormData = (data) => {
     ImageViewer.value = data.blog_image
@@ -165,11 +180,12 @@ const fileUpload = async (e) => {
         tags: data.tags,
         description: data.description,
         status: data.status,
-        blog_image: data.blog_image,  
+        blog_image: data.blog_image,
+        video:data.video,
       }
     })
   }
-  
+
   // Reload Datatable, SnackBar Message, Alert, Offcanvas Close
   const reset_datatable_close_offcanvas = (res) => {
     if (res.status) {
@@ -182,8 +198,8 @@ const fileUpload = async (e) => {
       errorMessages.value = res.all_message
     }
   }
-  
-  
+
+
   const numberRegex = /^\d+$/
   const decimalRegex = /^\d+(\.\d+)?$/
   // Validations
@@ -194,8 +210,8 @@ const fileUpload = async (e) => {
         return !scriptTagRegex.test(value);
     }),
   })
-  
-  
+
+
   const { handleSubmit, errors, resetForm } = useForm({
     validationSchema
   })
@@ -204,9 +220,10 @@ const fileUpload = async (e) => {
   const { value: description } = useField('description')
   const { value: blog_image } = useField('blog_image')
   const { value: status } = useField('status')
-  
+  const { value: video } = useField('video')
+
   const errorMessages = ref({})
-  
+
   onMounted(() => {
     quillInstance = new Quill(descriptionEditorRef.value, {
       theme: 'snow', // Choose the theme. 'snow' provides a standard toolbar.
@@ -218,11 +235,11 @@ const fileUpload = async (e) => {
     });
     setFormData(defaultData())
   })
-  
+
   // Form Submit
   const formSubmit = handleSubmit(async (values) => {
     const saveButton = document.getElementById('save-button');
-    saveButton.disabled = true; 
+    saveButton.disabled = true;
 
     values.custom_fields_data = JSON.stringify(values.custom_fields_data);
 
@@ -236,11 +253,11 @@ const fileUpload = async (e) => {
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      saveButton.disabled = false;  
+      saveButton.disabled = false;
     }
   });
-  
-  
+
+
   useOnOffcanvasHide('form-offcanvas', () => setFormData(defaultData()))
   </script>
 
@@ -257,4 +274,3 @@ const fileUpload = async (e) => {
   }
 }
 </style>
-  

@@ -606,8 +606,3 @@ body.uikit .btn-download {
   transition: all 400ms ease;
   cursor: pointer;
 }
-
-.img-preview-diario {
-  max-width: 300px;
-  max-height: 300px;
-}

@@ -2,13 +2,14 @@
 
 namespace Modules\Blog\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Http\Controllers\Controller;
-use Modules\Blog\Models\Blog;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
+use App\Authorizable;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Modules\Blog\Models\Blog;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class BlogsController extends Controller
 {
@@ -26,11 +27,11 @@ class BlogsController extends Controller
         $this->module_path = 'blog::backend';
 
         view()->share([
-          'module_title' => $this->module_title,
-          'module_icon' => 'fa-regular fa-sun',
-          'module_name' => $this->module_name,
-          'module_path' => $this->module_path,
-      ]);
+            'module_title' => $this->module_title,
+            'module_icon' => 'fa-regular fa-sun',
+            'module_name' => $this->module_name,
+            'module_path' => $this->module_path,
+        ]);
     }
 
     /**
@@ -92,7 +93,7 @@ class BlogsController extends Controller
         foreach ($query_data as $row) {
             $data[] = [
                 'id' => $row->id,
-                'text' => $row->name.' (Slug: '.$row->slug.')',
+                'text' => $row->name . ' (Slug: ' . $row->slug . ')',
             ];
         }
         return response()->json($data);
@@ -103,52 +104,52 @@ class BlogsController extends Controller
         $query = Blog::query();
 
         return Datatables::of($query)
-                        ->addColumn('check', function ($row) {
-                            return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
-                        })
-                        ->addColumn('action', function ($data) {
-                            return view('blog::backend.blogs.action_column', compact('data'));
-                        })
-                        ->editColumn('image', function ($data) {
-                            return "<img src='" . $data->blog_image . "'class='avatar avatar-40 img-fluid rounded-pill'>";
-                        })
-                        ->editColumn('date', function ($data) {
-                            return $data->created_at->format('Y-m-d');
-                        })
-                        ->orderColumn('date', function ($query, $order) {
-                            $query->orderBy('created_at', $order);
-                        }, 1)
-                        ->filterColumn('date', function ($query, $keyword) {
-                            if (! empty($keyword)) {
-                                $query->where('created_at', 'like', '%'.$keyword.'%');
-                            }
-                        })
-                        ->editColumn('status', function ($row) {
-                            $checked = '';
-                            if ($row->status) {
-                                $checked = 'checked="checked"';
-                            }
+            ->addColumn('check', function ($row) {
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
+            })
+            ->addColumn('action', function ($data) {
+                return view('blog::backend.blogs.action_column', compact('data'));
+            })
+            ->editColumn('image', function ($data) {
+                return "<img src='" . $data->blog_image . "'class='avatar avatar-40 img-fluid rounded-pill'>";
+            })
+            ->editColumn('date', function ($data) {
+                return $data->created_at->format('Y-m-d');
+            })
+            ->orderColumn('date', function ($query, $order) {
+                $query->orderBy('created_at', $order);
+            }, 1)
+            ->filterColumn('date', function ($query, $keyword) {
+                if (! empty($keyword)) {
+                    $query->where('created_at', 'like', '%' . $keyword . '%');
+                }
+            })
+            ->editColumn('status', function ($row) {
+                $checked = '';
+                if ($row->status) {
+                    $checked = 'checked="checked"';
+                }
 
-                            return '
+                return '
                             <div class="form-check form-switch ">
-                                <input type="checkbox" data-url="'.route('backend.blogs.update_status', $row->id).'" data-token="'.csrf_token().'" class="switch-status-change form-check-input"  id="datatable-row-'.$row->id.'"  name="status" value="'.$row->id.'" '.$checked.'>
+                                <input type="checkbox" data-url="' . route('backend.blogs.update_status', $row->id) . '" data-token="' . csrf_token() . '" class="switch-status-change form-check-input"  id="datatable-row-' . $row->id . '"  name="status" value="' . $row->id . '" ' . $checked . '>
                             </div>
                            ';
-                        })
-                        // ->editColumn('updated_at', function ($data) {
-                        //     $module_name = $this->module_name;
+            })
+            // ->editColumn('updated_at', function ($data) {
+            //     $module_name = $this->module_name;
 
-                        //     $diff = Carbon::now()->diffInHours($data->updated_at);
+            //     $diff = Carbon::now()->diffInHours($data->updated_at);
 
-                        //     if ($diff < 25) {
-                        //         return $data->updated_at->diffForHumans();
-                        //     } else {
-                        //         return $data->updated_at->isoFormat('llll');
-                        //     }
-                        // })
-                        ->rawColumns(['action', 'status', 'check','image'])
-                        ->orderColumns(['id'], '-:column $1')
-                        ->make(true);
+            //     if ($diff < 25) {
+            //         return $data->updated_at->diffForHumans();
+            //     } else {
+            //         return $data->updated_at->isoFormat('llll');
+            //     }
+            // })
+            ->rawColumns(['action', 'status', 'check', 'image'])
+            ->orderColumns(['id'], '-:column $1')
+            ->make(true);
     }
 
     /**
@@ -172,16 +173,19 @@ class BlogsController extends Controller
     {
         $data = $request->except('blog_image');
         if ($request->hasFile('video')) {
-            $video = $request->input('video');
-                    $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
-                    // Mover el video a la carpeta correspondiente
-                    $video->move(public_path('videos/blog'), $videoName);
+            if (!file_exists(public_path('videos/blog'))) {
+                mkdir(public_path('videos/blog'), 0755, true);
+            }
+            $video = $request->file('video');
+            $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+            // Mover el video a la carpeta correspondiente
+            $video->move(public_path('videos/blog'), $videoName);
 
-                    // Generar la URL del video
-                    $videoUrl = url('videos/blog/' . $videoName);
-                    //agregar a data
-                    $data['url'] = $videoUrl;
-                    $data['video'] = $videoName;
+            // Generar la URL del video
+            $videoUrl = url('videos/blog/' . $videoName);
+            //agregar a data
+            $data['url'] = $videoUrl;
+            $data['video'] = $videoName;
         }
         $query = Blog::create($data);
 
@@ -234,16 +238,27 @@ class BlogsController extends Controller
 
         $data = $request->except('event_image');
         if ($request->hasFile('video')) {
-            $video = $request->input('video');
-                    $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
-                    // Mover el video a la carpeta correspondiente
-                    $video->move(public_path('videos/blog'), $videoName);
+            if (!file_exists(public_path('videos/blog'))) {
+                mkdir(public_path('videos/blog'), 0755, true);
+            }
+            // Verificar si ya existe un video asociado
+            if ($query->video) {
+                // Eliminar el video anterior
+                $oldVideoPath = public_path('videos/blog/' . $query->video);
+                if (file_exists($oldVideoPath)) {
+                    unlink($oldVideoPath);
+                }
+            }
+            $video = $request->file('video');
+            $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+            // Mover el video a la carpeta correspondiente
+            $video->move(public_path('videos/blog'), $videoName);
 
-                    // Generar la URL del video
-                    $videoUrl = url('videos/blog/' . $videoName);
-                    //agregar a data
-                    $data['url'] = $videoUrl;
-                    $data['video'] = $videoName;
+            // Generar la URL del video
+            $videoUrl = url('videos/blog/' . $videoName);
+            //agregar a data
+            $data['url'] = $videoUrl;
+            $data['video'] = $videoName;
         }
         $query->update($data);
 
@@ -284,7 +299,7 @@ class BlogsController extends Controller
         $data = Blog::withTrashed()->find($id);
         $data->restore();
 
-        $message = Str::singular($this->module_title).' Data Restoreded Successfully';
+        $message = Str::singular($this->module_title) . ' Data Restoreded Successfully';
 
         return redirect('app/blogs');
     }
@@ -294,5 +309,4 @@ class BlogsController extends Controller
 
         return response()->json(['status' => true, 'message' => __('branch.status_update')]);
     }
-
 }
