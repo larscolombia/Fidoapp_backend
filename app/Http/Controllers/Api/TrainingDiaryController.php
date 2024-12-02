@@ -23,6 +23,9 @@ class TrainingDiaryController extends Controller
             if (!isset($request->image)) {
                 $data['image'] = null;
             }
+            if (!file_exists(public_path('images/training_diary'))) {
+                mkdir(public_path('images/training_diary'), 0755, true);
+            }
             // Manejo de la imagen del diario
             if (!is_null($data['image']) && $request->hasFile('image')) {
                 $image = $request->file('image');
@@ -31,6 +34,7 @@ class TrainingDiaryController extends Controller
 
                 // Mueve la imagen a la carpeta public/images/training_diary
                 $image->move(public_path('images/training_diary'), $imageName);
+                $data['image'] = $imagePath;
             }
 
             // Crear la nueva mascota
@@ -144,6 +148,9 @@ class TrainingDiaryController extends Controller
                     'success' => false,
                     'message' => 'Record not found'
                 ], 404);
+            }
+            if (!file_exists(public_path('images/training_diary'))) {
+                mkdir(public_path('images/training_diary'), 0755, true);
             }
             // Manejo de la imagen del diario
             if (!is_null($data['image']) && $request->hasFile('image')) {

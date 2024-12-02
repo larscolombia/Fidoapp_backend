@@ -736,6 +736,25 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          * }
          */
         Route::post('subscribe/rating-course-video',[CursoPlataformaController::class,'ratingCoursePlatformVideo']);
+        /**
+         * Actualizar visualizaciones del video
+         * Método HTTP: PUT
+         * Ruta: /api/course-platform/subscribe/{id}/visualization
+         * Descripción: Actualizar visualizaciones del video
+         * Parametros:
+         * id: Id del video
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": "data de la visualizacion del video"
+         * }
+         * Respuesta Fallida:
+         * {
+         *  "success":false,
+         *  "message": "mensaje de error"
+         * }
+         */
+        Route::put('subscribe/{id}/visualization',[CursoPlataformaController::class, 'updateVisualization']);
     });
 
 

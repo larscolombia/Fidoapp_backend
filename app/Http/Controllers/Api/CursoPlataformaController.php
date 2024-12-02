@@ -453,4 +453,26 @@ class CursoPlataformaController extends Controller
             'data' => $coursePlatformVideoRatings
         ]);
     }
+
+    public function updateVisualization($id)
+    {
+        try {
+            $coursePlatformVideo = CoursePlatformVideo::find($id);
+
+            // Incrementar el campo visualizations
+            $coursePlatformVideo->increment('visualizations');
+
+            // Retornar una respuesta JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Visualización actualizada correctamente',
+                'visualizations' =>  $coursePlatformVideo->visualizations,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
