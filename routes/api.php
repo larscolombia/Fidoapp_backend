@@ -1249,7 +1249,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     /**
      * Obtener las mascotas del evento.
      * Método HTTP: GET
-     * Ruta: /api/accept-or-reject-event
+     * Ruta: /api/get-pets-by-event
      * Descripción: Obtener las mascotas del evento asociado al veterinario o entrenador.
      * Parametros:
      * user_id: Id del entrenador o veterinario
