@@ -316,7 +316,7 @@ class EBookController extends Controller
             'e_book_id' => 'required|exists:e_book,id',
         ]);
 
-        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->paginate(10);
+        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->get();
 
         if ($bookRating->isEmpty()) {
             return response()->json([
@@ -325,7 +325,7 @@ class EBookController extends Controller
             ], 404);
         }
 
-        $bookRating->getCollection()->transform(function ($rating) {
+        $results = $bookRating->map(function ($rating) {
             return [
                 'id' => $rating->id,
                 'rating' => $rating->rating,
@@ -338,7 +338,7 @@ class EBookController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => $bookRating
+            'data' =>  $results
         ], 200);
     }
 
