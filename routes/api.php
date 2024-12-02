@@ -1246,7 +1246,25 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::put('accept-or-reject-event', [EventController::class, 'acceptOrRejectEvent']);
-
+    /**
+     * Obtener las mascotas del evento.
+     * Método HTTP: GET
+     * Ruta: /api/accept-or-reject-event
+     * Descripción: Obtener las mascotas del evento asociado al veterinario o entrenador.
+     * Parametros:
+     * user_id: Id del entrenador o veterinario
+     * Respuesta Exitosa:
+     * {
+     *     'success' => true
+     *     'data' => $detailEvent
+     * }
+     *
+     * Respuesta fallida:
+     * {
+     *  'success' => false,
+     *  'message' => 'Mensaje de error',
+     * }
+     */
     Route::get('get-pets-by-event',[EventController::class,'getPetByEvent']);
     /**
      * Eliminar un evento por ID.
