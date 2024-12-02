@@ -23,7 +23,7 @@ class Pet extends BaseModel
     use HasSlug;
 
     protected $table = 'pets';
-    protected $fillable = ['name', 'slug', 'pettype_id', 'breed_id', 'date_of_birth', 'age', 'gender', 'weight', 'height', 'weight_unit',
+    protected $fillable = ['name', 'slug','passport', 'pettype_id', 'breed_id', 'date_of_birth', 'age', 'gender', 'weight', 'height', 'weight_unit',
     'height_unit', 'additional_info', 'user_id', 'status', 'qr_code'];
     protected $appends = ['pet_image','qr_code'];
 
