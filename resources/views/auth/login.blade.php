@@ -60,25 +60,7 @@
             </div>
 
         </form>
-        <div>
-            <h6 class="text-center border-top py-3 mt-3">Cuentas de demostración</h6>
-            <div class="parent">
 
-                <select name="select" id="SelectUser" id="select" class="form-control selectpiker"
-                    onchange="getSelectedOption()">
-                    <option value="12345678,demo@pawlly.com" selected>Demo de Administrador</option>
-                    <option value="12345678,miles@gmail.com">Internado</option>
-                    <option value="12345678,felix@gmail.com">Veterinario</option>
-                    <option value="12345678,richard@gmail.com">Peluquero</option>
-                    <option value="12345678,tristan@gmail.com">Entrenador</option>
-                    <option value="12345678,pedro@gmail.com">Paseador</option>
-                    <option value="12345678,justin@gmail.com">Cuidador de guardería</option>
-                    <option value="12345678,harry@gmail.com">Cuidador de mascotas</option>
-                </select>
-
-            </div>
-
-        </div>
         </div>
 
         <x-slot name="extra">
@@ -93,9 +75,9 @@
 
 
     <script type="text/javascript">
-        window.onload = function() {
-            getSelectedOption();
-        };
+      //  window.onload = function() {
+      //      getSelectedOption();
+       // };
 
         function getSelectedOption() {
             var selectElement = document.getElementById("SelectUser");
@@ -103,7 +85,7 @@
 
             if (selectedOption) {
                 var optionText = selectedOption.textContent || selectedOption
-                .innerText; // Get the text of the selected option
+                    .innerText; // Get the text of the selected option
                 var optionValue = selectedOption.value; // Get the value of the selected option
 
                 var values = optionValue.split(",");
