@@ -62,7 +62,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth']], 
         Route::get('/booking-show/{id}', [BookingsController::class, 'bookingShow'])->name('bookingShow');
 
     });
-    
+
     Route::get('bookings-table-view', [BookingsController::class, 'datatable_view'])
     ->name('bookings.datatable_view')
     ->middleware('permission:view_boarding_booking');
@@ -94,7 +94,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth']], 
     Route::get('accept-booking/{id}', [WalkingController::class, 'accept_booking'])->name('walking.accept-booking');
 
 
-    
+
 
    });
 
@@ -125,5 +125,13 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth']], 
 
     Route::get('get-address', [BookingsController::class, 'getAddress'])->name('get-address');
 
-    Route::resource('bookings', BookingsController::class);
+    Route::resource('bookings', BookingsController::class)->names([
+        'index' => 'bookingsr.list',
+        'create' => 'bookingsr.new',
+        'store' => 'bookingsr.save',
+        'show' => 'bookingsr.detail',
+        'edit' => 'bookingsr.modify',
+        'update' => 'bookingsr.update',
+        'destroy' => 'bookingsr.remove',
+    ]);
 });

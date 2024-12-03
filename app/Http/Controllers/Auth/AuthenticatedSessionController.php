@@ -38,22 +38,22 @@ class AuthenticatedSessionController extends Controller
 
             if ($isLogin) {
                 $request->session()->regenerate();
-    
+
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
-    
+
             return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
+                'email' => __('messages.not_matched'),
             ])->onlyInput('email');
 
         }else{
 
-            $message = 'This service is inactive. Please contact your Administration.';
+            $message = __('messages.service_inactive');
             return back()->withErrors([
                 'custom_message' => $message,
             ]);
 
-        } 
+        }
     }
 
     /**

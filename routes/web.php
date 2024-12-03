@@ -56,26 +56,26 @@ Route::get('/', function () {
     }else if(auth()->user()->hasRole('vet')){
 
         return redirect(RouteServiceProvider::VET_LOGIN_REDIRECT);
-  
+
     }else if(auth()->user()->hasRole('groomer')){
 
         return redirect(RouteServiceProvider::GROOMER_LOGIN_REDIRECT);
-  
+
     }else if(auth()->user()->hasRole('trainer')){
 
         return redirect(RouteServiceProvider::TRAINER_LOGIN_REDIRECT);
-  
+
     }else if(auth()->user()->hasRole('walker')){
 
         return redirect(RouteServiceProvider::WALKER_LOGIN_REDIRECT);
-  
+
     }else if(auth()->user()->hasRole('day_taker')){
 
         return redirect(RouteServiceProvider::DAYTAKER_LOGIN_REDIRECT);
-  
+
     }else if(auth()->user()->hasRole('pet_sitter')){
         return redirect(RouteServiceProvider::PETSITTER_LOGIN_REDIRECT);
-  
+
     } else {
         return redirect(RouteServiceProvider::HOME);
     }
@@ -120,7 +120,7 @@ Route::group(['prefix' => 'app'], function () {
 
     });
 
-   
+
 
 
         /*
@@ -139,7 +139,7 @@ Route::group(['prefix' => 'app'], function () {
             Route::post('verify-email', [SettingController::class, 'verify_email'])->name('verify-email');
             Route::get('get-service-price', [SettingController::class, 'get_service_price']);
 
-            
+
         });
 
         /*
@@ -192,7 +192,7 @@ Route::group(['prefix' => 'app'], function () {
         });
     });
 
-  
+
 
     /*
     *
@@ -212,7 +212,7 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('/get_booking_chart_data/{type}', [BackendController::class, 'getBookingchartData']);
         Route::get('/get_booking_status_chart_data/{type}', [BackendController::class, 'getStatusBookingchartData']);
         Route::get('/get_profit_chart_data/{type}', [BackendController::class, 'getProfitchartData']);
-        
+
 
         Route::post('set-current-branch/{branch_id}', [BackendController::class, 'setCurrentBranch'])->name('set-current-branch');
         Route::post('reset-branch', [BackendController::class, 'resetBranch'])->name('reset-branch');
@@ -250,7 +250,7 @@ Route::group(['prefix' => 'app'], function () {
             * ---------------------------------------------------------------------
             */
             Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
-                
+
                 Route::get('/user-list', [UserController::class, 'user_list'])->name('user_list');
                 Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');
                 Route::get('/profile/{id}/edit', [UserController::class, 'profileEdit'])->name('profileEdit');
@@ -345,7 +345,7 @@ Route::group(['prefix' => 'app'], function () {
         Route::get('auth/google', [GoogleCalendarController::class, 'redirectToGoogle'])->name('google.redirect');
         Route::get('auth/google/callback', [GoogleCalendarController::class, 'handleGoogleCallback']);
         Route::post('events/google-calendar', [GoogleCalendarController::class, 'createEvent'])->name('google.calendar.create');
-    
+
         Route::get('training-index-data', [TrainingController::class, 'index_data'])->name('training.index_data');
 
         Route::get('/mascotas/qr_code', [QRCodeController::class, 'mascotas'])->name('mascotas.qr_code');
@@ -354,36 +354,36 @@ Route::group(['prefix' => 'app'], function () {
         Route::put('qr_code/{id}', [QRCodeController::class, 'update'])->name('qr_code.update');
 
         Route::put('pet/{id}/shared-owner', [PetsController::class, 'sharedOwner'])->name('pet.shared-owner');
-    
+
         Route::get('/mascotas/chips', [ChipsController::class, 'mascotas'])->name('mascotas.chips');
         Route::get('chips/mascotas_data', [ChipsController::class, 'mascotas_data'])->name('chips.mascotas_data');
         Route::resource('chips', ChipsController::class);
         Route::get('chips/index_data', [ChipsController::class, 'index_data'])->name('chips.index_data');
 
         Route::post('/fabricantes/store', [FabricanteController::class, 'store'])->name('fabricantes.store');
-   
+
         Route::get('/mascotas/activity_levels', [ActivityLevelController::class, 'mascotas'])->name('mascotas.activity_levels');
         Route::get('/pets/{pet_id}/activity_levels/index_data', [ActivityLevelController::class, 'index_data'])->name('activity_levels.index_data');
 
         Route::get('activity_levels/mascotas_data', [ActivityLevelController::class, 'mascotas_data'])->name('activity_levels.mascotas_data');
         // Ruta para mostrar los niveles de actividad de una mascota específica
         Route::get('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'index'])->name('activity-levels.index');
-        
+
         // Ruta para mostrar el formulario de creación de un nuevo nivel de actividad para una mascota específica
         Route::get('/pets/{pet_id}/activity-levels/create', [ActivityLevelController::class, 'create'])->name('activity-levels.create');
-        
+
         // Ruta para almacenar un nuevo nivel de actividad para una mascota específica
         Route::post('/pets/{pet_id}/activity-levels', [ActivityLevelController::class, 'store'])->name('activity-levels.store');
-        
+
         // Ruta para mostrar el formulario de edición de un nivel de actividad específico
         Route::get('/activity-levels/{id}/edit', [ActivityLevelController::class, 'edit'])->name('activity-levels.edit');
-        
+
         // Ruta para actualizar un nivel de actividad específico
         Route::put('/activity-levels/{id}', [ActivityLevelController::class, 'update'])->name('activity-levels.update');
-        
+
         // Ruta para eliminar un nivel de actividad específico
         Route::delete('/activity-levels/{id}', [ActivityLevelController::class, 'destroy'])->name('activity-levels.destroy');
-    
+
         Route::put('/activity-levels/{id}/update-steps', [ActivityLevelController::class, 'update_steps'])->name('activity-levels.update_steps');
         Route::put('/activity-levels/{id}/update-distance', [ActivityLevelController::class, 'update_distance'])->name('activity-levels.update_distance');
         Route::put('/activity-levels/{id}/update-calories', [ActivityLevelController::class, 'update_calories'])->name('activity-levels.update_calories');
@@ -393,7 +393,7 @@ Route::group(['prefix' => 'app'], function () {
         Route::post('/activity-levels/{pet_id}/store-distance', [ActivityLevelController::class, 'store_distance'])->name('activity-levels.store_distance');
         Route::post('/activity-levels/{pet_id}/store-calories', [ActivityLevelController::class, 'store_calories'])->name('activity-levels.store_calories');
         Route::post('/activity-levels/{pet_id}/store-minutes', [ActivityLevelController::class, 'store_minutes'])->name('activity-levels.store_minutes');
-    
+
         Route::resource('salud', SaludController::class);
         Route::get('/mascotas/salud', [SaludController::class, 'mascotas'])->name('mascotas.salud');
 
@@ -406,9 +406,9 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('/show/{vacuna}', [VacunaController::class, 'show'])->name('show');
             Route::get('/edit/{vacuna}', [VacunaController::class, 'edit'])->name('edit');
             Route::put('/update/{vacuna}', [VacunaController::class, 'update'])->name('update');
-            
+
             Route::get('/vacunas_data', [VacunaController::class, 'vacunas_data'])->name('vacunas_data');
-        });    
+        });
         Route::delete('/destroy/{vacuna}', [VacunaController::class, 'destroy'])->name('destroy');
 
         Route::resource('antigarrapatas', GarrapataController::class);
@@ -421,14 +421,14 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('/show/{antigarrapata}', [GarrapataController::class, 'show'])->name('show');
             Route::get('/edit/{antigarrapata}', [GarrapataController::class, 'edit'])->name('edit');
             Route::put('/update/{antigarrapata}', [GarrapataController::class, 'update'])->name('update');
-            
+
             Route::get('/antigarrapatas_data', [GarrapataController::class, 'antigarrapatas_data'])->name('antigarrapatas_data');
-        });    
+        });
         Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('mascotas.antigarrapatas.destroy');
 
         Route::resource('antiparasitantes', VacunaController::class);
 
-        
+
         Route::get('/mascotas/antiparasitantes', [GarrapataController::class, 'mascotas'])->name('mascotas.antiparasitantes');
         Route::prefix('/mascotas/antiparasitantes/{pet}')->name('mascotas.antiparasitantes.')->group(function () {
             Route::get('/', [GarrapataController::class, 'index'])->name('index');
@@ -437,10 +437,10 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('/show/{antiparasitante}', [GarrapataController::class, 'show'])->name('show');
             Route::get('/edit/{antiparasitante}', [GarrapataController::class, 'edit'])->name('edit');
             Route::put('/update/{antiparasitante}', [GarrapataController::class, 'update'])->name('update');
-            
+
             Route::get('/antiparasitantes_data', [GarrapataController::class, 'antiparasitantes_data'])->name('antiparasitantes_data');
-        });    
-        Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('destroy');
+        });
+        Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('antigarrapata.destroy');
 
     });
 });

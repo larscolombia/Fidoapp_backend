@@ -2248,7 +2248,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *     "message": "Error message"
      * }
      */
-    Route::get('/bookings/training/get', [BookingsController::class, 'bookingListTraining'])->name('bookings.list');
+    Route::get('/bookings/training/get', [BookingsController::class, 'bookingListTraining']);
 
     /**
      * Crear o actualizar una reserva.
