@@ -66,7 +66,7 @@ class EventController extends Controller
                 'pet_id' => $request->input('pet_id'),
                 'owner_id' => $request->input('owner_id'),
             ]);
-            $this->sendNotification('event', $event, [$request->input('owner_id')], $event->name);
+            $this->sendNotification('event', $event, [$request->input('owner_id')], $event->description);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento creado exitosamente',
