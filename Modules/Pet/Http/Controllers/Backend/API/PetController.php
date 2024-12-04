@@ -332,7 +332,7 @@ class PetController extends Controller
             // Manejo de la imagen de la mascota
             if ($request->hasFile('pet_image')) {
                 $image = $request->file('pet_image');
-                $imageName = time() . '.' . $image->getClientOriginalName();
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/pets/' . $imageName;
 
                 // Mueve la imagen a la carpeta public/images/pets
@@ -349,7 +349,13 @@ class PetController extends Controller
                 'message' => __('pet.pet_created_successfully'),
                 'data' => $pet
             ], 201);
-
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Captura de errores de validación
+            return response()->json([
+                'message' => __('validation.failed'),
+                'errors' => $e->validator->errors(),
+                'success' => false
+            ], 422);
         } catch (\Exception $e) {
             // Manejo de excepciones generales
             \Log::error('Error al crear la mascota: '.$e->getMessage());
@@ -409,7 +415,7 @@ class PetController extends Controller
                     unlink(public_path($pet->pet_image));
                 }
                 $image = $request->file('pet_image');
-                $imageName = time() . '.' . $image->getClientOriginalName();
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $imagePath = 'images/pets/' . $imageName;
 
                 // Mueve la imagen a la carpeta public/images/pets
@@ -426,6 +432,13 @@ class PetController extends Controller
                 'message' => __('pet.pet_updated_successfully'),
                 'data' => $pet
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Captura de errores de validación
+            return response()->json([
+                'message' => __('validation.failed'),
+                'errors' => $e->validator->errors(),
+                'success' => false
+            ], 422);
         }catch(\Exception $e){
             return response()->json([
                 'message' => $e->getMessage(),
