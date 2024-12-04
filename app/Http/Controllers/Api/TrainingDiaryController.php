@@ -29,7 +29,7 @@ class TrainingDiaryController extends Controller
             // Manejo de la imagen del diario
             if (!is_null($data['image']) && $request->hasFile('image')) {
                 $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageName = time() . '.' . $image->getClientOriginalName();
                 $imagePath = 'images/training_diary/' . $imageName;
 
                 // Mueve la imagen a la carpeta public/images/training_diary
