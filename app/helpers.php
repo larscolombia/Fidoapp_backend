@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Intervention\Image\ImageManagerStatic as Image;
 
 
 function onesingle($fields)
@@ -736,12 +737,17 @@ function storeMediaFile($module, $file, $key = 'feature_image')
     }
 }
 
-function convertToAvif ($image, $outputPath, $quality = 20) {
+function convertToWebP($image, $outputPath, $quality = 80)
+{
     try {
-        $img = Image::make($image->getPathname())->encode('avif', $quality); // calidad del 0 al 100
+        // Convertir la imagen al formato WebP con la calidad especificada
+        $img = Image::make($image->getPathname())->encode('webp', $quality); // calidad del 0 al 100
         $img->save($outputPath);
+
+        // Devolver la ruta de salida
         return $outputPath;
     } catch (\Exception $e) {
+        Log::debug('Error al convertir la imagen a WebP: ' . $e->getMessage());
         return null;
     }
 }

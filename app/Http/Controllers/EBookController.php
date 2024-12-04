@@ -149,14 +149,7 @@ class EBookController extends Controller
             $image = $request->file('cover_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $pathRegister = 'images/ebooks/' . $imageName;
-            $imagePath = public_path('images/ebooks/' . $imageName);
-
-            // Convertir la imagen a .avif usando el helper
-            $convertedPath = convertToAvif($image, $imagePath);
-
-            if (!$convertedPath) {
-                return redirect()->back()->withErrors(['cover_image' => 'Error al convertir la imagen'])->withInput();
-            }
+            $image->move(public_path('images/ebooks'), $imageName);
         } else {
             $imageName = '';
         }
@@ -383,39 +376,38 @@ class EBookController extends Controller
 
     public function getBooksUser(Request $request)
     {
-      try{
-        $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
-        ]);
+        try {
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+            ]);
 
-        $eBooksUser = EBookUser::where('user_id',$data['user_id'])->orderByDesc('id')->get();
-        $results = $eBooksUser->map(function ( $eBookUser) {
-            return [
-                'id' =>  $eBookUser->id,
-                'e_book_id' => $eBookUser->e_book->id,
-                'e_book_title' =>  $eBookUser->e_book->title,
-                'e_book_url' =>  $eBookUser->e_book->url,
-                'e_book_author' =>  $eBookUser->e_book->author,
-                'e_book_image' => !empty($eBookUser->e_book->cover_image) ?  $eBookUser->e_book->cover_image : null,
-                'e_book_description' => $eBookUser->e_book->description,
-                'e_book_language' => $eBookUser->e_book->language,
-                'user_id' => $eBookUser->user_id,
-                'user_full_name' => $eBookUser->user->full_name,
-                'user_avatar' =>   asset($eBookUser->user->avatar),
-                'created_at' => $eBookUser->created_at
-            ];
-        });
+            $eBooksUser = EBookUser::where('user_id', $data['user_id'])->orderByDesc('id')->get();
+            $results = $eBooksUser->map(function ($eBookUser) {
+                return [
+                    'id' =>  $eBookUser->id,
+                    'e_book_id' => $eBookUser->e_book->id,
+                    'e_book_title' =>  $eBookUser->e_book->title,
+                    'e_book_url' =>  $eBookUser->e_book->url,
+                    'e_book_author' =>  $eBookUser->e_book->author,
+                    'e_book_image' => !empty($eBookUser->e_book->cover_image) ?  $eBookUser->e_book->cover_image : null,
+                    'e_book_description' => $eBookUser->e_book->description,
+                    'e_book_language' => $eBookUser->e_book->language,
+                    'user_id' => $eBookUser->user_id,
+                    'user_full_name' => $eBookUser->user->full_name,
+                    'user_avatar' =>   asset($eBookUser->user->avatar),
+                    'created_at' => $eBookUser->created_at
+                ];
+            });
 
-        return response()->json([
-            'success' => true,
-            'data' => $results,
-        ]);
-
-      }catch(\Exception $e){
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ], 500);
-      }
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
