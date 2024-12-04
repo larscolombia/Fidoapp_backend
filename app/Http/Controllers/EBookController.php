@@ -220,11 +220,12 @@ class EBookController extends Controller
         ]);
 
         $ebook = EBook::find($id);
-
+        $pathRegister = null;
         // Manejar la carga de la imagen
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imageName = time() . '.avif';
+            $pathRegister = 'images/ebooks/' . $imageName;
             $image->move(public_path('images/ebooks'), $imageName);
         } else {
             $imageName = null;
@@ -235,7 +236,7 @@ class EBookController extends Controller
             'description' => $request->description,
             'author' => $request->author,
             'url' => $request->url,
-            'cover_image' => !is_null($imageName) ? $imageName : $ebook->cover_image,
+            'cover_image' => !is_null($pathRegister) ? $pathRegister : $ebook->cover_image,
             'number_of_pages' => $request->number_of_pages,
             'language' => $request->language,
             'price' => $request->price,
