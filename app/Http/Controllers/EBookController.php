@@ -144,6 +144,7 @@ class EBookController extends Controller
 
         // Manejar la carga de la imagen
         // Manejar la carga de la imagen
+        $pathRegister = null;
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
             $imageName = time() . '.avif';
