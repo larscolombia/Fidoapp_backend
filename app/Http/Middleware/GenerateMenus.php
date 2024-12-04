@@ -447,14 +447,14 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
-            $this->mainRoute($menu, [
-                'icon' => 'fa-graduation-cap',
-                'title' => __('sidebar.courses'),
-                'route' => ['backend.courses.index'],
-                'active' => ['app/courses'],
-                'permission' => 'view_courses',
-                'order' => 0,
-            ]);
+            // $this->mainRoute($menu, [
+            //     'icon' => 'fa-graduation-cap',
+            //     'title' => __('sidebar.courses'),
+            //     'route' => ['backend.courses.index'],
+            //     'active' => ['app/courses'],
+            //     'permission' => 'view_courses',
+            //     'order' => 0,
+            // ]);
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Orders',

@@ -150,7 +150,7 @@ class PetHistoryController extends Controller
             // Manejar el archivo si se proporciona
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '.' . $file->getClientOriginalName();
                 $file->move(public_path('files/pet_histories'), $fileName);
                 $filePath = 'files/pet_histories/' . $fileName;
                 $data['file'] = 'pet_histories/' . $filePath;
@@ -160,7 +160,7 @@ class PetHistoryController extends Controller
             // Manejar la imagen si se proporciona
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageName = time() . '.' . $image->getClientOriginalName();
                 $image->move(public_path('images/pet_histories'), $imageName);
                 $imagePath = 'images/pet_histories/' . $imageName;
                 $data['image'] = $imagePath;
@@ -292,7 +292,7 @@ class PetHistoryController extends Controller
                     unlink(public_path($history->file)); // Elimina el archivo anterior
                 }
                 $file = $request->file('file');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '.' . $file->getClientOriginalName();
                 $file->move(public_path('files/pet_histories'), $fileName);
                 $filePath = 'files/pet_histories/' . $fileName;
                 $data['file'] = 'pet_histories/' . $filePath;
@@ -305,7 +305,7 @@ class PetHistoryController extends Controller
                     unlink(public_path($history->image)); // Elimina la imagen anterior
                 }
                 $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageName = time() . '.' . $image->getClientOriginalName();
                 $image->move(public_path('images/pet_histories'), $imageName);
                 $imagePath = 'images/pet_histories/' . $imageName;
                 $data['image'] = $imagePath;
