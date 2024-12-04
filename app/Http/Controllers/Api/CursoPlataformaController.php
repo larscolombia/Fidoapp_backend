@@ -441,6 +441,8 @@ class CursoPlataformaController extends Controller
             // Procesar el avatar para incluir la URL completa
             if ($rating->user_avatar) {
                 $rating->user_avatar = asset($rating->user_avatar);
+            }else{
+                $rating->user_avatar = asset(config('app.avatar_base_path').'avatar.png');
             }
 
             // Opcional: eliminar los campos first_name y last_name si no son necesarios en la respuesta
