@@ -332,7 +332,7 @@ class PetController extends Controller
             // Manejo de la imagen de la mascota
             if ($request->hasFile('pet_image')) {
                 $image = $request->file('pet_image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageName = time() . '.' . $image->getClientOriginalName();
                 $imagePath = 'images/pets/' . $imageName;
 
                 // Mueve la imagen a la carpeta public/images/pets
@@ -403,17 +403,18 @@ class PetController extends Controller
                 }
             }
 
-            if($request->has('pet_image')){
-                if ($request->hasFile('pet_image')) {
-                    storeMediaFile($pet, $request->file('pet_image'), 'pet_image');
-                } elseif ( $request->pet_image != null && $request->pet_image != '') {
-                    $pet->clearMediaCollection('pet_image');
-                    $pet->addMediaFromUrl($request['pet_image'])->toMediaCollection('pet_image');
-                } else {
-                    return response()->json([
-                        'message' => 'El campo pet_image debe ser un archivo o una URL válida.'
-                    ], 422);
+             // Manejo de la imagen de la mascota
+             if ($request->hasFile('pet_image')) {
+                if ($pet->pet_image && file_exists(public_path($pet->pet_image))) {
+                    unlink(public_path($pet->pet_image));
                 }
+                $image = $request->file('pet_image');
+                $imageName = time() . '.' . $image->getClientOriginalName();
+                $imagePath = 'images/pets/' . $imageName;
+
+                // Mueve la imagen a la carpeta public/images/pets
+                $image->move(public_path('images/pets'), $imageName);
+                $validatedData['pet_image'] = $imagePath;
             }
 
 

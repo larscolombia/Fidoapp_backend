@@ -147,7 +147,7 @@ class EBookController extends Controller
         $pathRegister = null;
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
-            $imageName = time() . '.avif';
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
             $pathRegister = 'images/ebooks/' . $imageName;
             $imagePath = public_path('images/ebooks/' . $imageName);
 
@@ -224,7 +224,7 @@ class EBookController extends Controller
         // Manejar la carga de la imagen
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
-            $imageName = time() . '.avif';
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
             $pathRegister = 'images/ebooks/' . $imageName;
             $image->move(public_path('images/ebooks'), $imageName);
         } else {
