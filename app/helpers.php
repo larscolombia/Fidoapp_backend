@@ -736,12 +736,14 @@ function storeMediaFile($module, $file, $key = 'feature_image')
     }
 }
 
-function convertToAvif ($image, $outputPath, $quality = 20) {
+function convertToAvif($image, $outputPath, $quality = 20)
+{
     try {
         $img = Image::make($image->getPathname())->encode('avif', $quality); // calidad del 0 al 100
         $img->save($outputPath);
         return $outputPath;
     } catch (\Exception $e) {
+        Log::debug($e);
         return null;
     }
 }

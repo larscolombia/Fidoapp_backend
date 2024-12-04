@@ -49,33 +49,27 @@ use Modules\Pet\Http\Controllers\Backend\PetsController;
 
 
 // Auth Routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 Route::get('/', function () {
     if (auth()->user()->hasRole('boarder')) {
         return redirect(RouteServiceProvider::BOARDER_LOGIN_REDIRECT);
-    }else if(auth()->user()->hasRole('vet')){
+    } else if (auth()->user()->hasRole('vet')) {
 
         return redirect(RouteServiceProvider::VET_LOGIN_REDIRECT);
-
-    }else if(auth()->user()->hasRole('groomer')){
+    } else if (auth()->user()->hasRole('groomer')) {
 
         return redirect(RouteServiceProvider::GROOMER_LOGIN_REDIRECT);
-
-    }else if(auth()->user()->hasRole('trainer')){
+    } else if (auth()->user()->hasRole('trainer')) {
 
         return redirect(RouteServiceProvider::TRAINER_LOGIN_REDIRECT);
-
-    }else if(auth()->user()->hasRole('walker')){
+    } else if (auth()->user()->hasRole('walker')) {
 
         return redirect(RouteServiceProvider::WALKER_LOGIN_REDIRECT);
-
-    }else if(auth()->user()->hasRole('day_taker')){
+    } else if (auth()->user()->hasRole('day_taker')) {
 
         return redirect(RouteServiceProvider::DAYTAKER_LOGIN_REDIRECT);
-
-    }else if(auth()->user()->hasRole('pet_sitter')){
+    } else if (auth()->user()->hasRole('pet_sitter')) {
         return redirect(RouteServiceProvider::PETSITTER_LOGIN_REDIRECT);
-
     } else {
         return redirect(RouteServiceProvider::HOME);
     }
@@ -99,26 +93,24 @@ Route::group(['prefix' => 'app'], function () {
 
         // Sync Role & Permission
         Route::group(['middleware' => 'permission:view_permission'], function () {
-        Route::get('/permission-role', [RolePermission::class, 'index'])->name('permission-role.list')->middleware('password.confirm');
-        Route::post('/permission-role/store/{role_id}', [RolePermission::class, 'store'])->name('permission-role.store');
-        Route::get('/permission-role/reset/{role_id}', [RolePermission::class, 'reset_permission'])->name('permission-role.reset');
-        // Role & Permissions Crud
-        Route::resource('permission', PermissionController::class);
-        Route::resource('role', RoleController::class);
-
-    });
-
-
-    Route::group(['middleware' => 'permission:view_modules'], function () {
-        Route::group(['prefix' => 'module', 'as' => 'module.'], function () {
-
-            Route::get('index_data', [ModuleController::class, 'index_data'])->name('index_data');
-            Route::post('update-status/{id}', [ModuleController::class, 'update_status'])->name('update_status');
+            Route::get('/permission-role', [RolePermission::class, 'index'])->name('permission-role.list')->middleware('password.confirm');
+            Route::post('/permission-role/store/{role_id}', [RolePermission::class, 'store'])->name('permission-role.store');
+            Route::get('/permission-role/reset/{role_id}', [RolePermission::class, 'reset_permission'])->name('permission-role.reset');
+            // Role & Permissions Crud
+            Route::resource('permission', PermissionController::class);
+            Route::resource('role', RoleController::class);
         });
 
-       Route::resource('module', ModuleController::class);
 
-    });
+        Route::group(['middleware' => 'permission:view_modules'], function () {
+            Route::group(['prefix' => 'module', 'as' => 'module.'], function () {
+
+                Route::get('index_data', [ModuleController::class, 'index_data'])->name('index_data');
+                Route::post('update-status/{id}', [ModuleController::class, 'update_status'])->name('update_status');
+            });
+
+            Route::resource('module', ModuleController::class);
+        });
 
 
 
@@ -138,8 +130,6 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('reload-database', [SettingController::class, 'reload_database'])->name('reload-database');
             Route::post('verify-email', [SettingController::class, 'verify_email'])->name('verify-email');
             Route::get('get-service-price', [SettingController::class, 'get_service_price']);
-
-
         });
 
         /*
@@ -153,7 +143,6 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('/markAllAsRead', [NotificationsController::class, 'markAllAsRead'])->name('markAllAsRead');
             Route::delete('/deleteAll', [NotificationsController::class, 'deleteAll'])->name('deleteAll');
             Route::get('/{id}', [NotificationsController::class, 'show'])->name('show');
-
         });
 
         /*
@@ -224,24 +213,23 @@ Route::group(['prefix' => 'app'], function () {
              * Branch Routes
              */
 
-             Route::group(['middleware' => ['permission:view_branch']], function () {
-            Route::group(['prefix' => 'branch', 'as' => 'branch.'], function () {
-                Route::get('index_list', [BranchController::class, 'index_list'])->name('index_list');
-                Route::get('assign/{id}', [BranchController::class, 'assign_list'])->name('assign_list');
-                Route::post('assign/{id}', [BranchController::class, 'assign_update'])->name('assign_update');
-                Route::get('index_data', [BranchController::class, 'index_data'])->name('index_data');
-                Route::get('trashed', [BranchController::class, 'trashed'])->name('trashed');
-                Route::patch('trashed/{id}', [BranchController::class, 'restore'])->name('restore');
-                // Branch Gallery Images
-                Route::get('gallery-images/{id}', [BranchController::class, 'getGalleryImages']);
-                Route::post('gallery-images/{id}', [BranchController::class, 'uploadGalleryImages']);
-                Route::post('bulk-action', [BranchController::class, 'bulk_action'])->name('bulk_action');
-                Route::post('update-status/{id}', [BranchController::class, 'update_status'])->name('update_status');
-                Route::post('update-select-value/{id}/{action_type}', [BranchController::class, 'update_select'])->name('update_select');
+            Route::group(['middleware' => ['permission:view_branch']], function () {
+                Route::group(['prefix' => 'branch', 'as' => 'branch.'], function () {
+                    Route::get('index_list', [BranchController::class, 'index_list'])->name('index_list');
+                    Route::get('assign/{id}', [BranchController::class, 'assign_list'])->name('assign_list');
+                    Route::post('assign/{id}', [BranchController::class, 'assign_update'])->name('assign_update');
+                    Route::get('index_data', [BranchController::class, 'index_data'])->name('index_data');
+                    Route::get('trashed', [BranchController::class, 'trashed'])->name('trashed');
+                    Route::patch('trashed/{id}', [BranchController::class, 'restore'])->name('restore');
+                    // Branch Gallery Images
+                    Route::get('gallery-images/{id}', [BranchController::class, 'getGalleryImages']);
+                    Route::post('gallery-images/{id}', [BranchController::class, 'uploadGalleryImages']);
+                    Route::post('bulk-action', [BranchController::class, 'bulk_action'])->name('bulk_action');
+                    Route::post('update-status/{id}', [BranchController::class, 'update_status'])->name('update_status');
+                    Route::post('update-select-value/{id}/{action_type}', [BranchController::class, 'update_select'])->name('update_select');
+                });
+                Route::resource('branch', BranchController::class);
             });
-            Route::resource('branch', BranchController::class);
-
-        });
 
             /*
             *
@@ -333,12 +321,12 @@ Route::group(['prefix' => 'app'], function () {
             ]);
 
         // Clase routes
-        Route::prefix('curso-plataforma/{course}')->name('course_platform.')->group(function() {
+        Route::prefix('curso-plataforma/{course}')->name('course_platform.')->group(function () {
             Route::resource('clases', ClaseController::class);
         });
 
         // Ejercicio routes
-        Route::prefix('clases/{clase}')->name('clases.')->group(function() {
+        Route::prefix('clases/{clase}')->name('clases.')->group(function () {
             Route::resource('ejercicios', EjercicioController::class);
         });
 
@@ -441,6 +429,5 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('/antiparasitantes_data', [GarrapataController::class, 'antiparasitantes_data'])->name('antiparasitantes_data');
         });
         Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('antigarrapata.destroy');
-
     });
 });
