@@ -20,6 +20,8 @@ class BlogResource extends JsonResource
             'name' => $this->name,
             'tags' => $this->tags,
             'status' => $this->status,
+            'video' => $this->video,
+            'url_video' => $this->url,
             'blog_image' => $this->getFirstMediaUrl('blog_image'),
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
