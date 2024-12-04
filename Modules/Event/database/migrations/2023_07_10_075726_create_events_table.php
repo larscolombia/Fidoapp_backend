@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->longText('description')->nullable();
             $table->longText('location')->nullable();
-            $table->enum('tipo', ['salud', 'entrenamiento']);
+            $table->enum('tipo', ['medico', 'entrenamiento','evento']);
 
             $table->foreign('user_id')
                 ->references('id')
