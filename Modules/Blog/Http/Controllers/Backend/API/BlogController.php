@@ -33,7 +33,7 @@ class BlogController extends Controller
     {
 
         $blog = Blog::findOrFail($id);
-
+        $blog->description = strip_tags($blog->description);
         return response()->json([
             'status' => true,
             'data' => $blog,
@@ -107,7 +107,7 @@ class BlogController extends Controller
                 'user_name' => $rating->user->full_name,
                 'user_avatar' => asset($rating->user->avatar),
                 'blog_name' => $rating->blog->name,
-                'blog_description' => $rating->blog->description,
+                'blog_description' => strip_tags($rating->blog->description),
                 'blog_tags' => $rating->blog->tags,
             ];
         });
