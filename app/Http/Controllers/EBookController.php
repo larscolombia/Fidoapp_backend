@@ -227,7 +227,7 @@ class EBookController extends Controller
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images/ebooks'), $imageName);
         } else {
-            $imageName = '';
+            $imageName = null;
         }
 
         $ebook->update([
@@ -235,7 +235,7 @@ class EBookController extends Controller
             'description' => $request->description,
             'author' => $request->author,
             'url' => $request->url,
-            'cover_image' => $imageName,
+            'cover_image' => !is_null($imageName) ? $imageName : $ebook->cover_image,
             'number_of_pages' => $request->number_of_pages,
             'language' => $request->language,
             'price' => $request->price,
