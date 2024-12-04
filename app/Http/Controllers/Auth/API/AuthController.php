@@ -41,9 +41,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
-        Log::debug($request->all());
+
         $user = User::where('email', request('email'))->first();
         if ($user == null) {
             return response()->json(['status' => false, 'message' => __('messages.register_before_login')]);
