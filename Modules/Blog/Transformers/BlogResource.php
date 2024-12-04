@@ -16,7 +16,7 @@ class BlogResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'description' => $this->description,
+            'description' =>  strip_tags($this->description),
             'name' => $this->name,
             'tags' => $this->tags,
             'status' => $this->status,
