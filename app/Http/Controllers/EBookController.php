@@ -327,7 +327,7 @@ class EBookController extends Controller
                 'review_msg' => $rating->review_msg,
                 'user_id' => $rating->user->id,
                 'user_full_name' => $rating->user->full_name,
-                'user_avatar' => asset($rating->user->avatar)
+                'user_avatar' => asset($rating->user->profile_image)
             ];
         });
 
@@ -394,7 +394,7 @@ class EBookController extends Controller
                     'e_book_language' => $eBookUser->e_book->language,
                     'user_id' => $eBookUser->user_id,
                     'user_full_name' => $eBookUser->user->full_name,
-                    'user_avatar' =>   asset($eBookUser->user->avatar),
+                    'user_avatar' =>   asset($eBookUser->user->profile_image),
                     'created_at' => $eBookUser->created_at
                 ];
             });

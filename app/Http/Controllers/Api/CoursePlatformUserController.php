@@ -126,7 +126,7 @@ class CoursePlatformUserController extends Controller
                         'video' => optional($coursePlatformUser->course_platform->videos->first())->url,
                         'user_id' => $coursePlatformUser->user_id,
                         'user_name' => $coursePlatformUser->user->full_name,
-                        'avatar' => asset($coursePlatformUser->user->avatar)
+                        'avatar' => asset($coursePlatformUser->user->profile_image)
                     ];
                 })
             ],
