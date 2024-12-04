@@ -41,8 +41,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
+
         $user = User::where('email', request('email'))->first();
         if ($user == null) {
             return response()->json(['status' => false, 'message' => __('messages.register_before_login')]);
@@ -483,12 +484,11 @@ class AuthController extends Controller
 
     public function respondToRequest(Request $request, $requestId)
     {
-        try{
+        try {
             $permissionRequest = PermissionRequest::findOrFail($requestId);
 
             if ($request->input('response') == 'accept') {
                 $permissionRequest->accepted = true;
-
             } else {
                 $permissionRequest->accepted = false;
             }
@@ -499,8 +499,8 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Request updated',
                 'data' => $permissionRequest
-            ],201);
-        }catch(\Exception $e){
+            ], 201);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -510,20 +510,20 @@ class AuthController extends Controller
 
     public function requestPermissionForUser(Request $request)
     {
-        try{
+        try {
             $data = $request->validate([
                 'user_id' => 'required|exists:users,id',
                 'accepted' => 'nullable|boolean'
             ]);
-            $accepted = (isset($data['accepted']) && !is_null($data['accepted'])) ? $data['accepted'] :null;
-            $permissionRequest = PermissionRequest::where('user_id',$data['user_id'])
-            ->where('accepted',$accepted)
-            ->get();
+            $accepted = (isset($data['accepted']) && !is_null($data['accepted'])) ? $data['accepted'] : null;
+            $permissionRequest = PermissionRequest::where('user_id', $data['user_id'])
+                ->where('accepted', $accepted)
+                ->get();
             return response()->json([
                 'success' => true,
                 'data' => $permissionRequest
-            ],200);
-        }catch(\Exception $e){
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
