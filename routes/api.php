@@ -1582,6 +1582,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          * }
          */
         Route::delete('/{id}', [ComandoController::class, 'destroy']);
+
+        Route::post('command-by-pet',[ComandoController::class,'storeCommandPet']);
+
+        Route::put('comamand-by-pet/update/{id}',[ComandoController::class,'updateCommandPet']);
+        Route::get('commands-by-pet/get',[ComandoController::class,'getCommandByPet']);
     });
 
 
