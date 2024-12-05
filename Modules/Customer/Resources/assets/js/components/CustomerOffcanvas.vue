@@ -10,7 +10,7 @@
               <div class="d-flex align-items-center justify-content-center gap-2">
                 <input type="file" ref="profileInpuRef" class="form-control d-none" id="logo" name="profile_image" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
                 <label class="btn btn-soft-primary mb-3" for="logo">Upload</label>
-                <input type="button" class="btn btn-soft-danger mb-3" name="remove" value="Remove" @click="removeLogo()" v-if="ImageViewer" />
+                <input type="button" class="btn btn-soft-danger mb-3" name="remove" :value="$t('messages.remove')" @click="removeLogo()" v-if="ImageViewer" />
               </div>
               <span class="text-danger">{{ errors.profile_image }}</span>
             </div>
@@ -26,31 +26,26 @@
             </div>
 
             <div class="row" v-if="currentId === 0">
-              <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_password')"
-                placeholder="" v-model="password" :error-message="errors['password']"
-                :error-messages="errorMessages['password']"></InputField>
+              <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_password')" placeholder="" v-model="password" :error-message="errors['password']" :error-messages="errorMessages['password']"></InputField>
 
-              <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_confirm_password')"
-                placeholder="" v-model="confirm_password" :error-message="errors['confirm_password']"
-                :error-messages="errorMessages['confirm_password']"></InputField>
+              <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_confirm_password')" placeholder="" v-model="confirm_password" :error-message="errors['confirm_password']" :error-messages="errorMessages['confirm_password']"></InputField>
             </div>
-
 
             <div class="form-group col-md-4">
               <label for="" class="form-label w-100">{{ $t('customer.lbl_gender') }}</label>
               <div class="d-flex mt-2">
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male" />
-                  <label class="form-check-label" for="male"> {{$t('customer.lbl_male')}} </label>
+                  <label class="form-check-label" for="male"> {{ $t('customer.lbl_male') }} </label>
                 </div>
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" />
-                  <label class="form-check-label" for="female"> {{$t('customer.lbl_female')}} </label>
+                  <label class="form-check-label" for="female"> {{ $t('customer.lbl_female') }} </label>
                 </div>
 
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other" />
-                  <label class="form-check-label" for="other"> {{$t('customer.lbl_other')}} </label>
+                  <label class="form-check-label" for="other"> {{ $t('customer.lbl_other') }} </label>
                 </div>
               </div>
             </div>
@@ -173,12 +168,13 @@ const reset_datatable_close_offcanvas = (res) => {
   }
 }
 
-  const numberRegex = /^\d+$/;
-  let EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const numberRegex = /^\d+$/
+let EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 
-  // Validations
-  const validationSchema = yup.object({
-    first_name: yup.string()
+// Validations
+const validationSchema = yup.object({
+  first_name: yup
+    .string()
     .required('First Name is a required field')
     .test('is-string', 'Only strings are allowed', (value) => {
       // Regular expressions to disallow special characters and numbers
@@ -186,33 +182,38 @@ const reset_datatable_close_offcanvas = (res) => {
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
 
-    last_name: yup.string()
+  last_name: yup
+    .string()
     .required('Last Name is a required field')
     .test('is-string', 'Only strings are allowed', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
-    email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
-    mobile: yup.string()
-    .required('Phone Number is a required field').matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
-    password : yup.string().test('password','Password is required' , function(value) {
-      if(currentId === 0 && !value){
-        return false;
+  email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
+  mobile: yup
+    .string()
+    .required('Phone Number is a required field')
+    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
+  password: yup
+    .string()
+    .test('password', 'Password is required', function (value) {
+      if (currentId === 0 && !value) {
+        return false
       }
       return true
-    }
-    ).min(8,'Password must be at least 8 characters long'),
-    confirm_password : yup.string().test('confirm_password', 'Confirm password is required', function(value) {
-      if(currentId === 0 && !value){
-        return false;
+    })
+    .min(8, 'Password must be at least 8 characters long'),
+  confirm_password: yup
+    .string()
+    .test('confirm_password', 'Confirm password is required', function (value) {
+      if (currentId === 0 && !value) {
+        return false
       }
       return true
-    }
-    ).oneOf([yup.ref('password')], 'Passwords must match'),
-
-  })
-
+    })
+    .oneOf([yup.ref('password')], 'Passwords must match')
+})
 
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema

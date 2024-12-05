@@ -52,7 +52,7 @@
             <div class="d-flex align-items-center gap-2">
               <input type="file" ref="logoInputRef" class="form-control d-none" id="logo" name="logo" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
               <label class="btn btn-primary mb-5" for="logo">{{ $t('setting_general_page.upload') }}</label>
-              <input type="button" class="btn btn-danger mb-5" name="remove" value="Remove" @click="removeLogo()" v-if="logo" />
+              <input type="button" class="btn btn-danger mb-5" name="remove" :value="$t('messages.remove')" @click="removeLogo()" v-if="logo" />
             </div>
             <span class="text-danger">{{ errors.logo }}</span>
           </div>
@@ -73,7 +73,7 @@
             <div class="d-flex align-items-center gap-2">
               <input type="file" ref="logoMiniInputRef" class="form-control d-none" id="mini-logo" name="mini_logo" accept=".jpeg, .jpg, .png, .gif" @change="changeMiniLogo" />
               <label class="btn btn-primary mb-5" for="mini-logo">{{ $t('setting_general_page.upload') }}</label>
-              <input type="button" class="btn btn-danger mb-5" name="remove" value="Remove" @click="removeMiniLogo()" v-if="mini_logo" />
+              <input type="button" class="btn btn-danger mb-5" name="remove" :value="$t('messages.remove')" @click="removeMiniLogo()" v-if="mini_logo" />
             </div>
             <span class="text-danger">{{ errors.mini_logo }}</span>
           </div>
@@ -94,7 +94,7 @@
             <div class="d-flex align-items-center gap-2">
               <input type="file" ref="darkLogoInputRef" class="form-control d-none" id="dark-logo" name="dark_logo" accept=".jpeg, .jpg, .png, .gif" @change="changeDarkLogo" />
               <label class="btn btn-primary mb-5" for="dark-logo">{{ $t('setting_general_page.upload') }}</label>
-              <input type="button" class="btn btn-danger mb-5" name="remove" value="Remove" @click="removeDarkLogo()" v-if="dark_logo" />
+              <input type="button" class="btn btn-danger mb-5" name="remove" :value="$t('messages.remove')" @click="removeDarkLogo()" v-if="dark_logo" />
             </div>
             <span class="text-danger">{{ errors.dark_logo }}</span>
           </div>
@@ -115,7 +115,7 @@
             <div class="d-flex align-items-center gap-2">
               <input type="file" ref="darkLogoMiniInputRef" class="form-control d-none" id="dark-mini-logo" name="dark_mini_logo" accept=".jpeg, .jpg, .png, .gif" @change="changeDarkMiniLogo" />
               <label class="btn btn-primary mb-5" for="dark-mini-logo">{{ $t('setting_general_page.upload') }}</label>
-              <input type="button" class="btn btn-danger mb-5 mb-5" name="remove" value="Remove" @click="removeDarkMiniLogo()" v-if="dark_mini_logo" />
+              <input type="button" class="btn btn-danger mb-5 mb-5" name="remove" :value="$t('messages.remove')" @click="removeDarkMiniLogo()" v-if="dark_mini_logo" />
             </div>
             <span class="text-danger">{{ errors.dark_mini_logo }}</span>
           </div>
@@ -136,7 +136,7 @@
             <div class="d-flex align-items-center gap-2">
               <input type="file" ref="faviconInputRef" class="form-control d-none" id="favicon-logo" name="favicon" accept=".jpeg, .jpg, .png, .gif" @change="changeFavicon" />
               <label class="btn btn-primary mb-5" for="favicon-logo">{{ $t('setting_general_page.upload') }}</label>
-              <input type="button" class="btn btn-danger mb-5" name="remove" value="Remove" @click="removeFavicon()" v-if="favicon" />
+              <input type="button" class="btn btn-danger mb-5" name="remove" :value="$t('messages.remove')" @click="removeFavicon()" v-if="favicon" />
             </div>
             <span class="text-danger">{{ errors.favicon }}</span>
           </div>

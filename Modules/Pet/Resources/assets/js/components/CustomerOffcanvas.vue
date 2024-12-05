@@ -4,69 +4,64 @@
       <FormHeader :currentId="currentId" :editTitle="editTitle" :createTitle="createTitle"></FormHeader>
       <div class="offcanvas-body">
         <div class="row">
-            <div class="col-md-12 text-center">
-              <img :src="ImageViewer || defaultImage" class="img-fluid avatar avatar-120 avatar-rounded mb-2" alt="profile-image" />
-              <div class="d-flex align-items-center justify-content-center gap-2">
-                <input type="file" ref="profileInpuRef" class="form-control d-none" id="logo" name="profile_image" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
-                <label class="btn btn-soft-primary mb-3" for="logo">{{$t('pet.upload')}}</label>
-                <input type="button" class="btn btn-soft-danger mb-3" name="remove" value="Remove" @click="removeLogo()" v-if="ImageViewer" />
+          <div class="col-md-12 text-center">
+            <img :src="ImageViewer || defaultImage" class="img-fluid avatar avatar-120 avatar-rounded mb-2" alt="profile-image" />
+            <div class="d-flex align-items-center justify-content-center gap-2">
+              <input type="file" ref="profileInpuRef" class="form-control d-none" id="logo" name="profile_image" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
+              <label class="btn btn-soft-primary mb-3" for="logo">{{ $t('pet.upload') }}</label>
+              <input type="button" class="btn btn-soft-danger mb-3" name="remove" :value="$t('messages.remove')" @click="removeLogo()" v-if="ImageViewer" />
+            </div>
+            <span class="text-danger">{{ errors.profile_image }}</span>
+          </div>
+
+          <InputField :is-required="true" :label="$t('customer.lbl_first_name')" placeholder="" v-model="first_name" :error-message="errors.first_name" :error-messages="errorMessages['first_name']"></InputField>
+          <InputField :is-required="true" :label="$t('customer.lbl_last_name')" placeholder="" v-model="last_name" :error-message="errors['last_name']" :error-messages="errorMessages['last_name']"></InputField>
+
+          <InputField :is-required="true" :label="$t('customer.lbl_Email')" placeholder="" v-model="email" :error-message="errors['email']" :error-messages="errorMessages['email']"></InputField>
+          <div class="form-group">
+            <label class="form-label">{{ $t('customer.lbl_phone_number') }}<span class="text-danger">*</span> </label>
+            <vue-tel-input :value="mobile" @input="handleInput" v-bind="{ mode: 'international', maxLen: 15 }" class="form-control"></vue-tel-input>
+            <span class="text-danger">{{ errors['mobile'] }}</span>
+          </div>
+
+          <div class="row m-0 p-0" v-if="currentId === 0">
+            <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_password')" placeholder="" v-model="password" :error-message="errors['password']" :error-messages="errorMessages['password']"></InputField>
+
+            <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_confirm_password')" placeholder="" v-model="confirm_password" :error-message="errors['confirm_password']" :error-messages="errorMessages['confirm_password']"></InputField>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="" class="form-label w-100">{{ $t('customer.lbl_gender') }}</label>
+            <div class="d-flex mt-2">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male" />
+                <label class="form-check-label" for="male"> {{ $t('customer.lbl_male') }} </label>
               </div>
-              <span class="text-danger">{{ errors.profile_image }}</span>
-            </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" />
+                <label class="form-check-label" for="female"> {{ $t('customer.lbl_female') }} </label>
+              </div>
 
-            <InputField :is-required="true" :label="$t('customer.lbl_first_name')" placeholder="" v-model="first_name" :error-message="errors.first_name" :error-messages="errorMessages['first_name']"></InputField>
-            <InputField :is-required="true" :label="$t('customer.lbl_last_name')" placeholder="" v-model="last_name" :error-message="errors['last_name']" :error-messages="errorMessages['last_name']"></InputField>
-
-            <InputField :is-required="true" :label="$t('customer.lbl_Email')" placeholder="" v-model="email" :error-message="errors['email']" :error-messages="errorMessages['email']"></InputField>
-            <div class="form-group">
-              <label class="form-label">{{ $t('customer.lbl_phone_number') }}<span class="text-danger">*</span> </label>
-              <vue-tel-input :value="mobile" @input="handleInput" v-bind="{ mode: 'international', maxLen: 15 }" class="form-control"></vue-tel-input>
-              <span class="text-danger">{{ errors['mobile'] }}</span>
-            </div>
-
-            <div class="row m-0 p-0" v-if="currentId === 0">
-              <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_password')"
-                placeholder="" v-model="password" :error-message="errors['password']"
-                :error-messages="errorMessages['password']"></InputField>
-
-              <InputField type="password" class="col-md-12" :is-required="true" :label="$t('employee.lbl_confirm_password')"
-                placeholder="" v-model="confirm_password" :error-message="errors['confirm_password']"
-                :error-messages="errorMessages['confirm_password']"></InputField>
-            </div>
-
-
-            <div class="form-group col-md-4">
-              <label for="" class="form-label w-100">{{ $t('customer.lbl_gender') }}</label>
-              <div class="d-flex mt-2">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male" />
-                  <label class="form-check-label" for="male"> {{ $t('customer.lbl_male') }} </label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" />
-                  <label class="form-check-label" for="female"> {{ $t('customer.lbl_female') }} </label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other" />
-                  <label class="form-check-label" for="other"> {{ $t('customer.lbl_other') }} </label>
-                </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other" />
+                <label class="form-check-label" for="other"> {{ $t('customer.lbl_other') }} </label>
               </div>
             </div>
+          </div>
 
-            <div class="form-group col-md-12">
-              <label class="form-label" for="address">{{ $t('booking.lbl_address') }}</label>
-              <textarea class="form-control" v-model="address" id="address"></textarea>
-              <span v-if="errorMessages['address']">
-                <ul class="text-danger">
-                  <li v-for="err in errorMessages['address']" :key="err">{{ err }}</li>
-                </ul>
-              </span>
-              <div class="text-danger">{{ errors.address }}</div>
-            </div>
-            <div v-for="field in customefield" :key="field.id">
-              <FormElement v-model="custom_fields_data" :name="field.name" :label="field.label" :type="field.type" :required="field.required" :options="field.value" :field_id="field.id"></FormElement>
-            </div>
+          <div class="form-group col-md-12">
+            <label class="form-label" for="address">{{ $t('booking.lbl_address') }}</label>
+            <textarea class="form-control" v-model="address" id="address"></textarea>
+            <span v-if="errorMessages['address']">
+              <ul class="text-danger">
+                <li v-for="err in errorMessages['address']" :key="err">{{ err }}</li>
+              </ul>
+            </span>
+            <div class="text-danger">{{ errors.address }}</div>
+          </div>
+          <div v-for="field in customefield" :key="field.id">
+            <FormElement v-model="custom_fields_data" :name="field.name" :label="field.label" :type="field.type" :required="field.required" :options="field.value" :field_id="field.id"></FormElement>
+          </div>
         </div>
       </div>
       <FormFooter></FormFooter>
@@ -147,7 +142,7 @@ const defaultData = () => {
     confirm_password: '',
     gender: 'male',
     profile_image: '',
-    address:'',
+    address: '',
     custom_fields_data: {}
   }
 }
@@ -166,7 +161,7 @@ const setFormData = (data) => {
       confirm_password: data.confirm_password,
       gender: data.gender,
       profile_image: data.profile_image,
-      address:data.address,
+      address: data.address,
       custom_fields_data: data.custom_field_data
     }
   })
@@ -184,12 +179,13 @@ const reset_datatable_close_offcanvas = (res) => {
   }
 }
 
-  const numberRegex = /^\d+$/;
-  let EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const numberRegex = /^\d+$/
+let EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 
-  // Validations
-  const validationSchema = yup.object({
-    first_name: yup.string()
+// Validations
+const validationSchema = yup.object({
+  first_name: yup
+    .string()
     .required('First Name is a required field')
     .test('is-string', 'Only strings are allowed', (value) => {
       // Regular expressions to disallow special characters and numbers
@@ -197,33 +193,38 @@ const reset_datatable_close_offcanvas = (res) => {
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
 
-    last_name: yup.string()
+  last_name: yup
+    .string()
     .required('Last Name is a required field')
     .test('is-string', 'Only strings are allowed', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
-    email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
-    mobile: yup.string()
-    .required('Phone Number is a required field').matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
-    password : yup.string().test('password','Password is required' , function(value) {
-      if(currentId === 0 && !value){
-        return false;
+  email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
+  mobile: yup
+    .string()
+    .required('Phone Number is a required field')
+    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
+  password: yup
+    .string()
+    .test('password', 'Password is required', function (value) {
+      if (currentId === 0 && !value) {
+        return false
       }
       return true
-    }
-    ).min(8,'Password must be at least 8 characters long'),
-    confirm_password : yup.string().test('confirm_password', 'Confirm password is required', function(value) {
-      if(currentId === 0 && !value){
-        return false;
+    })
+    .min(8, 'Password must be at least 8 characters long'),
+  confirm_password: yup
+    .string()
+    .test('confirm_password', 'Confirm password is required', function (value) {
+      if (currentId === 0 && !value) {
+        return false
       }
       return true
-    }
-    ).oneOf([yup.ref('password')], 'Passwords must match'),
-
-  })
-
+    })
+    .oneOf([yup.ref('password')], 'Passwords must match')
+})
 
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema

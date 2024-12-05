@@ -19,14 +19,11 @@
         </div>
 
         <div class="col-md-4 text-center">
-          <img :src="ImageViewer || defaultImage" class="img-fluid avatar avatar-120 avatar-rounded mb-2"
-            alt="profile-image" />
+          <img :src="ImageViewer || defaultImage" class="img-fluid avatar avatar-120 avatar-rounded mb-2" alt="profile-image" />
           <div class="d-flex align-items-center justify-content-center gap-2">
-            <input type="file" ref="profileInputRef" class="form-control d-none" id="logo" name="profile_image"
-              accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
+            <input type="file" ref="profileInputRef" class="form-control d-none" id="logo" name="profile_image" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
             <label class="btn btn-info" for="logo">Upload</label>
-            <input type="button" class="btn btn-danger" name="remove" value="Remove" @click="removeLogo()"
-              v-if="ImageViewer" />
+            <input type="button" class="btn btn-danger" name="remove" :value="$t('messages.remove')" @click="removeLogo()" v-if="ImageViewer" />
           </div>
           <span class="text-danger">{{ errors.profile_image }}</span>
         </div>
@@ -90,7 +87,7 @@ const fileUpload = async (e, { imageViewerBS64, changeFile }) => {
   await readFile(file, (fileB64) => {
     imageViewerBS64.value = fileB64
 
-    profileInputRef.value.value = '';
+    profileInputRef.value.value = ''
   })
   changeFile.value = file
 }
@@ -103,7 +100,6 @@ const removeImage = ({ imageViewerBS64, changeFile }) => {
 const changeLogo = (e) => fileUpload(e, { imageViewerBS64: ImageViewer, changeFile: profile_image })
 const removeLogo = () => removeImage({ imageViewerBS64: ImageViewer, changeFile: profile_image })
 
-
 //  Reset Form
 const setFormData = (data) => {
   ImageViewer.value = data.profile_image
@@ -115,7 +111,7 @@ const setFormData = (data) => {
       mobile: data.mobile,
       show_in_calender: data.show_in_calender,
       gender: data.gender,
-      profile_image: data.profile_image,
+      profile_image: data.profile_image
     }
   })
 }
@@ -133,7 +129,7 @@ const validationSchema = yup.object({
   last_name: yup.string().required('last name is required'),
   email: yup.string().required('email is required'),
   mobile: yup.string().required('mobile is required'),
-  show_in_calender: yup.string().required('show_in_calender is required'),
+  show_in_calender: yup.string().required('show_in_calender is required')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({
@@ -152,7 +148,7 @@ const { value: profile_image } = useField('profile_image')
 const data = 'first_name'
 onMounted(() => {
   createRequest(GET_URL()).then((response) => {
-    if(response.status) {
+    if (response.status) {
       setFormData(response.data)
     }
   })

@@ -12,7 +12,7 @@
                 <div class="d-flex align-items-center justify-content-center gap-2">
                   <input type="file" ref="profileInputRef" class="form-control d-none" id="feature_image" name="feature_image" @change="fileUpload" accept=".jpeg, .jpg, .png, .gif" />
                   <label class="btn btn-info" for="feature_image">{{ $t('messages.upload') }}</label>
-                  <input type="button" class="btn btn-danger" name="remove" value="Remove" @click="removeLogo()" v-if="ImageViewer" />
+                  <input type="button" class="btn btn-danger" name="remove" :value="$t('messages.remove')" @click="removeLogo()" v-if="ImageViewer" />
                 </div>
               </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="col-md-12 form-group editor-container">
               <label class="form-label" for="description">{{ $t('product.long_description') }}</label>
               <!-- Add Quill editor here -->
-              <QuillEditor theme="snow" v-model:content="description" contentType="html"/>
+              <QuillEditor theme="snow" v-model:content="description" contentType="html" />
               <span class="text-danger">{{ errors.description }}</span>
             </div>
 
@@ -68,9 +68,8 @@
                 <div class="d-flex gap-3 align-items-center">
                   <div class="d-flex flex-grow-1 gap-3">
                     <div class="form-group w-50">
-          <label for="">{{ $t('product.variation_type') }}</label>
-                      <Multiselect id="variations-list" v-model="varData.value.variation" :value="varData.value.variation" v-bind="singleSelectOption" @select="generateCombinations" @deselect="generateCombinations" :options="variationsData.options.filter((item) => item.id !== varData.value.variation)" @change="() => varData.value.variationValue = []" class="form-group"></Multiselect>
-
+                      <label for="">{{ $t('product.variation_type') }}</label>
+                      <Multiselect id="variations-list" v-model="varData.value.variation" :value="varData.value.variation" v-bind="singleSelectOption" @select="generateCombinations" @deselect="generateCombinations" :options="variationsData.options.filter((item) => item.id !== varData.value.variation)" @change="() => (varData.value.variationValue = [])" class="form-group"></Multiselect>
                     </div>
                     <div class="form-group w-50">
                       <label for="">{{ $t('product.variation_value') }}</label>
@@ -80,7 +79,10 @@
                   <div v-if="variations.length > 1">
                     <button
                       class="btn btn-danger btn-icon"
-                      @click="variationsSplice(index);generateCombinations()">
+                      @click="
+                        variationsSplice(index)
+                        generateCombinations()
+                      ">
                       <i class="fa-solid fa-trash"></i>
                     </button>
                   </div>
@@ -161,7 +163,7 @@
           </div>
         </div>
       </div>
-    <FormFooter :IS_SUBMITED="IS_SUBMITED"></FormFooter>
+      <FormFooter :IS_SUBMITED="IS_SUBMITED"></FormFooter>
     </div>
   </form>
 </template>
@@ -183,7 +185,7 @@ import { buildMultiSelectObject } from '@/helpers/utilities'
 
 // ... (rest of the setup code) ...
 
-const descriptionEditorRef = ref(null);
+const descriptionEditorRef = ref(null)
 
 // props
 const props = defineProps({
@@ -297,7 +299,7 @@ const setFormData = (data) => {
       has_variation: data.has_variation || 0,
       feature_image: data.feature_image,
       status: data.status || 1,
-      is_featured: data.is_featured || 0,
+      is_featured: data.is_featured || 0
     }
   })
 }
@@ -353,7 +355,6 @@ const { fields: variations, push: variationsPush, remove: variationsSplice } = u
 const { fields: combinations, push: combinationsPush, remove: combinationsSplice, replace: combinationsReplace } = useFieldArray('combinations')
 const { value: feature_image } = useField('feature_image')
 
-
 const errorMessages = ref({})
 
 onMounted(() => {
@@ -365,14 +366,13 @@ onMounted(() => {
   getVariations()
 })
 
-
 const brands = ref({ options: [], list: [] })
 
 const getBrand = () => useSelect({ url: BRAND_LIST }, { value: 'id', label: 'name' }).then((data) => (brands.value = data))
 
 const category = ref({ options: [], list: [] })
 
-const getCategory = () => useSelect({ url: CATEGORY_LIST}, { value: 'id', label: 'name' }).then((data) => (category.value = data))
+const getCategory = () => useSelect({ url: CATEGORY_LIST }, { value: 'id', label: 'name' }).then((data) => (category.value = data))
 
 const units = ref({ options: [], list: [] })
 
@@ -391,7 +391,7 @@ const variationValueCheck = (data) => {
 }
 const IS_SUBMITED = ref(false)
 const formSubmit = handleSubmit((values) => {
-  if(IS_SUBMITED.value) return false
+  if (IS_SUBMITED.value) return false
   IS_SUBMITED.value = true
   values.combinations = JSON.stringify(values.combinations)
   values.tags = JSON.stringify(values.tags)
@@ -494,6 +494,6 @@ const multiselectCreateOption = ref({
   }
 }
 .editor-container {
-    height: 200px;
+  height: 200px;
 }
 </style>
