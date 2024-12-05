@@ -151,7 +151,7 @@ class EBookController extends Controller
             $pathRegister = 'images/ebooks/' . $imageName;
             $image->move(public_path('images/ebooks'), $imageName);
         } else {
-            $imageName = '';
+            $imageName = 'images/default/default.jpg';
         }
 
         $ebook = EBook::create([
@@ -256,7 +256,7 @@ class EBookController extends Controller
         $ebooks = EBook::with('book_ratings')
             ->get()
             ->transform(function ($ebook) {
-                $ebook->cover_image = asset($ebook->cover_image);
+                $ebook->cover_image = !is_null($ebook->cover_image) ? asset($ebook->cover_image) : asset('images/default/default.jpg');
                 return $ebook;
             });
         return response()->json([
@@ -271,7 +271,7 @@ class EBookController extends Controller
         $ebook = EBook::with('book_ratings')->find($id);
 
         if ($ebook) {
-            $ebook->cover_image = asset($ebook->cover_image);
+            $ebook->cover_image = !is_null($ebook->cover_image) ? asset($ebook->cover_image) : asset('images/default/default.jpg');
             return response()->json([
                 'success' => true,
                 'message' => __('messages.ebook_retrieved_successfully'),
