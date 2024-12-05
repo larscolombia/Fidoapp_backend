@@ -122,7 +122,7 @@ const data_table_limit_data = ref({
     { label: 25, value: 25 },
     { label: 50, value: 50 },
     { label: 100, value: 100 },
-    { label: 'All', value: -1 }
+    { label: 'Todos', value: -1 }
   ],
   closeOnSelect: true,
   createOption: true

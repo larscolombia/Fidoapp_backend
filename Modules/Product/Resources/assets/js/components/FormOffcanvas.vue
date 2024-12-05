@@ -80,8 +80,10 @@
                     <button
                       class="btn btn-danger btn-icon"
                       @click="
-                        variationsSplice(index)
-                        generateCombinations()
+                        () => {
+                          variationsSplice(index)
+                          generateCombinations()
+                        }
                       ">
                       <i class="fa-solid fa-trash"></i>
                     </button>
