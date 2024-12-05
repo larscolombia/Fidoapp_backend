@@ -194,7 +194,7 @@
         <!-- Footer block -->
         @include('backend.includes.footer')
         <!-- / Footer block -->
-        <div class="slideouticons">
+        {{-- <div class="slideouticons">
             <label for="togglebox" class="mainlabel"><i class="icon-pet"></i></label>
             <div class="iconswrapper">
                 <ul class="list-inline m-0">
@@ -230,12 +230,12 @@
                     @endhasPermission
                 </ul>
             </div>
-        </div>
+        </div> --}}
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" data-iq-modal="renderer" id="renderModal" tabindex="-1"
-        aria-labelledby="renderModalLabel" aria-hidden="true">
+    <div class="modal fade" data-iq-modal="renderer" id="renderModal" tabindex="-1" aria-labelledby="renderModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" data-iq-modal="content">
                 <div class="modal-header">
