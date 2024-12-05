@@ -57,7 +57,8 @@
     <div data-render="app">
 
         <plan-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}" :customefield="{{ json_encode($customefield) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}"
+            :customefield="{{ json_encode($customefield) }}">
         </plan-offcanvas>
 
         <x-backend.advance-filter>

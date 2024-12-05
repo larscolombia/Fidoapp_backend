@@ -21,7 +21,7 @@
                     <a href="{{ route('backend.notification-templates.index') }}" class="btn btn-secondary"
                         data-bs-toggle="tooltip" title="{{ __($module_name) }} List"><i class="fas fa-list"></i> List</a>
                     @can('edit_' . $module_name)
-                        <x-buttons.edit route='{!! route('backend.notification-templates.edit', $module_name_singular) !!}' title="{{ __('Edit') }} " class="ms-1" />
+                        <x-buttons.edit route='{!! route('backend.notification-templates.edit', $module_name_singular) !!}' title="{{ __('messages.edit') }} " class="ms-1" />
                     @endcan
                     <x-backend.buttons.return-back />
                 </x-slot>

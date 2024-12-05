@@ -54,126 +54,129 @@
     <div data-render="app">
         <customer-offcanvas default-image="{{ user_avatar() }}"
             create-title="{{ __('Create') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}" :customefield="{{ json_encode($customefield) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}"
+            :customefield="{{ json_encode($customefield) }}">
         </customer-offcanvas>
-        <change-password create-title="Change Password"></change-password>
+        <change-password
+            create-title="{{ __('messages.change_password') }}></change-password>
     </div>
 @endsection
 
 @push('after-styles')
-    <!-- DataTables Core and Extensions -->
-    <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
-@endpush
+<!-- DataTables Core and Extensions -->
+    <link rel="stylesheet"
+            href="{{ asset('vendor/datatable/datatables.min.css') }}">
+        @endpush
 
-@push('after-scripts')
-    <script src="{{ mix('modules/customer/script.js') }}"></script>
-    <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
+        @push('after-scripts')
+            <script src="{{ mix('modules/customer/script.js') }}"></script>
+            <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
 
-    <!-- DataTables Core and Extensions -->
-    <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+            <!-- DataTables Core and Extensions -->
+            <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
-    <script type="text/javascript" defer>
-        const columns = [{
-                name: 'check',
-                data: 'check',
-                title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
-                width: '0%',
-                exportable: false,
-                orderable: false,
-                searchable: false,
-            },
-            {
-                data: 'image',
-                name: 'image',
-                width: '0%',
-                orderable: false,
-                searchable: false,
-                title: "{{ __('customer.lbl_profile_image') }}"
-            },
-            {
-                data: 'first_name',
-                name: 'first_name',
-                title: "{{ __('customer.lbl_first_name') }}"
-            },
-            {
-                data: 'last_name',
-                name: 'last_name',
-                title: "{{ __('customer.lbl_last_name') }}"
-            },
-            {
-                data: 'email',
-                name: 'email',
-                title: "{{ __('customer.lbl_Email') }}"
-            },
-            {
-                data: 'email_verified_at',
-                name: 'email_verified_at',
-                orderable: false,
-                searchable: true,
-                title: "{{ __('customer.lbl_verification_status') }}"
-            },
-            {
-                data: 'is_banned',
-                name: 'is_banned',
-                orderable: false,
-                searchable: true,
-                title: "{{ __('customer.lbl_blocked') }}"
-            },
-            {
-                data: 'status',
-                name: 'status',
-                orderable: false,
-                searchable: true,
-                title: "{{ __('customer.lbl_status') }}"
-            },
-        ]
+            <script type="text/javascript" defer>
+                const columns = [{
+                        name: 'check',
+                        data: 'check',
+                        title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
+                        width: '0%',
+                        exportable: false,
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        data: 'image',
+                        name: 'image',
+                        width: '0%',
+                        orderable: false,
+                        searchable: false,
+                        title: "{{ __('customer.lbl_profile_image') }}"
+                    },
+                    {
+                        data: 'first_name',
+                        name: 'first_name',
+                        title: "{{ __('customer.lbl_first_name') }}"
+                    },
+                    {
+                        data: 'last_name',
+                        name: 'last_name',
+                        title: "{{ __('customer.lbl_last_name') }}"
+                    },
+                    {
+                        data: 'email',
+                        name: 'email',
+                        title: "{{ __('customer.lbl_Email') }}"
+                    },
+                    {
+                        data: 'email_verified_at',
+                        name: 'email_verified_at',
+                        orderable: false,
+                        searchable: true,
+                        title: "{{ __('customer.lbl_verification_status') }}"
+                    },
+                    {
+                        data: 'is_banned',
+                        name: 'is_banned',
+                        orderable: false,
+                        searchable: true,
+                        title: "{{ __('customer.lbl_blocked') }}"
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: true,
+                        title: "{{ __('customer.lbl_status') }}"
+                    },
+                ]
 
-        const actionColumn = [{
-            data: 'action',
-            name: 'action',
-            orderable: false,
-            searchable: false,
-            title: "{{ __('customer.lbl_action') }}"
-        }]
+                const actionColumn = [{
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    title: "{{ __('customer.lbl_action') }}"
+                }]
 
-        const customFieldColumns = JSON.parse(@json($columns))
+                const customFieldColumns = JSON.parse(@json($columns))
 
-        let finalColumns = [
-            ...columns,
-            ...customFieldColumns,
-            ...actionColumn
-        ]
+                let finalColumns = [
+                    ...columns,
+                    ...customFieldColumns,
+                    ...actionColumn
+                ]
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            initDatatable({
-                url: '{{ route("backend.$module_name.index_data") }}',
-                finalColumns,
-            })
-        })
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    initDatatable({
+                        url: '{{ route("backend.$module_name.index_data") }}',
+                        finalColumns,
+                    })
+                })
 
-        function resetQuickAction() {
-            const actionValue = $('#quick-action-type').val();
-            if (actionValue != '') {
-                $('#quick-action-apply').removeAttr('disabled');
+                function resetQuickAction() {
+                    const actionValue = $('#quick-action-type').val();
+                    if (actionValue != '') {
+                        $('#quick-action-apply').removeAttr('disabled');
 
-                if (actionValue == 'change-status') {
-                    $('.quick-action-field').addClass('d-none');
-                    $('#change-status-action').removeClass('d-none');
-                } else {
-                    $('.quick-action-field').addClass('d-none');
+                        if (actionValue == 'change-status') {
+                            $('.quick-action-field').addClass('d-none');
+                            $('#change-status-action').removeClass('d-none');
+                        } else {
+                            $('.quick-action-field').addClass('d-none');
+                        }
+                    } else {
+                        $('#quick-action-apply').attr('disabled', true);
+                        $('.quick-action-field').addClass('d-none');
+                    }
                 }
-            } else {
-                $('#quick-action-apply').attr('disabled', true);
-                $('.quick-action-field').addClass('d-none');
-            }
-        }
 
-        $('#quick-action-type').change(function() {
-            resetQuickAction()
-        });
+                $('#quick-action-type').change(function() {
+                    resetQuickAction()
+                });
 
-        $(document).on('update_quick_action', function() {
-            // resetActionButtons()
-        })
-    </script>
-@endpush
+                $(document).on('update_quick_action', function() {
+                    // resetActionButtons()
+                })
+            </script>
+        @endpush

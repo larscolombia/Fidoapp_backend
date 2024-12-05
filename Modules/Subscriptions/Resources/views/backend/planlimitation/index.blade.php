@@ -56,7 +56,7 @@
 
 
         <plan-limit-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}">
         </plan-limit-offcanvas>
 
         <x-backend.advance-filter>

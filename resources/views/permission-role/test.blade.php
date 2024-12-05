@@ -49,7 +49,7 @@
                                     </h2>
                                     @if ($role->is_fixed == 0)
                                         <a class="btn btn-soft-danger btn-sm" onclick="delete_role({{ $role->id }})"
-                                            data-bs-toggle="tooltip" title="{{ __('Delete') }}"> <i
+                                            data-bs-toggle="tooltip" title="{{ __('messages.delete') }}"> <i
                                                 class="fa-solid fa-trash"></i>
                                             Delete</a>
                                     @endif

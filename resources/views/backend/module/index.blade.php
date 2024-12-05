@@ -18,8 +18,9 @@
 
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
-                            aria-label="Search" aria-describedby="addon-wrapping">
+                        <input type="text" class="form-control form-control-sm dt-search"
+                            placeholder="{{ __('activity_levels.search_placeholder') }}" aria-label="Search"
+                            aria-describedby="addon-wrapping">
 
                     </div>
 
@@ -37,7 +38,7 @@
 
     <div data-render="app">
         <module-form-offcanvas create-title="{{ __('Create') }} {{ __('New') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}">
         </module-form-offcanvas>
 
     </div>

@@ -22,8 +22,8 @@
                     <a href="{{ route("backend.$module_name.index") }}" class="btn btn-secondary" data-bs-toggle="tooltip"
                         title="{{ __($module_name) }} List"><i class="fas fa-list"></i> List</a>
                     @can('edit_' . $module_name)
-                        <x-buttons.edit route='{!! route("backend.$module_name.edit", $$module_name_singular) !!}' title="{{ __('Edit') }} {{ __($module_title) }}"
-                            class="ms-1" />
+                        <x-buttons.edit route='{!! route("backend.$module_name.edit", $$module_name_singular) !!}'
+                            title="{{ __('messages.edit') }} {{ __($module_title) }}" class="ms-1" />
                     @endcan
                 </x-slot>
             </x-backend.section-header>

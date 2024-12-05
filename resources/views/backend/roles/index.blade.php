@@ -47,7 +47,7 @@
                                     </td>
                                     <td class="text-end">
                                         @can('edit_' . $module_name)
-                                            <x-buttons.edit route='{!! route("backend.$module_name.edit", $module_name_singular) !!}' title="{{ __('Edit') }} "
+                                            <x-buttons.edit route='{!! route("backend.$module_name.edit", $module_name_singular) !!}' title="{{ __('messages.edit') }} "
                                                 small="true" />
                                         @endcan
                                         <x-buttons.show route='{!! route("backend.$module_name.show", $module_name_singular) !!}'

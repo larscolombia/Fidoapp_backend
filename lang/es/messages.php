@@ -31,6 +31,7 @@ return [
     'Please fix the following errors & try again!' => '¡Por favor, corrija los siguientes errores e inténtelo de nuevo!',
     'Copyright' => 'Derechos de Autor',
     'change_language' => 'Cambiar idioma',
+    'change_password' => 'Cambiar contraseña',
     'Notifications' => 'Notificaciones',
     'you_have_:count_notifications' => 'Tienes :count notificaciones',
     ':count_unread' => ':count sin leer',
