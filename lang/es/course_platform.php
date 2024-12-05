@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Cursos de la Plataforma',
+    'video_title' => 'Título del video',
     'create' => 'Crear Curso',
     'edit' => 'Editar Curso',
     'delete' => 'Eliminar Curso',
@@ -29,5 +30,7 @@ return [
     'beginner' => 'Principiante',
     'intermediate' => 'Intermedio',
     'advanced' => 'Avanzado',
+    'add_video' => 'Agregar video',
+    'thumbnail' => 'Miniatura',
     'Are you sure you want to delete this course platform?' => '¿Estás seguro de que quieres eliminar este curso de la plataforma?',
 ];

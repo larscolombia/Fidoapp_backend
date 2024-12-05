@@ -98,6 +98,9 @@ class CursoPlataformaController extends Controller
             'difficulty' => 'required',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
+            'title.*' => 'required|string|max:255', // Validación para el título del video
+            'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
+            'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la miniatura
         ]);
 
         // Manejar la carga de la imagen
@@ -120,7 +123,7 @@ class CursoPlataformaController extends Controller
 
         // Manejar la carga de archivos de video
         if ($request->hasFile('video')) {
-            foreach ($request->file('video') as $video) {
+            foreach ($request->file('video') as $index => $video) {
                 if ($video) { // Asegurarse de que el archivo no sea nulo
                     // Generar un nombre único para cada video
                     $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
@@ -130,11 +133,24 @@ class CursoPlataformaController extends Controller
                     // Generar la URL del video
                     $videoUrl = url('videos/cursos_plataforma/' . $videoName);
 
+                    // Manejar la carga de la miniatura si se proporciona
+                    $thumbnailName = null;
+                    if ($request->hasFile('thumbnail') && isset($request->file('thumbnail')[$index])) {
+                        $thumbnail = $request->file('thumbnail')[$index];
+                        if ($thumbnail) {
+                            $thumbnailName = time() . '_' . uniqid() . '.' . $thumbnail->getClientOriginalExtension();
+                            $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
+                        }
+                    }
+
                     // Guardar cada video en la tabla CoursePlatformVideo
                     CoursePlatformVideo::create([
                         'course_platform_id' => $curso->id,
                         'url' => $videoUrl,
                         'video' => $videoName,
+                        'title' => $request->input('title')[$index], // Guardar el título del video
+                        'duration' => $request->input('duration_video')[$index], // Guardar la duración del video
+                        'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
                     ]);
                 }
             }
@@ -209,11 +225,16 @@ class CursoPlataformaController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // La imagen es opcional en la actualización
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
             'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
+            'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
+            'title.*' => 'required|string|max:255', // Validación para el título del video
+            'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
+            'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la miniatura
+            'course_platform_id.*' => 'nullable|integer',
         ]);
 
         // Buscar el curso existente
@@ -234,13 +255,17 @@ class CursoPlataformaController extends Controller
         $curso->price = $request->input('price');
         $curso->duration = $request->input('duration');
         $curso->difficulty = $request->input('difficulty');
+
         // Guardar los cambios en el curso
         $curso->save();
 
         // Manejar la carga de archivos de video
-        if ($request->hasFile('video')) {
-            foreach ($request->file('video') as $video) {
-                if ($video) { // Asegurarse de que el archivo no sea nulo
+        foreach ($request->input('course_platform_id') as $index => $videoId) {
+            // Verificar si se ha subido un nuevo video
+            if ($request->hasFile('video.' . $index)) {
+                // Si hay un nuevo archivo de video, procesarlo
+                $video = $request->file('video.' . $index);
+                if ($video) {
                     // Generar un nombre único para cada video
                     $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
                     // Mover el video a la carpeta correspondiente
@@ -248,12 +273,77 @@ class CursoPlataformaController extends Controller
 
                     // Generar la URL del video
                     $videoUrl = url('videos/cursos_plataforma/' . $videoName);
+                }
 
-                    // Guardar cada nuevo video en la tabla CoursePlatformVideo
+                // Manejar la carga de la miniatura si se proporciona
+                $thumbnailName = null;
+                if ($request->hasFile('thumbnail') && isset($request->file('thumbnail')[$index])) {
+                    $thumbnail = $request->file('thumbnail')[$index];
+                    if ($thumbnail) {
+                        $thumbnailName = time() . '_' . uniqid() . '.' . $thumbnail->getClientOriginalExtension();
+                        $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
+                    }
+                }
+
+                CoursePlatformVideo::updateOrCreate(
+                    ['id' => $videoId],  // Buscar por ID si existe
+                    [
+                        'course_platform_id' => $curso->id,
+                        'url' => isset($videoUrl) ? $videoUrl : null,
+                        'video' => isset($videoName) ? $videoName : null,
+                        'title' => $request->input('title')[$index], // Guardar el título del video
+                        'duration' => $request->input('duration_video')[$index], // Guardar la duración del video
+                        'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
+                    ]
+                );
+            } else {
+                // Si no se subió un nuevo archivo, solo actualizar el título y duración
+                $thumbnailName = null;
+                if ($request->hasFile('thumbnail') && isset($request->file('thumbnail')[$index])) {
+                    $thumbnail = $request->file('thumbnail')[$index];
+                    if ($thumbnail) {
+                        $thumbnailName = time() . '_' . uniqid() . '.' . $thumbnail->getClientOriginalExtension();
+                        $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
+                    }
+                }
+                $defaultThumbnail =  !is_null(CoursePlatformVideo::find($videoId)->thumbnail) ? CoursePlatformVideo::find($videoId)->thumbnail  :asset('images/default/default.jpg');
+                CoursePlatformVideo::where('id', $videoId)->update([
+                    'title' => $request->input('title')[$index],
+                    'duration' => $request->input('duration_video')[$index],
+                    'thumbnail' =>isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : $defaultThumbnail
+                ]);
+            }
+        }
+
+        // Manejar nuevos videos que no tienen ID (no están en course_platform_id)
+        if ($request->hasFile('new_video')) {
+            foreach ($request->file('new_video') as $index => $newVideo) {
+                if ($newVideo) {
+                    // Generar un nombre único para cada nuevo video
+                    $newVideoName = time() . '_' . uniqid() . '.' . $newVideo->getClientOriginalExtension();
+                    // Mover el nuevo video a la carpeta correspondiente
+                    $newVideo->move(public_path('videos/cursos_plataforma'), $newVideoName);
+
+                    // Generar la URL del nuevo video
+                    $newVideoUrl = url('videos/cursos_plataforma/' . $newVideoName);
+
+                    // Manejar la carga de miniaturas si se proporciona
+                    $newThumbnailName = null;
+                    if ($request->hasFile('new_thumbnail') && isset($request->file('new_thumbnail')[$index])) {
+                        $newThumbnail = $request->file('new_thumbnail')[$index];
+                        if ($newThumbnail) {
+                            $newThumbnailName = time() . '_' . uniqid() . '.' . $newThumbnail->getClientOriginalExtension();
+                            $newThumbnail->move(public_path('thumbnails/cursos_plataforma'), $newThumbnailName);
+                        }
+                    }
+
                     CoursePlatformVideo::create([
                         'course_platform_id' => $curso->id,
-                        'url' => $videoUrl,
-                        'video' => $videoName,
+                        'url' => isset($newVideoUrl) ?  $newVideoUrl : null,
+                        'video' => isset($newVideoName) ? $newVideoName : null,
+                        'title' => request()->input("title")[$index],  // Título del nuevo video (debe estar en el formulario)
+                        'duration' => request()->input("duration_video")[$index],  // Duración del nuevo video (debe estar en el formulario)
+                        'thumbnail' => isset($newThumbnailName) ?  $newThumbnailName : asset('images/default/default.jpg'),
                     ]);
                 }
             }

@@ -32,14 +32,6 @@
                 </div> --}}
 
                 <div class="mb-3">
-                    <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
-                    <input type="file" class="form-control @error('video.*') is-invalid @enderror" id="video" name="video[]" accept="video/*" multiple required>
-                    @error('video.*')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
                     <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
                     <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" required>
                     @error('duration')
@@ -76,10 +68,28 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
-                        <label for="video-preview" class="form-label">{{ __('course_platform.video_preview') }}</label>
-                    <div id="video-preview" class="border p-3 d-flex" style="width: 320px; height: 180px;"></div>
-                </div>
+
+                    <div class="mb-3" id="video-container">
+                        <fieldset>
+                        <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
+                        <div class="video-item mb-2">
+                            <input type="file" class="form-control @error('video.*') is-invalid @enderror" name="video[]" accept="video/*" required>
+                            <input type="text" name="title[]" class="form-control mt2" placeholder="{{ __('course_platform.video_title') }}" required>
+                            <input type="text"  class="form-control mt-2" name="duration_video[]" placeholder="{{ __('course_platform.duration') }}" required>
+                            <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
+                            <input type="file" class="form-control @error('thumbnail.*') is-invalid @enderror" name="thumbnail[]" accept="image/*">
+                            <div class="video-preview border p-3 d-flex mt-2" style="width: 320px; height: 180px;"></div>
+                        </div>
+                    </fieldset>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-secondary my-3" id="add-video-button">{{ __('course_platform.add_video') }}</button>
+                    </div>
+
+
+
+
 
                 <button type="submit" class="btn btn-primary my-3" id="submit-button" >{{ __('course_platform.create') }}</button>
             </form>
@@ -94,17 +104,19 @@
 @push('after-scripts')
 <script src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 <script>
-    document.getElementById('video').addEventListener('change', function(event) {
-        const files = event.target.files; // Obtener todos los archivos seleccionados
-        const videoPreview = document.getElementById('video-preview');
+    // Función para manejar la vista previa del video
+    function handleVideoPreview(input) {
+        const files = input.files; // Obtener todos los archivos seleccionados
+        const videoPreview = input.closest('.video-item').querySelector('.video-preview'); // Seleccionar el contenedor de vista previa correspondiente
         videoPreview.innerHTML = ''; // Limpiar las vistas previas anteriores
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            if (file) {
+        if (files.length > 0) { // Verifica si hay archivos seleccionados
+            const file = files[0]; // Solo tomamos el primer archivo
+
+            if (file && file.type.startsWith('video/')) { // Verifica si es un archivo de video
                 const videoElement = document.createElement('video');
-                videoElement.src = URL.createObjectURL(file);
-                videoElement.controls = true;
+                videoElement.src = URL.createObjectURL(file); // Crea un objeto URL para el archivo
+                videoElement.controls = true; // Muestra los controles del video
                 videoElement.width = 320; // Establecer el ancho del elemento de video
                 videoElement.height = 180; // Establecer la altura del elemento de video
 
@@ -112,19 +124,63 @@
                 videoElement.currentTime = 0;
                 videoElement.addEventListener('loadedmetadata', function() {
                     if (videoElement.duration > 10) {
-                        videoElement.currentTime = 10;
+                        videoElement.currentTime = 10; // Salta a los 10 segundos si dura más
                     }
                 });
                 videoElement.addEventListener('timeupdate', function() {
                     if (videoElement.currentTime >= 10) {
-                        videoElement.pause();
+                        videoElement.pause(); // Pausa el video al llegar a los 10 segundos
                     }
                 });
 
                 // Agregar el elemento de video al contenedor de previsualización
                 videoPreview.appendChild(videoElement);
+            } else {
+                alert("Por favor, selecciona un archivo de video válido.");
             }
         }
+    }
+
+    document.getElementById('add-video-button').addEventListener('click', function() {
+        const videoContainer = document.getElementById('video-container');
+
+        // Crear un nuevo fieldset para los campos de video
+        const newFieldset = document.createElement('fieldset');
+        newFieldset.classList.add('mb-3');
+
+        newFieldset.innerHTML = `
+            <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
+            <div class="video-item mb-2">
+                <input type="file" class="form-control @error('video.*') is-invalid @enderror" name="video[]" accept="video/*" required>
+                 <input type="text" name="title[]" class="form-control mt2" placeholder="{{ __('course_platform.video_title') }}" required>
+                <input type="text" class="form-control mt-2" name="duration_video[]" placeholder="{{ __('course_platform.duration') }}" required>
+                <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
+                <input type="file" class="form-control @error('thumbnail.*') is-invalid @enderror" name="thumbnail[]" accept="image/*">
+                <button type="button" class="btn btn-danger mt-2 remove-video-button">Eliminar Video</button>
+                <div class="video-preview border p-3 d-flex mt-2" style="width: 320px; height: 180px;"></div>
+            </div>
+        `;
+
+        // Añadir el nuevo fieldset al contenedor principal
+        videoContainer.appendChild(newFieldset);
+
+        // Agregar evento al botón de eliminar en el nuevo conjunto
+        newFieldset.querySelector('.remove-video-button').addEventListener('click', function() {
+            videoContainer.removeChild(newFieldset);
+        });
+
+        // Agregar evento para la vista previa del video
+        const fileInput = newFieldset.querySelector('input[type=file]'); // Selecciona el input del video
+
+        fileInput.addEventListener('change', function() {
+            handleVideoPreview(fileInput); // Llama a la función de vista previa solo si hay un archivo seleccionado
+        });
+    });
+
+    // Asignar evento al primer input existente para manejar su previsualización
+    const initialFileInput = document.querySelector('#video-container .video-item input[type=file]');
+    initialFileInput.addEventListener('change', function() {
+        handleVideoPreview(initialFileInput); // Llama a la función de vista previa para el primer input
     });
 </script>
 @endpush
