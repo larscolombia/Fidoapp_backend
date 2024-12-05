@@ -143,7 +143,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
         $media = $this->getFirstMediaUrl('profile_image');
 
-        return isset($media) && ! empty($media) ? $media : asset(config('app.avatar_base_path').'avatar.png');
+        return isset($media) && ! empty($media) ? $media : asset('images/default/default.jpg');
     }
 
     // Employee Relations

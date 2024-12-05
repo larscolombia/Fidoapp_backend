@@ -359,7 +359,8 @@ if (!function_exists('user_avatar')) {
 if (!function_exists('default_feature_image')) {
     function default_feature_image()
     {
-        return asset(config('app.image_path') . 'default.png');
+        return asset('images/default/default.jpg');
+        //return asset(config('app.image_path') . 'default.png');
     }
 }
 
