@@ -2,11 +2,12 @@
   <div class="offcanvas-footer border-top">
     <div class="d-grid d-md-flex gap-3 p-3">
       <button class="btn btn-primary d-flex align-items-center gap-1" id="save-button">
-        Save
+        {{ $t('messages.save') }}
         <i class="icon-disk"></i>
-      </button>      
+      </button>
       <button class="btn btn-soft-primary d-flex align-items-center gap-1" type="button" data-bs-dismiss="offcanvas">
-        Cancel
+        {{ $t('messages.cancel') }}
+
         <i class="icon-Arrow---Right-2"></i>
       </button>
     </div>
