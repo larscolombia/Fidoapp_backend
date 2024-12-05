@@ -1583,10 +1583,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          */
         Route::delete('/{id}', [ComandoController::class, 'destroy']);
 
-        Route::post('command-by-pet',[ComandoController::class,'storeCommandPet']);
+        Route::post('command-by-user',[ComandoController::class,'storeCommandUser']);
 
-        Route::put('comamand-by-pet/update/{id}',[ComandoController::class,'updateCommandPet']);
-        Route::get('commands-by-pet/get',[ComandoController::class,'getCommandByPet']);
+        Route::put('comamand-by-user/update/{id}',[ComandoController::class,'updateCommandUser']);
+        Route::get('commands-by-user/get',[ComandoController::class,'getCommandByUser']);
     });
 
 

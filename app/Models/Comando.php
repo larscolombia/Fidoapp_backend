@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Modules\Pet\Models\Pet;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,8 +23,8 @@ class Comando extends Model
         return $this->hasMany(ComandoEquivalente::class);
     }
 
-    public function pet()
+    public function user()
     {
-        return $this->belongsTo(Pet::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('comandos', function (Blueprint $table) {
-            $table->unsignedBigInteger('pet_id')->after('instructions')->nullable();
+            $table->unsignedBigInteger('user_id')->after('instructions')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('comandos', function (Blueprint $table) {
-            $table->dropColumn('pet_id');
+            $table->dropColumn('user_id');
         });
     }
 };

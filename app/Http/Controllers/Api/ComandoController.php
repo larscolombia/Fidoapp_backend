@@ -76,7 +76,7 @@ class ComandoController extends Controller
         ], 200);
     }
 
-    public function storeCommandPet(Request $request)
+    public function storeCommandUser(Request $request)
     {
         try {
             $data = $request->validate([
@@ -87,7 +87,7 @@ class ComandoController extends Controller
                 'category_id' => 'required|exists:category_comandos,id',
                 'voz_comando' => 'required|string|max:255',
                 'instructions' => 'required|string',
-                'pet_id' => 'required|exists:pets,id'
+                'user_id' => 'required|exists:users,id'
             ]);
 
             $comando = Comando::create($data);
@@ -104,7 +104,7 @@ class ComandoController extends Controller
         }
     }
 
-    public function updateCommandPet(Request $request, $id)
+    public function updateCommandUser(Request $request, $id)
     {
         try {
             $comando = Comando::findOrFail($id);
@@ -116,7 +116,7 @@ class ComandoController extends Controller
                 'category_id' => 'required|exists:category_comandos,id',
                 'voz_comando' => 'required|string|max:255',
                 'instructions' => 'required|string',
-                'pet_id' => 'required|exists:pets,id'
+                'user_id' => 'required|exists:users,id'
             ]);
             $comando->update($request->only('name', 'description', 'type', 'is_favorite', 'category_id', 'voz_comando', 'instructions'));
 
@@ -133,15 +133,15 @@ class ComandoController extends Controller
         }
     }
 
-    public function getCommandByPet(Request $request)
+    public function getCommandByUser(Request $request)
     {
         try {
             $data = $request->validate([
-                'pet_id' => 'required|exists:pets,id'
+                'user_id' => 'required|exists:users,id'
             ]);
-            $comandos = Comando::where('pet_id', $data['pet_id'])->get();
+            $comandos = Comando::where('user_id', $data['user_id'])->get();
             if ($comandos->isEmpty()) {
-                return response()->json(['success' => false, 'message' => 'No se encontraron comandos para esta mascota.'], 404);
+                return response()->json(['success' => false, 'message' => 'No se encontraron comandos para este comando.'], 404);
             }
             return response()->json(['success' => true, 'data' => $comandos], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
