@@ -1,7 +1,7 @@
 <template>
   <form @submit="formSubmit">
     <div>
-      <CardTitle title="Notification Setting " icon="fa-solid fa-bullhorn"></CardTitle>
+      <CardTitle :title="$t('setting_general_page.notification_setting')" icon="fa-solid fa-bullhorn"></CardTitle>
     </div>
     <div>
       <table class="table table-condensed table-responsive">

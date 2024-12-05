@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 
@@ -25,32 +25,30 @@
 
     <div class="card">
 
-       <div class="col-md-12">
+        <div class="col-md-12">
             <div class="iq-card">
                 <div class="iq-card-header d-flex justify-content-between">
-                  <div class="card-header">
+                    <div class="card-header">
                         <h4 class="card-title">
                             Current Plan
                         </h4>
                     </div>
-                 </div>
+                </div>
                 <div class="iq-card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-1 d-flex justify-content-between">
 
-                            @if(count($subscription)!=0)
-                               <div class="card-header">
-                                    <h2>Free <span class="h6">(0 USD / Life Time)
+                                @if (count($subscription) != 0)
+                                    <div class="card-header">
+                                        <h2>Free <span class="h6">(0 USD / Life Time)
                                             </span></h2>
-                                    <a href="#" class="feature-link">View Features</a>
-                                </div>
-
+                                        <a href="#" class="feature-link">View Features</a>
+                                    </div>
                                 @else
-
-                                <div class="card-header">
-                                   <h4>No Subscription Plan has been selected !</h4>
-                                </div>
+                                    <div class="card-header">
+                                        <h4>No Subscription Plan has been selected !</h4>
+                                    </div>
                                 @endif
 
                             </div>
@@ -60,7 +58,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('after-styles')
@@ -71,6 +68,4 @@
 @push('after-scripts')
     <script src="{{ mix('modules/subscriptions/script.js') }}"></script>
     <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
-
-
 @endpush

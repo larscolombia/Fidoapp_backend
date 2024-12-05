@@ -1,7 +1,7 @@
 @extends ('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 

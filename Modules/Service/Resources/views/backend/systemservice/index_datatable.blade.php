@@ -1,57 +1,59 @@
 @extends('backend.layouts.app')
 
 @section('title')
-{{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 @push('after-styles')
-<link rel="stylesheet" href="{{ mix('modules/constant/style.css') }}">
+    <link rel="stylesheet" href="{{ mix('modules/constant/style.css') }}">
 @endpush
 
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-        <div>
-            <x-backend.quick-action url='{{ route("backend.$module_name.bulk_action") }}'>
-            <div class="">
-                <select name="action_type" class="form-control select2 col-12" id="quick-action-type" style="width:100%">
-                <option value="">{{ __('messages.no_action') }}</option>
-                <option value="change-status">{{ __('messages.status') }}</option>
-                <!-- <option value="delete">{{ __('messages.delete') }}</option> -->
-                </select>
-            </div>
-            <div class="select-status d-none quick-action-field" id="change-status-action">
-                <select name="status" class="form-control select2" id="status" style="width:100%">
-                <option value="1">{{ __('messages.active') }}</option>
-                <option value="0">{{ __('messages.inactive') }}</option>
-                </select>
-            </div>
-            </x-backend.quick-action>
-        </div>
+    <div class="card">
+        <div class="card-header">
+            <x-backend.section-header>
+                <div>
+                    <x-backend.quick-action url='{{ route("backend.$module_name.bulk_action") }}'>
+                        <div class="">
+                            <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
+                                style="width:100%">
+                                <option value="">{{ __('messages.no_action') }}</option>
+                                <option value="change-status">{{ __('messages.status') }}</option>
+                                <!-- <option value="delete">{{ __('messages.delete') }}</option> -->
+                            </select>
+                        </div>
+                        <div class="select-status d-none quick-action-field" id="change-status-action">
+                            <select name="status" class="form-control select2" id="status" style="width:100%">
+                                <option value="1">{{ __('messages.active') }}</option>
+                                <option value="0">{{ __('messages.inactive') }}</option>
+                            </select>
+                        </div>
+                    </x-backend.quick-action>
+                </div>
 
-        <x-slot name="toolbar">
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-            <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..." aria-label="Search"
-                aria-describedby="addon-wrapping">
-            
-            </div>
-            
-            <!-- <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas> -->
-            
-        </x-slot>
-        </x-backend.section-header>
+                <x-slot name="toolbar">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
+                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
+                            aria-label="Search" aria-describedby="addon-wrapping">
+
+                    </div>
+
+                    <!-- <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas> -->
+
+                </x-slot>
+            </x-backend.section-header>
+        </div>
+        <div class="card-body p-0">
+
+            <table id="datatable" class="table table-striped border table-responsive">
+            </table>
+        </div>
     </div>
-  <div class="card-body p-0">
-    
-        <table id="datatable" class="table table-striped border table-responsive">
-    </table>
-  </div>
-</div>
     <div data-render="app">
         <system-service-form-offcanvas create-title="{{ __('messages.create') }} {{ __($craete_title) }}"
-            edit-title="{{ __('messages.edit') }} {{ __($craete_title) }}" :customefield="{{ json_encode($customefield) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($craete_title) }}"
+            :customefield="{{ json_encode($customefield) }}">
         </system-service-form-offcanvas>
         <assign-employee-form-offcanvas></assign-employee-form-offcanvas>
         <assign-branch-form-offcanvas></assign-branch-form-offcanvas>
@@ -84,7 +86,7 @@
             {
                 data: 'image',
                 name: 'image',
-                title:  "{{ __('service.lbl_image') }}",
+                title: "{{ __('service.lbl_image') }}",
                 orderable: false,
                 width: '0%'
             },
@@ -96,7 +98,7 @@
             {
                 data: 'description',
                 name: 'description',
-                title: "{{__('service.lbl_description')}}"
+                title: "{{ __('service.lbl_description') }}"
             },
             {
                 data: 'status',
@@ -106,7 +108,7 @@
                 title: "{{ __('service.lbl_status') }}",
                 width: '10%'
             },
-        
+
         ]
 
 
@@ -149,7 +151,7 @@
 
         document.addEventListener('DOMContentLoaded', (event) => {
             initDatatable({
-                url: '{{ route("backend.service.systemservice.index_data") }}',
+                url: '{{ route('backend.service.systemservice.index_data') }}',
                 finalColumns,
                 advanceFilter: () => {
                     return {

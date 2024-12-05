@@ -1,6 +1,8 @@
 @extends('backend.layouts.app')
 
-@section('title') {{ __($module_action) }} {{ __($module_title) }} @endsection
+@section('title')
+    {{ __($module_title) }}
+@endsection
 
 @section('content')
     <div class="card">
@@ -30,7 +32,7 @@
                         <div class="datatable-filter">
                             <select name="column_status" id="column_status" class="select2 form-control"
                                 data-filter="select" style="width: 100%">
-                                <option value="">{{__('product.all')}}</option>
+                                <option value="">{{ __('product.all') }}</option>
                                 <option value="0" {{ $filter['status'] == '0' ? 'selected' : '' }}>
                                     {{ __('messages.inactive') }}</option>
                                 <option value="1" {{ $filter['status'] == '1' ? 'selected' : '' }}>
@@ -46,8 +48,9 @@
                             aria-describedby="addon-wrapping">
                     </div>
                     @hasPermission('add_tag')
-                        <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('messages.create') }} {{ __($module_title) }}">
-                        {{ __('messages.create') }} {{ __('tags.title') }}</x-buttons.offcanvas>
+                        <x-buttons.offcanvas target='#form-offcanvas'
+                            title="{{ __('messages.create') }} {{ __($module_title) }}">
+                            {{ __('messages.create') }} {{ __('tags.title') }}</x-buttons.offcanvas>
                     @endhasPermission
                     {{-- <button class="btn btn-outline-primary btn-group" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i
@@ -60,7 +63,8 @@
     </div>
     <div data-render="app">
         <form-offcanvas create-title="{{ __('messages.create') }} {{ __($module_title) }}"
-            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}" :customefield="{{ json_encode($customefield) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}"
+            :customefield="{{ json_encode($customefield) }}">
         </form-offcanvas>
     </div>
     <x-backend.advance-filter>
@@ -71,25 +75,24 @@
     </x-backend.advance-filter>
 @endsection
 
-@push ('after-styles')
-<link rel="stylesheet" href='{{ mix("modules/tag/style.css") }}'>
+@push('after-styles')
+    <link rel="stylesheet" href='{{ mix('modules/tag/style.css') }}'>
 
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+    <!-- DataTables Core and Extensions -->
+    <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush
 
-@push ('after-scripts')
-<script src='{{ mix("modules/tag/script.js") }}'></script>
+@push('after-scripts')
+    <script src='{{ mix('modules/tag/script.js') }}'></script>
 
-<script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
-<script src="{{ asset('js/form-modal/index.js') }}" defer></script>
+    <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
+    <script src="{{ asset('js/form-modal/index.js') }}" defer></script>
 
-<!-- DataTables Core and Extensions -->
-<script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+    <!-- DataTables Core and Extensions -->
+    <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
-<script type="text/javascript" defer>
-          const columns = [
-        {
+    <script type="text/javascript" defer>
+        const columns = [{
                 name: 'check',
                 data: 'check',
                 title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
@@ -97,7 +100,7 @@
                 exportable: false,
                 orderable: false,
                 searchable: false,
-        },
+            },
             {
                 data: 'name',
                 name: 'name',
@@ -113,12 +116,12 @@
             },
 
             {
-              data: 'updated_at',
-              name: 'updated_at',
-              title: "{{ __('service.lbl_update_at') }}",
-              orderable: true,
-             visible: false,
-           },
+                data: 'updated_at',
+                name: 'updated_at',
+                title: "{{ __('service.lbl_update_at') }}",
+                orderable: true,
+                visible: false,
+            },
 
         ]
 
@@ -145,30 +148,30 @@
                 url: '{{ route("backend.$module_name.index_data") }}',
                 finalColumns,
                 advanceFilter: () => {
-                    return {
-                    }
+                    return {}
                 }
             });
         })
-        function resetQuickAction () {
-      const actionValue = $('#quick-action-type').val();
-      if (actionValue != '') {
-          $('#quick-action-apply').removeAttr('disabled');
 
-          if (actionValue == 'change-status') {
-              $('.quick-action-field').addClass('d-none');
-              $('#change-status-action').removeClass('d-none');
-          } else {
-              $('.quick-action-field').addClass('d-none');
-          }
-      } else {
-          $('#quick-action-apply').attr('disabled', true);
-          $('.quick-action-field').addClass('d-none');
-      }
-    }
+        function resetQuickAction() {
+            const actionValue = $('#quick-action-type').val();
+            if (actionValue != '') {
+                $('#quick-action-apply').removeAttr('disabled');
 
-    $('#quick-action-type').change(function () {
-      resetQuickAction()
-    });
-</script>
+                if (actionValue == 'change-status') {
+                    $('.quick-action-field').addClass('d-none');
+                    $('#change-status-action').removeClass('d-none');
+                } else {
+                    $('.quick-action-field').addClass('d-none');
+                }
+            } else {
+                $('#quick-action-apply').attr('disabled', true);
+                $('.quick-action-field').addClass('d-none');
+            }
+        }
+
+        $('#quick-action-type').change(function() {
+            resetQuickAction()
+        });
+    </script>
 @endpush

@@ -1,6 +1,6 @@
 <template>
   <form @submit="formSubmit">
-    <CardTitle title="Mail Settings" icon="fas fa-envelope"></CardTitle>
+    <CardTitle :title="$t('setting_general_page.mail_settings')" icon="fas fa-envelope"></CardTitle>
     <div class="row row-cols-2">
       <InputField class="col" :is-required="true" :label="$t('setting_mail_page.lbl_email')" placeholder="info@example.com" v-model="email" :error-message="errors.email"></InputField>
       <InputField class="col" :is-required="true" :label="$t('setting_mail_page.lbl_driver')" placeholder="smtp" v-model="mail_driver" :error-message="errors.mail_driver"></InputField>
@@ -14,7 +14,9 @@
     </div>
     <div class="d-grid d-md-flex gap-3 p-3">
       <SubmitButton :IS_SUBMITED="IS_SUBMITED" v-if="isEmailVerified"></SubmitButton>
-      <button type="button" class="btn btn-primary" :disabled="IS_VERIFY_SUBMITED" @click="verifyEmail">Verify Email</button>
+      <button type="button" class="btn btn-primary" :disabled="IS_VERIFY_SUBMITED" @click="verifyEmail">
+        {{ $t('setting_general_page.verify_email') }}
+      </button>
     </div>
   </form>
 </template>

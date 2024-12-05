@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CardTitle title="Customization" icon="fa-solid fa-swatchbook"></CardTitle>
+    <CardTitle :title="$t('setting_general_page.customization')" icon="fa-solid fa-swatchbook"></CardTitle>
   </div>
   <color-customizer></color-customizer>
   <!-- <font-family></font-family> -->

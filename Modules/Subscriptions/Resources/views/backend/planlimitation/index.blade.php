@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 
@@ -10,40 +10,42 @@
 @endpush
 @section('content')
     <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-              <div>
-                <x-backend.quick-action url='{{ route("backend.subscription.$module_name.bulk_action") }}'>
-                  <div class="">
-                    <select name="action_type" class="form-control select2 col-12" id="quick-action-type" style="width:100%">
-                        <option value="">{{ __('messages.no_action') }}</option>
-                        <option value="change-status">{{ __('messages.status') }}</option>
-                        <option value="delete">{{ __('messages.delete') }}</option>
-                    </select>
-                  </div>
-                  <div class="select-status d-none quick-action-field" id="change-status-action">
-                      <select name="status" class="form-control select2" id="status" style="width:100%">
-                        <option value="1">{{ __('messages.active') }}</option>
-                        <option value="0">{{ __('messages.inactive') }}</option>
-                      </select>
-                  </div>
-                </x-backend.quick-action>
-              </div>
-            <x-slot name="toolbar">
-                <div class="input-group flex-nowrap">
-                <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..." aria-label="Search" aria-describedby="addon-wrapping">
-                
+        <div class="card-header">
+            <x-backend.section-header>
+                <div>
+                    <x-backend.quick-action url='{{ route("backend.subscription.$module_name.bulk_action") }}'>
+                        <div class="">
+                            <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
+                                style="width:100%">
+                                <option value="">{{ __('messages.no_action') }}</option>
+                                <option value="change-status">{{ __('messages.status') }}</option>
+                                <option value="delete">{{ __('messages.delete') }}</option>
+                            </select>
+                        </div>
+                        <div class="select-status d-none quick-action-field" id="change-status-action">
+                            <select name="status" class="form-control select2" id="status" style="width:100%">
+                                <option value="1">{{ __('messages.active') }}</option>
+                                <option value="0">{{ __('messages.inactive') }}</option>
+                            </select>
+                        </div>
+                    </x-backend.quick-action>
                 </div>
-                @can('add_' . $module_name)
-                    <x-buttons.offcanvas target='#form-offcanvas' class=" d-flex align-items-center gap-1"
-                        title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
-                @endcan
+                <x-slot name="toolbar">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
+                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
+                            aria-label="Search" aria-describedby="addon-wrapping">
+
+                    </div>
+                    @can('add_' . $module_name)
+                        <x-buttons.offcanvas target='#form-offcanvas' class=" d-flex align-items-center gap-1"
+                            title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
+                    @endcan
 
 
-            </x-slot>
-        </x-backend.section-header>
-    </div>
+                </x-slot>
+            </x-backend.section-header>
+        </div>
         <div class="card-body p-0">
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
@@ -53,18 +55,19 @@
     <div data-render="app">
 
 
-        <plan-limit-offcanvas
-            create-title="{{ __('Create') }} {{ __($module_title) }}"
+        <plan-limit-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
             edit-title="{{ __('Edit') }} {{ __($module_title) }}">
         </plan-limit-offcanvas>
 
         <x-backend.advance-filter>
-          <x-slot name="title"><h4>Advanced Filter</h4></x-slot>
-          <select name="" id="" class="select2">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
+            <x-slot name="title">
+                <h4>Advanced Filter</h4>
+            </x-slot>
+            <select name="" id="" class="select2">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </x-backend.advance-filter>
     </div>
 @endsection
@@ -82,9 +85,7 @@
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
     <script type="text/javascript" defer>
-
-const columns = [
-            {
+        const columns = [{
                 name: 'check',
                 data: 'check',
                 title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
@@ -93,17 +94,35 @@ const columns = [
                 orderable: false,
                 searchable: false,
             },
-            { data: 'name', name: 'name', title: "{{ __('plan_limitation.lbl_name') }}" },
-            { data: 'limit', name: 'limit',  title: "{{ __('plan_limitation.lbl_set_limit') }}" },
-            { data: 'status', name: 'status', orderable: false, searchable: true,  title: "{{ __('plan_limitation.lbl_status') }}" },
+            {
+                data: 'name',
+                name: 'name',
+                title: "{{ __('plan_limitation.lbl_name') }}"
+            },
+            {
+                data: 'limit',
+                name: 'limit',
+                title: "{{ __('plan_limitation.lbl_set_limit') }}"
+            },
+            {
+                data: 'status',
+                name: 'status',
+                orderable: false,
+                searchable: true,
+                title: "{{ __('plan_limitation.lbl_status') }}"
+            },
         ]
 
-        const actionColumn = [
-            { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Action' }
-        ]
-    const customFieldColumns = JSON.parse(@json($columns))
+        const actionColumn = [{
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false,
+            title: 'Action'
+        }]
+        const customFieldColumns = JSON.parse(@json($columns))
 
-    
+
         let finalColumns = [
             ...columns,
             ...customFieldColumns,
@@ -123,29 +142,29 @@ const columns = [
 
 
 
-    function resetQuickAction () {
-        const actionValue = $('#quick-action-type').val();
-        if (actionValue != '') {
-            $('#quick-action-apply').removeAttr('disabled');
+        function resetQuickAction() {
+            const actionValue = $('#quick-action-type').val();
+            if (actionValue != '') {
+                $('#quick-action-apply').removeAttr('disabled');
 
-            if (actionValue == 'change-status') {
-                $('.quick-action-field').addClass('d-none');
-                $('#change-status-action').removeClass('d-none');
+                if (actionValue == 'change-status') {
+                    $('.quick-action-field').addClass('d-none');
+                    $('#change-status-action').removeClass('d-none');
+                } else {
+                    $('.quick-action-field').addClass('d-none');
+                }
             } else {
+                $('#quick-action-apply').attr('disabled', true);
                 $('.quick-action-field').addClass('d-none');
             }
-        } else {
-            $('#quick-action-apply').attr('disabled', true);
-            $('.quick-action-field').addClass('d-none');
         }
-      }
 
-      $('#quick-action-type').change(function () {
-        resetQuickAction()
-      });
+        $('#quick-action-type').change(function() {
+            resetQuickAction()
+        });
 
-      $(document).on('update_quick_action', function() {
-        // resetActionButtons()
-      })
+        $(document).on('update_quick_action', function() {
+            // resetActionButtons()
+        })
     </script>
 @endpush

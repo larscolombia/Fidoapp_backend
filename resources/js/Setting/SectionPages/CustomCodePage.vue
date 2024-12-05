@@ -2,7 +2,7 @@
 <template>
   <form @submit="formSubmit">
     <div>
-      <CardTitle title="Custom Code" icon="fa-solid fa-file-code"></CardTitle>
+      <CardTitle :title="$t('setting_general_page.custom_code')" icon="fa-solid fa-file-code"></CardTitle>
     </div>
     <TextArea :label="$t('setting_custom_code.lbl_css_name')" placeholder="custom css code" v-model="custom_css_block" :errorMessage="errors.custom_css_block"> </TextArea>
     <TextArea :label="$t('setting_custom_code.lbl_js_name')" placeholder="custom js code" v-model="custom_js_block" :errorMessage="errors.custom_js_block"> </TextArea>

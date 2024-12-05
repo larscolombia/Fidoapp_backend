@@ -1,7 +1,7 @@
 @extends ('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 
@@ -19,8 +19,8 @@
                 </x-slot>
                 <x-slot name="toolbar">
                     <x-backend.buttons.return-back />
-                    <a href='{{ route("backend.subscription.$module_name.index") }}' class="btn btn-secondary" data-bs-toggle="tooltip"
-                        title="{{ __($module_name) }} List"><i class="fas fa-list"></i> List</a>
+                    <a href='{{ route("backend.subscription.$module_name.index") }}' class="btn btn-secondary"
+                        data-bs-toggle="tooltip" title="{{ __($module_name) }} List"><i class="fas fa-list"></i> List</a>
                 </x-slot>
             </x-backend.section-header>
 

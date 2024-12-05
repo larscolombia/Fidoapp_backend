@@ -1,7 +1,7 @@
 <template>
   <form @submit="formSubmit">
     <div>
-      <CardTitle title="Integration" icon="fa-solid fa-sliders"></CardTitle>
+      <CardTitle :title="$t('setting_general_page.integration')" icon="fa-solid fa-sliders"></CardTitle>
     </div>
     <!-- <div class="form-group">
       <div class="d-flex justify-content-between align-items-center">
@@ -104,7 +104,7 @@
         </div>
       </div>
 
-        <div class="row">
+      <div class="row">
         <div class="col-md-6">
           <InputField class="col-md-12" type="text" :is-required="true" :label="$t('setting_integration_page.lbl_emp_playstore')" placeholder="" v-model="employee_app_play_store" :error-message="errors['employee_app_play_store']" :error-messages="errorMessages['employee_app_play_store']"></InputField>
         </div>
@@ -197,33 +197,33 @@ const setFormData = (data) => {
       is_google_login: data.is_google_login || 0,
       is_one_signal_notification: data.is_one_signal_notification || 0,
       is_custom_webhook_notification: data.is_custom_webhook_notification || 0,
-      is_map_key: data.is_map_key  || 0,
+      is_map_key: data.is_map_key || 0,
       google_secretkey: data.google_secretkey || '',
       google_publickey: data.google_publickey || '',
-      onesignal_app_id: data.onesignal_app_id  || '',
-      onesignal_rest_api_key: data.onesignal_rest_api_key  || '',
-      onesignal_channel_id: data.onesignal_channel_id  || '',
-      employee_onesignal_app_id: data.employee_onesignal_app_id  || '',
-      employee_onesignal_rest_api_key: data.employee_onesignal_rest_api_key  || '',
-      employee_onesignal_channel_id: data.employee_onesignal_channel_id  || '',
-      google_maps_key: data.google_maps_key  || '',
-      is_application_link: data.is_application_link  || '',
-      customer_app_play_store: data.customer_app_play_store  || '',
-      customer_app_app_store: data.customer_app_app_store  || '',
-      employee_app_play_store: data.employee_app_play_store  || '',
-      employee_app_app_store: data.employee_app_app_store  || '',
-      custom_webhook_content_key: data.custom_webhook_content_key  || '',
-      custom_webhook_url: data.custom_webhook_url  || '',
-      isForceUpdate: data.isForceUpdate  || 0,
-      minimum_force_update_code: data.minimum_force_update_code  || '',
-      latest_version_update_code: data.latest_version_update_code  || '',
-      isForceUpdateEmployee: data.isForceUpdateEmployee  || 0,
-      employee_minimum_force_update_code: data.employee_minimum_force_update_code  || '',
-      employee_latest_version_update_code: data.employee_latest_version_update_code  || '',
-      is_zoom: data.is_zoom  || 0,
-      account_id: data.account_id  || '',
-      client_id: data.client_id  || '',
-      client_secret: data.client_secret  || '',
+      onesignal_app_id: data.onesignal_app_id || '',
+      onesignal_rest_api_key: data.onesignal_rest_api_key || '',
+      onesignal_channel_id: data.onesignal_channel_id || '',
+      employee_onesignal_app_id: data.employee_onesignal_app_id || '',
+      employee_onesignal_rest_api_key: data.employee_onesignal_rest_api_key || '',
+      employee_onesignal_channel_id: data.employee_onesignal_channel_id || '',
+      google_maps_key: data.google_maps_key || '',
+      is_application_link: data.is_application_link || '',
+      customer_app_play_store: data.customer_app_play_store || '',
+      customer_app_app_store: data.customer_app_app_store || '',
+      employee_app_play_store: data.employee_app_play_store || '',
+      employee_app_app_store: data.employee_app_app_store || '',
+      custom_webhook_content_key: data.custom_webhook_content_key || '',
+      custom_webhook_url: data.custom_webhook_url || '',
+      isForceUpdate: data.isForceUpdate || 0,
+      minimum_force_update_code: data.minimum_force_update_code || '',
+      latest_version_update_code: data.latest_version_update_code || '',
+      isForceUpdateEmployee: data.isForceUpdateEmployee || 0,
+      employee_minimum_force_update_code: data.employee_minimum_force_update_code || '',
+      employee_latest_version_update_code: data.employee_latest_version_update_code || '',
+      is_zoom: data.is_zoom || 0,
+      account_id: data.account_id || '',
+      client_id: data.client_id || '',
+      client_secret: data.client_secret || ''
     }
   })
 }
@@ -241,135 +241,134 @@ const validationSchema = yup.object({
   //   }
   //   return true
   // }),
-  onesignal_app_id: yup.string().test('onesignal_app_id','Must be a valid App ID', function(value) {
-    if(this.parent.is_one_signal_notification == '1' && !value) {
-      return false;
+  onesignal_app_id: yup.string().test('onesignal_app_id', 'Must be a valid App ID', function (value) {
+    if (this.parent.is_one_signal_notification == '1' && !value) {
+      return false
     }
     return true
   }),
-  onesignal_rest_api_key: yup.string().test('onesignal_rest_api_key', "Must be a valid Rest Key", function(value) {
-    if(this.parent.is_one_signal_notification == '1' && !value) {
-      return false;
+  onesignal_rest_api_key: yup.string().test('onesignal_rest_api_key', 'Must be a valid Rest Key', function (value) {
+    if (this.parent.is_one_signal_notification == '1' && !value) {
+      return false
     }
     return true
   }),
-  onesignal_channel_id: yup.string().test('onesignal_channel_id', "Must be a valid Channel ID", function(value) {
-    if(this.parent.is_one_signal_notification == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-
-  employee_onesignal_app_id: yup.string().test('employee_onesignal_app_id','Must be a valid App ID', function(value) {
-    if(this.parent.is_one_signal_notification == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-  employee_onesignal_rest_api_key: yup.string().test('employee_onesignal_rest_api_key', "Must be a valid Rest Key", function(value) {
-    if(this.parent.is_one_signal_notification == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-  employee_onesignal_channel_id: yup.string().test('employee_onesignal_channel_id', "Must be a valid Channel ID", function(value) {
-    if(this.parent.is_one_signal_notification == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-  google_maps_key: yup.string().test('google_maps_key', "Must be a valid Google MapKey", function(value) {
-    if(this.parent.is_map_key == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-  customer_app_play_store: yup.string().test('customer_app_play_store',"Must be a valid Customer Playstore App Key", function(value) {
-    if(this.parent.is_application_link == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-  customer_app_app_store: yup.string().test('customer_app_app_store',"Must be a valid Customer App Key", function(value) {
-    if(this.parent.is_application_link == '1' && !value) {
-      return false;
+  onesignal_channel_id: yup.string().test('onesignal_channel_id', 'Must be a valid Channel ID', function (value) {
+    if (this.parent.is_one_signal_notification == '1' && !value) {
+      return false
     }
     return true
   }),
 
-   employee_app_play_store: yup.string().test('employee_app_play_store',"Must be a valid Employee Playstore App Key", function(value) {
-    if(this.parent.is_application_link == '1' && !value) {
-      return false;
+  employee_onesignal_app_id: yup.string().test('employee_onesignal_app_id', 'Must be a valid App ID', function (value) {
+    if (this.parent.is_one_signal_notification == '1' && !value) {
+      return false
     }
     return true
   }),
-  employee_app_app_store: yup.string().test('employee_app_app_store',"Must be a valid Employee App Key", function(value) {
-    if(this.parent.is_application_link == '1' && !value) {
-      return false;
+  employee_onesignal_rest_api_key: yup.string().test('employee_onesignal_rest_api_key', 'Must be a valid Rest Key', function (value) {
+    if (this.parent.is_one_signal_notification == '1' && !value) {
+      return false
     }
     return true
   }),
-  custom_webhook_content_key: yup.string().test('custom_webhook_content_key',"Must be a valid wbhook content key", function(value) {
-    if(this.parent.is_custom_webhook_notification == '1' && !value) {
-      return false;
+  employee_onesignal_channel_id: yup.string().test('employee_onesignal_channel_id', 'Must be a valid Channel ID', function (value) {
+    if (this.parent.is_one_signal_notification == '1' && !value) {
+      return false
     }
     return true
   }),
-  custom_webhook_url: yup.string().test('custom_webhook_url',"Must be a valid wbhook URL", function(value) {
-    if(this.parent.is_custom_webhook_notification == '1' && !value) {
-      return false;
+  google_maps_key: yup.string().test('google_maps_key', 'Must be a valid Google MapKey', function (value) {
+    if (this.parent.is_map_key == '1' && !value) {
+      return false
     }
     return true
   }),
-  minimum_force_update_code: yup.string().test('mimimum_version_code', "Minimum version code for Android is Required", function(value) {
-    if(this.parent.isForceUpdate == '1' && !value) {
-      return false;
+  customer_app_play_store: yup.string().test('customer_app_play_store', 'Must be a valid Customer Playstore App Key', function (value) {
+    if (this.parent.is_application_link == '1' && !value) {
+      return false
     }
     return true
   }),
-  latest_version_update_code: yup.string().test('latest_version_update_code', "Latest version code for Android is Required", function(value) {
-    if(this.parent.isForceUpdate == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-
-  employee_minimum_force_update_code: yup.string().test('mimimum_version_code', "Minimum version code for Android is Required", function(value) {
-    if(this.parent.isForceUpdateEmployee == '1' && !value) {
-      return false;
-    }
-    return true
-  }),
-  employee_latest_version_update_code: yup.string().test('latest_version_update_code', "Latest version code for Android is Required", function(value) {
-    if(this.parent.isForceUpdateEmployee == '1' && !value) {
-      return false;
+  customer_app_app_store: yup.string().test('customer_app_app_store', 'Must be a valid Customer App Key', function (value) {
+    if (this.parent.is_application_link == '1' && !value) {
+      return false
     }
     return true
   }),
 
-  account_id: yup.string().test('account_id', "Zoom Account ID is Required", function(value) {
-    if(this.parent.is_zoom == '1' && !value) {
-      return false;
+  employee_app_play_store: yup.string().test('employee_app_play_store', 'Must be a valid Employee Playstore App Key', function (value) {
+    if (this.parent.is_application_link == '1' && !value) {
+      return false
+    }
+    return true
+  }),
+  employee_app_app_store: yup.string().test('employee_app_app_store', 'Must be a valid Employee App Key', function (value) {
+    if (this.parent.is_application_link == '1' && !value) {
+      return false
+    }
+    return true
+  }),
+  custom_webhook_content_key: yup.string().test('custom_webhook_content_key', 'Must be a valid wbhook content key', function (value) {
+    if (this.parent.is_custom_webhook_notification == '1' && !value) {
+      return false
+    }
+    return true
+  }),
+  custom_webhook_url: yup.string().test('custom_webhook_url', 'Must be a valid wbhook URL', function (value) {
+    if (this.parent.is_custom_webhook_notification == '1' && !value) {
+      return false
+    }
+    return true
+  }),
+  minimum_force_update_code: yup.string().test('mimimum_version_code', 'Minimum version code for Android is Required', function (value) {
+    if (this.parent.isForceUpdate == '1' && !value) {
+      return false
+    }
+    return true
+  }),
+  latest_version_update_code: yup.string().test('latest_version_update_code', 'Latest version code for Android is Required', function (value) {
+    if (this.parent.isForceUpdate == '1' && !value) {
+      return false
     }
     return true
   }),
 
-  client_id: yup.string().test('client_id', "Zoom Client ID is Required", function(value) {
-    if(this.parent.is_zoom == '1' && !value) {
-      return false;
+  employee_minimum_force_update_code: yup.string().test('mimimum_version_code', 'Minimum version code for Android is Required', function (value) {
+    if (this.parent.isForceUpdateEmployee == '1' && !value) {
+      return false
+    }
+    return true
+  }),
+  employee_latest_version_update_code: yup.string().test('latest_version_update_code', 'Latest version code for Android is Required', function (value) {
+    if (this.parent.isForceUpdateEmployee == '1' && !value) {
+      return false
     }
     return true
   }),
 
-  client_secret: yup.string().test('client_secret', "Zoom Client Secret key is Required", function(value) {
-    if(this.parent.is_zoom == '1' && !value) {
-      return false;
+  account_id: yup.string().test('account_id', 'Zoom Account ID is Required', function (value) {
+    if (this.parent.is_zoom == '1' && !value) {
+      return false
     }
     return true
   }),
 
+  client_id: yup.string().test('client_id', 'Zoom Client ID is Required', function (value) {
+    if (this.parent.is_zoom == '1' && !value) {
+      return false
+    }
+    return true
+  }),
+
+  client_secret: yup.string().test('client_secret', 'Zoom Client Secret key is Required', function (value) {
+    if (this.parent.is_zoom == '1' && !value) {
+      return false
+    }
+    return true
+  })
 })
-const { handleSubmit, errors, resetForm, validate } = useForm({validationSchema})
+const { handleSubmit, errors, resetForm, validate } = useForm({ validationSchema })
 const errorMessages = ref({})
 const { value: is_google_login } = useField('is_google_login')
 const { value: is_one_signal_notification } = useField('is_one_signal_notification')
@@ -389,7 +388,7 @@ const { value: customer_app_play_store } = useField('customer_app_play_store')
 const { value: customer_app_app_store } = useField('customer_app_app_store')
 const { value: employee_app_play_store } = useField('employee_app_play_store')
 const { value: employee_app_app_store } = useField('employee_app_app_store')
-const { value: custom_webhook_content_key} = useField('custom_webhook_content_key')
+const { value: custom_webhook_content_key } = useField('custom_webhook_content_key')
 const { value: custom_webhook_url } = useField('custom_webhook_url')
 const { value: isForceUpdate } = useField('isForceUpdate')
 const { value: minimum_force_update_code } = useField('minimum_force_update_code')
@@ -402,54 +401,81 @@ const { value: account_id } = useField('account_id')
 const { value: client_id } = useField('client_id')
 const { value: client_secret } = useField('client_secret')
 
+watch(
+  () => is_map_key.value,
+  (value) => {
+    if (value == '0') {
+      google_maps_key.value = ''
+    }
+  },
+  { deep: true }
+)
+watch(
+  () => is_google_login.value,
+  (value) => {
+    if (value == '0') {
+      google_secretkey.value = ''
+      google_publickey.value = ''
+    }
+  },
+  { deep: true }
+)
+watch(
+  () => isForceUpdate.value,
+  (value) => {
+    if (value == '0') {
+      minimum_force_update_code.value = ''
+      latest_version_update_code.value = ''
+    }
+  },
+  { deep: true }
+)
+watch(
+  () => isForceUpdateEmployee.value,
+  (value) => {
+    if (value == '0') {
+      employee_minimum_force_update_code.value = ''
+      employee_latest_version_update_code.value = ''
+    }
+  },
+  { deep: true }
+)
+watch(
+  () => is_custom_webhook_notification.value,
+  (value) => {
+    if (value == '0') {
+      custom_webhook_content_key.value = ''
+      custom_webhook_url.value = ''
+    }
+  },
+  { deep: true }
+)
+watch(
+  () => is_one_signal_notification.value,
+  (value) => {
+    if (value == '0') {
+      onesignal_app_id.value = ''
+      onesignal_rest_api_key.value = ''
+      onesignal_channel_id.value = ''
+      employee_onesignal_app_id.value = ''
+      employee_onesignal_rest_api_key.value = ''
+      employee_onesignal_channel_id.value = ''
+    }
+  },
+  { deep: true }
+)
 
-watch(() => is_map_key.value, (value) => {
-  if(value == '0') {
-    google_maps_key.value = ''
-  }
-}, {deep: true})
-watch(() => is_google_login.value, (value) => {
-  if(value == '0') {
-    google_secretkey.value = ''
-    google_publickey.value = ''
-  }
-}, {deep: true})
-watch(() => isForceUpdate.value, (value) => {
-  if(value == '0') {
-    minimum_force_update_code.value = ''
-    latest_version_update_code.value = ''
-  }
-}, {deep: true})
-watch(() => isForceUpdateEmployee.value, (value) => {
-  if(value == '0') {
-    employee_minimum_force_update_code.value = ''
-    employee_latest_version_update_code.value = ''
-  }
-}, {deep: true})
-watch(() => is_custom_webhook_notification.value, (value) => {
-  if(value == '0') {
-    custom_webhook_content_key.value = ''
-    custom_webhook_url.value = ''
-  }
-}, {deep: true})
-watch(() => is_one_signal_notification.value, (value) => {
-  if(value == '0') {
-    onesignal_app_id.value = ''
-    onesignal_rest_api_key.value = ''
-    onesignal_channel_id.value = ''
-    employee_onesignal_app_id.value = ''
-    employee_onesignal_rest_api_key.value = ''
-    employee_onesignal_channel_id.value = ''
-  }
-}, {deep: true})
-
-watch(() => is_zoom.value, (value) => {
-  if(value == '0') {
-    account_id.value = ''
-    client_id.value = ''
-    client_secret.value = ''
-  }
-}, {deep: true})
+watch(
+  () => is_zoom.value,
+  (value) => {
+    if (value == '0') {
+      account_id.value = ''
+      client_id.value = ''
+      client_secret.value = ''
+    }
+  },
+  { deep: true }
+)
 // message
 const display_submit_message = (res) => {
   IS_SUBMITED.value = false
@@ -462,69 +488,20 @@ const display_submit_message = (res) => {
 }
 
 //fetch data
-const data = [
-  'is_google_login',
-  'is_one_signal_notification',
-  'is_mobile_notification',
-  'is_map_key',
-  'is_application_link',
-  'is_custom_webhook_notification',
-  'isForceUpdate',
-  'isForceUpdateEmployee',
-  'is_zoom',
-]
+const data = ['is_google_login', 'is_one_signal_notification', 'is_mobile_notification', 'is_map_key', 'is_application_link', 'is_custom_webhook_notification', 'isForceUpdate', 'isForceUpdateEmployee', 'is_zoom']
 
-const zoom_key = [
-  'account_id',
-  'client_id',
-  'client_secret',
-]
+const zoom_key = ['account_id', 'client_id', 'client_secret']
 
-const onesignal_key = [
-  'onesignal_app_id',
-  'onesignal_rest_api_key',
-  'onesignal_channel_id',
-  'employee_onesignal_app_id',
-  'employee_onesignal_rest_api_key',
-  'employee_onesignal_channel_id',
-]
+const onesignal_key = ['onesignal_app_id', 'onesignal_rest_api_key', 'onesignal_channel_id', 'employee_onesignal_app_id', 'employee_onesignal_rest_api_key', 'employee_onesignal_channel_id']
 
-const custom_webhook_key = [
-  'custom_webhook_content_key',
-  'custom_webhook_url'
-]
+const custom_webhook_key = ['custom_webhook_content_key', 'custom_webhook_url']
 
-const customer_app = [
-  'customer_app_play_store',
-  'customer_app_app_store',
-  'employee_app_play_store',
-  'employee_app_app_store',
-]
-const google_map_key = [
-  'google_maps_key',
-]
-const google_login_key = [
-  'google_secretkey',
-  'google_publickey',
-]
-const versions_key = [
-  'minimum_force_update_code',
-  'latest_version_update_code',
-  'employee_minimum_force_update_code',
-  'employee_latest_version_update_code',
-]
+const customer_app = ['customer_app_play_store', 'customer_app_app_store', 'employee_app_play_store', 'employee_app_app_store']
+const google_map_key = ['google_maps_key']
+const google_login_key = ['google_secretkey', 'google_publickey']
+const versions_key = ['minimum_force_update_code', 'latest_version_update_code', 'employee_minimum_force_update_code', 'employee_latest_version_update_code']
 onMounted(() => {
-
-  const customData = [
-    ...data,
-    ...onesignal_key,
-    ...custom_webhook_key,
-    ...customer_app,
-    ...google_map_key,
-    ...google_login_key,
-    ...versions_key,
-    ...zoom_key,
-  ].join(",")
+  const customData = [...data, ...onesignal_key, ...custom_webhook_key, ...customer_app, ...google_map_key, ...google_login_key, ...versions_key, ...zoom_key].join(',')
 
   createRequest(GET_URL(customData)).then((response) => {
     setFormData(response)
@@ -536,12 +513,12 @@ const formSubmit = handleSubmit((values) => {
   IS_SUBMITED.value = true
   const newValues = {}
   Object.keys(values).forEach((key) => {
-    if(values[key] !== '') {
+    if (values[key] !== '') {
       newValues[key] = values[key] || ''
     }
   })
   storeRequest({
-    url: STORE_URL, 
+    url: STORE_URL,
     body: newValues
   }).then((res) => display_submit_message(res))
 })

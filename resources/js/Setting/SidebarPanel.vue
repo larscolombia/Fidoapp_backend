@@ -94,7 +94,7 @@
               {{ $t('setting_general_page.holiday') }}
             </router-link>
           </div>
-          <div class="mb-3" @click="toggle()">
+          <!-- <div class="mb-3" @click="toggle()">
             <router-link :to="{ name: 'Settings.bussiness-hours' }" class="btn btn-border"
               ><i class="fa-solid fa-clock"></i>
               {{ $t('setting_general_page.business_hours') }}
@@ -111,7 +111,7 @@
               ><i class="fa-solid fa-clock"></i>
               {{ $t('setting_general_page.training_business_hours') }}
             </router-link>
-          </div>
+          </div> -->
           <div class="mb-3" @click="toggle()">
             <router-link :to="{ name: 'Settings.payment-method' }" class="btn btn-border"
               ><i class="fa-solid fa-coins"></i>

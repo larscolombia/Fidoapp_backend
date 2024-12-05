@@ -1,6 +1,8 @@
 @extends('backend.layouts.app')
 
-@section('title') {{ __($module_action) }} {{ __($module_title) }} @endsection
+@section('title')
+    {{ __($module_title) }}
+@endsection
 
 @section('content')
     <div class="card">
@@ -46,8 +48,9 @@
                             aria-describedby="addon-wrapping">
                     </div>
                     @hasPermission('add_country')
-                        <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('messages.create') }} {{ __($module_title) }}">
-                        {{ __('messages.create') }} {{ __('country.singular_title') }}</x-buttons.offcanvas>
+                        <x-buttons.offcanvas target='#form-offcanvas'
+                            title="{{ __('messages.create') }} {{ __($module_title) }}">
+                            {{ __('messages.create') }} {{ __('country.singular_title') }}</x-buttons.offcanvas>
                     @endhasPermission
                 </x-slot>
             </x-backend.section-header>
@@ -68,21 +71,21 @@
     </x-backend.advance-filter>
 @endsection
 
-@push ('after-styles')
-<link rel="stylesheet" href="{{ mix('modules/world/style.css') }}">
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+@push('after-styles')
+    <link rel="stylesheet" href="{{ mix('modules/world/style.css') }}">
+    <!-- DataTables Core and Extensions -->
+    <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush
 
-@push ('after-scripts')
-<script src="{{ mix('modules/world/script.js') }}"></script>
-<script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
-<script src="{{ asset('js/form-modal/index.js') }}" defer></script>
+@push('after-scripts')
+    <script src="{{ mix('modules/world/script.js') }}"></script>
+    <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
+    <script src="{{ asset('js/form-modal/index.js') }}" defer></script>
 
-<!-- DataTables Core and Extensions -->
-<script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+    <!-- DataTables Core and Extensions -->
+    <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
-<script type="text/javascript" defer>
+    <script type="text/javascript" defer>
         const columns = [{
                 name: 'check',
                 data: 'check',
@@ -108,12 +111,12 @@
             },
 
             {
-              data: 'updated_at',
-              name: 'updated_at',
-              title: "{{ __('service.lbl_update_at') }}",
-              orderable: true,
-             visible: false,
-           },
+                data: 'updated_at',
+                name: 'updated_at',
+                title: "{{ __('service.lbl_update_at') }}",
+                orderable: true,
+                visible: false,
+            },
 
         ]
 
@@ -137,34 +140,34 @@
                 url: '{{ route("backend.$module_name.index_data") }}',
                 finalColumns,
                 advanceFilter: () => {
-                    return {
-                    }
+                    return {}
                 }
             });
         })
-        function resetQuickAction () {
-        const actionValue = $('#quick-action-type').val();
-        if (actionValue != '') {
-            $('#quick-action-apply').removeAttr('disabled');
 
-            if (actionValue == 'change-status') {
-                $('.quick-action-field').addClass('d-none');
-                $('#change-status-action').removeClass('d-none');
+        function resetQuickAction() {
+            const actionValue = $('#quick-action-type').val();
+            if (actionValue != '') {
+                $('#quick-action-apply').removeAttr('disabled');
+
+                if (actionValue == 'change-status') {
+                    $('.quick-action-field').addClass('d-none');
+                    $('#change-status-action').removeClass('d-none');
+                } else {
+                    $('.quick-action-field').addClass('d-none');
+                }
             } else {
+                $('#quick-action-apply').attr('disabled', true);
                 $('.quick-action-field').addClass('d-none');
             }
-        } else {
-            $('#quick-action-apply').attr('disabled', true);
-            $('.quick-action-field').addClass('d-none');
         }
-      }
 
-      $('#quick-action-type').change(function () {
-        resetQuickAction()
-      });
+        $('#quick-action-type').change(function() {
+            resetQuickAction()
+        });
 
-      $(document).on('update_quick_action', function() {
-        // resetActionButtons()
-      })
-</script>
+        $(document).on('update_quick_action', function() {
+            // resetActionButtons()
+        })
+    </script>
 @endpush

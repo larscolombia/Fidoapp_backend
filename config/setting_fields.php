@@ -59,7 +59,7 @@ return [
                 'label' => 'Inquiry Email', // you know what label it is
                 'rules' => 'required|min:2', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'admin@pawlly.com', // default value if you want
+                'value' => 'admin@fidoapp.com', // default value if you want
             ],
             [
                 'type' => 'text', // input fields type
@@ -1141,7 +1141,7 @@ return [
                 'label' => 'lbl_spacial_note', // you know what label it is
                 'rules' => 'nullable|max:191', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'Thank you for shopping our store & for your order.', // default value if you want
+                'value' => 'Gracias por comprar en nuestra tienda y por su pedido', // default value if you want
             ],
         ],
     ],

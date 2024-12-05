@@ -1,8 +1,11 @@
 <template>
   <form @submit="formSubmit">
     <div class="col-md-12 d-flex justify-content-between">
-      <CardTitle title="Language Settings" icon="fa fa-language"></CardTitle>
-       <button type="submit" class="btn btn-primary d-flex align-items-center gap-1 float-right">Save<i class="icon-disk"></i></button>
+      <CardTitle :title="$t('setting_general_page.language_settings')" icon="fa fa-language"></CardTitle>
+      <button type="submit" class="btn btn-primary d-flex align-items-center gap-1 float-right">
+        {{ $t('messages.save') }}
+        <i class="icon-disk"></i>
+      </button>
     </div>
 
     <div class="container">
@@ -20,7 +23,7 @@
       </div>
     </div>
 
-    <div class="container py-3" v-if="file_id !== '' && language_id !== ''" >
+    <div class="container py-3" v-if="file_id !== '' && language_id !== ''">
       <div class="row">
         <div class="col">
           <h6>
@@ -34,23 +37,20 @@
         </div>
       </div>
 
-
-        <div>
-    <div v-for="item in lang_data" :key="item.key" class="row">
-      <div class="col">
-        <div class="form-group">
-          <input type="text" class="form-control" :value="item.key" disabled />
+      <div>
+        <div v-for="item in lang_data" :key="item.key" class="row">
+          <div class="col">
+            <div class="form-group">
+              <input type="text" class="form-control" :value="item.key" disabled />
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <input type="text" class="form-control" v-model="item.value" />
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col">
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="item.value" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-
     </div>
   </form>
 </template>
@@ -58,7 +58,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import CardTitle from '@/Setting/Components/CardTitle.vue'
-import { LANGUAGE_LIST, LISTING_URL,STORE_URL,FILE_DATA_URL } from '@/vue/constants/language'
+import { LANGUAGE_LIST, LISTING_URL, STORE_URL, FILE_DATA_URL } from '@/vue/constants/language'
 import { useRequest } from '@/helpers/hooks/useCrudOpration'
 import { useSelect } from '@/helpers/hooks/useSelect'
 import { useForm, useField } from 'vee-validate'
@@ -105,7 +105,6 @@ const languageSelect = (e) => {
   const lanuageId = language_id.value
 
   listingRequest({ url: LISTING_URL, data: { language_id: lanuageId } }).then((res) => {
-
     file.value.options = buildMultiSelectObject(res, {
       value: 'id',
       label: 'name'
@@ -113,39 +112,36 @@ const languageSelect = (e) => {
   })
 }
 
-
 const FileSelect = (cb = null) => {
+  const FileId = file_id.value
+  const languageId = language_id.value
 
-     const FileId = file_id.value
-     const languageId = language_id.value
-
-  listingRequest({ url: FILE_DATA_URL, data: {file_id: FileId, language_id: languageId} }).then((res) => {
-   lang_data.value = res
+  listingRequest({ url: FILE_DATA_URL, data: { file_id: FileId, language_id: languageId } }).then((res) => {
+    lang_data.value = res
     if (typeof cb == 'function') {
       cb()
     }
   })
 }
 //Form Submit
-  const formSubmit = handleSubmit((values) => {
-
-    const data = []
-     for (let index = 0; index < lang_data.value.length; index++) {
-       const element =lang_data.value[index]
-       data.push({
-        key: element.key,
-        value: element.value
-      })
-    }
-
-    values.data=data
-
-    storeRequest({ url: STORE_URL, body: values }).then((res) => {
-      if (res.status) {
-        window.successSnackbar(res.message)
-      }
+const formSubmit = handleSubmit((values) => {
+  const data = []
+  for (let index = 0; index < lang_data.value.length; index++) {
+    const element = lang_data.value[index]
+    data.push({
+      key: element.key,
+      value: element.value
     })
+  }
+
+  values.data = data
+
+  storeRequest({ url: STORE_URL, body: values }).then((res) => {
+    if (res.status) {
+      window.successSnackbar(res.message)
+    }
   })
+})
 </script>
 <style>
 .multiselect-clear-icon {

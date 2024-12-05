@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 
@@ -23,7 +23,7 @@
 
             <div class="row mt-4">
                 <div class="col">
-                    {{ html()->form('POST', route("backend.notification-templates.store"))->acceptsFiles()->class('form')->open() }}
+                    {{ html()->form('POST', route('backend.notification-templates.store'))->acceptsFiles()->class('form')->open() }}
                     @include ('notificationtemplate::backend.notificationtemplates.form')
                     {{ html()->form()->close() }}
                 </div>

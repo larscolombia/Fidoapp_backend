@@ -1,6 +1,8 @@
 @extends('backend.layouts.app')
 
-@section('title') {{ __($module_action) }} {{ __($module_title) }} @endsection
+@section('title')
+    {{ __($module_title) }}
+@endsection
 
 @section('content')
     <div class="card">
@@ -37,7 +39,7 @@
                         <div class="datatable-filter" style="width: 100%; display: inline-block;">
                             <select name="column_status" id="column_status" class="select2 form-control"
                                 data-filter="select">
-                                <option value="">{{ __('product.all')}}</option>
+                                <option value="">{{ __('product.all') }}</option>
                                 <option value="0" {{ $filter['status'] == '0' ? 'selected' : '' }}>
                                     {{ __('messages.inactive') }}</option>
                                 <option value="1" {{ $filter['status'] == '1' ? 'selected' : '' }}>
@@ -53,8 +55,9 @@
                             aria-describedby="addon-wrapping">
                     </div>
                     @hasPermission('add_product')
-                        <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('messages.create') }} {{ __($module_title) }}">
-                        {{ __('messages.create') }} {{ __('product.singular_title') }}</x-buttons.offcanvas>
+                        <x-buttons.offcanvas target='#form-offcanvas'
+                            title="{{ __('messages.create') }} {{ __($module_title) }}">
+                            {{ __('messages.create') }} {{ __('product.singular_title') }}</x-buttons.offcanvas>
                     @endhasPermission
 
                 </x-slot>
@@ -75,21 +78,21 @@
             <h4>{{ __('service.lbl_advanced_filter') }}</h4>
         </x-slot>
 
-          <div class="form-group datatable-filter">
+        <div class="form-group datatable-filter">
 
-             <div class="form-group datatable-filter">
-              <label class="form-label" for="column_brand">{{ __('product.brand') }}</label>
-              <select name="column_brand" id="column_brand" class="form-control select2" data-filter="select">
-                  <option value="">{{ __('product.all_brand')}}</option>
-                  @foreach ($brands as $brand)
-                      <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                  @endforeach
-              </select>
+            <div class="form-group datatable-filter">
+                <label class="form-label" for="column_brand">{{ __('product.brand') }}</label>
+                <select name="column_brand" id="column_brand" class="form-control select2" data-filter="select">
+                    <option value="">{{ __('product.all_brand') }}</option>
+                    @foreach ($brands as $brand)
+                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <label class="form-label" for="column_category">{{ __('service.lbl_category') }}</label>
             <select name="column_category" id="column_category" class="form-control select2" data-filter="select">
-                <option value="">{{ __('product.all_categories')}}</option>
+                <option value="">{{ __('product.all_categories') }}</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
@@ -100,20 +103,20 @@
     </x-backend.advance-filter>
 @endsection
 
-@push ('after-styles')
-<link rel="stylesheet" href='{{ mix("modules/product/style.css") }}'>
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+@push('after-styles')
+    <link rel="stylesheet" href='{{ mix('modules/product/style.css') }}'>
+    <!-- DataTables Core and Extensions -->
+    <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush
 
-@push ('after-scripts')
-<script src='{{ mix("modules/product/script.js") }}'></script>
-<script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
-<script src="{{ asset('js/form-modal/index.js') }}" defer></script>
-<!-- DataTables Core and Extensions -->
-<script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+@push('after-scripts')
+    <script src='{{ mix('modules/product/script.js') }}'></script>
+    <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
+    <script src="{{ asset('js/form-modal/index.js') }}" defer></script>
+    <!-- DataTables Core and Extensions -->
+    <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
-<script type="text/javascript" defer>
+    <script type="text/javascript" defer>
         const columns = [{
                 name: 'check',
                 data: 'check',
@@ -123,11 +126,13 @@
                 orderable: false,
                 searchable: false,
             },
-            {   data: 'image',
+            {
+                data: 'image',
                 name: 'image',
                 title: "{{ __('category.lbl_image') }}",
                 width: '7%',
-                orderable: false,},
+                orderable: false,
+            },
             {
                 data: 'name',
                 name: 'name',
@@ -153,7 +158,7 @@
                 data: 'stock_qty',
                 name: 'stock_qty',
                 title: "{{ __('product.quantity') }}",
-                 width: '7%',
+                width: '7%',
             },
             {
                 data: 'is_featured',
@@ -172,12 +177,12 @@
                 width: '5%'
             },
             {
-              data: 'updated_at',
-              name: 'updated_at',
-              title: "{{ __('product.lbl_update_at') }}",
-              orderable: true,
-             visible: false,
-           },
+                data: 'updated_at',
+                name: 'updated_at',
+                title: "{{ __('product.lbl_update_at') }}",
+                orderable: true,
+                visible: false,
+            },
 
         ]
 
@@ -200,17 +205,19 @@
             initDatatable({
                 url: '{{ route("backend.$module_name.index_data") }}',
                 finalColumns,
-                orderColumn: [[ 9, "desc" ]],
+                orderColumn: [
+                    [9, "desc"]
+                ],
                 paging: true,
                 advanceFilter: () => {
                     return {
-                          brand_id: $('#column_brand').val(),
-                          category_id: $('#column_category').val(),
+                        brand_id: $('#column_brand').val(),
+                        category_id: $('#column_category').val(),
                     }
                 }
             });
 
-               // Event listener for category selection change
+            // Event listener for category selection change
             $('#column_brand').on('change', function() {
                 var selectedBrandId = $(this).val();
                 filtercategories(selectedBrandId);
@@ -257,24 +264,25 @@
 
 
         function resetQuickAction() {
-          const actionValue = $('#quick-action-type').val();
-          if (actionValue != '') {
-              $('#quick-action-apply').removeAttr('disabled');
-              $('.quick-action-field').addClass('d-none');
-              if (actionValue == 'change-status') {
-                  $('#change-status-action').removeClass('d-none');
-              } if (actionValue == 'change-is_featured') {
-                $('#change-is_featured-action').removeClass('d-none');
-              }
+            const actionValue = $('#quick-action-type').val();
+            if (actionValue != '') {
+                $('#quick-action-apply').removeAttr('disabled');
+                $('.quick-action-field').addClass('d-none');
+                if (actionValue == 'change-status') {
+                    $('#change-status-action').removeClass('d-none');
+                }
+                if (actionValue == 'change-is_featured') {
+                    $('#change-is_featured-action').removeClass('d-none');
+                }
 
-          } else {
-              $('#quick-action-apply').attr('disabled', true);
-              $('.quick-action-field').addClass('d-none');
-          }
-      }
+            } else {
+                $('#quick-action-apply').attr('disabled', true);
+                $('.quick-action-field').addClass('d-none');
+            }
+        }
 
-      $('#quick-action-type').change(function() {
-          resetQuickAction()
-      });
-</script>
+        $('#quick-action-type').change(function() {
+            resetQuickAction()
+        });
+    </script>
 @endpush

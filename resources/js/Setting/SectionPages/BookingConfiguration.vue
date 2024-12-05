@@ -1,7 +1,7 @@
 <template>
   <form @submit="formSubmit">
 
-    <CardTitle title="Booking Configuration" icon="fa-solid fa-paper-plane"></CardTitle>
+    <CardTitle  :title="$t('setting_general_page.booking_configuration')" icon="fa-solid fa-paper-plane"></CardTitle>
 
     <div class="row mb-4">
         <div class="col-md-6">

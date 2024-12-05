@@ -1,6 +1,6 @@
 <template>
-  <CardTitle title="Custom Fields" icon="fa-solid fa-bars">
-    <button class="btn btn-primary d-flex align-items-center gap-1 me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-controls="exampleModal" @click="changeId(0)"><i class="icon-add-new"></i>{{  $t('messages.new') }}</button>
+  <CardTitle :title="$t('setting_general_page.custom_fields')" icon="fa-solid fa-bars">
+    <button class="btn btn-primary d-flex align-items-center gap-1 me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-controls="exampleModal" @click="changeId(0)"><i class="icon-add-new"></i>{{ $t('messages.new') }}</button>
   </CardTitle>
 
   <FormCustomField :id="tableId" @onSubmit="fetchTableData()"></FormCustomField>
@@ -60,7 +60,6 @@ import { confirmSwal } from '@/helpers/utilities'
 import SubmitButton from './Forms/SubmitButton.vue'
 const tableId = ref(null)
 const changeId = (id) => {
-
   tableId.value = id
 }
 
@@ -80,7 +79,6 @@ const fetchTableData = () => {
     if (res.status) {
       tableId.value = 0
       tableList.value = res.data
-
     }
   })
 }

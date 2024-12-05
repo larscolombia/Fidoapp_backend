@@ -1,6 +1,8 @@
 @extends('backend.layouts.app')
 
-@section('title') {{ __($module_action) }} {{ __($module_title) }} @endsection
+@section('title')
+    {{ __($module_title) }}
+@endsection
 
 @section('content')
     <div class="card">
@@ -24,12 +26,12 @@
                         </div>
                     </x-backend.quick-action>
                     <div>
-                      <button type="button" class="btn btn-secondary" data-modal="export">
-                        <i class="fa-solid fa-download"></i> Export
-                      </button>
-        {{--          <button type="button" class="btn btn-secondary" data-modal="import">--}}
-        {{--            <i class="fa-solid fa-upload"></i> Import--}}
-        {{--          </button>--}}
+                        <button type="button" class="btn btn-secondary" data-modal="export">
+                            <i class="fa-solid fa-download"></i> Export
+                        </button>
+                        {{--          <button type="button" class="btn btn-secondary" data-modal="import"> --}}
+                        {{--            <i class="fa-solid fa-upload"></i> Import --}}
+                        {{--          </button> --}}
                     </div>
                 </div>
                 <x-slot name="toolbar">
@@ -54,8 +56,9 @@
                             aria-describedby="addon-wrapping">
                     </div>
                     @hasPermission('add_service')
-                        <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('messages.create') }} {{ __($module_title) }}">
-                        {{ __('messages.create') }} {{ __('service.singular_title') }}</x-buttons.offcanvas>
+                        <x-buttons.offcanvas target='#form-offcanvas'
+                            title="{{ __('messages.create') }} {{ __($module_title) }}">
+                            {{ __('messages.create') }} {{ __('service.singular_title') }}</x-buttons.offcanvas>
                     @endhasPermission
                     {{-- <button class="btn btn-outline-primary btn-group" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i
@@ -68,7 +71,8 @@
     </div>
     <div data-render="app">
         <form-offcanvas create-title="{{ __('messages.create') }} {{ __($module_title) }}"
-            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}" :customefield="{{ json_encode($customefield) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}"
+            :customefield="{{ json_encode($customefield) }}">
         </form-offcanvas>
     </div>
     <x-backend.advance-filter>
@@ -79,21 +83,21 @@
     </x-backend.advance-filter>
 @endsection
 
-@push ('after-styles')
-<link rel="stylesheet" href="{{ mix('modules/location/style.css') }}">
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+@push('after-styles')
+    <link rel="stylesheet" href="{{ mix('modules/location/style.css') }}">
+    <!-- DataTables Core and Extensions -->
+    <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush
 
-@push ('after-scripts')
-<script src="{{ mix('modules/location/script.js') }}"></script>
-<script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
-<script src="{{ asset('js/form-modal/index.js') }}" defer></script>
+@push('after-scripts')
+    <script src="{{ mix('modules/location/script.js') }}"></script>
+    <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
+    <script src="{{ asset('js/form-modal/index.js') }}" defer></script>
 
-<!-- DataTables Core and Extensions -->
-<script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+    <!-- DataTables Core and Extensions -->
+    <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
-<script type="text/javascript" defer>
+    <script type="text/javascript" defer>
         const columns = [{
                 name: 'check',
                 data: 'check',
@@ -125,12 +129,12 @@
                 width: '5%'
             },
             {
-              data: 'updated_at',
-              name: 'updated_at',
-              title: "{{ __('service.lbl_update_at') }}",
-              orderable: true,
-             visible: false,
-           },
+                data: 'updated_at',
+                name: 'updated_at',
+                title: "{{ __('service.lbl_update_at') }}",
+                orderable: true,
+                visible: false,
+            },
 
         ]
 
@@ -154,13 +158,12 @@
 
         document.addEventListener('DOMContentLoaded', (event) => {
             initDatatable({
-                url: '{{ route("backend.locations.index_data") }}',
+                url: '{{ route('backend.locations.index_data') }}',
                 finalColumns,
                 advanceFilter: () => {
-                    return {
-                    }
+                    return {}
                 }
             });
         })
-</script>
+    </script>
 @endpush

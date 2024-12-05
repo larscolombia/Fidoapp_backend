@@ -58,57 +58,80 @@ class GenerateMenus
 
 
             $permissionsToCheck = [
-                'view_boarding', 'view_boarding_booking', 'view_boarder', 'view_facility', 'view_veterinary',
-                'view_veterinary_booking', 'view_veterinarian', 'view_veterinary_category', 'view_veterinary_service', 'view_grooming',
-                'view_grooming_booking', 'view_groomer', 'view_grooming_category', 'view_grooming_service', 'view_traning',
-                'view_training_booking', 'view_trainer', 'view_training_type', 'view_traning_duration', 'view_walking',
-                'view_walking_booking', 'view_walker', 'view_walking_duration', 'view_daycare', 'view_daycare_booking', 'view_care_taker',
-                'view_pet_sitter', 'view_booking_request'
+                'view_boarding',
+                'view_boarding_booking',
+                'view_boarder',
+                'view_facility',
+                'view_veterinary',
+                'view_veterinary_booking',
+                'view_veterinarian',
+                'view_veterinary_category',
+                'view_veterinary_service',
+                'view_grooming',
+                'view_grooming_booking',
+                'view_groomer',
+                'view_grooming_category',
+                'view_grooming_service',
+                'view_traning',
+                'view_training_booking',
+                'view_trainer',
+                'view_training_type',
+                'view_traning_duration',
+                'view_walking',
+                'view_walking_booking',
+                'view_walker',
+                'view_walking_duration',
+                'view_daycare',
+                'view_daycare_booking',
+                'view_care_taker',
+                'view_pet_sitter',
+                'view_booking_request'
             ];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->hasPermission($permission))) {
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->hasPermission($permission))) {
                 $this->staticMenu($menu, ['title' => __('sidebar.services'), 'order' => 0]);
             }
 
-            //Boarding
-            if (check_system_service('boarding') == 1) {
-                $boarding = $this->parentMenu($menu, [
-                    'icon' => 'icon-Boarding',
-                    'title' => __('booking.lbl_boarding'),
-                    'nickname' => 'boarding',
-                    'permission' => 'view_boarding',
-                    'order' => 0,
-                ]);
-                $this->childMain($boarding, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.boarding_booking'),
-                    'route' => 'backend.bookings.datatable_view',
-                    'shortTitle' => 'BB',
-                    'active' => ['app/bookings-table-view'],
-                    'permission' => 'view_boarding_booking',
-                    'order' => 0,
-                ]);
+            // //Boarding
+            // if (check_system_service('boarding') == 1) {
+            //     $boarding = $this->parentMenu($menu, [
+            //         'icon' => 'icon-Boarding',
+            //         'title' => __('booking.lbl_boarding'),
+            //         'nickname' => 'boarding',
+            //         'permission' => 'view_boarding',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($boarding, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.boarding_booking'),
+            //         'route' => 'backend.bookings.datatable_view',
+            //         'shortTitle' => 'BB',
+            //         'active' => ['app/bookings-table-view'],
+            //         'permission' => 'view_boarding_booking',
+            //         'order' => 0,
+            //     ]);
 
-                $this->childMain($boarding, [
-                    'title' => __('menu.boarder_list'),
-                    'icon' => 'icon-Employee',
-                    'route' => ['backend.employees.index', 'employee_type' => 'boarder'],
-                    'shortTitle' => 'BL',
-                    'active' => ['app/employees?employee_type=boarder'],
-                    'permission' => 'view_boarder',
-                    'order' => 0,
-                ]);
+            //     $this->childMain($boarding, [
+            //         'title' => __('menu.boarder_list'),
+            //         'icon' => 'icon-Employee',
+            //         'route' => ['backend.employees.index', 'employee_type' => 'boarder'],
+            //         'shortTitle' => 'BL',
+            //         'active' => ['app/employees?employee_type=boarder'],
+            //         'permission' => 'view_boarder',
+            //         'order' => 0,
+            //     ]);
 
-                $this->childMain($boarding, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.facility_list'),
-                    'route' => 'backend.service-facility.index',
-                    'shortTitle' => 'FL',
-                    'active' => ['app/service-facility'],
-                    'permission' => 'view_facility',
-                    'order' => 0,
-                ]);
-            }
+            //     $this->childMain($boarding, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.facility_list'),
+            //         'route' => 'backend.service-facility.index',
+            //         'shortTitle' => 'FL',
+            //         'active' => ['app/service-facility'],
+            //         'permission' => 'view_facility',
+            //         'order' => 0,
+            //     ]);
+            // }
+
             if (check_system_service('veterinary') == 1) {
                 //Veterinary
                 $veterinary = $this->parentMenu($menu, [
@@ -155,52 +178,54 @@ class GenerateMenus
                     'order' => 0,
                 ]);
             }
-            if (check_system_service('grooming') == 1) {
-                //Grooming
-                $grooming = $this->parentMenu($menu, [
-                    'icon' => 'icon-Grooming',
-                    'title' => __('booking.lbl_grooming'),
-                    'nickname' => 'grooming',
-                    'permission' => 'view_grooming',
-                    'order' => 0,
-                ]);
-                $this->childMain($grooming, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.grooming_booking'),
-                    'route' => 'backend.grooming.datatable_view',
-                    'shortTitle' => 'GB',
-                    'active' => ['app/grooming-table-view'],
-                    'permission' => 'view_grooming_booking',
-                    'order' => 0,
-                ]);
-                $this->childMain($grooming, [
-                    'title' => __('menu.groomer_list'),
-                    'icon' => 'icon-Employee',
-                    'route' => ['backend.employees.index', 'employee_type' => 'groomer'],
-                    'shortTitle' => 'GL',
-                    'active' => ['app/employees?employee_type=groomer'],
-                    'permission' => 'view_groomer',
-                    'order' => 0,
-                ]);
-                $this->childMain($grooming, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.category_list'),
-                    'route' => ['backend.categories.index', 'category_type' => 'grooming'],
-                    'shortTitle' => 'CL',
-                    'active' => ['app/categories?category_type=grooming'],
-                    'permission' => 'view_grooming_category',
-                    'order' => 0,
-                ]);
-                $this->childMain($grooming, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.service_list'),
-                    'route' => ['backend.services.index', 'service_type' => 'grooming'],
-                    'shortTitle' => 'SL',
-                    'active' => ['app/services?service_type=grooming'],
-                    'permission' => 'view_grooming_service',
-                    'order' => 0,
-                ]);
-            }
+
+            // if (check_system_service('grooming') == 1) {
+            //     //Grooming
+            //     $grooming = $this->parentMenu($menu, [
+            //         'icon' => 'icon-Grooming',
+            //         'title' => __('booking.lbl_grooming'),
+            //         'nickname' => 'grooming',
+            //         'permission' => 'view_grooming',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($grooming, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.grooming_booking'),
+            //         'route' => 'backend.grooming.datatable_view',
+            //         'shortTitle' => 'GB',
+            //         'active' => ['app/grooming-table-view'],
+            //         'permission' => 'view_grooming_booking',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($grooming, [
+            //         'title' => __('menu.groomer_list'),
+            //         'icon' => 'icon-Employee',
+            //         'route' => ['backend.employees.index', 'employee_type' => 'groomer'],
+            //         'shortTitle' => 'GL',
+            //         'active' => ['app/employees?employee_type=groomer'],
+            //         'permission' => 'view_groomer',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($grooming, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.category_list'),
+            //         'route' => ['backend.categories.index', 'category_type' => 'grooming'],
+            //         'shortTitle' => 'CL',
+            //         'active' => ['app/categories?category_type=grooming'],
+            //         'permission' => 'view_grooming_category',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($grooming, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.service_list'),
+            //         'route' => ['backend.services.index', 'service_type' => 'grooming'],
+            //         'shortTitle' => 'SL',
+            //         'active' => ['app/services?service_type=grooming'],
+            //         'permission' => 'view_grooming_service',
+            //         'order' => 0,
+            //     ]);
+            // }
+
             if (check_system_service('training') == 1) {
                 //Training
                 $training = $this->parentMenu($menu, [
@@ -247,106 +272,120 @@ class GenerateMenus
                     'order' => 0,
                 ]);
             }
-            //Walking
-            if (check_system_service('walking') == 1) {
-                $walking = $this->parentMenu($menu, [
-                    'icon' => 'icon-Walking',
-                    'title' => __('booking.lbl_walking'),
-                    'permission' => 'view_walking',
-                    'nickname' => 'walking',
-                    'order' => 0,
-                ]);
-                $this->childMain($walking, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.walking_booking'),
-                    'route' => 'backend.walking.datatable_view',
-                    'shortTitle' => 'WB',
-                    'active' => ['app/walking-table-view'],
-                    'permission' => 'view_walking_booking',
-                    'order' => 0,
-                ]);
+            // //Walking
+            // if (check_system_service('walking') == 1) {
+            //     $walking = $this->parentMenu($menu, [
+            //         'icon' => 'icon-Walking',
+            //         'title' => __('booking.lbl_walking'),
+            //         'permission' => 'view_walking',
+            //         'nickname' => 'walking',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($walking, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.walking_booking'),
+            //         'route' => 'backend.walking.datatable_view',
+            //         'shortTitle' => 'WB',
+            //         'active' => ['app/walking-table-view'],
+            //         'permission' => 'view_walking_booking',
+            //         'order' => 0,
+            //     ]);
 
-                $this->childMain($walking, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.walking_booking_request'),
-                    'route' => ['backend.walking.booking_request_datatable'],
-                    'shortTitle' => 'BR',
-                    'active' => ['app/booking-request-datatable'],
-                    'permission' => 'view_booking_request',
-                    'order' => 0,
-                ]);
-                $this->childMain($walking, [
-                    'title' => __('menu.walker_list'),
-                    'icon' => 'icon-Employee',
-                    'route' => ['backend.employees.index', 'employee_type' => 'walker'],
-                    'shortTitle' => 'WL',
-                    'active' => ['app/employees?employee_type=walker'],
-                    'permission' => 'view_walker',
-                    'order' => 0,
-                ]);
-                $this->childMain($walking, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.duration_list'),
-                    'route' => ['backend.service-duration.index', 'type' => 'walking'],
-                    'shortTitle' => 'DL',
-                    'active' => ['app/service-duration?type=walking'],
-                    'permission' => 'view_walking_duration',
-                    'order' => 0,
-                ]);
-            }
+            //     $this->childMain($walking, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.walking_booking_request'),
+            //         'route' => ['backend.walking.booking_request_datatable'],
+            //         'shortTitle' => 'BR',
+            //         'active' => ['app/booking-request-datatable'],
+            //         'permission' => 'view_booking_request',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($walking, [
+            //         'title' => __('menu.walker_list'),
+            //         'icon' => 'icon-Employee',
+            //         'route' => ['backend.employees.index', 'employee_type' => 'walker'],
+            //         'shortTitle' => 'WL',
+            //         'active' => ['app/employees?employee_type=walker'],
+            //         'permission' => 'view_walker',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($walking, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.duration_list'),
+            //         'route' => ['backend.service-duration.index', 'type' => 'walking'],
+            //         'shortTitle' => 'DL',
+            //         'active' => ['app/service-duration?type=walking'],
+            //         'permission' => 'view_walking_duration',
+            //         'order' => 0,
+            //     ]);
+            // }
 
-            //Day Care
-            if (check_system_service('daycare') == 1) {
+            // //Day Care
+            // if (check_system_service('daycare') == 1) {
 
-                $daycare = $this->parentMenu($menu, [
-                    'icon' => 'icon-icon-day-care',
-                    'title' => __('booking.lbl_day_care'),
-                    'nickname' => 'daycare',
-                    'permission' => 'view_daycare',
-                    'order' => 0,
-                ]);
-                $this->childMain($daycare, [
-                    'icon' => 'icon-Filter',
-                    'title' => __('menu.daycare_booking'),
-                    'route' => 'backend.daycare.datatable_view',
-                    'shortTitle' => 'DB',
-                    'active' => ['app/daycare-table-view'],
-                    'permission' => 'view_daycare_booking',
-                    'order' => 0,
-                ]);
-                $this->childMain($daycare, [
-                    'title' => __('menu.daycare_taker_list'),
-                    'icon' => 'icon-Employee',
-                    'route' => ['backend.employees.index', 'employee_type' => 'day_taker'],
-                    'shortTitle' => 'DT',
-                    'active' => ['app/employees?employee_type=day_care'],
-                    'permission' => 'view_care_taker',
-                    'order' => 0,
-                ]);
-            }
+            //     $daycare = $this->parentMenu($menu, [
+            //         'icon' => 'icon-icon-day-care',
+            //         'title' => __('booking.lbl_day_care'),
+            //         'nickname' => 'daycare',
+            //         'permission' => 'view_daycare',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($daycare, [
+            //         'icon' => 'icon-Filter',
+            //         'title' => __('menu.daycare_booking'),
+            //         'route' => 'backend.daycare.datatable_view',
+            //         'shortTitle' => 'DB',
+            //         'active' => ['app/daycare-table-view'],
+            //         'permission' => 'view_daycare_booking',
+            //         'order' => 0,
+            //     ]);
+            //     $this->childMain($daycare, [
+            //         'title' => __('menu.daycare_taker_list'),
+            //         'icon' => 'icon-Employee',
+            //         'route' => ['backend.employees.index', 'employee_type' => 'day_taker'],
+            //         'shortTitle' => 'DT',
+            //         'active' => ['app/employees?employee_type=day_care'],
+            //         'permission' => 'view_care_taker',
+            //         'order' => 0,
+            //     ]);
+            // }
 
-            //Pet Sitter
-            $this->mainRoute($menu, [
-                'icon' => 'icon-Employee',
-                'title' => __('menu.pet_sitter_list_menu'),
-                'permission' => 'view_tag',
-                'route' => ['backend.employees.index', 'employee_type' => 'pet_sitter'],
-                'permission' => 'view_pet_sitter',
-                'active' => ['app/employees?employee_type=pet_sitter'],
-                'order' => 0,
-            ]);
+            // //Pet Sitter
+            // $this->mainRoute($menu, [
+            //     'icon' => 'icon-Employee',
+            //     'title' => __('menu.pet_sitter_list_menu'),
+            //     'permission' => 'view_tag',
+            //     'route' => ['backend.employees.index', 'employee_type' => 'pet_sitter'],
+            //     'permission' => 'view_pet_sitter',
+            //     'active' => ['app/employees?employee_type=pet_sitter'],
+            //     'order' => 0,
+            // ]);
 
 
             // if (auth()->user()->can(['view_product', 'view_brand', 'view_product_category', 'view_product_subcategory', 'view_unit','view_tag','view_unit','view_product_variation','view_supply','view_logistics','view_shipping_zones'])) {
             //     $this->staticMenu($menu, ['title' => __('sidebar.shop'), 'order' => 0]);
             // }
 
+
+
             $permissionsToCheck = [
+                'view_product',
+                'view_brand',
+                'view_product_category',
+                'view_product_subcategory',
+                'view_unit',
+                'view_tag',
+                'view_product_variation',
+                'view_supply',
+                'view_logistics',
+                'view_shipping_zones',
+                'view_e-books',
+                'view_courses',
                 'view_course_platform'
             ];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->hasPermission($permission))) {
-                $this->staticMenu($menu, ['title' => __('sidebar.education_content'), 'order' => 0]);
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->hasPermission($permission))) {
+                $this->staticMenu($menu, ['title' => __('sidebar.shop'), 'order' => 0]);
             }
 
             $this->mainRoute($menu, [
@@ -358,85 +397,76 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
-            $permissionsToCheck = [
-                'view_product', 'view_brand', 'view_product_category', 'view_product_subcategory', 'view_unit',
-                'view_tag', 'view_product_variation', 'view_supply', 'view_logistics', 'view_shipping_zones', 'view_e-books', 'view_courses'
-            ];
+            // $product = $this->parentMenu($menu, [
+            //     'icon' => 'icon-Product',
+            //     'title' => __('sidebar.product'),
+            //     'nickname' => 'pets',
+            //     'permission' => 'view_product',
+            //     'order' => 0,
+            // ]);
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->hasPermission($permission))) {
-                $this->staticMenu($menu, ['title' => __('sidebar.shop'), 'order' => 0]);
-            }
+            // $this->childMain($product, [
+            //     'title' => __('sidebar.all_product'),
+            //     'route' => 'backend.products.index',
+            //     'shortTitle' => 'AP',
+            //     'permission' => 'view_product',
+            //     'active' => ['app/products'],
+            //     'order' => 0,
+            // ]);
 
-            $product = $this->parentMenu($menu, [
-                'icon' => 'icon-Product',
-                'title' => __('sidebar.product'),
-                'nickname' => 'pets',
-                'permission' => 'view_product',
-                'order' => 0,
-            ]);
+            // $this->childMain($product, [
+            //     'title' => __('sidebar.brand'),
+            //     'route' => 'backend.brands.index',
+            //     'shortTitle' => 'BR',
+            //     'permission' => 'view_brand',
+            //     'active' => ['app/brands'],
+            //     'order' => 0,
+            // ]);
 
-            $this->childMain($product, [
-                'title' => __('sidebar.all_product'),
-                'route' => 'backend.products.index',
-                'shortTitle' => 'AP',
-                'permission' => 'view_product',
-                'active' => ['app/products'],
-                'order' => 0,
-            ]);
+            // $this->childMain($product, [
+            //     'title' => __('sidebar.categories'),
+            //     'route' => 'backend.products-categories.index',
+            //     'shortTitle' => 'C',
+            //     'permission' => 'view_product_category',
+            //     'active' => ['app/products-categories'],
+            //     'order' => 0,
+            // ]);
 
-            $this->childMain($product, [
-                'title' => __('sidebar.brand'),
-                'route' => 'backend.brands.index',
-                'shortTitle' => 'BR',
-                'permission' => 'view_brand',
-                'active' => ['app/brands'],
-                'order' => 0,
-            ]);
+            // $this->childMain($product, [
+            //     'title' => __('sidebar.sub_categories'),
+            //     'route' => 'backend.products-categories.index_nested',
+            //     'shortTitle' => 'SC',
+            //     'permission' => 'view_product_subcategory',
+            //     'active' => ['app/products-sub-categories'],
+            //     'order' => 0,
+            // ]);
 
-            $this->childMain($product, [
-                'title' => __('sidebar.categories'),
-                'route' => 'backend.products-categories.index',
-                'shortTitle' => 'C',
-                'permission' => 'view_product_category',
-                'active' => ['app/products-categories'],
-                'order' => 0,
-            ]);
+            // $this->childMain($product, [
+            //     'title' => __('sidebar.units'),
+            //     'route' => 'backend.units.index',
+            //     'shortTitle' => 'U',
+            //     'permission' => 'view_unit',
+            //     'active' => ['app/units'],
+            //     'order' => 0,
+            // ]);
 
-            $this->childMain($product, [
-                'title' => __('sidebar.sub_categories'),
-                'route' => 'backend.products-categories.index_nested',
-                'shortTitle' => 'SC',
-                'permission' => 'view_product_subcategory',
-                'active' => ['app/products-sub-categories'],
-                'order' => 0,
-            ]);
+            // $this->childMain($product, [
+            //     'title' => __('sidebar.tag'),
+            //     'route' => 'backend.tags.index',
+            //     'shortTitle' => 'T',
+            //     'permission' => 'view_tag',
+            //     'active' => ['app/tags'],
+            //     'order' => 0,
+            // ]);
 
-            $this->childMain($product, [
-                'title' => __('sidebar.units'),
-                'route' => 'backend.units.index',
-                'shortTitle' => 'U',
-                'permission' => 'view_unit',
-                'active' => ['app/units'],
-                'order' => 0,
-            ]);
-
-            $this->childMain($product, [
-                'title' => __('sidebar.tag'),
-                'route' => 'backend.tags.index',
-                'shortTitle' => 'T',
-                'permission' => 'view_tag',
-                'active' => ['app/tags'],
-                'order' => 0,
-            ]);
-
-            $this->mainRoute($menu, [
-                'icon' => 'icon-Product-Variations',
-                'title' => __('sidebar.variations'),
-                'route' => ['backend.variations.index'],
-                'active' => ['app/variations'],
-                'permission' => 'view_product_variation',
-                'order' => 0,
-            ]);
+            // $this->mainRoute($menu, [
+            //     'icon' => 'icon-Product-Variations',
+            //     'title' => __('sidebar.variations'),
+            //     'route' => ['backend.variations.index'],
+            //     'active' => ['app/variations'],
+            //     'permission' => 'view_product_variation',
+            //     'order' => 0,
+            // ]);
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-all-booking',
@@ -466,31 +496,31 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
-            $supply = $this->parentMenu($menu, [
-                'icon' => 'icon-supply',
-                'title' => __('sidebar.supply'),
-                'nickname' => 'supply',
-                'permission' => 'view_supply',
-                'order' => 0,
-            ]);
+            // $supply = $this->parentMenu($menu, [
+            //     'icon' => 'icon-supply',
+            //     'title' => __('sidebar.supply'),
+            //     'nickname' => 'supply',
+            //     'permission' => 'view_supply',
+            //     'order' => 0,
+            // ]);
 
-            $this->childMain($supply, [
-                'title' => __('sidebar.logistics'),
-                'route' => 'backend.logistics.index',
-                'shortTitle' => 'AP',
-                'active' => ['app/logistics'],
-                'permission' => 'view_logistics',
-                'order' => 0,
-            ]);
+            // $this->childMain($supply, [
+            //     'title' => __('sidebar.logistics'),
+            //     'route' => 'backend.logistics.index',
+            //     'shortTitle' => 'AP',
+            //     'active' => ['app/logistics'],
+            //     'permission' => 'view_logistics',
+            //     'order' => 0,
+            // ]);
 
-            $this->childMain($supply, [
-                'title' => __('sidebar.logistic_zone'),
-                'route' => 'backend.logistic-zones.index',
-                'permission' => 'view_shipping_zones',
-                'shortTitle' => 'AP',
-                'active' => ['app/logistic-zones'],
-                'order' => 0,
-            ]);
+            // $this->childMain($supply, [
+            //     'title' => __('sidebar.logistic_zone'),
+            //     'route' => 'backend.logistic-zones.index',
+            //     'permission' => 'view_shipping_zones',
+            //     'shortTitle' => 'AP',
+            //     'active' => ['app/logistic-zones'],
+            //     'order' => 0,
+            // ]);
 
             // USERS Static
 
@@ -498,7 +528,7 @@ class GenerateMenus
 
             $permissionsToCheck = ['view_employees', 'view_pending_employees', 'view_owners', 'view_review'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'USUARIO', 'order' => 0]);
             }
 
@@ -544,7 +574,7 @@ class GenerateMenus
 
             $permissionsToCheck = ['view_tax', 'view_employee_earning'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'FINANZAS', 'order' => 0]);
             }
 
@@ -559,7 +589,7 @@ class GenerateMenus
 
             $this->mainRoute($menu, [
                 'icon' => ' icon-Employee-Earnings',
-                'title' => 'Employee Earnings',
+                'title' => __('earning.lbl_staff_earning'),
                 'route' => 'backend.earnings.index',
                 'active' => ['app/earnings'],
                 'permission' => 'view_employee_earning',
@@ -568,7 +598,7 @@ class GenerateMenus
 
             $permissionsToCheck = ['view_daily_bookings', 'view_overall_bookings', 'view_employee_payout', 'view_order_reports'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'REPORTES', 'order' => 0]);
             }
 
@@ -612,7 +642,7 @@ class GenerateMenus
 
             $permissionsToCheck = ['view_vacunas', 'view_antiparasitantes', 'view_antigarrapatas'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'Historial Medico', 'order' => 0]);
             }
 
@@ -639,7 +669,7 @@ class GenerateMenus
 
             $permissionsToCheck = ['view_events', 'view_blogs', 'view_comandos', 'view_herramientas_entrenamiento', 'view_diarios', 'view_activity_levels', 'view_chips', 'view_qr_code', 'view_salud'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'OTROS', 'order' => 0]);
             }
 
@@ -726,12 +756,20 @@ class GenerateMenus
 
             // System Static
             $permissionsToCheck = [
-                'view_setting', 'view_location', 'view_syetem_service', 'view_pet', 'view_page',
-                'view_notification', 'view_app_banner', 'view_app_banner', 'view_constant',
-                'view_permission', 'view_modules'
+                'view_setting',
+                'view_location',
+                'view_syetem_service',
+                'view_pet',
+                'view_page',
+                'view_notification',
+                'view_app_banner',
+                'view_app_banner',
+                'view_constant',
+                'view_permission',
+                'view_modules'
             ];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (collect($permissionsToCheck)->contains(fn($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => 'SISTEMA', 'order' => 0]);
             }
 
@@ -784,14 +822,14 @@ class GenerateMenus
 
 
             //system service
-            $this->mainRoute($menu, [
-                'icon' => ' icon-Employee-Services',
-                'title' => __('menu.system_service'),
-                'route' => ['backend.service.systemservice.index'],
-                'active' => ['app/service/systemservice'],
-                'permission' => 'view_syetem_service',
-                'order' => 0,
-            ]);
+            // $this->mainRoute($menu, [
+            //     'icon' => ' icon-Employee-Services',
+            //     'title' => __('menu.system_service'),
+            //     'route' => ['backend.service.systemservice.index'],
+            //     'active' => ['app/service/systemservice'],
+            //     'permission' => 'view_syetem_service',
+            //     'order' => 0,
+            // ]);
 
             //Pet
             $pet = $this->parentMenu($menu, [

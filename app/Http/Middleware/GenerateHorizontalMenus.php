@@ -47,13 +47,13 @@ class GenerateHorizontalMenus
             ]);
 
             // Company -Child
-            $this->childMain($company, [
-                'title' => 'Pet Center',
-                'route' => 'backend.branch.index',
-                'active' => 'app/branch',
-                'permission' => 'view_branch',
-                'order' => 10,
-            ]);
+            // $this->childMain($company, [
+            //     'title' => 'Pet Center',
+            //     'route' => 'backend.branch.index',
+            //     'active' => 'app/branch',
+            //     'permission' => 'view_branch',
+            //     'order' => 10,
+            // ]);
 
             // Bookings
             $this->mainRoute($company, [

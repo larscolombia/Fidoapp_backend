@@ -262,7 +262,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::post('buy-e-books', [EBookController::class, 'buyBook']);
-       /**
+    /**
      * Obtener libros comprados de un usuario
      * Método HTTP: GET
      * Ruta: /api/get-books-user
@@ -407,7 +407,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *       {
      *         "id": 1,
      *         "full_name": "Super Admin",
-     *         "email": "admin@pawlly.com",
+     *         "email": "admin@fidoapp.com",
      *         "mobile": "44-5289568745",
      *         "profile_image": "http://localhost:8001/storage/1/DbsVx3hU6fl5ZfCBcCC4oX6jlhI9ATgVp7tcxHBn.png",
      *         "created_at": "2024-08-12T06:58:57.000000Z"
@@ -435,7 +435,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *       {
      *         "id": 1,
      *         "full_name": "Super Admin",
-     *         "email": "admin@pawlly.com",
+     *         "email": "admin@fidoapp.com",
      *         "mobile": "44-5289568745",
      *         "profile_image": "http://localhost:8001/storage/1/DbsVx3hU6fl5ZfCBcCC4oX6jlhI9ATgVp7tcxHBn.png",
      *         "created_at": "2024-08-12T06:58:57.000000Z"
@@ -1265,7 +1265,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      *  'message' => 'Mensaje de error',
      * }
      */
-    Route::get('get-pets-by-event',[EventController::class,'getPetByEvent']);
+    Route::get('get-pets-by-event', [EventController::class, 'getPetByEvent']);
     /**
      * Eliminar un evento por ID.
      * Método HTTP: DELETE

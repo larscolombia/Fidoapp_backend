@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 
@@ -10,8 +10,8 @@
 @endpush
 @section('content')
     <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
+        <div class="card-header">
+            <x-backend.section-header>
                 <div>
                     <x-backend.quick-action url='{{ route("backend.subscription.$module_name.bulk_action") }}'>
                         <div class="">
@@ -32,11 +32,10 @@
                 </div>
                 <x-slot name="toolbar">
                     <div class="input-group flex-nowrap">
-                        <span class="input-group-text" id="addon-wrapping"><i
-                                class="icon-Search"></i></span>
-                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..." aria-label="Search"
-                            aria-describedby="addon-wrapping">
-                        
+                        <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
+                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
+                            aria-label="Search" aria-describedby="addon-wrapping">
+
                     </div>
                     @can('add_' . $module_name)
                         <x-buttons.offcanvas target='#form-offcanvas' class=" d-flex align-items-center gap-1"
@@ -47,9 +46,9 @@
                             class="fa-solid fa-filter"></i></button> --}}
                 </x-slot>
             </x-backend.section-header>
-    </div>
+        </div>
         <div class="card-body p-0">
-            
+
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
         </div>
@@ -58,8 +57,7 @@
     <div data-render="app">
 
         <plan-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}"
-            :customefield="{{ json_encode($customefield) }}" >
+            edit-title="{{ __('Edit') }} {{ __($module_title) }}" :customefield="{{ json_encode($customefield) }}">
         </plan-offcanvas>
 
         <x-backend.advance-filter>
@@ -87,8 +85,7 @@
     <!-- DataTables Core and Extensions -->
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
     <script type="text/javascript" defer>
-        const columns = [
-            {
+        const columns = [{
                 name: 'check',
                 data: 'check',
                 title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
@@ -97,17 +94,47 @@
                 orderable: false,
                 searchable: false,
             },
-            { data: 'name', name: 'name', title: "{{ __('plan.lbl_name') }}"  },
-            { data: 'type', name: 'type', title: "{{ __('plan.lbl_type') }}" },
-            { data: 'duration', name: 'duration', title: "{{ __('plan.lbl_duration') }}" },
-            { data: 'amount', name: 'amount', title: "{{ __('plan.lbl_amount') }}" },
-            { data: 'planlimitation', name: 'planlimitation',  title: "{{ __('plan.lbl_plan_limitation') }}"},
-            { data: 'status', name: 'status', orderable: false, searchable: true, title: "{{ __('plan.lbl_status') }}" },
+            {
+                data: 'name',
+                name: 'name',
+                title: "{{ __('plan.lbl_name') }}"
+            },
+            {
+                data: 'type',
+                name: 'type',
+                title: "{{ __('plan.lbl_type') }}"
+            },
+            {
+                data: 'duration',
+                name: 'duration',
+                title: "{{ __('plan.lbl_duration') }}"
+            },
+            {
+                data: 'amount',
+                name: 'amount',
+                title: "{{ __('plan.lbl_amount') }}"
+            },
+            {
+                data: 'planlimitation',
+                name: 'planlimitation',
+                title: "{{ __('plan.lbl_plan_limitation') }}"
+            },
+            {
+                data: 'status',
+                name: 'status',
+                orderable: false,
+                searchable: true,
+                title: "{{ __('plan.lbl_status') }}"
+            },
         ]
 
-        const actionColumn = [
-            { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Action' }
-        ]
+        const actionColumn = [{
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false,
+            title: 'Action'
+        }]
 
         const customFieldColumns = JSON.parse(@json($columns))
 

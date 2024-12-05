@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 
@@ -18,25 +18,25 @@
                 </x-slot>
                 <x-slot name="toolbar">
                     <!-- @can('add_' . $module_name)
-                        <x-buttons.offcanvas target='#form-offcanvas'
-                            title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
-                    @endcan -->
+        <x-buttons.offcanvas target='#form-offcanvas'
+                                    title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
+    @endcan -->
 
                     <!-- @can('restore_' . $module_name)
-                        <div class="btn-group">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                data-bs-target="#module-dropdown-01" aria-expanded="false">
-                                <i class="fas fa-cog"></i>
-                            </button>
-                            <ul class="dropdown-menu" id="module-dropdown-01">
-                                <li>
-                                    <a class="dropdown-item" href=''>
-                                        <i class="fas fa-eye-slash"></i> @lang('View trash')
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    @endcan -->
+        <div class="btn-group">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                        data-bs-target="#module-dropdown-01" aria-expanded="false">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" id="module-dropdown-01">
+                                        <li>
+                                            <a class="dropdown-item" href=''>
+                                                <i class="fas fa-eye-slash"></i> @lang('View trash')
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+    @endcan -->
                 </x-slot>
             </x-backend.section-header>
         </div>
@@ -49,8 +49,7 @@
     <div data-render="app">
 
 
-        <plan-offcanvas
-            create-title="{{ __('Create') }} {{ __($module_title) }}"
+        <plan-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
             edit-title="{{ __('Edit') }} {{ __($module_title) }}">
         </plan-offcanvas>
 
@@ -70,17 +69,17 @@
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
     <script type="text/javascript" defer>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        window.renderedDataTable = $('#datatable').DataTable({
+        document.addEventListener('DOMContentLoaded', (event) => {
+            window.renderedDataTable = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 responsive: true,
                 dom: '<"row align-items-center"<"col-md-6" l><"col-md-6" f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">',
-                ajax: '{{ route("backend.subscriptions.index_data") }}',
+                ajax: '{{ route('backend.subscriptions.index_data') }}',
                 fixedHeader: true,
                 drawCallback: function() {
-                    if(laravel !== undefined) {
+                    if (laravel !== undefined) {
                         window.laravel.initialize();
                     }
                 },
@@ -126,6 +125,6 @@
 
                 ]
             });
-    })
+        })
     </script>
 @endpush

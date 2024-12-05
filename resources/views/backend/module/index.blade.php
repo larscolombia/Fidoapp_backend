@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 @push('after-styles')
@@ -11,33 +11,33 @@
     <div class="card">
         <div class="card-header">
             <x-backend.section-header>
-            <div>
+                <div>
 
-            </div>
-            <x-slot name="toolbar">
+                </div>
+                <x-slot name="toolbar">
 
-              <div class="input-group flex-nowrap">
-                <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..." aria-label="Search" aria-describedby="addon-wrapping">
-                
-              </div>
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
+                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
+                            aria-label="Search" aria-describedby="addon-wrapping">
 
-                <x-buttons.offcanvas target='#form-offcanvas' class=" d-flex align-items-center gap-1" title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
+                    </div>
 
-            </x-slot>
-          </x-backend.section-header>
+                    <x-buttons.offcanvas target='#form-offcanvas' class=" d-flex align-items-center gap-1"
+                        title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
+
+                </x-slot>
+            </x-backend.section-header>
         </div>
         <div class="card-body p-0">
-          <table id="datatable" class="table table-striped border table-responsive">
-          </table>
+            <table id="datatable" class="table table-striped border table-responsive">
+            </table>
         </div>
     </div>
 
     <div data-render="app">
-        <module-form-offcanvas
-            create-title="{{ __('Create') }} {{ __('New') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}"
-             >
+        <module-form-offcanvas create-title="{{ __('Create') }} {{ __('New') }} {{ __($module_title) }}"
+            edit-title="{{ __('Edit') }} {{ __($module_title) }}">
         </module-form-offcanvas>
 
     </div>
@@ -56,11 +56,7 @@
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
     <script type="text/javascript" defer>
-
-
-
-const columns = [
-             {
+        const columns = [{
                 name: 'check',
                 data: 'check',
                 title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
@@ -69,13 +65,22 @@ const columns = [
                 orderable: false,
                 searchable: false,
             },
-            { data: 'module_name', name: 'module_name', title: "{{ __('page.lbl_name') }}" },
+            {
+                data: 'module_name',
+                name: 'module_name',
+                title: "{{ __('page.lbl_name') }}"
+            },
             // { data: 'status', name: 'status', orderable: false, searchable: true,  title: "{{ __('page.lbl_status') }}" },
         ]
 
-        const actionColumn = [
-            { data: 'action', name: 'action', orderable: false, searchable: false, title: "{{ __('page.lbl_action') }}",  width: '5%', }
-        ]
+        const actionColumn = [{
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false,
+            title: "{{ __('page.lbl_action') }}",
+            width: '5%',
+        }]
 
         let finalColumns = [
             ...columns,
@@ -88,8 +93,5 @@ const columns = [
                 finalColumns,
             })
         })
-
-
-
     </script>
 @endpush

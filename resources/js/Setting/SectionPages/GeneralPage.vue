@@ -9,21 +9,23 @@
             Loading...
           </div>
           <div v-else>
-            <i class="fa-solid fa-arrow-rotate-left mx-2"></i>Purge Cache
+            <i class="fa-solid fa-arrow-rotate-left mx-2"></i>
+
+            {{ $t('setting_general_page.purge_cache') }}
           </div>
         </a>
 
-        <a  v-if="role() == 'admin'" href="#" class="btn btn-primary float-right  ml-2" @click="reloaddatabase()" :class="{ disabled: IS_LOADING_DATABASE }" v-bind:disabled="IS_LOADING_DATABASE">
+        <a v-if="role() == 'admin'" href="#" class="btn btn-primary float-right ml-2" @click="reloaddatabase()" :class="{ disabled: IS_LOADING_DATABASE }" v-bind:disabled="IS_LOADING_DATABASE">
           <div v-if="IS_LOADING_DATABASE">
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Loading...
           </div>
           <div v-else>
-            <i class="fa-solid fa-arrow-rotate-left mx-2"></i>Import Data
+            <i class="fa-solid fa-arrow-rotate-left mx-2"></i>
+            {{ $t('setting_general_page.import_data') }}
           </div>
         </a>
-     </div>
-
+      </div>
     </div>
     <InputField :label="$t('setting_general_page.lbl_app')" :value="app_name" v-model="app_name" :errorMessage="errors.app_name"></InputField>
 
@@ -37,7 +39,7 @@
 
     <div class="col row">
       <div class="form-group mb-3 col-md-6">
-        <label for="logo" class="form-label">{{$t('setting_general_page.logo')}}</label>
+        <label for="logo" class="form-label">{{ $t('setting_general_page.logo') }}</label>
         <div class="row align-items-center">
           <div class="col-lg-4">
             <div class="card text-center inline-block">
@@ -49,7 +51,7 @@
           <div class="col-lg-8">
             <div class="d-flex align-items-center gap-2">
               <input type="file" ref="logoInputRef" class="form-control d-none" id="logo" name="logo" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
-              <label class="btn btn-primary mb-5" for="logo">{{$t('setting_general_page.upload')}}</label>
+              <label class="btn btn-primary mb-5" for="logo">{{ $t('setting_general_page.upload') }}</label>
               <input type="button" class="btn btn-danger mb-5" name="remove" value="Remove" @click="removeLogo()" v-if="logo" />
             </div>
             <span class="text-danger">{{ errors.logo }}</span>
@@ -58,7 +60,7 @@
       </div>
 
       <div class="form-group mb-3 col-md-6">
-        <label for="logo" class="form-label">{{$t('setting_general_page.mini')}} {{ $t('setting_general_page.logo') }}</label>
+        <label for="logo" class="form-label">{{ $t('setting_general_page.mini') }} {{ $t('setting_general_page.logo') }}</label>
         <div class="row align-items-center">
           <div class="col-lg-4">
             <div class="card text-center inline-block">
@@ -79,7 +81,7 @@
       </div>
 
       <div class="form-group mb-3 col-md-6">
-        <label for="logo" class="form-label">{{$t('setting_general_page.dark')}} {{ $t('setting_general_page.logo') }}</label>
+        <label for="logo" class="form-label">{{ $t('setting_general_page.dark') }} {{ $t('setting_general_page.logo') }}</label>
         <div class="row align-items-center">
           <div class="col-lg-4">
             <div class="card text-center inline-block">
@@ -91,7 +93,7 @@
           <div class="col-lg-8">
             <div class="d-flex align-items-center gap-2">
               <input type="file" ref="darkLogoInputRef" class="form-control d-none" id="dark-logo" name="dark_logo" accept=".jpeg, .jpg, .png, .gif" @change="changeDarkLogo" />
-              <label class="btn btn-primary mb-5" for="dark-logo">{{$t('setting_general_page.upload')}}</label>
+              <label class="btn btn-primary mb-5" for="dark-logo">{{ $t('setting_general_page.upload') }}</label>
               <input type="button" class="btn btn-danger mb-5" name="remove" value="Remove" @click="removeDarkLogo()" v-if="dark_logo" />
             </div>
             <span class="text-danger">{{ errors.dark_logo }}</span>
@@ -100,7 +102,7 @@
       </div>
 
       <div class="form-group mb-3 col-md-6">
-        <label for="logo" class="form-label">{{$t('setting_general_page.dark')}} {{ $t('setting_general_page.mini') }} {{ $t('setting_general_page.logo') }}</label>
+        <label for="logo" class="form-label">{{ $t('setting_general_page.dark') }} {{ $t('setting_general_page.mini') }} {{ $t('setting_general_page.logo') }}</label>
         <div class="row align-items-center">
           <div class="col-lg-4">
             <div class="card text-center inline-block">
@@ -150,8 +152,7 @@ import CardTitle from '@/Setting/Components/CardTitle.vue'
 import InputField from '@/vue/components/form-elements/InputField.vue'
 import { onMounted, ref } from 'vue'
 import { useField, useForm } from 'vee-validate'
-import { STORE_URL, GET_URL, CACHE_CLEAR,RELOAD_DATABASE} from '@/vue/constants/setting'
-
+import { STORE_URL, GET_URL, CACHE_CLEAR, RELOAD_DATABASE } from '@/vue/constants/setting'
 
 import { readFile } from '@/helpers/utilities'
 import { createRequest } from '@/helpers/utilities'
@@ -175,7 +176,7 @@ const DEFAULT_DARK_MINI_LOGO = document.querySelector('[name="dark-mini-logo"]')
 const DEFAULT_FAVICON = document.querySelector('[name="favicon"]').value
 const IS_SUBMITED = ref(false)
 
-const { storeRequest,deleteRequest  } = useRequest()
+const { storeRequest, deleteRequest } = useRequest()
 
 let logoInputRef = ref(null)
 let logoMiniInputRef = ref(null)
@@ -295,7 +296,6 @@ const display_submit_message = (res) => {
 
 //Form Submit
 const formSubmit = handleSubmit((values) => {
-
   const filteredValues = {}
   Object.entries(values).forEach(([key, value]) => {
     if (value !== null && value !== undefined && value !== '') {
@@ -307,40 +307,32 @@ const formSubmit = handleSubmit((values) => {
   storeRequest({ url: STORE_URL, body: filteredValues, type: 'file' }).then((res) => display_submit_message(res))
 })
 
-
 const IS_LOADING_PURGE_CACHE = ref(false)
 const clearcache = () => {
   IS_LOADING_PURGE_CACHE.value = true
-  deleteRequest({ url: CACHE_CLEAR })
-    .then((res) => {
-      if (res.status) {
-        IS_LOADING_PURGE_CACHE.value = false
-        display_submit_message(res);
-      }
-    });
-};
-
-
+  deleteRequest({ url: CACHE_CLEAR }).then((res) => {
+    if (res.status) {
+      IS_LOADING_PURGE_CACHE.value = false
+      display_submit_message(res)
+    }
+  })
+}
 
 const IS_LOADING_DATABASE = ref(false)
 
-
 const reloaddatabase = () => {
   IS_LOADING_DATABASE.value = true
-  deleteRequest({ url: RELOAD_DATABASE })
-    .then((res) => {
-      if (res.status) {
-        IS_LOADING_DATABASE.value = false
-        display_submit_message(res);
-      }
-    });
-};
+  deleteRequest({ url: RELOAD_DATABASE }).then((res) => {
+    if (res.status) {
+      IS_LOADING_DATABASE.value = false
+      display_submit_message(res)
+    }
+  })
+}
 
 const role = () => {
   return window.auth_role[0]
 }
-
-
 </script>
 
 <style>

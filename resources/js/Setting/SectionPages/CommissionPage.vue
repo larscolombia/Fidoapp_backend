@@ -1,6 +1,6 @@
 <template>
-  <CardTitle title="Commission" icon="fa-solid fa-bars">
-    <button class="btn btn-primary d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-controls="form-modal" @click="changeId(0)"><i class="icon-add-new"></i> {{  $t('messages.new') }}</button>
+  <CardTitle :title="$t('setting_general_page.commission')" icon="fa-solid fa-bars">
+    <button class="btn btn-primary d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-controls="form-modal" @click="changeId(0)"><i class="icon-add-new"></i> {{ $t('messages.new') }}</button>
   </CardTitle>
   <CommissionForm :id="tableId" @onSubmit="fetchTableData()"></CommissionForm>
   <div class="table-responsive">
@@ -19,13 +19,10 @@
           <tr v-for="(item, index) in tableList" :key="index">
             <th>{{ index + 1 }}</th>
             <th>{{ item.title }}</th>
-            <th>  <span v-if="item.commission_type === 'percentage'">
-                {{ item.commission_value }}%
-              </span>
+            <th>
+              <span v-if="item.commission_type === 'percentage'"> {{ item.commission_value }}% </span>
               <span v-else>
-
-                {{formatCurrencyVue(item.commission_value)}}
-
+                {{ formatCurrencyVue(item.commission_value) }}
               </span>
             </th>
             <th class="text-capitalize">{{ item.commission_type }}</th>

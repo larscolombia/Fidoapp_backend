@@ -1,6 +1,6 @@
 <template>
   <form @submit="formSubmit">
-    <CardTitle title="Invoice Settings" icon="fa-solid fa-file-invoice"></CardTitle>
+    <CardTitle :title="$t('setting_general_page.invoice_settings')" icon="fa-solid fa-file-invoice"></CardTitle>
     <div class="row">
       <InputField class="col-md-6" :is-required="false" :label="$t('setting_invoice.lbl_order_prefix')" placeholder="# - INV" v-model="inv_prefix" :error-message="errors.inv_prefix"></InputField>
       <InputField class="col-md-6" type="number" :is-required="false" :label="$t('setting_invoice.lbl_order_starts')" placeholder="1" v-model="order_code_start" :error-message="errors.order_code_start"></InputField>
@@ -34,7 +34,7 @@ const setFormData = (data) => {
     values: {
       inv_prefix: data.inv_prefix,
       order_code_start: data.order_code_start,
-      spacial_note: data.spacial_note,
+      spacial_note: data.spacial_note
     }
   })
 }
@@ -43,7 +43,7 @@ const setFormData = (data) => {
 const validationSchema = yup.object({
   inv_prefix: yup.string().required('Invoice Prefix Is Required'),
   order_code_start: yup.number().required('Order Starts Is Required'),
-  spacial_note: yup.string().required('Spacial Note Is Required'),
+  spacial_note: yup.string().required('Spacial Note Is Required')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({ validationSchema })

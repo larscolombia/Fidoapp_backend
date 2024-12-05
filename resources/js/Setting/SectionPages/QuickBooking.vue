@@ -1,7 +1,7 @@
 <template>
   <form @submit="formSubmit">
     <div>
-      <CardTitle title="Quick Booking" icon="fa-solid fa-paper-plane"></CardTitle>
+      <CardTitle :title="$t('setting_general_page.quick_booking')" icon="fa-solid fa-paper-plane"></CardTitle>
     </div>
     <div class="form-group">
       <div class="d-flex justify-content-between align-items-center">

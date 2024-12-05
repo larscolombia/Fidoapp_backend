@@ -241,14 +241,14 @@ $notifications_latest = optional($notifications)->take(5);
                                     </div>
                                 </div>
                             </div>
-                            @unlessrole('pet_sitter')
+                            {{-- @unlessrole('pet_sitter')
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center gap-2"
                                         href="{{ route('backend.branch.index') }}">
                                         <i class="icon-Home"></i> Pet Center
                                     </a>
                                 </li>
-                            @endunlessrole
+                            @endunlessrole --}}
                             <li>
                                 <a class="dropdown-item d-flex align-items-center gap-2"
                                     href="{{ route('backend.my-profile') }}"><i

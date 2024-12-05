@@ -1,7 +1,6 @@
 <template>
   <form @submit="formSubmit">
-    
-    <CardTitle title="Misc Settings" icon="fa-solid fa-screwdriver-wrench"></CardTitle>
+    <CardTitle :title="$t('setting_general_page.misc_settings')" icon="fa-solid fa-screwdriver-wrench"></CardTitle>
 
     <div class="row">
       <div class="col-md-4">
@@ -51,7 +50,7 @@ import CardTitle from '@/Setting/Components/CardTitle.vue'
 import InputField from '@/vue/components/form-elements/InputField.vue'
 import { onMounted, ref } from 'vue'
 import { useField, useForm } from 'vee-validate'
-import { STORE_URL, GET_URL, TIME_ZONE_LIST,CURRENCY_LIST } from '@/vue/constants/setting'
+import { STORE_URL, GET_URL, TIME_ZONE_LIST, CURRENCY_LIST } from '@/vue/constants/setting'
 import { useSelect } from '@/helpers/hooks/useSelect'
 import { LANGUAGE_LIST, LISTING_URL } from '@/vue/constants/language'
 import { createRequest, buildMultiSelectObject } from '@/helpers/utilities'
@@ -93,7 +92,7 @@ const singleSelectOption = ref({
 })
 const language = ref([])
 const timezone = ref([])
-const currency= ref([])
+const currency = ref([])
 
 const type = 'time_zone'
 
@@ -112,7 +111,6 @@ const getTimeZoneList = () => {
 const getCurrencyList = () => {
   useSelect({ url: CURRENCY_LIST }, { value: 'id', label: 'currency_code' }).then((data) => (currency.value = data))
 }
-
 
 const data_table_limit_data = ref({
   searchable: true,
@@ -139,8 +137,7 @@ const setFormData = (data) => {
       default_language: data.default_language,
       default_time_zone: data.default_time_zone,
       data_table_limit: data.data_table_limit,
-      default_currency:data.default_currency
-      
+      default_currency: data.default_currency
     }
   })
 }

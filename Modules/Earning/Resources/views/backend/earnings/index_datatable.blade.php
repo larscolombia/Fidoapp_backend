@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-    {{ __($module_action) }} {{ __($module_title) }}
+    {{ __($module_title) }}
 @endsection
 
 @push('after-styles')
@@ -20,7 +20,7 @@
         <earning-form-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
             edit-title="{{ __('Create') }} {{ __('Staff Payout') }} "></earning-form-offcanvas>
 
-           
+
     </div>
 @endsection
 
@@ -44,30 +44,55 @@
                 responsive: true,
                 dom: '<"row align-items-center"><"table-responsive my-3" rt><"row align-items-center px-3 mb-3" <"col-md-6" l><"col-md-6" p>><"clear">',
                 ajax: {
-                    "type"   : "GET",
-                    "url"    : '{{ route("backend.$module_name.index_data") }}',
-                    "data"   : function( d ) {
-                    d.search = {
-                        value: $('.dt-search').val()
-                    };
-                    d.filter = {
-                        column_status: $('#column_status').val()
-                    }
+                    "type": "GET",
+                    "url": '{{ route("backend.$module_name.index_data") }}',
+                    "data": function(d) {
+                        d.search = {
+                            value: $('.dt-search').val()
+                        };
+                        d.filter = {
+                            column_status: $('#column_status').val()
+                        }
                     },
                 },
-                columns: [
-                   {
-                         data: 'user_id',
-                         name: 'user_id',
-                         title: "{{__('employee.lbl_name')}}",
-                         orderable: true,
-                         searchable: true,
-                     },
-                    { data: 'total_booking', name: 'total_booking', title: "{{ __('earning.lbl_tot_booking') }}", orderable: false},
-                    { data: 'total_service_amount', name: 'total_service_amount', title: "{{ __('earning.lbl_total_earning') }}", orderable: false },
-                    { data: 'total_commission_earn', name: 'total_commission_earn', title: "{{ __('earning.lbl_total_commission') }}", orderable: false },
-                    { data: 'total_pay', name: 'total_pay', title: "{{ __('earning.lbl_staff_earning') }}", orderable: false },
-                    { data: 'action', name: 'action', title: "{{ __('earning.lbl_action') }}", orderable: false, searchable: false }
+                columns: [{
+                        data: 'user_id',
+                        name: 'user_id',
+                        title: "{{ __('employee.lbl_name') }}",
+                        orderable: true,
+                        searchable: true,
+                    },
+                    {
+                        data: 'total_booking',
+                        name: 'total_booking',
+                        title: "{{ __('earning.lbl_tot_booking') }}",
+                        orderable: false
+                    },
+                    {
+                        data: 'total_service_amount',
+                        name: 'total_service_amount',
+                        title: "{{ __('earning.lbl_total_earning') }}",
+                        orderable: false
+                    },
+                    {
+                        data: 'total_commission_earn',
+                        name: 'total_commission_earn',
+                        title: "{{ __('earning.lbl_total_commission') }}",
+                        orderable: false
+                    },
+                    {
+                        data: 'total_pay',
+                        name: 'total_pay',
+                        title: "{{ __('earning.lbl_staff_earning') }}",
+                        orderable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        title: "{{ __('earning.lbl_action') }}",
+                        orderable: false,
+                        searchable: false
+                    }
                 ]
             });
         })
@@ -81,7 +106,7 @@
             setEditID($(this).attr('data-crud-id'), $(this).attr('data-parent-id'))
         })
 
-        function test(){
+        function test() {
 
             alert(132);
         }

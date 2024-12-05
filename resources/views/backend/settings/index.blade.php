@@ -1,20 +1,22 @@
 @extends('backend.layouts.app')
 
-@section('title') {{ __($module_action) }} {{ __($module_title) }} @endsection
+@section('title')
+    {{ __($module_title) }}
+@endsection
 
 
 
 @section('content')
-<meta name="setting_local" content="none">
-<input type="hidden" name="admin-profile" value="{{asset('img/avatar/avatar.png')}}">
-<input type="hidden" name="logo" value="{{asset('img/logo/logo.png')}}">
-<input type="hidden" name="mini-logo" value="{{asset('img/logo/mini_logo.png')}}">
-<input type="hidden" name="dark-logo" value="{{asset('img/logo/dark_logo.png')}}">
-<input type="hidden" name="dark-mini-logo" value="{{asset('img/logo/mini_logo.png')}}">
-<input type="hidden" name="favicon" value="{{asset('img/logo/favicon/favicon.png')}}">
+    <meta name="setting_local" content="none">
+    <input type="hidden" name="admin-profile" value="{{ asset('img/avatar/avatar.png') }}">
+    <input type="hidden" name="logo" value="{{ asset('img/logo/logo.png') }}">
+    <input type="hidden" name="mini-logo" value="{{ asset('img/logo/mini_logo.png') }}">
+    <input type="hidden" name="dark-logo" value="{{ asset('img/logo/dark_logo.png') }}">
+    <input type="hidden" name="dark-mini-logo" value="{{ asset('img/logo/mini_logo.png') }}">
+    <input type="hidden" name="favicon" value="{{ asset('img/logo/favicon/favicon.png') }}">
 
-<div id="setting-app"></div>
-{{-- <div class="card">
+    <div id="setting-app"></div>
+    {{-- <div class="card">
     <div class="card-body">
 
         <x-backend.section-header>
@@ -35,9 +37,9 @@
                 <form method="post" action="{{ route('backend.settings.store') }}" enctype="multipart/form-data" class="form-horizontal" role="form">
                     {!! csrf_field() !!}
 
-                    @if(count(config('setting_fields', [])) )
+                    @if (count(config('setting_fields', [])))
 
-                        @foreach(config('setting_fields') as $section => $fields)
+                        @foreach (config('setting_fields') as $section => $fields)
                         <div class="card card-accent-primary mb-4">
                             <div class="card-header">
                                 <i class="{{ Arr::get($fields, 'icon', 'glyphicon glyphicon-flash') }}"></i>
@@ -48,7 +50,7 @@
 
                                 <div class="row mb-3">
                                     <div class="col row">
-                                        @foreach($fields['elements'] as $field)
+                                        @foreach ($fields['elements'] as $field)
                                             @includeIf('backend.settings.fields.' . $field['type'] )
                                         @endforeach
                                     </div>
@@ -79,12 +81,12 @@
 @endsection
 
 @push('after-styles')
-  <style>
-    .modal-backdrop {
-      --bs-backdrop-zindex: 1030;
-    }
-  </style>
+    <style>
+        .modal-backdrop {
+            --bs-backdrop-zindex: 1030;
+        }
+    </style>
 @endpush
 @push('after-scripts')
-<script src="{{ asset('js/setting-vue.min.js')}}"></script>
+    <script src="{{ asset('js/setting-vue.min.js') }}"></script>
 @endpush

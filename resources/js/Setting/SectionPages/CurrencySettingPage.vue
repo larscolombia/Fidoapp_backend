@@ -1,6 +1,6 @@
 <template>
-  <CardTitle title="Currency Setting" icon="fa fa-dollar fa-lg mr-2">
-    <button class="btn btn-primary d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-controls="exampleModal" @click="changeId(0)"><i class="icon-add-new"></i>{{  $t('messages.new') }}</button>
+  <CardTitle :title="$t('setting_general_page.currency_settings')" icon="fa fa-dollar fa-lg mr-2">
+    <button class="btn btn-primary d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-controls="exampleModal" @click="changeId(0)"><i class="icon-add-new"></i>{{ $t('messages.new') }}</button>
   </CardTitle>
   <CurrencyFormOffCanvas :id="tableId" @onSubmit="fetchTableData()"></CurrencyFormOffCanvas>
   <div class="table-responsive">

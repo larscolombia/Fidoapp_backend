@@ -3,7 +3,10 @@
     <div class="d-flex align-items-center justify-content-between">
       <h6 class="mt-4 mb-3">{{ $t('setting_general_page.Color_Customizer') }}</h6>
       <div class="d-flex align-items-center">
-        <a href="#custom-color" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="custom-color">Custom</a>
+        <a href="#custom-color" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="custom-color">
+          
+           {{$t('setting_general_page.custom')}}
+          </a>
         <div data-setting="radio">
           <button class="btn bg-transparent" @click="resetColor">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

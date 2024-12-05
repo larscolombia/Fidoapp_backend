@@ -2,10 +2,9 @@
   <form @submit="formSubmit">
     <div class="col-md-12 d-flex justify-content-between">
       <div class="d-flex">
-        <CardTitle title="Holiday" icon="fa-solid fa-calendar-check"></CardTitle>
+        <CardTitle :title="$t('setting_general_page.holiday')" icon="fa-solid fa-calendar-check"></CardTitle>
       </div>
     </div>
-
 
     <div class="row mb-2">
       <div class="col-12">
