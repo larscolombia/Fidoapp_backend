@@ -32,7 +32,7 @@ class PetController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $pettype = PetType::where('status',1);
+        $pettype = PetType::where('status', 1);
 
         if ($request->has('search')) {
             $pettype->where('name', 'like', "%{$request->search}%");
@@ -55,7 +55,7 @@ class PetController extends Controller
         $user = Auth::user();
         $perPage = $request->input('per_page', 10);
         $user_id = !empty($request->user_id) ? $request->user_id : auth()->user()->id;
-        $pet = Pet::with(['pettype','breed'])->where('status',1)->where('user_id',$user_id);
+        $pet = Pet::with(['pettype', 'breed'])->where('status', 1)->where('user_id', $user_id);
 
         if ($request->has('search')) {
             $pet->where('name', 'like', "%{$request->search}%");
@@ -81,14 +81,14 @@ class PetController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $breed = Breed::where('status',1);
+        $breed = Breed::where('status', 1);
 
         if ($request->has('search')) {
             $breed->where('name', 'like', "%{$request->search}%")
                 ->orWhere('description', 'like', "%{$request->search}%");
         }
         if ($request->has('pettype_id')) {
-            $breed->where('pettype_id',$request->pettype_id);
+            $breed->where('pettype_id', $request->pettype_id);
         }
         $breed = $breed->paginate($perPage);
         $items = BreedResource::collection($breed);
@@ -106,36 +106,34 @@ class PetController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $user=Auth::user();
-        $user_type=$user->user_type;
+        $user = Auth::user();
+        $user_type = $user->user_type;
 
 
-        $pet_note = PetNote::where('status',1)->with('createdBy');
+        $pet_note = PetNote::where('status', 1)->with('createdBy');
 
-        if($user_type =='user'){
-
-            $pet_note->where(function ($query) {
-
-                $query->where('created_by',auth()->id())
-                         ->Orwhere('is_private',0)
-                         ->OrwhereHas('createdBy', function ($subQuery) {
-                            $subQuery->where('user_type','admin');
-                       })
-                       ->OrwhereHas('createdBy', function ($subQuery) {
-                        $subQuery->where('user_type','demo_admin');
-                   });
-               });
-         }else{
+        if ($user_type == 'user') {
 
             $pet_note->where(function ($query) {
 
-                $query->where('created_by',auth()->id())
+                $query->where('created_by', auth()->id())
+                    ->Orwhere('is_private', 0)
+                    ->OrwhereHas('createdBy', function ($subQuery) {
+                        $subQuery->where('user_type', 'admin');
+                    })
+                    ->OrwhereHas('createdBy', function ($subQuery) {
+                        $subQuery->where('user_type', 'demo_admin');
+                    });
+            });
+        } else {
 
-                         ->Orwhere('is_private',0);
+            $pet_note->where(function ($query) {
 
-                  });
+                $query->where('created_by', auth()->id())
 
-          }
+                    ->Orwhere('is_private', 0);
+            });
+        }
 
         if (!empty($request->pet_id)) {
             $pet_note->where('pet_id', $request->pet_id);
@@ -143,7 +141,7 @@ class PetController extends Controller
         if ($request->has('search')) {
             $pet_note->where('name', 'like', "%{$request->search}%");
         }
-        $pet_note= $pet_note->orderBy('created_at','desc');
+        $pet_note = $pet_note->orderBy('created_at', 'desc');
 
         $pet_note = $pet_note->paginate($perPage);
         $items = PetNoteResource::collection($pet_note);
@@ -156,9 +154,10 @@ class PetController extends Controller
     }
 
     // Retorna una lista paginada de dueños y sus mascotas, basándose en un employee_id y los datos de reserva.
-    public function OwnerPetList(Request $request){
+    public function OwnerPetList(Request $request)
+    {
 
-        $employee_id=!empty($request->emaployee_id) ? $request->emaployee_id : auth()->user()->id;
+        $employee_id = !empty($request->emaployee_id) ? $request->emaployee_id : auth()->user()->id;
 
         $perPage = $request->input('per_page', 10);
 
@@ -180,26 +179,25 @@ class PetController extends Controller
             'data' => $items,
             'message' => 'Owners and Pets Note List',
         ], 200);
-
     }
 
     // Retorna los detalles completos de una mascota específica, incluyendo su tipo, raza y notas asociadas.
-    public function PetDetails(Request $request){
+    public function PetDetails(Request $request)
+    {
 
-        try{
+        try {
             $pet_id = $request->has('pet_id') ? $request->input('pet_id') : null;
 
-            $pet_details = Pet::with(['pettype','breed','petnote','sharedOwners','owner'])->where('id', $pet_id)->first();
+            $pet_details = Pet::with(['pettype', 'breed', 'petnote', 'sharedOwners', 'owner'])->where('id', $pet_id)->first();
 
-            $items =New PetDetailsResource($pet_details);
+            $items = new PetDetailsResource($pet_details);
 
             return response()->json([
                 'status' => true,
                 'data' => $items,
                 'message' => 'Pet Details',
             ], 200);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -260,7 +258,7 @@ class PetController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Crear una nueva mascota.
      *
      * @param Request $request
@@ -329,22 +327,17 @@ class PetController extends Controller
             if (!file_exists(public_path('images/pets'))) {
                 mkdir(public_path('images/pets'), 0755, true);
             }
-            // Manejo de la imagen de la mascota
-            if ($request->hasFile('pet_image')) {
-                $image = $request->file('pet_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $imagePath = 'images/pets/' . $imageName;
 
-                // Mueve la imagen a la carpeta public/images/pets
-                $image->move(public_path('images/pets'), $imageName);
-                $validatedData['pet_image'] = $imagePath;
-            }
 
             // Crear la nueva mascota
             $pet = Pet::create($validatedData);
-
+            // Manejo de la imagen de la mascota usando Media Library
+            if ($request->hasFile('pet_image')) {
+                $pet->addMedia($request->file('pet_image'))
+                    ->toMediaCollection('pet_image');
+            }
             //notification
-            $this->sendNotification('pets',$pet,[$request->input('user_id')],__('pet.pet_created_successfully'));
+            $this->sendNotification('pets', $pet, [$request->input('user_id')], __('pet.pet_created_successfully'));
             return response()->json([
                 'message' => __('pet.pet_created_successfully'),
                 'data' => $pet
@@ -358,7 +351,7 @@ class PetController extends Controller
             ], 422);
         } catch (\Exception $e) {
             // Manejo de excepciones generales
-            \Log::error('Error al crear la mascota: '.$e->getMessage());
+            \Log::error('Error al crear la mascota: ' . $e->getMessage());
 
             return response()->json([
                 'message' => __('pet.creation_failed'),
@@ -369,7 +362,7 @@ class PetController extends Controller
 
     public function update(Request $request, $id)
     {
-        try{
+        try {
             $pet = Pet::findOrFail($id);
 
             $rules = [
@@ -409,24 +402,22 @@ class PetController extends Controller
                 }
             }
 
-             // Manejo de la imagen de la mascota
-             if ($request->hasFile('pet_image')) {
-                if ($pet->pet_image && file_exists(public_path($pet->pet_image))) {
-                    unlink(public_path($pet->pet_image));
-                }
-                $image = $request->file('pet_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $imagePath = 'images/pets/' . $imageName;
-
-                // Mueve la imagen a la carpeta public/images/pets
-                $image->move(public_path('images/pets'), $imageName);
-                $validatedData['pet_image'] = $imagePath;
-            }
-
-
             $pet->update($validatedData);
+            // Manejo de la imagen de la mascota
+            if ($request->hasFile('pet_image')) {
+                // Eliminar la imagen anterior si existe
+                if ($pet->hasMedia('pet_image')) {
+                    $pet->getFirstMedia('pet_image')->delete();
+                }
+
+                // Agregar la nueva imagen a la colección de medios
+               $pet->addMedia($request->file('pet_image'))
+                    ->toMediaCollection('pet_image');
+                // Recargar el modelo para obtener los datos actualizados
+               $pet->load('media');
+            }
             //notification
-            $this->sendNotification('pets',$pet,[$request->input('user_id')],__('pet.pet_updated_successfully'));
+            $this->sendNotification('pets', $pet, [$request->input('user_id')], __('pet.pet_updated_successfully'));
             return response()->json([
                 'success' => true,
                 'message' => __('pet.pet_updated_successfully'),
@@ -439,7 +430,7 @@ class PetController extends Controller
                 'errors' => $e->validator->errors(),
                 'success' => false
             ], 422);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
                 'success' => false
@@ -491,7 +482,7 @@ class PetController extends Controller
     {
         $petSelected = Pet::find($id);
         $petSelected->delete();
-        $this->sendNotification('pets',$petSelected,[$petSelected->user_id],__('pet.pet_deleted_successfully'));
+        $this->sendNotification('pets', $petSelected, [$petSelected->user_id], __('pet.pet_deleted_successfully'));
         return response()->json([
             'success' => true,
             'message' => __('pet.pet_deleted_successfully'),
