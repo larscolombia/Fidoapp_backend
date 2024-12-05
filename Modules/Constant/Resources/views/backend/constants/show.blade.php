@@ -23,7 +23,7 @@
                     @can('edit_' . $module_name)
                         <button type="button" class="btn btn-primary btn-icon btn-sm" data-bs-toggle="offcanvas"
                             data-bs-target="#form-offcanvas" data-crud-id="{{ $$module_name_singular->id }}"
-                            title="{{ __('Edit') }} " data-bs-toggle="tooltip"> <i class="icon-Edit"></i></button>
+                            title="{{ __('messages.edit') }} " data-bs-toggle="tooltip"> <i class="icon-Edit"></i></button>
                     @endcan
                     <x-backend.buttons.return-back />
                 </x-slot>
@@ -54,7 +54,7 @@
 
     <div data-render="app">
         <form-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}"></form-offcanvas>
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}"></form-offcanvas>
     </div>
 @endsection
 

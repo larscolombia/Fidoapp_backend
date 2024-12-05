@@ -19,23 +19,23 @@
                 <x-slot name="toolbar">
                     <!-- @can('add_' . $module_name)
         <x-buttons.offcanvas target='#form-offcanvas'
-                                    title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
+                                            title="{{ __('Create') }} {{ __($module_title) }}">{{ __('messages.new') }}</x-buttons.offcanvas>
     @endcan -->
 
                     <!-- @can('restore_' . $module_name)
         <div class="btn-group">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                        data-bs-target="#module-dropdown-01" aria-expanded="false">
-                                        <i class="fas fa-cog"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" id="module-dropdown-01">
-                                        <li>
-                                            <a class="dropdown-item" href=''>
-                                                <i class="fas fa-eye-slash"></i> @lang('View trash')
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                                data-bs-target="#module-dropdown-01" aria-expanded="false">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" id="module-dropdown-01">
+                                                <li>
+                                                    <a class="dropdown-item" href=''>
+                                                        <i class="fas fa-eye-slash"></i> @lang('View trash')
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
     @endcan -->
                 </x-slot>
             </x-backend.section-header>
@@ -50,7 +50,7 @@
 
 
         <plan-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}">
+            edit-title="{{ __('messages.edit') }} {{ __($module_title) }}">
         </plan-offcanvas>
 
     </div>

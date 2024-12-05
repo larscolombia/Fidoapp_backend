@@ -60,17 +60,19 @@
             edit-title="{{ __('messages.edit') }} {{ __('pet.lbl_owner') }}">
         </customer-offcanvas>
         <send-push-notification create-title="Send Push Notification"></send-push-notification>
-        <change-password create-title="Change Password"></change-password>
-        <assign-pet create-title="Assign Pet"></assign-pet>
-        <pet-offcanvas create-title="{{ __('messages.create') }} {{ __('pet.title') }}"
-            edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
-        </pet-offcanvas>
+        <change-password
+            create-title="{{ __('messages.change_password') }}></change-password>
+        <assign-pet create-title="Assign
+            Pet"></assign-pet>
+            <pet-offcanvas create-title="{{ __('messages.create') }} {{ __('pet.title') }}"
+                edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
+            </pet-offcanvas>
     </div>
 
 
     <div data-render="app">
         <pets-offcanvas create-title="{{ __('Create') }} {{ __('pet.title') }}"
-            edit-title="{{ __('Edit') }} {{ __('pet.title') }}">
+            edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
         </pets-offcanvas>
     </div>
 
@@ -253,7 +255,8 @@
                             placeholder: "{{ __('pet.Select User') }}",
                             allowClear: true,
                             dropdownParent: $(
-                                '#shareModal') // Ensure the dropdown is rendered within the modal
+                                '#shareModal'
+                            ) // Ensure the dropdown is rendered within the modal
                         });
                     });
             });

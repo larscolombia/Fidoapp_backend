@@ -45,8 +45,9 @@
                     </div>
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
-                            aria-label="Search" aria-describedby="addon-wrapping">
+                        <input type="text" class="form-control form-control-sm dt-search"
+                            placeholder="{{ __('activity_levels.search_placeholder') }}" aria-label="Search"
+                            aria-describedby="addon-wrapping">
 
                     </div>
 
@@ -59,7 +60,7 @@
             </table>
             <div data-render="app">
                 <branch-form-offcanvas create-title="{{ __('Create') }} {{ __('New') }} {{ __($module_title) }}"
-                    edit-title="{{ __('Edit') }} {{ __($module_title) }}"
+                    edit-title="{{ __('messages.edit') }} {{ __($module_title) }}"
                     select-data="{{ json_encode($select_data) }}" :customefield="{{ json_encode($customefield) }}">
                 </branch-form-offcanvas>
                 <branch-gallery-offcanvas></branch-gallery-offcanvas>
@@ -69,14 +70,14 @@
     </div>
 
     <!-- <div data-render="app">
-        <branch-form-offcanvas
-            create-title="{{ __('Create') }} {{ __('New') }} {{ __($module_title) }}"
-            edit-title="{{ __('Edit') }} {{ __($module_title) }}"
-            select-data="{{ json_encode($select_data) }}"
-            :customefield="{{ json_encode($customefield) }}">
-        </branch-form-offcanvas>
-        <branch-gallery-offcanvas></branch-gallery-offcanvas>
-    </div> -->
+                <branch-form-offcanvas
+                    create-title="{{ __('Create') }} {{ __('New') }} {{ __($module_title) }}"
+                    edit-title="{{ __('messages.edit') }} {{ __($module_title) }}"
+                    select-data="{{ json_encode($select_data) }}"
+                    :customefield="{{ json_encode($customefield) }}">
+                </branch-form-offcanvas>
+                <branch-gallery-offcanvas></branch-gallery-offcanvas>
+            </div> -->
 @endsection
 
 @push('after-styles')

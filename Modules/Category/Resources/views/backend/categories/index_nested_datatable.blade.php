@@ -81,9 +81,9 @@
     <div data-render="app">
         <form-offcanvas default-image="{{ default_feature_image() }}"
             create-title="{{ __('Create') }} {{ __('new') }}  Category / Sub Category"
-            edit-title="{{ __('Edit') }} Category / Sub Category"
+            edit-title="{{ __('messages.edit') }} Category / Sub Category"
             create-nested-title="{{ __('Create') }} {{ __('new') }}  Sub {{ __($module_title) }}"
-            edit-nested-title="{{ __('Edit') }} Sub {{ __($module_title) }}"
+            edit-nested-title="{{ __('messages.edit') }} Sub {{ __($module_title) }}"
             :category-id="{{ isset($category->id) ? $category->id : null }}"></form-offcanvas>
     </div>
 @endsection

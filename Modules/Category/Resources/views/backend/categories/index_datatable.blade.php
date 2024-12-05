@@ -75,7 +75,7 @@
             create-title="{{ __('messages.create') }} {{ __('messages.new') }} {{ __('category.lbl_category') }} / {{ __('category.sub_category') }}"
             edit-title="{{ __('messages.edit') }} {{ __('category.lbl_category') }} / {{ __('category.sub_category') }}"
             create-nested-title="{{ __('Create') }} {{ __('new') }} Sub {{ __($module_title) }}"
-            edit-nested-title="{{ __('Edit') }} Sub {{ __($module_title) }}"
+            edit-nested-title="{{ __('messages.edit') }} Sub {{ __($module_title) }}"
             :customefield="{{ json_encode($customefield) }}">
         </form-offcanvas>
     </div>
