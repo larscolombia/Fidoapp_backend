@@ -1587,6 +1587,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::put('comamand-by-user/update/{id}',[ComandoController::class,'updateCommandUser']);
         Route::get('commands-by-user/get',[ComandoController::class,'getCommandByUser']);
+        Route::get('commands-by-user/get-category-commands',[ComandoController::class,'getCategoryCommand']);
     });
 
 
