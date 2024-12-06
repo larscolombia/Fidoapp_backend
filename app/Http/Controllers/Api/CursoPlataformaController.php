@@ -413,8 +413,6 @@ class CursoPlataformaController extends Controller
 
         // Inicializar la consulta
         $query = CoursePlatformVideoRating::query()
-            ->select('course_platform_video_ratings.*', 'users.first_name', 'users.last_name', 'users.avatar as user_avatar')
-            ->leftJoin('users', 'course_platform_video_ratings.user_id', '=', 'users.id')
             ->where('course_platform_video_id', $data['course_platform_video_id']);
 
         // Filtrar por user_id si se proporciona
@@ -433,26 +431,23 @@ class CursoPlataformaController extends Controller
             ], 404);
         }
 
-        // Procesar los resultados para incluir full_name y el avatar con URL completa
-        foreach ($coursePlatformVideoRatings as $rating) {
-            // Crear el campo full_name
-            $rating->user_full_name = trim($rating->first_name . ' ' . $rating->last_name);
-
-            // Procesar el avatar para incluir la URL completa
-            if ($rating->user_avatar) {
-                $rating->user_avatar = asset($rating->user_avatar);
-            }else{
-                $rating->user_avatar = asset(config('app.avatar_base_path').'avatar.png');
-            }
-
-            // Opcional: eliminar los campos first_name y last_name si no son necesarios en la respuesta
-            unset($rating->first_name, $rating->last_name);
-        }
-
+        $mappedRatings = $coursePlatformVideoRatings->map(function ($rating) {
+            return [
+                'id' => $rating->id,
+                'user_id' => $rating->user_id,
+                'course_platform_video_id' => $rating->course_platform_video_id,
+                'rating' => $rating->rating,
+                'review_msg' => $rating->review_msg,
+                'user_full_name' => $rating->user->full_name,
+                'user_avatar' => !is_null($rating->user->avatar) ? asset($rating->user->avatar) : asset('images/default/default.jpg'),
+                'created_at' => $rating->created_at,
+                'updated_at' => $rating->updated_at
+            ];
+        });
         // Respuesta exitosa
         return response()->json([
             'success' => true,
-            'data' => $coursePlatformVideoRatings
+            'data' =>  $mappedRatings
         ]);
     }
 
