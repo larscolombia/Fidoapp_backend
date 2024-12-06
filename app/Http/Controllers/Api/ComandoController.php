@@ -87,7 +87,7 @@ class ComandoController extends Controller
                 'category_id' => 'required|exists:category_comandos,id',
                 'voz_comando' => 'required|string|max:255',
                 'instructions' => 'required|string',
-                'user_id' => 'required|exists:users,id'
+                'pet_id' => 'required|exists:pets,id'
             ]);
 
             $comando = Comando::create($data);
@@ -116,7 +116,7 @@ class ComandoController extends Controller
                 'category_id' => 'required|exists:category_comandos,id',
                 'voz_comando' => 'required|string|max:255',
                 'instructions' => 'required|string',
-                'user_id' => 'required|exists:users,id'
+                'pet_id' => 'required|exists:pets,id'
             ]);
             $comando->update($request->only('name', 'description', 'type', 'is_favorite', 'category_id', 'voz_comando', 'instructions'));
 
@@ -137,9 +137,9 @@ class ComandoController extends Controller
     {
         try {
             $data = $request->validate([
-                'user_id' => 'required|exists:users,id'
+                'pet_id' => 'required|exists:pets,id'
             ]);
-            $comandos = Comando::where('user_id', $data['user_id'])->get();
+            $comandos = Comando::where('pet_id', $data['pet_id'])->get();
             if ($comandos->isEmpty()) {
                 return response()->json(['success' => false, 'message' => 'No se encontraron comandos para este comando.'], 404);
             }
