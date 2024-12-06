@@ -28,6 +28,7 @@ class ComandoController extends Controller
             'category_id' => 'required|exists:category_comandos,id',
             'voz_comando' => 'required|string|max:255',
             'instructions' => 'required|string',
+            'pet_id' => 'required|exists:pets,id'
         ]);
 
         $comando = Comando::create($request->all());
@@ -57,6 +58,7 @@ class ComandoController extends Controller
             'category_id' => 'sometimes|exists:category_comandos,id',
             'voz_comando' => 'sometimes|string|max:255',
             'instructions' => 'sometimes|string',
+            'pet_id' => 'required|exists:pets,id'
         ]);
 
         $comando->update($request->only('name', 'description', 'type', 'is_favorite', 'category_id', 'voz_comando', 'instructions'));
