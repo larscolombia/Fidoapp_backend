@@ -139,10 +139,16 @@ class ComandoController extends Controller
             $data = $request->validate([
                 'pet_id' => 'required|exists:pets,id'
             ]);
-            $comandos = Comando::where('pet_id', $data['pet_id'])->get();
+
+            // Obtener comandos donde pet_id sea igual al proporcionado o sea null
+            $comandos = Comando::where('pet_id', $data['pet_id'])
+                ->orWhereNull('pet_id')
+                ->get();
+
             if ($comandos->isEmpty()) {
-                return response()->json(['success' => false, 'message' => 'No se encontraron comandos para este comando.'], 404);
+                return response()->json(['success' => false, 'message' => 'No se encontraron comandos para este pet_id.'], 404);
             }
+
             return response()->json(['success' => true, 'data' => $comandos], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Captura de errores de validación
