@@ -285,7 +285,8 @@ class PetController extends Controller
                 'status' => 'sometimes|boolean',
                 'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'qr_code' => 'sometimes',
-                'passport' => 'nullable|string'
+                'passport' => 'nullable|string',
+                'pet_fur' => 'nullable|string|max:255'
             ];
 
             // Obtener los datos validados
@@ -383,6 +384,7 @@ class PetController extends Controller
                 'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'qr_code' => 'sometimes',
                 'passport' => 'nullable|string',
+                'pet_fur' => 'nullable|string|max:255'
             ];
 
             $validatedData = $request->validate($rules);
@@ -411,10 +413,10 @@ class PetController extends Controller
                 }
 
                 // Agregar la nueva imagen a la colección de medios
-               $pet->addMedia($request->file('pet_image'))
+                $pet->addMedia($request->file('pet_image'))
                     ->toMediaCollection('pet_image');
                 // Recargar el modelo para obtener los datos actualizados
-               $pet->load('media');
+                $pet->load('media');
             }
             //notification
             $this->sendNotification('pets', $pet, [$request->input('user_id')], __('pet.pet_updated_successfully'));
@@ -467,6 +469,7 @@ class PetController extends Controller
             'deleted_at' => $pet->deleted_at,
             'qr_code' => $pet->qr_code,
             'pet_image' => $pet->pet_image,
+            'pet_fur' => $pet->pet_fur,
             // Agregar descripción de la raza
             'description' => optional($pet->breed)->description, // Usamos optional para evitar errores si breed es null
             // Agregar nombre del tipo de mascota
