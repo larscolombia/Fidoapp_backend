@@ -2,27 +2,28 @@
 
 namespace Modules\Pet\Http\Controllers\Backend\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Pets\StoreRequest;
-use App\Http\Requests\Api\Pets\UpdateRequest;
+use DB;
+use Auth;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Trait\Notification;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Modules\Pet\Models\Pet;
-use Modules\Pet\Models\PetType;
+use Illuminate\Http\Request;
 use Modules\Pet\Models\Breed;
 use Modules\Pet\Models\PetNote;
+use Modules\Pet\Models\PetType;
+use Illuminate\Support\Facades\Log;
+use Modules\Booking\Models\Booking;
+use App\Http\Controllers\Controller;
 use Modules\Pet\Transformers\PetResource;
-use Modules\Pet\Transformers\PetTypeResource;
 use Modules\Pet\Transformers\BreedResource;
+use App\Http\Requests\Api\Pets\StoreRequest;
+use App\Http\Requests\Api\Pets\UpdateRequest;
 use Modules\Pet\Transformers\PetNoteResource;
+use Modules\Pet\Transformers\PetTypeResource;
 use Modules\Pet\Transformers\OwnerPetResource;
 use Modules\Pet\Transformers\PetDetailsResource;
-use Modules\Booking\Models\Booking;
-use App\Models\User;
-use Auth;
-use DB;
-use Illuminate\Support\Facades\Log;
-use App\Trait\Notification;
 
 class PetController extends Controller
 {
@@ -273,7 +274,7 @@ class PetController extends Controller
                 'breed_id' => 'sometimes|exists:breeds,id',
                 'breed_name' => 'sometimes|string',
                 'size' => 'sometimes|string|max:50',
-                'date_of_birth' => 'sometimes|date',
+                'date_of_birth' => 'sometimes|string',
                 'age' => 'sometimes|string|max:50',
                 'gender' => 'sometimes|in:male,female',
                 'weight' => 'sometimes|numeric',
@@ -311,6 +312,12 @@ class PetController extends Controller
                 return response()->json([
                     'message' => __('pet.invalid_breed'),
                 ], 422);
+            }
+
+            try {
+                $validatedData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $validatedData['date_of_birth'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $validatedData['date_of_birth'] = null; // Asignar null si la conversión falla
             }
 
             $validatedData['breed_id'] = $breed->id;
@@ -371,7 +378,7 @@ class PetController extends Controller
                 'breed_id' => 'sometimes|exists:breeds,id',
                 'breed_name' => 'sometimes|string',
                 'size' => 'sometimes|string|max:50',
-                'date_of_birth' => 'sometimes|date',
+                'date_of_birth' => 'sometimes|string',
                 'age' => 'sometimes|string|max:50',
                 'gender' => 'sometimes|in:male,female',
                 'weight' => 'sometimes|numeric',
@@ -402,6 +409,12 @@ class PetController extends Controller
                         'message' => __('validation.invalid_breed'),
                     ], 422);
                 }
+            }
+
+            try {
+                $validatedData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $validatedData['date_of_birth'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $validatedData['date_of_birth'] = null; // Asignar null si la conversión falla
             }
 
             $pet->update($validatedData);
