@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\CategoryComando;
 use App\Models\Comando;
+use Modules\Pet\Models\Pet;
 use Illuminate\Http\Request;
+use App\Models\CategoryComando;
+use App\Http\Controllers\Controller;
 
 class ComandoController extends Controller
 {
@@ -92,7 +93,8 @@ class ComandoController extends Controller
                 'instructions' => 'required|string',
                 'pet_id' => 'required|exists:pets,id'
             ]);
-
+            $pet = Pet::find($data['pet_id']);
+            $data['user_id'] = $pet->owner->id;
             $comando = Comando::create($data);
             return response()->json(['success' => true, 'data' => $comando], 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -110,8 +112,8 @@ class ComandoController extends Controller
     public function updateCommandUser(Request $request, $id)
     {
         try {
-            $comando = Comando::findOrFail($id);
-            $request->validate([
+           $comando = Comando::findOrFail($id);
+           $data = $request->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'required|string',
                 'type' => 'required|in:especializado,basico',
@@ -121,7 +123,14 @@ class ComandoController extends Controller
                 'instructions' => 'required|string',
                 'pet_id' => 'required|exists:pets,id'
             ]);
-            $comando->update($request->only('name', 'description', 'type', 'is_favorite', 'category_id', 'voz_comando', 'instructions'));
+            $pet = Pet::find($data['pet_id']);
+            $data['user_id'] = $pet->owner->id;
+            if (is_null($comando->pet_id)) {
+                $comando = Comando::create($data);
+            } else {
+                // Actualizar el comando existente si pet_id no es null
+                $comando->update($request->only('name', 'description', 'type', 'is_favorite', 'category_id', 'voz_comando', 'instructions'));
+            }
 
             return response()->json(['success' => true, 'data' => $comando], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -169,6 +178,36 @@ class ComandoController extends Controller
     {
         $categorieCommands = CategoryComando::all();
         return response()->json(['success' => true, 'data' => $categorieCommands], 200);
+    }
+
+    public function setLearned(Request $request)
+    {
+        try{
+            $data = $request->validate([
+                'comando_id' => ['required','exists:comandos,id'],
+                'pet_id' => ['required','exists:pets,id'],
+                'learned' => ['required','boolean']
+            ]);
+            $command = Comando::where('id',$data['comando_id'])
+                ->where('pet_id',$data['pet_id'])
+                ->first();
+            if(!$command){
+                return response()->json(['success' => false, 'message' => __('messages.no_record')], 404);
+            }
+
+            $command->learned = $data['learned'];
+            $command->save();
+            return response()->json(['success' => true, 'data' => $command], 200);
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            // Captura de errores de validación
+            return response()->json([
+                'message' => __('validation.failed'),
+                'errors' => $e->validator->errors(),
+                'success' => false
+            ], 422);
+        }catch(\Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
 }

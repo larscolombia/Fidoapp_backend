@@ -1583,11 +1583,103 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          */
         Route::delete('/{id}', [ComandoController::class, 'destroy']);
 
+  /**
+         * Crear un nuevo comando.
+         * Método HTTP: POST
+         * Ruta: /api/comandos/command-by-user
+         * Descripción: Crea un nuevo comando de entrenamiento.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Comando 1",
+         *     "description": "Descripción del comando 1",
+         *     "type": "especializado",
+         *     "is_favorite": true,
+         *     "category_id": 1,
+         *     "voz_comando": "Voz de comando 1",
+         *     "instructions": "Instrucciones del comando 1",
+         *     "pet_id":2
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Comando 1",
+         *         "description": "Descripción del comando 1",
+         *         "type": "especializado",
+         *         "is_favorite": true,
+         *         "category_id": 1,
+         *         "voz_comando": "Voz de comando 1",
+         *         "instructions": "Instrucciones del comando 1",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
         Route::post('command-by-user',[ComandoController::class,'storeCommandUser']);
-
+   /**
+         * Actualizar un comando por ID.
+         * Método HTTP: PUT
+         * Ruta: /api/comandos/comamand-by-user/update/{id}
+         * Descripción: Actualiza los datos de un comando específico por ID,
+         * si no es un comando creado por el usuario, crea uno nuevo.
+         * Datos de Solicitud:
+         * {
+         *     "name": "Comando Actualizado",
+         *     "description": "Descripción actualizada",
+         *     "type": "basico",
+         *     "is_favorite": false,
+         *     "category_id": 2,
+         *     "voz_comando": "Voz de comando actualizada",
+         *     "instructions": "Instrucciones actualizadas",
+         *     "pet_id":2
+         * }
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Comando Actualizado",
+         *         "description": "Descripción actualizada",
+         *         "type": "basico",
+         *         "is_favorite": false,
+         *         "category_id": 2,
+         *         "voz_comando": "Voz de comando actualizada",
+         *         "instructions": "Instrucciones actualizadas",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
         Route::put('comamand-by-user/update/{id}',[ComandoController::class,'updateCommandUser']);
+            /**
+         * Mostrar comandos por mascota.
+         * Método HTTP: GET
+         * Ruta: /api/comandos/commands-by-user/get
+         * Descripción: obtiene los comandos por mascota.
+         * parametro:
+         * pet_id: Id de la mascota
+         * Respuesta Exitosa:
+         * {
+         *     "success": true,
+         *     "data": {
+         *         "id": 1,
+         *         "name": "Comando 1",
+         *         "description": "Descripción del comando 1",
+         *         "type": "especializado",
+         *         "is_favorite": true,
+         *         "category_id": 1,
+         *         "voz_comando": "Voz de comando 1",
+         *         "instructions": "Instrucciones del comando 1",
+         *         "created_at": "2024-07-13T00:00:00.000000Z",
+         *         "updated_at": "2024-07-13T00:00:00.000000Z"
+         *     }
+         * }
+         */
         Route::get('commands-by-user/get',[ComandoController::class,'getCommandByUser']);
         Route::get('commands-by-user/get-category-commands',[ComandoController::class,'getCategoryCommand']);
+
+        Route::put('commands-by-user/setLearned',[ComandoController::class,'setLearned']);
     });
 
 
