@@ -110,7 +110,7 @@ class EventsController extends Controller
         $query = Event::query()
                 ->whereDate('date', $currentDate)
                 ->orWhere('date', '>', $currentDate);
-                
+
         return Datatables::of($query)
                         ->addColumn('check', function ($row) {
                             return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
@@ -121,12 +121,13 @@ class EventsController extends Controller
                         ->editColumn('date', function ($data) {
                             $date = new \DateTime($data->date);
                             return $date->format('Y-m-d');
-                        }) 
+                        })
                         ->editColumn('user_id', function ($data) {
-                            $userType = str_replace('day_taker', 'dayCare_taker', $data->user->user_type);
-                            $user = isset($data->user->first_name) ? $data->user->first_name.' '.$data->user->last_name.' ('.ucwords(str_replace('_',' ',$userType)).')' : '-';
-            
+                            $userType = isset($data->user) ? str_replace('day_taker', 'dayCare_taker', $data->user->user_type) : '';
+                            $user = isset($data->user->first_name) ? $data->user->first_name . ' ' . $data->user->last_name . ($userType ? ' (' . ucwords(str_replace('_', ' ', $userType)) . ')' : '') : '-';
+
                             return $user;
+
                         })
                         ->filterColumn('user_id', function ($query, $keyword) {
                             if (!empty($keyword)) {
@@ -146,7 +147,7 @@ class EventsController extends Controller
                             if ($row->status) {
                                 $checked = 'checked="checked"';
                             }
-            
+
                             return '
                             <div class="form-check form-switch ">
                                 <input type="checkbox" data-url="'.route('backend.events.update_status', $row->id).'" data-token="'.csrf_token().'" class="switch-status-change form-check-input"  id="datatable-row-'.$row->id.'"  name="status" value="'.$row->id.'" '.$checked.'>
