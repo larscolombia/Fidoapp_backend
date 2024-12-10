@@ -60,19 +60,21 @@ class EventController extends Controller
                 'tipo'        => $request->input('tipo'),
                 'status'      => $request->input('status'),
             ]);
-
-            $detailEvent = EventDetail::create([
-                'event_id' => $event->id,
-                'pet_id' => $request->input('pet_id'),
-                'owner_id' => $request->input('owner_id'),
-            ]);
-            $this->sendNotification('event', $event, [$request->input('owner_id')], $event->description);
+            $ownerIds = $request->input('owner_id');
+            foreach ($ownerIds as $ownerId) {
+                EventDetail::create([
+                    'event_id' => $event->id,
+                    'pet_id'   => $request->input('pet_id'),
+                    'owner_id' => $ownerId,
+                ]);
+            }
+            $this->sendNotification('event', $event, $request->input('owner_id'), $event->description);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento creado exitosamente',
                 'data'    =>  [
                     'event'       => $event,
-                    'detail_event' => $detailEvent,
+                    'detail_event' => $event->detailEvent,
                 ],
             ], 201);
         } catch (\Exception $e) {
@@ -102,11 +104,20 @@ class EventController extends Controller
                 'tipo'        => $request->input('tipo', $event->tipo),
                 'status'      => $request->input('status', $event->status),
             ]);
-            $detailEvent->update([
-                'pet_id'   => $request->input('pet_id', $detailEvent->pet_id),
-                'owner_id' => $request->input('owner_id', $detailEvent->owner_id),
-            ]);
+            // Eliminar detalles existentes
+            EventDetail::where('event_id', $event->id)->delete();
 
+            // Crear nuevos detalles del evento
+            $ownerIds = $request->input('owner_id');
+            foreach ($ownerIds as $ownerId) {
+                EventDetail::create([
+                    'event_id' => $event->id,
+                    'pet_id'   => $request->input('pet_id'),
+                    'owner_id' => $ownerId,
+                ]);
+            }
+
+            $this->sendNotification('event', $event, $request->input('owner_id'), $event->description);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento actualizado exitosamente',

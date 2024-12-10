@@ -36,6 +36,8 @@ class UpdateRequest extends FormRequest
             'location' => 'nullable|string',
             'tipo' => 'sometimes|required|in:salud,entrenamiento',
             'status' => 'sometimes|required|boolean',
+            'owner_id' => 'required|array',
+            'owner_id.*' => 'required|integer|exists:users,id'
         ];
     }
 
