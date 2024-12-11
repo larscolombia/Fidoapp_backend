@@ -162,8 +162,7 @@
                             </div> --}}
                             <div class="col-auto mt-3">
                                 <h6 class="d-inline-block">{{ __('product.payment_method') }} </h6>
-                                <span
-                                    class="badge bg-primary">{{ ucwords(str_replace('_', ' ', $order->orderGroup->payment_method)) }}</span>
+                                <span class="badge bg-primary">FidoCoins</span>
                             </div>
                             <h6 class="col-auto d-inline-block">{{ __('product.logistic') }} </h6> <span
                                 class="badge bg-primary">{{ $order->logistic_name }}</span>
