@@ -963,9 +963,9 @@ class EmployeesController extends Controller
 
                 // return $user_id;
             })
-            ->orderColumn('user_id', function ($query, $order) {
-                $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = employee_rating.user_id LIMIT 1)'), $order);
-            }, 1)
+            // ->orderColumn('user_id', function ($query, $order) {
+            //     $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = employee_rating.user_id LIMIT 1)'), $order);
+            // }, 1)
             ->editColumn('updated_at', function ($data) {
                 $module_name = $this->module_name;
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\Diario;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,14 +13,18 @@ class TrainingDiaryController extends Controller
     {
         try {
             $data = $request->validate([
-                'date' => 'required|date',
-                'actividad' => 'required|string',
+                'date' => 'required',
+                'actividad' => 'required|string|max:255',
                 'notas' => 'string',
                 'category_id' => 'required|integer',
                 'pet_id' => 'required|exists:pets,id',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
-
+            try {
+                $data['date'] = Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $data['date'] = Carbon::now()->format('Y-m-d');
+            }
             if (!isset($request->image)) {
                 $data['image'] = null;
             }
@@ -131,8 +136,8 @@ class TrainingDiaryController extends Controller
     {
         try {
             $data = $request->validate([
-                'date' => 'required|date',
-                'actividad' => 'required|string',
+                'date' => 'required',
+                'actividad' => 'required|string|max:255',
                 'notas' => 'string',
                 'category_id' => 'required|integer',
                 'pet_id' => 'required|exists:pets,id',
@@ -141,6 +146,11 @@ class TrainingDiaryController extends Controller
 
             if (!isset($request->image)) {
                 $data['image'] = null;
+            }
+            try {
+                $data['date'] = Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $data['date'] = Carbon::now()->format('Y-m-d');
             }
             $trainingDiary = Diario::find($id);
             if (!$trainingDiary) {
