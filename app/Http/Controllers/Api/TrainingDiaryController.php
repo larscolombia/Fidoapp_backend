@@ -76,7 +76,7 @@ class TrainingDiaryController extends Controller
                 'actividad' => $trainingDiary->actividad,
                 'notas' => $trainingDiary->notas,
                 'pet_id' => $trainingDiary->pet_id,
-                'image' => $trainingDiary->image,
+                'image' => is_null($trainingDiary->image) ? null : asset($trainingDiary->image),
                 'created_at' => $trainingDiary->created_at,
                 'updated_at' => $trainingDiary->updated_at
             ];
@@ -110,7 +110,7 @@ class TrainingDiaryController extends Controller
                     'actividad' => $trainingDiary->actividad,
                     'notas' => $trainingDiary->notas,
                     'pet_id' => $trainingDiary->pet_id,
-                    'image' => $trainingDiary->image,
+                    'image' => is_null($trainingDiary->image) ? null : asset($trainingDiary->image),
                     'created_at' => $trainingDiary->created_at,
                     'updated_at' => $trainingDiary->updated_at
                 ];
