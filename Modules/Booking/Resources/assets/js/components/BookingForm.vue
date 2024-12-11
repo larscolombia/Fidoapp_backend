@@ -1,176 +1,168 @@
 <template>
   <form>
     <div :class="`offcanvas offcanvas-end offcanvas-booking`" data-bs-scroll="true" tabindex="-1" id="form-offcanvas" aria-labelledby="offcanvasBookingForm">
-        <div class="offcanvas-header">
-          <BookingHeader :currentId="currentId" :booking_id="id" :editTitle="editTitle" :createTitle="createTitle" :status="status" :is_paid="is_paid" @statusUpdate="updateStatus"></BookingHeader>
-        </div>
-        <div>
-          <div class="d-flex text-center date-time d-none">
-            <div class="col-6 py-3">
-              <i>On</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{ moment(start_date_time).format('D, MMM YYYY') }}</strong>
-              <strong v-else> {{ moment(current_date).format('D, MMM YYYY') }}</strong>
-            </div>
-            <div class="col-6 py-3">
-              <i>At</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{ moment(start_date_time).format('HH:mm') }}</strong>
-              <strong v-else>{{ moment().format(' HH:mm') }}</strong>
-            </div>
+      <div class="offcanvas-header">
+        <BookingHeader :currentId="currentId" :booking_id="id" :editTitle="editTitle" :createTitle="createTitle" :status="status" :is_paid="is_paid" @statusUpdate="updateStatus"></BookingHeader>
+      </div>
+      <div>
+        <div class="d-flex text-center date-time d-none">
+          <div class="col-6 py-3">
+            <i>On</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{ moment(start_date_time).format('D, MMM YYYY') }}</strong>
+            <strong v-else> {{ moment(current_date).format('D, MMM YYYY') }}</strong>
+          </div>
+          <div class="col-6 py-3">
+            <i>At</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{ moment(start_date_time).format('HH:mm') }}</strong>
+            <strong v-else>{{ moment().format(' HH:mm') }}</strong>
           </div>
         </div>
-        <div class="offcanvas-body border-top">
-          <div class="form-group">
-            <!-- data-bs-toggle="modal" data-bs-target="#exampleModal" -->
-            <div class="d-flex justify-content-between align-items-center">
-              <label class="form-label d-block" v-if="!selectedCustomer"
-                >{{ $t('booking.lbl_choose_customer') }} <span class="text-danger">*</span>
-              </label>
-              <span v-if="!selectedCustomer">
-                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#customer-form-offcanvas" class="btn btn-sm text-primary border-0 px-0 float-end"><i class="fa-solid fa-plus"></i> {{ $t('booking.addnew') }}</button>
-              </span>
-            </div>
-            <!-- <label class="form-label d-block" v-if="!selectedCustomer"
-              >{{ $t('booking.lbl_choose_customer') }} <span class="text-danger">*</span>
+      </div>
+      <div class="offcanvas-body border-top">
+        <div class="form-group">
+          <!-- data-bs-toggle="modal" data-bs-target="#exampleModal" -->
+          <div class="d-flex justify-content-between align-items-center">
+            <label class="form-label d-block" v-if="!selectedCustomer">{{ $t('booking.lbl_choose_customer') }} <span class="text-danger">*</span> </label>
+            <span v-if="!selectedCustomer">
               <button type="button" data-bs-toggle="offcanvas" data-bs-target="#customer-form-offcanvas" class="btn btn-sm text-primary border-0 px-0 float-end"><i class="fa-solid fa-plus"></i> {{ $t('booking.addnew') }}</button>
-            </label> -->
-            
-            <div class="user-block bg-white p-3 rounded" v-if="selectedCustomer">
-              <div class="d-flex align-items-start gap-4 mb-2">
-                <img :src="selectedCustomer.profile_image" alt="avatar" class="img-fluid avatar avatar-60 rounded-pill" />
-                <div class="flex-grow-1">
-                  <div class="gap-2">
-                    <h5>{{ selectedCustomer.full_name }}</h5>
-                    <p class="m-0">{{ $t('booking.lbl_pgroom') }} {{ moment(selectedCustomer.created_at).format('MMMM YYYY') }}</p>
-                  </div>
-                </div>
-                <button type="button" v-if="status !== 'check_in' && !is_paid" @click="removeCustomer()" class="text-danger bg-transparent border-0"><i class="fa-regular fa-trash-can"></i></button>
-              </div>
-              <div class="row m-0">
-                <label class="col-3 p-0"
-                  ><i
-                    ><span class="fst-normal">{{ $t('booking.lbl_phone') }}</span></i
-                  ></label
-                >
-                <strong class="col p-0">{{ selectedCustomer.mobile }}</strong>
-              </div>
-              <div class="row mx-0 mb-3">
-                <label class="col-3 p-0"
-                  ><i
-                    ><span class="fst-normal">{{ $t('booking.lbl_e-mail') }}</span></i
-                  ></label
-                >
-                <strong class="col p-0">{{ selectedCustomer.email }}</strong>
-              </div>
-            </div>
-            <Multiselect id="user_id" v-else v-model="user_id" placeholder="Select Customer" :disabled="is_paid || filterStatus(status).is_disabled" :value="user_id" v-bind="singleSelectOption" :options="customer.options" @select="customerSelect" class="form-group"></Multiselect>
+            </span>
           </div>
 
-          <div v-if="selectedCustomer">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <label class="form-label d-block"
-                      >{{ $t('booking.lbl_choose_pet') }} <span class="text-danger">*</span>
-                    </label>
-                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#PetFromOffcanvas" class="btn btn-sm text-primary px-0 float-end"><i class="fa-solid fa-plus"></i> {{ $t('booking.addpet') }}</button>
-                  </div>
-                  <Multiselect id="pet" v-model="pet" :value="pet" placeholder="Select Pet" v-bind="SingleSelectOption" :options="pet_list.options" class="form-group"></Multiselect>
-                  <div class="text-danger">{{ errors.pet }}</div>
+          <div class="user-block bg-white p-3 rounded" v-if="selectedCustomer">
+            <div class="d-flex align-items-start gap-4 mb-2">
+              <img :src="selectedCustomer.profile_image" alt="avatar" class="img-fluid avatar avatar-60 rounded-pill" />
+              <div class="flex-grow-1">
+                <div class="gap-2">
+                  <h5>{{ selectedCustomer.full_name }}</h5>
+                  <p class="m-0">{{ $t('booking.lbl_pgroom') }} {{ moment(selectedCustomer.created_at).format('MMMM YYYY') }}</p>
                 </div>
               </div>
+              <button type="button" v-if="status !== 'check_in' && !is_paid" @click="removeCustomer()" class="text-danger bg-transparent border-0"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+            <div class="row m-0">
+              <label class="col-3 p-0"
+                ><i
+                  ><span class="fst-normal">{{ $t('booking.lbl_phone') }}</span></i
+                ></label
+              >
+              <strong class="col p-0">{{ selectedCustomer.mobile }}</strong>
+            </div>
+            <div class="row mx-0 mb-3">
+              <label class="col-3 p-0"
+                ><i
+                  ><span class="fst-normal">{{ $t('booking.lbl_e-mail') }}</span></i
+                ></label
+              >
+              <strong class="col p-0">{{ selectedCustomer.email }}</strong>
+            </div>
+          </div>
+          <Multiselect id="user_id" v-else v-model="user_id" :placeholder="$t('messages.select_customer')" :disabled="is_paid || filterStatus(status).is_disabled" :value="user_id" v-bind="singleSelectOption" :options="customer.options" @select="customerSelect" class="form-group"></Multiselect>
+        </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">{{ $t('booking.lbl_care_taker') }} <span class="text-danger">*</span> </label>
-                  <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" placeholder="Select Care Taker" v-bind="SingleSelectOption" :options="employee.options" class="form-group"></Multiselect>
-                  <div class="text-danger">{{ errors.employee_id }}</div>
+        <div v-if="selectedCustomer">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="d-flex justify-content-between align-items-center">
+                  <label class="form-label d-block">{{ $t('booking.lbl_choose_pet') }} <span class="text-danger">*</span> </label>
+                  <button type="button" data-bs-toggle="offcanvas" data-bs-target="#PetFromOffcanvas" class="btn btn-sm text-primary px-0 float-end"><i class="fa-solid fa-plus"></i> {{ $t('booking.addpet') }}</button>
                 </div>
+                <Multiselect id="pet" v-model="pet" :value="pet" :placeholder="$t('branch.select_pet')" v-bind="SingleSelectOption" :options="pet_list.options" class="form-group"></Multiselect>
+                <div class="text-danger">{{ errors.pet }}</div>
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label class="form-label" for="service">{{ $t('booking.lbl_add_facility') }} </label>
-                  <Multiselect id="facility" v-model="facility" :multiple="true" :value="facility" placeholder="Select Facility" v-bind="multiSelectOption" :options="facility_list.options" class="form-group"> </Multiselect>
-                  <span v-if="errorMessages['facility']">
-                    <ul class="text-danger">
-                      <li v-for="err in errorMessages['facility']" :key="err">{{ err }}</li>
-                    </ul>
-                  </span>
-                  <div class="text-danger">{{ errors.facility }}</div>
-                </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label">{{ $t('booking.lbl_care_taker') }} <span class="text-danger">*</span> </label>
+                <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" placeholder="Select Care Taker" v-bind="SingleSelectOption" :options="employee.options" class="form-group"></Multiselect>
+                <div class="text-danger">{{ errors.employee_id }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-label" for="service">{{ $t('booking.lbl_add_facility') }} </label>
+                <Multiselect id="facility" v-model="facility" :multiple="true" :value="facility" placeholder="Select Facility" v-bind="multiSelectOption" :options="facility_list.options" class="form-group"> </Multiselect>
+                <span v-if="errorMessages['facility']">
+                  <ul class="text-danger">
+                    <li v-for="err in errorMessages['facility']" :key="err">{{ err }}</li>
+                  </ul>
+                </span>
+                <div class="text-danger">{{ errors.facility }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label" for="drop_off_date">{{ $t('booking.lbl_drop_off_date') }} <span class="text-danger">*</span></label>
+                <flat-pickr placeholder="Drop Off Date" id="drop_off_date" class="form-control" @input="checkTotalAmount" v-model="drop_off_date" :value="drop_off_date" :config="config"></flat-pickr>
+                <div class="text-danger">{{ errors.drop_off_date }}</div>
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label class="form-label" for="drop_off_date">{{ $t('booking.lbl_drop_off_date') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Drop Off Date" id="drop_off_date" class="form-control" @input="checkTotalAmount" v-model="drop_off_date" :value="drop_off_date" :config="config"></flat-pickr>
-                  <div class="text-danger">{{ errors.drop_off_date }}</div>
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label class="form-label" for="drop_off_time">{{ $t('booking.lbl_drop_off_time') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Drop Off Time" id="drop_off_time" class="form-control" v-model="drop_off_time" :value="drop_off_time" :config="config_time"></flat-pickr>
-                  <div class="text-danger">{{ errors.drop_off_time }}</div>
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label class="form-label" for="pick_up_date">{{ $t('booking.lbl_pick_up_date') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Pick Up Date" id="pick_up_date" @input="checkTotalAmount" class="form-control" v-model="pick_up_date" :value="pick_up_date" :config="config"></flat-pickr>
-                  <div class="text-danger">{{ errors.pick_up_date }}</div>
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label class="form-label" for="pick_up_time">{{ $t('booking.lbl_pick_up_time') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Pick Up Time" id="pick_up_time" class="form-control" v-model="pick_up_time" :value="pick_up_time" :config="config_time"></flat-pickr>
-                  <div class="text-danger">{{ errors.pick_up_time }}</div>
-                </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label" for="drop_off_time">{{ $t('booking.lbl_drop_off_time') }} <span class="text-danger">*</span></label>
+                <flat-pickr placeholder="Drop Off Time" id="drop_off_time" class="form-control" v-model="drop_off_time" :value="drop_off_time" :config="config_time"></flat-pickr>
+                <div class="text-danger">{{ errors.drop_off_time }}</div>
               </div>
             </div>
 
-            <div class="row">
-              <div class="form-group col-md-6">
-                <label class="form-label" for="drop_off_address">{{ $t('booking.lbl_drop_off_pick_off_address') }}<span class="text-danger">*</span></label>
-                <textarea class="form-control" v-model="drop_off_address" id="drop_off_address" disabled></textarea>
-                <!-- <span v-if="errorMessages['drop_off_address']">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label" for="pick_up_date">{{ $t('booking.lbl_pick_up_date') }} <span class="text-danger">*</span></label>
+                <flat-pickr placeholder="Pick Up Date" id="pick_up_date" @input="checkTotalAmount" class="form-control" v-model="pick_up_date" :value="pick_up_date" :config="config"></flat-pickr>
+                <div class="text-danger">{{ errors.pick_up_date }}</div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="form-label" for="pick_up_time">{{ $t('booking.lbl_pick_up_time') }} <span class="text-danger">*</span></label>
+                <flat-pickr placeholder="Pick Up Time" id="pick_up_time" class="form-control" v-model="pick_up_time" :value="pick_up_time" :config="config_time"></flat-pickr>
+                <div class="text-danger">{{ errors.pick_up_time }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="form-label" for="drop_off_address">{{ $t('booking.lbl_drop_off_pick_off_address') }}<span class="text-danger">*</span></label>
+              <textarea class="form-control" v-model="drop_off_address" id="drop_off_address" disabled></textarea>
+              <!-- <span v-if="errorMessages['drop_off_address']">
                   <ul class="text-danger">
                     <li v-for="err in errorMessages['drop_off_address']" :key="err">{{ err }}</li>
                   </ul>
                 </span>
                 <div class="text-danger">{{ errors.drop_off_address }}</div> -->
-              </div>
+            </div>
 
-              <div class="form-group col-md-6">
-                <label class="form-label" for="addition_information">{{ $t('booking.lbl_addition_information') }}</label>
-                <textarea class="form-control" v-model="addition_information" id="addition_information"></textarea>
-                <span v-if="errorMessages['addition_information']">
-                  <ul class="text-danger">
-                    <li v-for="err in errorMessages['addition_information']" :key="err">{{ err }}</li>
-                  </ul>
-                </span>
-                <div class="text-danger">{{ errors.addition_information }}</div>
-              </div>
+            <div class="form-group col-md-6">
+              <label class="form-label" for="addition_information">{{ $t('booking.lbl_addition_information') }}</label>
+              <textarea class="form-control" v-model="addition_information" id="addition_information"></textarea>
+              <span v-if="errorMessages['addition_information']">
+                <ul class="text-danger">
+                  <li v-for="err in errorMessages['addition_information']" :key="err">{{ err }}</li>
+                </ul>
+              </span>
+              <div class="text-danger">{{ errors.addition_information }}</div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="offcanvas-footer border-top">
-          <div class="form-group m-0 p-3 d-flex justify-content-center bg-soft-primary rounded align-items-center">
-            <label for=""
-              ><h6 class="mb-0 pe-2 me-2 border-gray border-end">{{ $t('booking.amount') }}</h6>
-            </label>
-            <span id="totalAmountSpan" class="fw-bold">{{ formatCurrencyVue(totalAmount) }}</span>
-            <small class="text-body ps-1">({{ formatCurrencyVue(totalTaxAmount) }} {{ $t('booking.tax_included') }})</small>
-          </div>
-          <div class="d-grid d-md-flex gap-3 pt-5">
+      <div class="offcanvas-footer border-top">
+        <div class="form-group m-0 p-3 d-flex justify-content-center bg-soft-primary rounded align-items-center">
+          <label for=""
+            ><h6 class="mb-0 pe-2 me-2 border-gray border-end">{{ $t('booking.amount') }}</h6>
+          </label>
+          <span id="totalAmountSpan" class="fw-bold">{{ formatCurrencyVue(totalAmount) }}</span>
+          <small class="text-body ps-1">({{ formatCurrencyVue(totalTaxAmount) }} {{ $t('booking.tax_included') }})</small>
+        </div>
+        <div class="d-grid d-md-flex gap-3 pt-5">
           <div class="d-grid d-md-flex gap-3 p-3">
             <button class="btn btn-primary d-flex align-items-center gap-2 fw-600" id="save-button" @click="formSubmit" :disabled="totalAmount < 1">
               {{ $t('booking.btn_save') }}
@@ -181,15 +173,14 @@
               <i class="icon-Arrow---Right-2"></i>
             </button>
           </div>
-         </div>
         </div>
-    
+      </div>
     </div>
   </form>
 
   <CustomerCreate :data="newCustomerData" @submit="externalFormCreation"></CustomerCreate>
-  <PetFromOffcanvas createTitle="Create Pet"></PetFromOffcanvas>
-  <CustomeFormOffcanvas createTitle="Create Customer"></CustomeFormOffcanvas>
+  <PetFromOffcanvas :createTitle="$t('messages.create_pet')"></PetFromOffcanvas>
+  <CustomeFormOffcanvas :createTitle="$t('messages.create_customer')"></CustomeFormOffcanvas>
 </template>
 <script setup>
 import { ref, reactive, watch, onMounted, computed } from 'vue'
@@ -250,10 +241,7 @@ const drop_off_address = ref()
 
 const getAddress = () => {
   listingRequest({ url: GET_ADDRESS }).then((res) => {
-    drop_off_address.value = res['address_line_1']+',\n'
-                            +res['country']+',\n'
-                            +res['state']+',\n'
-                            +res['city']+'-'+res['postal_code']
+    drop_off_address.value = res['address_line_1'] + ',\n' + res['country'] + ',\n' + res['state'] + ',\n' + res['city'] + '-' + res['postal_code']
   })
 }
 
@@ -368,7 +356,7 @@ const filterStatus = (value) => {
 const current_date = ref(moment().format('YYYY-MM-DD'))
 const config = ref({
   dateFormat: 'Y-m-d',
-  static: true,
+  static: true
   // minDate: 'today'
 })
 
@@ -386,9 +374,9 @@ const validationSchema = yup.object({
         name: 'pickUpDate',
         message: 'Pick Up Date must be after Drop Off Date',
         test: function (pickUpDate) {
-          return !dropOffDate || !pickUpDate || new Date(pickUpDate) > new Date(dropOffDate);
-        },
-      });
+          return !dropOffDate || !pickUpDate || new Date(pickUpDate) > new Date(dropOffDate)
+        }
+      })
     }),
   // pick_up_date: yup.string().required('Pick Up Date is required'),
   pick_up_time: yup.string().required('Pick Up Time is required'),
@@ -447,7 +435,7 @@ const setFormData = (data) => {
       drop_off_time: data.dropoff_time,
       pick_up_date: data.pickup_date,
       pick_up_time: data.pickup_time,
-      
+
       dropoff_address: data.dropoff_address,
       addition_information: data.booking_extra_info
       //  pick_up_address:data.pickup_address,
@@ -467,7 +455,6 @@ const customer = ref({ options: [], list: [] })
 useOnOffcanvasHide('form-offcanvas', () => setFormData(defaultData()))
 
 onMounted(() => {
-
   getCustomers()
   getemployee()
   //getPetList()
@@ -475,10 +462,7 @@ onMounted(() => {
   getBookingprice()
   getFacilityList()
   getAddress()
-
 })
-
-
 
 const getCustomers = (cb) =>
   useSelect({ url: CUSTOMER_LIST }, { value: 'id', label: 'full_name' }).then((data) => {
@@ -527,8 +511,8 @@ const removeCustomer = () => {
 }
 
 const formSubmit = handleSubmit(async (values) => {
-  const saveButton = document.getElementById('save-button');
-  saveButton.disabled = true; 
+  const saveButton = document.getElementById('save-button')
+  saveButton.disabled = true
 
   values.type = 'boarding'
 
@@ -537,14 +521,14 @@ const formSubmit = handleSubmit(async (values) => {
       await updateRequest({ url: UPDATE_URL, id: currentId.value, body: values }).then((res) => reset_datatable_close_offcanvas(res))
     } else {
       await storeRequest({ url: STORE_URL, body: values }).then((res) => reset_datatable_close_offcanvas(res))
-      document.getElementById('feature_image').value = '';
+      document.getElementById('feature_image').value = ''
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error)
   } finally {
-    saveButton.disabled = false;  
+    saveButton.disabled = false
   }
-});
+})
 
 const reset_datatable_close_offcanvas = (res) => {
   if (res.status) {
@@ -558,8 +542,6 @@ const reset_datatable_close_offcanvas = (res) => {
     errorMessages.value = res.all_message
   }
 }
-
-
 </script>
 
 <style scoped>

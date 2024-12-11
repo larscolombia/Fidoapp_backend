@@ -210,4 +210,21 @@ return [
     'course_not_found' => 'Curso no encontrado',
     'breeds_retrieved_successfully' => 'Razas recuperadas con éxito',
     'Users with profiles retrieved successfully' => 'Usuarios con perfiles recuperados con éxito',
+
+    'completed' => 'Completado',
+    'pending' => 'Pendiente',
+    'cancelled' => 'Cancelado',
+    'inprogress' => 'En Progreso',
+    'rejected' => 'Rechazado',
+    'confirmed' => 'Confirmado',
+    'Pending' => 'Pendiente',
+    'Paid' => 'Pagado',
+    'Delete' => 'Eliminar',
+    'search' => 'Buscar',
+    'select_customer' => 'Seleccionar Cliente',
+    'create_customer' => 'Crear Cliente',
+    'create_pet' => 'Crear Mascota',
+    'create_category' => 'Crear nueva Categoría / Sub Categoría',
+    'create_service' => 'Crear servicio',
+    'included_tax' => 'Con impuestos '
 ];

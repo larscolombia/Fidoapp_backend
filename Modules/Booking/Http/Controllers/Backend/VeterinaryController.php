@@ -50,7 +50,7 @@ class VeterinaryController extends Controller
         $statusList = $this->statusList();
 
         $booking = Booking::find(request()->booking_id);
-        
+
         $date = $booking->start_date_time ?? date('Y-m-d');
 
 
@@ -103,7 +103,7 @@ class VeterinaryController extends Controller
             $resource[] = [
                 'id' => $employee->id,
                 'title' => $employee->full_name,
-                'titleHTML' => '<div class="d-flex gap-3 justify-content-center align-items-center py-3"><img src="'.$employee->profile_image.'" class="avatar avatar-40 rounded-pill" alt="employee" />'.$employee->full_name.'</div>',
+                'titleHTML' => '<div class="d-flex gap-3 justify-content-center align-items-center py-3"><img src="' . $employee->profile_image . '" class="avatar avatar-40 rounded-pill" alt="employee" />' . $employee->full_name . '</div>',
             ];
         }
 
@@ -117,7 +117,7 @@ class VeterinaryController extends Controller
     {
         $module_action = 'List';
         $create_title = __('booking.veterinary_booking');
-        $type=$request->type;
+        $type = $request->type;
 
         $filter = [
             'status' => $request->status,
@@ -125,27 +125,25 @@ class VeterinaryController extends Controller
 
         $booking_status = Constant::getAllConstant()->where('type', 'BOOKING_STATUS');
 
-        return view('booking::backend.veterinary.index_datatable', compact('module_action', 'filter', 'booking_status', 'create_title','type'));
+        return view('booking::backend.veterinary.index_datatable', compact('module_action', 'filter', 'booking_status', 'create_title', 'type'));
     }
 
     public function index_data(Datatables $datatable, Request $request)
     {
         $module_name = $this->module_name;
 
-        $query = Booking::query()->where('booking_type','veterinary')
-        ->branch()->with(['user','veterinary','pet','employee','payment']);
+        $query = Booking::query()->where('booking_type', 'veterinary')
+            ->branch()->with(['user', 'veterinary', 'pet', 'employee', 'payment']);
 
 
-        if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
-           
+        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
+
             $query;
-
         } else {
 
             $query->where('employee_id', auth()->id());
-
         }
-    
+
 
         $filter = $request->filter;
 
@@ -185,7 +183,7 @@ class VeterinaryController extends Controller
 
         return $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
-                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->addColumn('action', function ($data) use ($module_name) {
                 return view('booking::backend.veterinary.datatable.action_column', compact('module_name', 'data'));
@@ -195,14 +193,13 @@ class VeterinaryController extends Controller
             })
             ->editColumn('id', function ($data) {
                 $url = route('backend.bookings.bookingShow', ['id' => $data->id]);
-                return "<a href='$url' class='text-primary'>#".$data->id."</a>";
+                return "<a href='$url' class='text-primary'>#" . $data->id . "</a>";
             })
-            ->editColumn('payment_status', function ($data) use ($payment_status,$booking_colors) {
-                if($data->status === 'rejected' || $data->status === 'cancelled'){
+            ->editColumn('payment_status', function ($data) use ($payment_status, $booking_colors) {
+                if ($data->status === 'rejected' || $data->status === 'cancelled') {
                     return '--';
-                }
-                else{
-                    return view('booking::backend.bookings.datatable.select_payment_status', compact('data','payment_status','booking_colors'));
+                } else {
+                    return view('booking::backend.bookings.datatable.select_payment_status', compact('data', 'payment_status', 'booking_colors'));
                 }
             })
             ->editColumn('user_id', function ($data) {
@@ -213,20 +210,18 @@ class VeterinaryController extends Controller
 
                 $employee_data = ServiceEmployee::with('employee')->where('service_id', $serviceid)->pluck('employee_id');
 
-                if($data->employee_id){
-                    if($data->employee !=null){
+                if ($data->employee_id) {
+                    if ($data->employee != null) {
 
-                        return $data->employee->first_name.' '.$data->employee->last_name;
-                    }else{
+                        return $data->employee->first_name . ' ' . $data->employee->last_name;
+                    } else {
 
                         return '-';
                     }
-                }
-                elseif ($employee_data->count() > 0) {
+                } elseif ($employee_data->count() > 0) {
                     $employee = User::whereIn('id', $employee_data)->get();
                     return view('booking::backend.bookings.datatable.select_employee', compact('data', 'employee'));
-                }
-                else{
+                } else {
                     return view('booking::backend.bookings.datatable.select_employee', compact('data', 'employee'));
                 }
             })
@@ -235,9 +230,9 @@ class VeterinaryController extends Controller
             })
             ->orderColumn('veterinary_type', function ($query, $order) {
                 $query->select('bookings.*')
-                ->leftJoin('booking_veterinary_mapping', 'bookings.id', '=', 'booking_veterinary_mapping.booking_id')
-                ->leftJoin('services', 'booking_veterinary_mapping.service_id', '=', 'services.id')
-                ->orderBy(new Expression('(SELECT name FROM categories WHERE id = services.category_id LIMIT 1)'), $order);
+                    ->leftJoin('booking_veterinary_mapping', 'bookings.id', '=', 'booking_veterinary_mapping.booking_id')
+                    ->leftJoin('services', 'booking_veterinary_mapping.service_id', '=', 'services.id')
+                    ->orderBy(new Expression('(SELECT name FROM categories WHERE id = services.category_id LIMIT 1)'), $order);
             }, 1)
             ->filterColumn('veterinary_type', function ($query, $keyword) {
                 if (!empty($keyword)) {
@@ -252,7 +247,7 @@ class VeterinaryController extends Controller
             ->filterColumn('pet_name', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     $query->whereHas('pet', function ($q) use ($keyword) {
-                        $q->where('name', 'like', '%'.$keyword.'%');
+                        $q->where('name', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -260,11 +255,11 @@ class VeterinaryController extends Controller
                 $query->orderBy(new Expression('(SELECT name FROM pets WHERE id = bookings.pet_id LIMIT 1)'), $order);
             }, 1)
             ->editColumn('pettype_id', function ($data) {
-                $value =optional(optional($data->pet)->pettype)->name;
-                if(isset($data->pet)){
-                    if(isset($data->pet->breed)){
+                $value = optional(optional($data->pet)->pettype)->name;
+                if (isset($data->pet)) {
+                    if (isset($data->pet->breed)) {
                         $breed = $data->pet->breed->name;
-                        $value = $data->pet->pettype->name . ' ('. $data->pet->breed->name .')';
+                        $value = $data->pet->pettype->name . ' (' . $data->pet->breed->name . ')';
                     }
                 }
                 return !empty($value) ? $value : '-';
@@ -279,12 +274,12 @@ class VeterinaryController extends Controller
             })
             ->orderColumn('pettype_id', function ($query, $order) {
                 $query->select('bookings.*')
-                ->leftJoin('pets', 'pets.id', '=', 'bookings.pet_id')
-                ->leftJoin('pets_type', 'pets.pettype_id', '=', 'pets_type.id')
-                ->orderBy(new Expression('(SELECT name FROM pets_type WHERE pets_type.id = pets.pettype_id LIMIT 1)'), $order);
+                    ->leftJoin('pets', 'pets.id', '=', 'bookings.pet_id')
+                    ->leftJoin('pets_type', 'pets.pettype_id', '=', 'pets_type.id')
+                    ->orderBy(new Expression('(SELECT name FROM pets_type WHERE pets_type.id = pets.pettype_id LIMIT 1)'), $order);
             }, 1)
             ->editColumn('service_amount', function ($data) {
-                return '<span class="text-primary">'.\Currency::format($data->total_amount).'</span>';
+                return '<span class="text-primary">' . \Currency::format($data->total_amount) . '</span>';
             })
             ->orderColumn('service_amount', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT total_amount FROM booking_transactions WHERE booking_id = bookings.id)'), $order);
@@ -292,7 +287,7 @@ class VeterinaryController extends Controller
             ->filterColumn('service_amount', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     $query->whereHas('payment', function ($q) use ($keyword) {
-                        $q->where('total_amount', 'like', '%'.$keyword.'%');
+                        $q->where('total_amount', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -301,12 +296,11 @@ class VeterinaryController extends Controller
             })
             ->orderColumn('start_date_time', function ($query, $order) {
                 $query->orderByRaw('(SELECT date_time FROM booking_veterinary_mapping WHERE booking_id = bookings.id LIMIT 1) ' . $order);
-
             }, 1)
             ->filterColumn('start_date_time', function ($query, $keyword) {
                 if (!empty($keyword)) {
                     $query->whereHas('veterinary', function ($q) use ($keyword) {
-                        $q->where('date_time', 'like', '%'.$keyword.'%');
+                        $q->where('date_time', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -332,16 +326,16 @@ class VeterinaryController extends Controller
                 if (! empty($keyword)) {
                     $query->whereHas('services', function ($q) use ($keyword) {
                         $q->whereHas('employee', function ($qn) use ($keyword) {
-                            $qn->where('first_name', 'like', '%'.$keyword.'%');
+                            $qn->where('first_name', 'like', '%' . $keyword . '%');
                         });
                     });
                 }
             })
-       
+
             ->filterColumn('user_id', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     $query->whereHas('user', function ($q) use ($keyword) {
-                        $q->where('first_name', 'like', '%'.$keyword.'%');
+                        $q->where('first_name', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -352,7 +346,7 @@ class VeterinaryController extends Controller
                     });
                 }
             })
-            ->rawColumns(['check', 'action', 'status', 'services', 'service_duration', 'service_amount','start_date_time','id'])
+            ->rawColumns(['check', 'action', 'status', 'services', 'service_duration', 'service_amount', 'start_date_time', 'id'])
             ->orderColumns(['id'], '-:column $1')
             ->make(true);
     }
@@ -383,5 +377,4 @@ class VeterinaryController extends Controller
 
         return response()->json(['status' => true, 'message' => $message]);
     }
-    
 }

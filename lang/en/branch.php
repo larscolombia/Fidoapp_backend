@@ -42,6 +42,10 @@ return [
     'branch_reserved' => 'Sorry, your selected slot is already booked. Please choose another slot.',
     'branch_isempty' => 'No Pet Center Available',
     'select_branch' => 'Select Pet Center',
-    'lbl_assign'=>'Assign',
-    'lbl_action'=>'Action'
+    'select_pet' => 'Select Pet',
+    'select_vet' => 'Select Vet',
+    'select_vet_category' => 'Select Category',
+    'select_service' => 'Select service',
+    'lbl_assign' => 'Assign',
+    'lbl_action' => 'Action'
 ];

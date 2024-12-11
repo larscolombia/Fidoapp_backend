@@ -24,9 +24,7 @@
         <div class="offcanvas-body border-top">
           <div class="form-group">
             <div class="d-flex justify-content-between align-items-center">
-              <label class="form-label d-block" v-if="!selectedCustomer"
-                >{{ $t('booking.lbl_choose_customer') }} <span class="text-danger">*</span>
-              </label>
+              <label class="form-label d-block" v-if="!selectedCustomer">{{ $t('booking.lbl_choose_customer') }} <span class="text-danger">*</span> </label>
               <span v-if="!selectedCustomer">
                 <button type="button" data-bs-toggle="offcanvas" data-bs-target="#customer-form-offcanvas" class="btn btn-sm text-primary border-0 px-0 float-end"><i class="fa-solid fa-plus"></i> {{ $t('booking.addnew') }}</button>
               </span>
@@ -59,7 +57,7 @@
                 <strong class="col p-0">{{ selectedCustomer.email }}</strong>
               </div>
             </div>
-            <Multiselect id="user_id" v-else v-model="user_id" placeholder="Select Customer" :disabled="is_paid || filterStatus(status).is_disabled" :value="user_id" v-bind="singleSelectOption" :options="customer.options" @select="customerSelect" class="form-group"></Multiselect>
+            <Multiselect id="user_id" v-else v-model="user_id" :placeholder="$t('messages.select_customer')" :disabled="is_paid || filterStatus(status).is_disabled" :value="user_id" v-bind="singleSelectOption" :options="customer.options" @select="customerSelect" class="form-group"></Multiselect>
           </div>
 
           <div v-if="selectedCustomer">
@@ -67,12 +65,10 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <div class="d-flex justify-content-between align-items-center">
-                    <label class="form-label d-block"
-                      >{{ $t('booking.lbl_choose_pet') }} <span class="text-danger">*</span>
-                    </label>
+                    <label class="form-label d-block">{{ $t('booking.lbl_choose_pet') }} <span class="text-danger">*</span> </label>
                     <button type="button" class="btn text-primary btn-sm float-end px-0" data-bs-toggle="offcanvas" data-bs-target="#PetFromOffcanvas" aria-controls="form-offcanvas"><i class="fa-solid fa-plus"></i> {{ $t('booking.addpet') }}</button>
                   </div>
-                  <Multiselect id="pet" v-model="pet" :value="pet" placeholder="Select Pet" v-bind="SingleSelectOption" :options="pet_list.options" class="form-group"></Multiselect>
+                  <Multiselect id="pet" v-model="pet" :value="pet" :placeholder="$t('branch.select_pet')" v-bind="SingleSelectOption" :options="pet_list.options" class="form-group"></Multiselect>
                   <span class="text-danger">{{ errors.pet }}</span>
                 </div>
               </div>
@@ -80,7 +76,7 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="form-label d-block" for="date">{{ $t('booking.lbl_date') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Date" id="date" class="form-control" v-model="date" :value="date" :config="config"></flat-pickr>
+                  <flat-pickr :placeholder="$t('booking.lbl_date')" id="date" class="form-control" v-model="date" :value="date" :config="config"></flat-pickr>
                   <span class="text-danger">{{ errors.date }}</span>
                 </div>
               </div>
@@ -88,7 +84,7 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="form-label" for="time">{{ $t('booking.lbl_time') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Time" id="time" class="form-control" v-model="time" :value="time" :config="config_time"></flat-pickr>
+                  <flat-pickr :placeholder="$t('booking.lbl_time')" id="time" class="form-control" v-model="time" :value="time" :config="config_time"></flat-pickr>
                   <span class="text-danger">{{ errors.time }}</span>
                 </div>
               </div>
@@ -98,12 +94,10 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <div class="d-flex justify-content-between align-items-center">
-                    <label class="form-label d-block"
-                      >{{ $t('booking.lbl_veterinary_typedata') }} <span class="text-danger">*</span> 
-                    </label>
+                    <label class="form-label d-block">{{ $t('booking.lbl_veterinary_typedata') }} <span class="text-danger">*</span> </label>
                     <button type="button" class="btn text-primary btn-sm float-end px-0" data-bs-toggle="offcanvas" data-bs-target="#category-offcanvas" aria-controls="form-offcanvas"><i class="fa-solid fa-plus"></i> {{ $t('booking.addtype') }}</button>
                   </div>
-                  <Multiselect id="veterinary_type" v-model="veterinary_type" :value="veterinary_type" @select="getServiceList" placeholder="Select veterinary category" v-bind="SingleSelectOption" :options="veterinary_type_list.options" class="form-group"></Multiselect>
+                  <Multiselect id="veterinary_type" v-model="veterinary_type" :value="veterinary_type" @select="getServiceList" :placeholder="$t('branch.select_vet_category')" v-bind="SingleSelectOption" :options="veterinary_type_list.options" class="form-group"></Multiselect>
                   <span class="text-danger">{{ errors.veterinary_type }}</span>
                 </div>
               </div>
@@ -113,7 +107,7 @@
                   <label class="form-label d-block"
                     >{{ $t('booking.lbl_service') }} <span class="text-danger">*</span> <button type="button" class="btn text-primary btn-sm float-end px-0" data-bs-toggle="offcanvas" data-bs-target="#PetFromOffcanvas" aria-controls="form-offcanvas"><i class="fa-solid fa-plus"></i> {{ $t('booking.addtype') }}</button></label
                   >
-                  <Multiselect id="service_id" v-model="service_id" :value="service_id" placeholder="Select service" @select="checkTotalAmount" :options="service_list.options" v-bind="SingleSelectOption" class="form-group"></Multiselect>
+                  <Multiselect id="service_id" v-model="service_id" :value="service_id" :placeholder="$t('branch.select_service')" @select="checkTotalAmount" :options="service_list.options" v-bind="SingleSelectOption" class="form-group"></Multiselect>
                   <span class="text-danger">{{ errors.service_id }}</span>
                 </div>
               </div>
@@ -123,7 +117,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="form-label">{{ $t('booking.lbl_vet') }} <span class="text-danger">*</span> </label>
-                  <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" placeholder="Select Vet" v-bind="SingleSelectOption" :options="vet_list.options" class="form-group"></Multiselect>
+                  <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" :placeholder="$t('branch.select_vet')" v-bind="SingleSelectOption" :options="vet_list.options" class="form-group"></Multiselect>
                   <span class="text-danger">{{ errors.employee_id }}</span>
                 </div>
               </div>
@@ -163,7 +157,7 @@
               <h6 class="mb-0 pe-2 me-2 border-end">{{ $t('booking.amount') }}</h6>
             </label>
             <span id="totalAmountSpan" class="fw-bold">{{ formatCurrencyVue(totalAmount) }}</span>
-            <small class="text-body ps-1">(Included {{ formatCurrencyVue(totalTaxAmount) }} tax)</small>
+            <small class="text-body ps-1">({{ formatCurrencyVue(totalTaxAmount) }} {{ $t('booking.tax_included') }})</small>
           </div>
           <div class="d-grid d-md-flex gap-3 pt-5">
             <div class="d-grid d-md-flex gap-3 p-3">
@@ -182,10 +176,10 @@
     </div>
   </form>
 
-  <PetFromOffcanvas createTitle="Create Pet"></PetFromOffcanvas>
-  <CategoryFormOffcanvas createTitle="Create new Category / Sub Category"></CategoryFormOffcanvas>
-  <ServiceFormOffcanvas createTitle="Create Service"></ServiceFormOffcanvas>
-  <CustomeFormOffcanvas createTitle="Create Customer"></CustomeFormOffcanvas>
+  <PetFromOffcanvas :createTitle="$t('messages.create_pet')"></PetFromOffcanvas>
+  <CategoryFormOffcanvas :createTitle="$t('messages.create_category')"></CategoryFormOffcanvas>
+  <ServiceFormOffcanvas :createTitle="$t('messages.create_service')"></ServiceFormOffcanvas>
+  <CustomeFormOffcanvas :createTitle="$t('messages.create_customer')"></CustomeFormOffcanvas>
 </template>
 <script setup>
 import { ref, computed } from 'vue'
@@ -323,7 +317,7 @@ const filterStatus = (value) => {
 const current_date = ref(moment().format('YYYY-MM-DD'))
 const config = ref({
   dateFormat: 'Y-m-d',
-  static: true,
+  static: true
   // minDate: 'today'
 })
 
@@ -469,7 +463,6 @@ const singleSelectOption = ref({
   searchable: true
 })
 
-
 //  Customer Select & Unselect & Selected Values
 const selectedCustomer = computed(() => customer.value.list.find((customer) => customer.id == user_id.value) ?? null)
 
@@ -478,8 +471,8 @@ const removeCustomer = () => {
 }
 
 const formSubmit = handleSubmit(async (values) => {
-  const saveButton = document.getElementById('save-button');
-  saveButton.disabled = true; 
+  const saveButton = document.getElementById('save-button')
+  saveButton.disabled = true
 
   values.type = 'veterinary'
 
@@ -488,14 +481,14 @@ const formSubmit = handleSubmit(async (values) => {
       await updateRequest({ url: UPDATE_URL, id: currentId.value, body: values }).then((res) => reset_datatable_close_offcanvas(res))
     } else {
       await storeRequest({ url: STORE_URL, body: values }).then((res) => reset_datatable_close_offcanvas(res))
-      document.getElementById('feature_image').value = '';
+      document.getElementById('feature_image').value = ''
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error)
   } finally {
-    saveButton.disabled = false;  
+    saveButton.disabled = false
   }
-});
+})
 
 const reset_datatable_close_offcanvas = (res) => {
   if (res.status) {
