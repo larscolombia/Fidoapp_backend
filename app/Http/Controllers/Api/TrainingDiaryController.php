@@ -18,7 +18,7 @@ class TrainingDiaryController extends Controller
                 'notas' => 'string',
                 'category_id' => 'required|integer',
                 'pet_id' => 'required|exists:pets,id',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png',
             ]);
             try {
                 $data['date'] = Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y-m-d');
@@ -141,7 +141,7 @@ class TrainingDiaryController extends Controller
                 'notas' => 'string',
                 'category_id' => 'required|integer',
                 'pet_id' => 'required|exists:pets,id',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png',
             ]);
 
             if (!isset($request->image)) {
