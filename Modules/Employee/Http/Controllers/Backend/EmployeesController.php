@@ -2,24 +2,28 @@
 
 namespace Modules\Employee\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Http\Controllers\Controller;
-use App\Models\Branch;
-use App\Models\User;
-use Carbon\Carbon;
 use Hash;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Authorizable;
+use App\Models\Branch;
+use App\Models\Setting;
+use App\Models\BlogRating;
+use App\Models\BookRating;
 use Illuminate\Http\Request;
-use Modules\Commission\Models\EmployeeCommission;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\CoursePlatformVideoRating;
+use Illuminate\Database\Query\Expression;
+use Modules\Commission\Models\Commission;
 use Modules\CustomField\Models\CustomField;
-use Modules\CustomField\Models\CustomFieldGroup;
-use Modules\Employee\Http\Requests\EmployeeRequest;
 use Modules\Employee\Models\BranchEmployee;
 use Modules\Employee\Models\EmployeeRating;
 use Modules\Service\Models\ServiceEmployee;
-use Yajra\DataTables\DataTables;
-use Illuminate\Database\Query\Expression;
-use App\Models\Setting;
-use Modules\Commission\Models\Commission;
+use Modules\CustomField\Models\CustomFieldGroup;
+use Modules\Commission\Models\EmployeeCommission;
+use Modules\Employee\Http\Requests\EmployeeRequest;
 
 class EmployeesController extends Controller
 {
@@ -62,50 +66,50 @@ class EmployeesController extends Controller
 
                 $module_title = 'menu.boarder_list';
                 $create_title = 'booking.lbl_care_taker';
-              
+
                 break;
             case 'vet':
                 $module_title = 'menu.veterinarian_list';
                 $create_title  = 'booking.lbl_veterinarian';
-              
+
                 break;
             case 'groomer':
                 $module_title = 'menu.groomer_list';
                 $create_title  = 'booking.lbl_groomer';
-            
+
                 break;
 
             case 'trainer':
                 $module_title = 'menu.trainer_list';
                 $create_title  = 'booking.lbl_trainer';
-            
+
                  break;
             case 'walker':
                 $module_title = 'menu.walker_list';
                 $create_title  = 'booking.lbl_walker';
-            
+
                  break;
 
             case 'day_taker':
                 $module_title = 'menu.daycare_taker_list';
                 $create_title = 'booking.lbl_daycare_taker';
-            
+
                 break;
             case 'pet_sitter':
                 $module_title = 'menu.pet_sitter_list';
                 $create_title = 'booking.lbl_pet_sitter';
-                
+
                 break;
             case 'pending_employee':
                 $module_title = 'menu.pending_employee';
                 $create_title = 'booking.lbl_pending_employee';
-                    
-                    break; 
+
+                    break;
             default:
-                  
+
                  $module_title = 'menu.lbl_employee_list';
                  $create_title = 'menu.lbl_employee';
-            
+
                 break;
 
         }
@@ -116,14 +120,14 @@ class EmployeesController extends Controller
 
       $filter = [
         'commission' => $request->commission,
-      
+
 
        ];
 
 
       $commissions_list=Commission::all();
 
-  
+
 
         return view('employee::backend.employees.index', compact('module_action', 'columns', 'customefield','type','module_title','create_title','commissions_list','filter'));
     }
@@ -134,68 +138,68 @@ class EmployeesController extends Controller
         $module_action = 'List';
         $columns = CustomFieldGroup::columnJsonValues(new User());
         $customefield = CustomField::exportCustomFields(new User());
-       
+
 
         switch ($type) {
             case 'boarder':
 
                 $module_title = 'menu.boarder_list';
                 $create_title = 'booking.lbl_care_taker';
-              
+
                 break;
             case 'vet':
                 $module_title = 'menu.veterinarian_list';
                 $create_title  = 'booking.lbl_veterinarian';
-              
+
                 break;
             case 'groomer':
                 $module_title = 'menu.groomer_list';
                 $create_title  = 'booking.lbl_groomer';
-            
+
                 break;
 
             case 'trainer':
                 $module_title = 'menu.trainer_list';
                 $create_title  = 'booking.lbl_trainer';
-            
+
                  break;
             case 'walker':
                 $module_title = 'menu.walker_list';
                 $create_title  = 'booking.lbl_walker';
-            
+
                  break;
 
             case 'day_taker':
                 $module_title = 'menu.daycare_taker_list';
                 $create_title = 'booking.lbl_daycare_taker';
-            
+
                 break;
             case 'pet_sitter':
                 $module_title = 'menu.pet_sitter_list';
                 $create_title = 'booking.lbl_pet_sitter';
-                
+
                 break;
 
             case 'pending_employee':
                 $module_title = 'menu.pending_employee';
                 $create_title = 'booking.lbl_pending_employee';
-                    
-                 break; 
-                  
+
+                 break;
+
             default:
                  $module_title = 'menu.lbl_employee_list';
                  $create_title = 'menu.lbl_employee';
-            
+
                 break;
         }
 
           // $module_title = 'menu.lbl_employee_list';
          //  $create_title = 'menu.lbl_employee';
 
-  
+
         return view('employee::backend.employees.index', compact('module_action', 'columns', 'customefield','type','module_title','create_title'));
 
-        
+
     }
 
     /**
@@ -306,10 +310,10 @@ class EmployeesController extends Controller
     public function index_data(Datatables $datatable, Request $request)
     {
 
-      
+
         $module_name = $this->module_name;
         $query = User::select('users.*')->branch()->whereNotNull('email_verified_at')->with('media', 'mainBranch','commissions_data');
-      
+
 
         if($request->has('type') ){
 
@@ -320,14 +324,14 @@ class EmployeesController extends Controller
             }else{
 
                 $query =$query->role($request->type);
-                
+
             }
-            
+
         }
 
         $filter = $request->filter;
 
-      
+
         if(isset($filter)) {
             if (isset($filter['column_status'])) {
                 $query->whereHas('commissions_data', function ($subquery) use ($filter) {
@@ -363,7 +367,7 @@ class EmployeesController extends Controller
             })
             ->orderColumn('user_id', function ($query, $order) {
                 $query->orderByRaw("CONCAT(first_name, ' ', last_name) $order");
-            }, 1)  
+            }, 1)
             ->editColumn('image', function ($data) {
                 return "<img src='" . $data->profile_image . "'class='avatar avatar-50 rounded-pill'>";
             })
@@ -379,7 +383,7 @@ class EmployeesController extends Controller
             ->editColumn('full_name', function ($data) {
                 return $data->first_name .' ' .$data->last_name;
 
-            })            
+            })
             ->filterColumn('full_name', function ($query, $keyword) {
                 if (!empty($keyword)) {
                     $query->where('first_name', 'like', '%'.$keyword.'%')->orWhere('last_name', 'like', '%'.$keyword.'%');
@@ -387,7 +391,7 @@ class EmployeesController extends Controller
             })
             ->orderColumn('full_name', function ($query, $order) {
                 $query->orderByRaw("CONCAT(first_name, ' ', last_name) $order");
-            }, 1)            
+            }, 1)
             // ->orderColumn('full_name', function ($query, $order) {
             //     $query->orderBy(new Expression('(SELECT first_name FROM users LIMIT 1)'), $order);
             // }, 1)
@@ -580,7 +584,7 @@ class EmployeesController extends Controller
 
         $data = User::role(['vet','groomer','walker','boarder','trainer','day_taker','pet_sitter'])->where('id',$id)->with('branches', 'services', 'commissions_data', 'profile')->first();
 
-     
+
         if (!is_null($data)) {
             $custom_field_data = $data->withCustomFields();
             $data['custom_field_data'] = collect($custom_field_data->custom_fields_data)
@@ -657,7 +661,7 @@ class EmployeesController extends Controller
 
         }
 
-    
+
         BranchEmployee::where('employee_id', $id)->delete();
 
         ServiceEmployee::where('employee_id', $id)->delete();
@@ -820,8 +824,20 @@ class EmployeesController extends Controller
 
     public function review_data(Datatables $datatable, Request $request)
     {
-
-        $query = EmployeeRating::with('user', 'employee');
+        //consultas
+        $employeeQuery = EmployeeRating::with('user')->select('id', 'user_id', 'employee_id', 'review_msg', 'rating', 'status' ,'created_at', 'updated_at')
+        ->addSelect(DB::raw("'employee' as module"));
+        $bookQuery = BookRating::with('user','ebook')
+        ->select('id', 'user_id', 'e_book_id', 'review_msg', 'rating','status', 'created_at', 'updated_at')
+        ->addSelect(DB::raw("'books' as module"));
+        $videoQuery = CoursePlatformVideoRating::with('user')
+        ->select('id', 'user_id','course_platform_video_id', 'review_msg', 'rating', 'status', 'created_at','updated_at')
+        ->addSelect(DB::raw("'courses' as module"));
+        $videoQuery = BlogRating::with('user')
+        ->select('id', 'user_id','blog_id', 'review_msg', 'rating', 'status', 'created_at','updated_at')
+        ->addSelect(DB::raw("'courses' as module"));
+        //union
+        $query = $employeeQuery->union($bookQuery)->union($videoQuery);
         $filter = $request->filter;
         if (isset($filter)) {
             if (isset($filter['column_status'])) {
@@ -857,31 +873,75 @@ class EmployeesController extends Controller
                 }
             })
             ->editColumn('employee_id', function ($data) {
-                $employee_id = isset($data->employee->full_name) ? $data->employee->full_name : '-';
-                if(isset($data->employee->profile_image)){
-                    return '<img src=' . $data->employee->profile_image . " class='avatar avatar-40 rounded-pill me-2'>".' '.$employee_id;
+                if($data->module === 'employee'){
+                    $employee_id = isset($data->employee->full_name) ? $data->employee->full_name : '-';
+                    if(isset($data->employee->profile_image)){
+                        return '<img src=' . $data->employee->profile_image . " class='avatar avatar-40 rounded-pill me-2'>".' '.$employee_id;
+                    }
+                    else{
+                        $assetImage = asset('images/default/default.jpg');
+                        return "<img style='max-width:40px;' src='".$assetImage."' class='avatar avatar-10 rounded-pill me-2'>".' '.$employee_id;
+                    }
                 }
-                else{
-                    return "<img src='https://dummyimage.com/600x300/cfcfcf/000000.png' class='avatar avatar-10 rounded-pill me-2'>".' '.$employee_id;
+                if($data->module === 'books'){
+                    $bookRatoing = BookRating::find($data->id);
+                    if($bookRatoing){
+                        return $bookRatoing->ebook->title;
+                    }
+                    return __('rating.title_not_found');
+                }
+                if($data->module === 'courses'){
+                    $courseRating = CoursePlatformVideoRating::find($data->id);
+                    if($courseRating){
+                        return $courseRating->course_platform_video->title;
+                    }
+                    return __('rating.title_not_found');
                 }
 
+                if($data->module === 'blogs'){
+                    $blogRating = BlogRating::find($data->id);
+                    if($blogRating){
+                        return $blogRating->blog->name;
+                    }
+                    return __('rating.title_not_found');
+                }
                 // return $employee_id;
             })
-            ->orderColumn('employee_id', function ($query, $order) {
-                $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = employee_rating.employee_id LIMIT 1)'), $order);
-            }, 1)
-
-            // ->editColumn('employee_id', function ($data) {
-            //     $employee_id = isset($data->employee->full_name) ? $data->employee->full_name : '-';
-
-            //     return $employee_id;
-            // })
             ->editColumn('review_msg', function ($data) {
                 return '<div class="text-desc">'.$data->review_msg.'</div>';
-            })   
+            })
             ->editColumn('rating', function ($data) {
-                return $data->rating - floor($data->rating) > 0 ? number_format($data->rating, 1) : $data->rating;
-            })            
+                $ratingNumber = $data->rating - floor($data->rating) > 0 ? number_format($data->rating, 1) : $data->rating;
+                $iconsHtml = '';
+                if(empty($ratingNumber)){
+                    $ratingNumber = 1;
+                }
+                $icon = '<i class="fas fa-star" style="color: #FFD43B;"></i>';
+                for ($i = 0; $i < floor($ratingNumber); $i++) {
+                    $iconsHtml .= $icon;
+                }
+
+                $container = "<div class='d-flex justify-content-center'>".$iconsHtml."</div>";
+
+                return $container;
+            })
+            ->addColumn('module', function ($data) {
+                if($data->module === 'employee'){
+                    $nameModule = __('rating.employee');
+                }
+                if($data->module === 'books'){
+                    $nameModule = __('rating.books');
+                }
+                if($data->module === 'courses'){
+                    $nameModule = __('rating.courses');
+                }
+
+                if($data->module === 'blogs'){
+                    $nameModule = __('rating.blogs');
+                }
+
+                return ucfirst($nameModule);
+            })
 
             ->filterColumn('user_id', function ($query, $keyword) {
                 if (!empty($keyword)) {
@@ -919,7 +979,7 @@ class EmployeesController extends Controller
             })
             ->orderColumns(['id'], '-:column $1');
 
-        return $datatable->rawColumns(array_merge(['action', 'image', 'check', 'employee_id', 'user_id','review_msg']))
+        return $datatable->rawColumns(array_merge(['action', 'image', 'check', 'employee_id', 'user_id','review_msg','module','rating']))
             ->toJson();
     }
 
@@ -975,14 +1035,14 @@ class EmployeesController extends Controller
           if(isset($decoded_data['errors'])) {
 
             return response()->json(['message' =>$decoded_data['errors'][0], 'status' => false], 200);
-          
+
         } else {
-           
+
             return response()->json(['message' => __('messages.notification_send'), 'status' => true], 200);
 
         }
 
-       
-        
+
+
     }
 }

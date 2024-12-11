@@ -15,4 +15,8 @@ class CoursePlatformVideoRating extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function course_platform_video()
+    {
+        return $this->belongsTo(CoursePlatformVideo::class,'course_platform_video_id','id');
+    }
 }

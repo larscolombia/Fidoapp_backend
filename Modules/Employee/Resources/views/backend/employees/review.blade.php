@@ -74,7 +74,7 @@
       exportable: false,
       orderable: false,
       searchable: false,
-    }, 
+    },
     // {
     //   data: 'image',
     //   name: 'image',
@@ -90,9 +90,16 @@
       searchable: true,
     },
     {
+      data: 'module',
+      name: 'module',
+      title: "{{ __('rating.module') }}",
+      orderable: true,
+      searchable: true,
+    },
+    {
       data: 'employee_id',
       name: 'employee_id',
-      title: "{{ __('employee.lbl_emp_name') }}",
+      title: "{{ __('rating.name_or_description') }}",
       orderable: true,
       searchable: true,
       // width: '10%'

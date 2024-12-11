@@ -16,4 +16,8 @@ class BookRating extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function ebook()
+    {
+        return $this->belongsTo(EBook::class,'e_book_id','id');
+    }
 }
