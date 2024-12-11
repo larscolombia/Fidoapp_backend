@@ -13,7 +13,7 @@ class TrainingDiaryController extends Controller
     {
         try {
             $data = $request->validate([
-                'date' => 'required',
+                'date' => 'required|string',
                 'actividad' => 'required|string|max:255',
                 'notas' => 'string',
                 'category_id' => 'required|integer',
@@ -136,7 +136,7 @@ class TrainingDiaryController extends Controller
     {
         try {
             $data = $request->validate([
-                'date' => 'required',
+                'date' => 'required|string',
                 'actividad' => 'required|string|max:255',
                 'notas' => 'string',
                 'category_id' => 'required|integer',
