@@ -150,5 +150,6 @@ return [
     'booking_accepted' => '¡Reserva Aceptada!',
     'booking_already_accepted' => 'Reserva ya aceptada',
     'lbl_pending_employee' => 'Empleado Pendiente',
+    'unpaid' => 'Sin pagar',
 
 ];

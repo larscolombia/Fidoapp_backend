@@ -25,10 +25,10 @@
                         </div>
                     </x-backend.quick-action>
                     <!-- <div>
-                              <button type="button" class="btn btn-secondary" data-modal="export">
-                                <i class="fa-solid fa-download"></i> Export
-                              </button>
-                            </div> -->
+                                                  <button type="button" class="btn btn-secondary" data-modal="export">
+                                                    <i class="fa-solid fa-download"></i> Export
+                                                  </button>
+                                                </div> -->
                 </div>
                 <x-slot name="toolbar">
                     <div class="flex-grow-1">
@@ -44,10 +44,10 @@
                         <div class="datatable-filter" style="width: 100%; display: inline-block;">
                             <select name="payment_status" id="payment_status" class="select2 form-control"
                                 data-filter="select">
-                                <option value="">Payment Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="paid">Paid</option>
-                                <option value="unpaid">Unpaid</option>
+                                <option value="">{{ __('booking.lbl_payment_status') }}</option>
+                                <option value="pending">{{ __('booking.pending') }}</option>
+                                <option value="paid">{{ __('booking.paid') }}</option>
+                                <option value="unpaid">{{ __('booking.unpaid') }}</option>
                             </select>
                         </div>
                     </div>

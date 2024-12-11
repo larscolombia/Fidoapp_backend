@@ -226,5 +226,7 @@ return [
     'create_pet' => 'Crear Mascota',
     'create_category' => 'Crear nueva Categoría / Sub Categoría',
     'create_service' => 'Crear servicio',
-    'included_tax' => 'Con impuestos '
+    'included_tax' => 'Con impuestos ',
+    'unpaid' => 'Sin pagar',
+
 ];
