@@ -833,11 +833,11 @@ class EmployeesController extends Controller
         $videoQuery = CoursePlatformVideoRating::with('user')
         ->select('id', 'user_id','course_platform_video_id', 'review_msg', 'rating', 'status', 'created_at','updated_at')
         ->addSelect(DB::raw("'courses' as module"));
-        $videoQuery = BlogRating::with('user')
+        $blogQuery = BlogRating::with('user')
         ->select('id', 'user_id','blog_id', 'review_msg', 'rating', 'status', 'created_at','updated_at')
         ->addSelect(DB::raw("'courses' as module"));
         //union
-        $query = $employeeQuery->union($bookQuery)->union($videoQuery);
+        $query = $employeeQuery->union($bookQuery)->union($videoQuery)->union($blogQuery);
         $filter = $request->filter;
         if (isset($filter)) {
             if (isset($filter['column_status'])) {
@@ -977,6 +977,13 @@ class EmployeesController extends Controller
                     return $data->created_at->isoFormat('llll');
                 }
             })
+            ->addColumn('enabled', function ($data) {
+                $text = __('rating.no');
+                if($data->status == 1){
+                    $text = __('rating.yes');
+                }
+                return $text;
+            })
             ->orderColumns(['id'], '-:column $1');
 
         return $datatable->rawColumns(array_merge(['action', 'image', 'check', 'employee_id', 'user_id','review_msg','module','rating']))
@@ -1045,4 +1052,52 @@ class EmployeesController extends Controller
 
 
     }
+
+    public function enableRating(Request $request)
+    {
+        // Validación de los datos de entrada
+        $data = $request->validate([
+            'module_name' => 'required|string',
+            'module_id' => 'required|integer'
+        ]);
+
+        // Inicializar una variable para el modelo correspondiente
+        $model = null;
+
+        // Determinar el modelo basado en el nombre del módulo
+        switch ($data['module_name']) {
+            case 'employee':
+                $model = EmployeeRating::class;
+                break;
+            case 'books':
+                $model = BookRating::class;
+                break;
+            case 'courses':
+                $model = CoursePlatformVideoRating::class;
+                break;
+            case 'blogs':
+                $model = BlogRating::class;
+                break;
+            default:
+                return redirect()->back()->with('error', 'Módulo no válido.');
+        }
+
+        try {
+            // Buscar el registro correspondiente
+            $rating = $model::find($data['module_id']);
+
+            // Verificar si se encontró el registro
+            if ($rating) {
+                $rating->status = 1; // Habilitar la calificación
+                $rating->save(); // Guardar cambios
+                return redirect()->back()->with('message', 'Calificación habilitada exitosamente.');
+            } else {
+                return redirect()->back()->with('error', 'Registro no encontrado.');
+            }
+        } catch (\Exception $e) {
+            // Manejo de excepciones
+            return redirect()->back()->with('error', 'Ocurrió un error al habilitar la calificación: ' . $e->getMessage());
+        }
+    }
+
 }

@@ -124,6 +124,12 @@
       name: 'updated_at',
       title: "{{ __('employee.lbl_updated') }}",
       width: '5%'
+    },
+    {
+        data:'enabled',
+        name:'enabled',
+        title:"{{__('rating.enabled')}}",
+        width: '5%'
     }
 
         ]

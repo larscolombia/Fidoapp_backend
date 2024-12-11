@@ -8,4 +8,9 @@
         'name_or_description' => 'Nombre o Descripción',
         'blogs' => 'Blog',
         'title_not_found' => 'Título no disponible',
+        'enabled' =>'Habilitado',
+        'yes' => 'Si',
+        'no' => 'No',
+        'delete' => 'Borrar',
+        'approve' => 'Aprobar',
     ];

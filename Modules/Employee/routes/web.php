@@ -61,4 +61,5 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['web', 'au
     Route::get('employees-review', [EmployeesController::class, 'review'])->name('employees.review');
     Route::get('all-employees', [EmployeesController::class, 'index'])->name('employees.all');
     Route::resource('employees', EmployeesController::class);
+    Route::post('rating-approve',[EmployeesController::class, 'enableRating'])->name('rating.approve');
 });
