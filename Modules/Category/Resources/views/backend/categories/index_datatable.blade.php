@@ -12,31 +12,12 @@
     <div class="card">
         <div class="card-header">
             <x-backend.section-header>
-                <div>
-                    <x-backend.quick-action url='{{ route('backend.categories.bulk_action') }}'>
-                        {{-- <x-backend.quick-action> --}}
-                        <div class="">
-                            <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
-                                style="width:100%">
-                                <option value="">{{ __('messages.no_action') }}</option>
-                                <option value="change-status">{{ __('messages.status') }}</option>
-                                <option value="delete">{{ __('messages.delete') }}</option>
-                            </select>
-                        </div>
-                        <div class="select-status d-none quick-action-field" id="change-status-action">
-                            <select name="status" class="form-control select2" id="status" style="width:100%">
-                                <option value="1">{{ __('messages.active') }}</option>
-                                <option value="0">{{ __('messages.inactive') }}</option>
-                            </select>
-                        </div>
-                    </x-backend.quick-action>
-                </div>
+
                 <x-slot name="toolbar">
                     <div>
                         <div class="datatable-filter" style="width: 100%; display: inline-block;">
                             {{ $filter['status'] }}
-                            <select name="column_status" id="column_status" class="select2 form-control"
-                                data-filter="select">
+                            <select name="column_status" id="column_status" class="select2 form-control" data-filter="select">
                                 <option value="">{{ __('category.all') }}</option>
                                 <option value="1" {{ $filter['status'] == '1' ? 'selected' : '' }}>
                                     {{ __('messages.active') }}</option>

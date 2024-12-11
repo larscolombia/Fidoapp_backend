@@ -13,7 +13,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label class="form-label">{{ $t('booking.lbl_care_taker') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" placeholder="Select Care Taker" v-bind="SingleSelectOption" :options="employee.options" class="form-group"></Multiselect>
+              <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" :placeholder="$t('booking.lbl_care_taker')" v-bind="SingleSelectOption" :options="employee.options" class="form-group"></Multiselect>
               <div class="text-danger">{{ errors.employee_id }}</div>
             </div>
           </div>
@@ -22,7 +22,7 @@
             <div class="col-md-12 p-0">
               <div class="form-group">
                 <label class="form-label" for="service">{{ $t('booking.lbl_add_facility') }} </label>
-                <Multiselect id="facility" v-model="facility" :multiple="true" :value="facility" placeholder="Select Facility" v-bind="multiSelectOption" :options="facility_list.options" class="form-group"> </Multiselect>
+                <Multiselect id="facility" v-model="facility" :multiple="true" :value="facility" :placeholder="$t('booking.lbl_add_facility')" v-bind="multiSelectOption" :options="facility_list.options" class="form-group"> </Multiselect>
                 <span v-if="errorMessages['facility']">
                   <ul class="text-danger">
                     <li v-for="err in errorMessages['facility']" :key="err">{{ err }}</li>
@@ -37,7 +37,7 @@
             <div class="col-md-3 p-0">
               <div class="form-group">
                 <label class="form-label" for="drop_off_date">{{ $t('booking.lbl_drop_off_date') }} <span class="text-danger">*</span></label>
-                <flat-pickr placeholder="Drop Off Date" id="drop_off_date" class="form-control" @input="checkTotalAmount" v-model="drop_off_date" :value="drop_off_date" :config="config"></flat-pickr>
+                <flat-pickr :placeholder="$t('booking.lbl_drop_off_date')" id="drop_off_date" class="form-control" @input="checkTotalAmount" v-model="drop_off_date" :value="drop_off_date" :config="config"></flat-pickr>
                 <div class="text-danger">{{ errors.drop_off_date }}</div>
               </div>
             </div>
@@ -45,7 +45,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label class="form-label" for="drop_off_time">{{ $t('booking.lbl_drop_off_time') }} <span class="text-danger">*</span></label>
-                <flat-pickr placeholder="Drop Off Time" id="drop_off_time" class="form-control" v-model="drop_off_time" :value="drop_off_time" :config="config_time"></flat-pickr>
+                <flat-pickr :placeholder="$t('booking.lbl_drop_off_time')" id="drop_off_time" class="form-control" v-model="drop_off_time" :value="drop_off_time" :config="config_time"></flat-pickr>
                 <div class="text-danger">{{ errors.drop_off_time }}</div>
               </div>
             </div>
@@ -53,7 +53,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label class="form-label" for="pick_up_date">{{ $t('booking.lbl_pick_up_date') }} <span class="text-danger">*</span></label>
-                <flat-pickr placeholder="Pick Up Date" id="pick_up_date" @input="checkTotalAmount" class="form-control" v-model="pick_up_date" :value="pick_up_date" :config="config"></flat-pickr>
+                <flat-pickr :placeholder="$t('booking.lbl_pick_up_date')" id="pick_up_date" @input="checkTotalAmount" class="form-control" v-model="pick_up_date" :value="pick_up_date" :config="config"></flat-pickr>
                 <div class="text-danger">{{ errors.pick_up_date }}</div>
               </div>
             </div>
@@ -61,7 +61,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label class="form-label" for="pick_up_time">{{ $t('booking.lbl_pick_up_time') }} <span class="text-danger">*</span></label>
-                <flat-pickr placeholder="Pick Up Time" id="pick_up_time" class="form-control" v-model="pick_up_time" :value="pick_up_time" :config="config_time"></flat-pickr>
+                <flat-pickr :placeholder="$t('booking.lbl_pick_up_time')" id="pick_up_time" class="form-control" v-model="pick_up_time" :value="pick_up_time" :config="config_time"></flat-pickr>
                 <div class="text-danger">{{ errors.pick_up_time }}</div>
               </div>
             </div>

@@ -77,7 +77,7 @@
 
           <div class="form-group col-md-12">
             <label class="form-label" for="commission_id"> {{ $t('employee.lbl_select_commission') }} </label><span class="text-danger">*</span>
-            <Multiselect id="commission_id" v-model="commission_id" :value="commission_id" placeholder="Select Commission" v-bind="multiselectOption" :options="commissions.options" class="form-group"></Multiselect>
+            <Multiselect id="commission_id" v-model="commission_id" :value="commission_id" :placeholder="$t('employee.lbl_select_commission')" v-bind="multiselectOption" :options="commissions.options" class="form-group"></Multiselect>
             <span v-if="errorMessages['commission_id']">
               <ul class="text-danger">
                 <li v-for="err in errorMessages['commission_id']" :key="err">{{ err }}</li>
@@ -88,7 +88,7 @@
 
           <div class="col-md-6 form-group" v-if="type == 'staff'">
             <label class="form-label" for="user_type">{{ $t('employee.lbl_select_user_type') }} {{ type.value }}</label> <span class="text-danger">*</span>
-            <select class="form-select" placeholder="Select User Type" v-model="user_type">
+            <select class="form-select" :placeholder="$t('employee.lbl_select_user_type')" v-model="user_type">
               <option value="vet">{{ $t('employee.vet') }}</option>
               <option value="trainer">{{ $t('employee.trainer') }}</option>
               <option value="groomer">{{ $t('employee.groomer') }}</option>
@@ -107,7 +107,7 @@
 
           <div class="col-md-6 form-group d-none" v-if="type != 'staff'">
             <label class="form-label" for="user_type">{{ $t('employee.lbl_select_user_type') }} </label>
-            <select class="form-select" placeholder="Select User Type" v-model="user_type" :disabled="user_type != 'staff'">
+            <select class="form-select" :placeholder="$t('employee.lbl_select_user_type')" v-model="user_type" :disabled="user_type != 'staff'">
               <option value="vet">{{ $t('employee.vet') }}</option>
               <option value="trainer">{{ $t('employee.trainer') }}</option>
               <option value="groomer">{{ $t('employee.groomer') }}</option>
@@ -126,7 +126,7 @@
           <div class="col-md-6 form-group">
             <label class="form-label" for="branch">{{ $t('employee.lbl_select_branch') }}</label
             ><span class="text-danger">*</span>
-            <Multiselect id="branch_id" v-model="branch_id" :value="branch_id" placeholder="Select Branch" v-bind="singleSelectOption" :options="branch.options" @select="branchSelect" class="form-group"> </Multiselect>
+            <Multiselect id="branch_id" v-model="branch_id" :value="branch_id" :placeholder="$t('employee.lbl_select_branch')" v-bind="singleSelectOption" :options="branch.options" @select="branchSelect" class="form-group"> </Multiselect>
             <span v-if="errorMessages['branch_id']">
               <ul class="text-danger">
                 <li v-for="err in errorMessages['branch_id']" :key="err">{{ err }}</li>
@@ -150,7 +150,7 @@
 
           <div class="form-group" v-if="type == 'groomer' || type == 'vet'">
             <label class="form-label" for="service">{{ $t('employee.lbl_select_service') }}</label>
-            <Multiselect id="service_id" v-model="service_id" :multiple="true" :value="service_id" placeholder="Select Service" v-bind="multiSelectOption" :options="services.options" class="form-group"> </Multiselect>
+            <Multiselect id="service_id" v-model="service_id" :multiple="true" :value="service_id" :placeholder="$t('employee.lbl_select_service')" v-bind="multiSelectOption" :options="services.options" class="form-group"> </Multiselect>
             <span v-if="errorMessages['service_id']">
               <ul class="text-danger">
                 <li v-for="err in errorMessages['service_id']" :key="err">{{ err }}</li>

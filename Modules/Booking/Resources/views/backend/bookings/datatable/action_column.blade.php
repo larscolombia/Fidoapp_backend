@@ -1,11 +1,11 @@
 <div class="text-end d-flex gap-2 align-items-center">
 
-    {{-- <button type="button" class="fs-4 text-primary border-0 bg-transparent" data-crud-id="{{$data->id}}" title="{{__('Edit')}} " data-bs-toggle="tooltip"> <i class="icon-Edit"></i></button> --}}
+    {{-- <button type="button" class="fs-4 text-primary border-0 bg-transparent" data-crud-id="{{$data->id}}" title="{{ __('messages.edit') }}" data-bs-toggle="tooltip"> <i class="icon-Edit"></i></button> --}}
 
     @hasPermission('delete_booking')
         <a href="{{ route("backend.$module_name.destroy", $data->id) }}" id="delete-{{ $module_name }}-{{ $data->id }}"
             class="fs-4 text-danger" data-type="ajax" data-method="DELETE" data-token="{{ csrf_token() }}"
-            data-bs-toggle="tooltip" title="{{ __('Delete') }}" data-confirm="{{ __('messages.are_you_sure?') }}">
+            data-bs-toggle="tooltip" title="{{ __('messages.delete') }}" data-confirm="{{ __('messages.are_you_sure?') }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
                 <g id="Huge-icon/interface/outline/trash">
                     <path id="Vector"

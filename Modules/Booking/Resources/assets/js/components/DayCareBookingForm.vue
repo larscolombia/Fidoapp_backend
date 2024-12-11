@@ -87,7 +87,7 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="form-label" for="drop_off_time">{{ $t('booking.lbl_drop_off_time') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Drop Off Time" id="drop_off_time" class="form-control" v-model="drop_off_time" :value="drop_off_time" :config="config_time"></flat-pickr>
+                  <flat-pickr :placeholder="$t('booking.lbl_drop_off_time')" id="drop_off_time" class="form-control" v-model="drop_off_time" :value="drop_off_time" :config="config_time"></flat-pickr>
                   <span class="text-danger">{{ errors.drop_off_time }}</span>
                 </div>
               </div>
@@ -95,7 +95,7 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="form-label" for="pick_up_time">{{ $t('booking.lbl_pick_up_time') }} <span class="text-danger">*</span></label>
-                  <flat-pickr placeholder="Pick Up Time" id="pick_up_time" class="form-control" v-model="pick_up_time" :value="pick_up_time" :config="config_time"></flat-pickr>
+                  <flat-pickr :placeholder="$t('booking.lbl_pick_up_time')" id="pick_up_time" class="form-control" v-model="pick_up_time" :value="pick_up_time" :config="config_time"></flat-pickr>
                   <span class="text-danger">{{ errors.pick_up_time }}</span>
                 </div>
               </div>
