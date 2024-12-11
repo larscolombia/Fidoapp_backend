@@ -92,19 +92,19 @@
 
             <div class="col-md-12 form-group">
               <label class="form-label">{{ $t('booking.lbl_training') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="training" v-model="training" :value="training" placeholder="Select training" v-bind="SingleSelectOption" :options="training_list.options" class="form-group"></Multiselect>
+              <Multiselect id="training" v-model="training" :value="training" :placeholder="$t('booking.lbl_training')" v-bind="SingleSelectOption" :options="training_list.options" class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.training }}</span>
             </div>
 
             <div class="col-md-12 form-group">
               <label class="form-label">{{ $t('booking.lbl_trainer') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" placeholder="Select trainer" v-bind="SingleSelectOption" :options="trainer_list.options" class="form-group"></Multiselect>
+              <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" :placeholder="$t('booking.lbl_trainer')" v-bind="SingleSelectOption" :options="trainer_list.options" class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.employee_id }}</span>
             </div>
 
             <div class="col-md-12 form-group">
               <label class="form-label">{{ $t('booking.lbl_duration') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="duration" v-model="duration" :value="duration" placeholder="Select duration" @select="checkTotalAmount" v-bind="SingleSelectOption" :options="duration_list.options" :allow-empty="false" class="form-group"></Multiselect>
+              <Multiselect id="duration" v-model="duration" :value="duration" :placeholder="$t('booking.lbl_duration')" @select="checkTotalAmount" v-bind="SingleSelectOption" :options="duration_list.options" :allow-empty="false" class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.duration }}</span>
             </div>
 

@@ -100,7 +100,7 @@
 
             <div class="col-md-12 form-group">
               <label class="form-label">{{ $t('booking.lbl_duration') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="duration" v-model="duration" :value="duration" @select="checkTotalAmount" placeholder="Select duration" v-bind="SingleSelectOption" :options="duration_list.options" class="form-group"></Multiselect>
+              <Multiselect id="duration" v-model="duration" :value="duration" @select="checkTotalAmount" :placeholder="$t('booking.lbl_duration')" v-bind="SingleSelectOption" :options="duration_list.options" class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.duration }}</span>
             </div>
 

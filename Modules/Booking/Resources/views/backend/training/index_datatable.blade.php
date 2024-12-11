@@ -22,7 +22,8 @@
                             <select name="status" class="form-control select2" id="status" style="width:100%">
                                 @foreach ($booking_status as $key => $value)
                                     <option value="{{ $value->name }}"
-                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>{{ $value->value }}
+                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>
+                                        {{ __('messages.' . $value->name) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -37,7 +38,8 @@
                                 <option value="">{{ __('booking.all_status') }}</option>
                                 @foreach ($booking_status as $key => $value)
                                     <option value="{{ $value->name }}"
-                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>{{ $value->value }}
+                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>
+                                        {{ __('messages.' . $value->name) }}
                                     </option>
                                 @endforeach
                             </select>
