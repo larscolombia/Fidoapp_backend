@@ -54,7 +54,7 @@ class TrainingController extends Controller
         $statusList = $this->statusList();
 
         $booking = Booking::find(request()->booking_id);
-        
+
         $date = $booking->start_date_time ?? date('Y-m-d');
 
         return view('booking::backend.training.index', compact('module_action', 'statusList', 'date'));
@@ -106,7 +106,7 @@ class TrainingController extends Controller
             $resource[] = [
                 'id' => $employee->id,
                 'title' => $employee->full_name,
-                'titleHTML' => '<div class="d-flex gap-3 justify-content-center align-items-center py-3"><img src="'.$employee->profile_image.'" class="avatar avatar-40 rounded-pill" alt="employee" />'.$employee->full_name.'</div>',
+                'titleHTML' => '<div class="d-flex gap-3 justify-content-center align-items-center py-3"><img src="' . $employee->profile_image . '" class="avatar avatar-40 rounded-pill" alt="employee" />' . $employee->full_name . '</div>',
             ];
         }
 
@@ -120,7 +120,7 @@ class TrainingController extends Controller
     {
         $module_action = 'List';
         $create_title = __('booking.traning_booking');
-        $type=$request->type;
+        $type = $request->type;
 
         $filter = [
             'status' => $request->status,
@@ -128,27 +128,25 @@ class TrainingController extends Controller
 
         $booking_status = Constant::getAllConstant()->where('type', 'BOOKING_STATUS');
 
-        return view('booking::backend.training.index_datatable', compact('module_action', 'filter', 'booking_status', 'create_title','type'));
+        return view('booking::backend.training.index_datatable', compact('module_action', 'filter', 'booking_status', 'create_title', 'type'));
     }
 
     public function index_data(Datatables $datatable, Request $request)
     {
         $module_name = $this->module_name;
 
-        $query = Booking::query()->where('booking_type','training')->branch()->with('user', 'training', 'pet','employee','payment');
+        $query = Booking::query()->where('booking_type', 'training')->branch()->with('user', 'training', 'pet', 'employee', 'payment');
 
-         
-        if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
-           
+
+        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
+
             $query;
-
         } else {
 
             $query->where('employee_id', auth()->id());
-
         }
 
- 
+
         $filter = $request->filter;
 
         if (isset($filter)) {
@@ -181,13 +179,13 @@ class TrainingController extends Controller
 
         $booking_status = Constant::getAllConstant()->where('type', 'BOOKING_STATUS');
         $booking_colors = Constant::getAllConstant()->where('type', 'BOOKING_STATUS_COLOR');
-         $payment_status = Constant::getAllConstant()->where('type', 'PAYMENT_STATUS')->where('status', '=', '1');
+        $payment_status = Constant::getAllConstant()->where('type', 'PAYMENT_STATUS')->where('status', '=', '1');
 
         $employee = User::where('user_type', 'trainer')->get();
 
         return $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
-                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->addColumn('action', function ($data) use ($module_name) {
                 return view('booking::backend.training.datatable.action_column', compact('module_name', 'data'));
@@ -197,14 +195,13 @@ class TrainingController extends Controller
             })
             ->editColumn('id', function ($data) {
                 $url = route('backend.bookings.bookingShow', ['id' => $data->id]);
-                return "<a href='$url' class='text-primary'>#".$data->id."</a>";
+                return "<a href='$url' class='text-primary'>#" . $data->id . "</a>";
             })
-            ->editColumn('payment_status', function ($data) use ($payment_status,$booking_colors) {
-                if($data->status === 'rejected' || $data->status === 'cancelled'){
+            ->editColumn('payment_status', function ($data) use ($payment_status, $booking_colors) {
+                if ($data->status === 'rejected' || $data->status === 'cancelled') {
                     return '--';
-                }
-                else{
-                    return view('booking::backend.bookings.datatable.select_payment_status', compact('data','payment_status','booking_colors'));
+                } else {
+                    return view('booking::backend.bookings.datatable.select_payment_status', compact('data', 'payment_status', 'booking_colors'));
                 }
             })
             ->editColumn('user_id', function ($data) {
@@ -212,21 +209,20 @@ class TrainingController extends Controller
             })
             ->editColumn('employee_id', function ($data) use ($employee) {
                 // return $data->employee->first_name.' '.$data->employee->last_name;
-                if($data->employee_id){
-                    if($data->employee !=null){
+                if ($data->employee_id) {
+                    if ($data->employee != null) {
 
-                        return $data->employee->first_name.' '.$data->employee->last_name;
-                    }else{
+                        return $data->employee->first_name . ' ' . $data->employee->last_name;
+                    } else {
 
                         return '-';
                     }
-                }
-                else{
+                } else {
                     return view('booking::backend.bookings.datatable.select_employee', compact('data', 'employee'));
                 }
             })
             ->editColumn('service_amount', function ($data) {
-                return '<span>'.\Currency::format($data->total_amount).'</span>';
+                return '<span>' . \Currency::format($data->total_amount) . '</span>';
             })
             ->orderColumn('service_amount', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT total_amount FROM booking_transactions WHERE booking_id = bookings.id)'), $order);
@@ -234,7 +230,7 @@ class TrainingController extends Controller
             ->filterColumn('service_amount', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     $query->whereHas('payment', function ($q) use ($keyword) {
-                        $q->where('total_amount', 'like', '%'.$keyword.'%');
+                        $q->where('total_amount', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -244,8 +240,8 @@ class TrainingController extends Controller
             })
             ->orderColumn('services', function ($query, $order) {
                 $query->select('bookings.*')
-                ->leftJoin('booking_training_mapping', 'bookings.id', '=', 'booking_training_mapping.booking_id')
-                ->orderBy(new Expression('(SELECT name FROM service_training WHERE id = booking_training_mapping.training_id LIMIT 1)'), $order);
+                    ->leftJoin('booking_training_mapping', 'bookings.id', '=', 'booking_training_mapping.booking_id')
+                    ->orderBy(new Expression('(SELECT name FROM service_training WHERE id = booking_training_mapping.training_id LIMIT 1)'), $order);
             }, 1)
             ->filterColumn('services', function ($query, $keyword) {
                 if (!empty($keyword)) {
@@ -260,7 +256,7 @@ class TrainingController extends Controller
             ->filterColumn('start_date_time', function ($query, $keyword) {
                 if (!empty($keyword)) {
                     $query->whereHas('training', function ($q) use ($keyword) {
-                        $q->where('date_time', 'like', '%'.$keyword.'%');
+                        $q->where('date_time', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -273,7 +269,7 @@ class TrainingController extends Controller
             ->filterColumn('duration', function ($query, $keyword) {
                 if (!empty($keyword)) {
                     $query->whereHas('training', function ($q) use ($keyword) {
-                        $q->where('duration', 'like', '%'.$keyword.'%');
+                        $q->where('duration', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -292,7 +288,7 @@ class TrainingController extends Controller
             ->filterColumn('pet_name', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     $query->whereHas('pet', function ($q) use ($keyword) {
-                        $q->where('name', 'like', '%'.$keyword.'%');
+                        $q->where('name', 'like', '%' . $keyword . '%');
                     });
                 }
             })
@@ -300,20 +296,20 @@ class TrainingController extends Controller
                 $query->orderBy(new Expression('(SELECT name FROM pets WHERE id = bookings.pet_id LIMIT 1)'), $order);
             }, 1)
             ->editColumn('pettype_id', function ($data) {
-                $value =optional(optional($data->pet)->pettype)->name;
-                if(isset($data->pet)){
-                    if(isset($data->pet->breed)){
+                $value = optional(optional($data->pet)->pettype)->name;
+                if (isset($data->pet)) {
+                    if (isset($data->pet->breed)) {
                         $breed = $data->pet->breed->name;
-                        $value = $data->pet->pettype->name . ' ('. $data->pet->breed->name .')';
+                        $value = $data->pet->pettype->name . ' (' . $data->pet->breed->name . ')';
                     }
                 }
                 return !empty($value) ? $value : '-';
             })
             ->orderColumn('pettype_id', function ($query, $order) {
                 $query->select('bookings.*')
-                ->leftJoin('pets', 'pets.id', '=', 'bookings.pet_id')
-                ->leftJoin('pets_type', 'pets.pettype_id', '=', 'pets_type.id')
-                ->orderBy(new Expression('(SELECT name FROM pets_type WHERE pets_type.id = pets.pettype_id LIMIT 1)'), $order);
+                    ->leftJoin('pets', 'pets.id', '=', 'bookings.pet_id')
+                    ->leftJoin('pets_type', 'pets.pettype_id', '=', 'pets_type.id')
+                    ->orderBy(new Expression('(SELECT name FROM pets_type WHERE pets_type.id = pets.pettype_id LIMIT 1)'), $order);
             }, 1)
             ->filterColumn('pettype_id', function ($query, $keyword) {
                 // If a keyword is provided, filter the results based on the 'pettype' name
@@ -332,20 +328,20 @@ class TrainingController extends Controller
             ->filterColumn('employee_id', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     // $query->whereHas('services', function ($q) use ($keyword) {
-                        $query->whereHas('employee', function ($qn) use ($keyword) {
-                            $qn->where('first_name', 'like', '%'.$keyword.'%');
-                        });
+                    $query->whereHas('employee', function ($qn) use ($keyword) {
+                        $qn->where('first_name', 'like', '%' . $keyword . '%');
+                    });
                     // });
                 }
             })
             ->filterColumn('user_id', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     $query->whereHas('user', function ($q) use ($keyword) {
-                        $q->where('first_name', 'like', '%'.$keyword.'%');
+                        $q->where('first_name', 'like', '%' . $keyword . '%');
                     });
                 }
             })
-            ->rawColumns(['check', 'action', 'status', 'services', 'service_duration', 'service_amount','start_date_time','id'])
+            ->rawColumns(['check', 'action', 'status', 'services', 'service_duration', 'service_amount', 'start_date_time', 'id'])
             ->orderColumns(['id'], '-:column $1')
             ->make(true);
     }

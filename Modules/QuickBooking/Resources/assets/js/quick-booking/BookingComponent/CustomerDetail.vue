@@ -6,10 +6,8 @@
     <CreateCustomer @add_user="handleUserResponse"></CreateCustomer>
   </div>
 
-  <div class="view_customer" v-if="userVerify == 2 && isAddpet==0">
+  <div class="view_customer" v-if="userVerify == 2 && isAddpet == 0">
     <div class="col" v-if="userData">
-    
-
       <div class="user-block bg-white p-3 rounded">
         <div class="d-flex align-items-start gap-3 mb-2">
           <img :src="userData.profile_image" alt="avatar" class="img-fluid avatar avatar-60 rounded-pill" />
@@ -18,15 +16,22 @@
               <h5>{{ userData.first_name }} {{ userData.last_name }}</h5>
             </div>
           </div>
-          <button type="button"  @click="removeCustomer()"
-            class="btn btn-sm text-danger">{{$t('quick_booking.remove')}}</button>
+          <button type="button" @click="removeCustomer()" class="btn btn-sm text-danger">{{ $t('quick_booking.remove') }}</button>
         </div>
         <div class="row m-0">
-          <label class="col-3 p-0"><i><span class="fst-normal">{{$t('quick_booking.lbl_phone_number')}}</span></i></label>
+          <label class="col-3 p-0"
+            ><i
+              ><span class="fst-normal">{{ $t('quick_booking.lbl_phone_number') }}</span></i
+            ></label
+          >
           <strong class="col p-0">{{ userData.mobile }}</strong>
         </div>
         <div class="row mx-0 mb-3">
-          <label class="col-3 p-0"><i><span class="fst-normal">{{$t('quick_booking.lbl_Email')}}</span></i></label>
+          <label class="col-3 p-0"
+            ><i
+              ><span class="fst-normal">{{ $t('quick_booking.lbl_Email') }}</span></i
+            ></label
+          >
           <strong class="col p-0">{{ userData.email }}</strong>
         </div>
       </div>
@@ -35,26 +40,26 @@
     <div class="col-md-12">
       <div class="form-group">
         <label class="form-label d-block"
-          >{{$t('quick_booking.choose_pet')}}<span class="text-danger">*</span>
-          <button type="button" @click="addpet()" class="btn btn-sm text-primary px-0 float-end"><i class="fa-solid fa-plus"></i>{{$t('quick_booking.add_pet')}} </button>
+          >{{ $t('quick_booking.choose_pet') }}<span class="text-danger">*</span>
+          <button type="button" @click="addpet()" class="btn btn-sm text-primary px-0 float-end"><i class="fa-solid fa-plus"></i>{{ $t('quick_booking.add_pet') }}</button>
         </label>
-        <Multiselect id="pet" v-model="pet" :value="pet" placeholder="Select Pet" v-bind="SingleSelectOption" :options="petList.options" class="form-group"></Multiselect>
+        <Multiselect id="pet" v-model="pet" :value="pet" :placeholder="$t('branch.select_pet')" v-bind="SingleSelectOption" :options="petList.options" class="form-group"></Multiselect>
         <div class="text-danger">{{ errors.pet }}</div>
       </div>
     </div>
   </div>
 
   <div v-if="isAddpet == 1">
-    <Createpet :user_id="userData.id"  @add_pet="handlePetResponse"></Createpet>
+    <Createpet :user_id="userData.id" @add_pet="handlePetResponse"></Createpet>
   </div>
-  <div class="card-footer" v-if="isFinalstep == 1  && isAddpet==0">
-    <button type="button" class="btn btn-secondary iq-text-uppercase" v-if="wizardPrev" @click="prevTabChange(wizardPrev)">{{$t('quick_booking.back')}}</button>
-    <button class="btn btn-primary iq-text-uppercase" name="submit" v-if="wizardNext" @click="formSubmit">{{$t('quick_booking.submit')}}</button>
+  <div class="card-footer" v-if="isFinalstep == 1 && isAddpet == 0">
+    <button type="button" class="btn btn-secondary iq-text-uppercase" v-if="wizardPrev" @click="prevTabChange(wizardPrev)">{{ $t('quick_booking.back') }}</button>
+    <button class="btn btn-primary iq-text-uppercase" name="submit" v-if="wizardNext" @click="formSubmit">{{ $t('quick_booking.submit') }}</button>
   </div>
 </template>
 
 <script setup>
-import { ref, watch,onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useField, useForm } from 'vee-validate'
 import { VueTelInput } from 'vue3-tel-input'
 import InputField from '@/vue/components/form-elements/InputField.vue'
@@ -88,10 +93,8 @@ const defaultData = () => {
 }
 
 onMounted(() => {
-
   userVerify.value = 1
   isFinalstep.value = 0
- 
 })
 
 const SingleSelectOption = ref({
@@ -100,20 +103,18 @@ const SingleSelectOption = ref({
   clearable: false
 })
 
-const removeCustomer=()=>{
-
+const removeCustomer = () => {
   userVerify.value = 1 // show customer info
-  isFinalstep.value=0
-    userId.value = ''
-    store.updateBookingValues({ key: 'user_id', value: '' })
-    store.updateUserValues({ key: 'email', value: ''})
-    store.updateUserValues({ key: 'first_name', value: '' })
-    store.updateUserValues({ key: 'last_name', value:'' })
-    store.updateUserValues({ key: 'mobile', value: '' })
-    store.updateUserValues({ key: 'gender', value: ''})
-    store.updateUserValues({ key: 'profile_image', value: '' })
-    userData.value = ''
-
+  isFinalstep.value = 0
+  userId.value = ''
+  store.updateBookingValues({ key: 'user_id', value: '' })
+  store.updateUserValues({ key: 'email', value: '' })
+  store.updateUserValues({ key: 'first_name', value: '' })
+  store.updateUserValues({ key: 'last_name', value: '' })
+  store.updateUserValues({ key: 'mobile', value: '' })
+  store.updateUserValues({ key: 'gender', value: '' })
+  store.updateUserValues({ key: 'profile_image', value: '' })
+  userData.value = ''
 }
 
 const userVerify = ref(1) // open verify canvas
@@ -126,7 +127,6 @@ const userData = ref('')
 const petList = ref([])
 
 const handleverifyUserResponse = (data) => {
-
   if (data != null) {
     userVerify.value = 2 // show customer info
     userId.value = data.id
@@ -146,7 +146,6 @@ const handleverifyUserResponse = (data) => {
 }
 
 const handleUserResponse = (data) => {
-
   if (data != null) {
     userVerify.value = 2
     userId.value = data.user.id
@@ -171,17 +170,13 @@ const addpet = () => {
   isAddpet.value = 1
 }
 
-const handlePetResponse=(data)=>{
-
-
-if (data != null) {
-  petList.value.options = buildMultiSelectObject(data.user_pet, { value: 'id', label: 'name' })
-  isAddpet.value = 0
-} else {
-  isAddpet.value = 1
-}
-
-
+const handlePetResponse = (data) => {
+  if (data != null) {
+    petList.value.options = buildMultiSelectObject(data.user_pet, { value: 'id', label: 'name' })
+    isAddpet.value = 0
+  } else {
+    isAddpet.value = 1
+  }
 }
 
 const validationSchema = yup.object({

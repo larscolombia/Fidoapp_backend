@@ -35,8 +35,9 @@
                 <x-slot name="toolbar">
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
-                            aria-label="Search" aria-describedby="addon-wrapping">
+                        <input type="text" class="form-control form-control-sm dt-search"
+                            placeholder="{{ __('activity_levels.search_placeholder') }}" aria-label="Search"
+                            aria-describedby="addon-wrapping">
                     </div>
 
                     <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('Create') }} {{ __($module_title) }}"

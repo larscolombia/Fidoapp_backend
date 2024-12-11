@@ -22,7 +22,8 @@
                             <select name="status" class="form-control select2" id="status" style="width:100%">
                                 @foreach ($booking_status as $key => $value)
                                     <option value="{{ $value->name }}"
-                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>{{ $value->value }}
+                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>
+                                        {{ __('messages.' . $value->name) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -37,7 +38,8 @@
                                 <option value="">{{ __('booking.all_status') }}</option>
                                 @foreach ($booking_status as $key => $value)
                                     <option value="{{ $value->name }}"
-                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>{{ $value->value }}
+                                        {{ $filter['status'] == $value->name ? 'selected' : '' }}>
+                                        {{ __('messages.' . $value->name) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -45,8 +47,9 @@
                     </div>
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
-                            aria-label="Search" aria-describedby="addon-wrapping">
+                        <input type="text" class="form-control form-control-sm dt-search"
+                            placeholder="{{ __('activity_levels.search_placeholder') }}" aria-label="Search"
+                            aria-describedby="addon-wrapping">
 
                     </div>
                     @hasPermission('add_training_booking')

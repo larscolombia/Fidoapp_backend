@@ -15,15 +15,15 @@
             <x-backend.section-header>
                 <div>
                     <!-- <div class="datatable-filter">
-                                <select name="column_status" id="column_status" class="select2 form-control"
-                                    data-filter="select" style="width: 100%">
-                                    <option value="">{{ __('service.all') }}</option>
-                                    <option value="0" {{ $filter['status'] == '0' ? 'selected' : '' }}>
-                                        {{ __('messages.inactive') }}</option>
-                                    <option value="1" {{ $filter['status'] == '1' ? 'selected' : '' }}>
-                                        {{ __('messages.active') }}</option>
-                                </select>
-                            </div> -->
+                                        <select name="column_status" id="column_status" class="select2 form-control"
+                                            data-filter="select" style="width: 100%">
+                                            <option value="">{{ __('service.all') }}</option>
+                                            <option value="0" {{ $filter['status'] == '0' ? 'selected' : '' }}>
+                                                {{ __('messages.inactive') }}</option>
+                                            <option value="1" {{ $filter['status'] == '1' ? 'selected' : '' }}>
+                                                {{ __('messages.active') }}</option>
+                                        </select>
+                                    </div> -->
                     <x-backend.quick-action url="{{ route('backend.services.bulk_action') }}">
                         <div class="">
                             <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
@@ -75,8 +75,9 @@
 
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
-                            aria-label="Search" aria-describedby="addon-wrapping">
+                        <input type="text" class="form-control form-control-sm dt-search"
+                            placeholder="{{ __('activity_levels.search_placeholder') }}" aria-label="Search"
+                            aria-describedby="addon-wrapping">
 
                     </div>
                     @hasPermission('add_service')
@@ -85,8 +86,8 @@
                             {{ __('messages.new') }}</x-buttons.offcanvas>
                     @endhasPermission
                     <!-- <button class="btn btn-outline-primary btn-group" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i
-                                    class="fa-solid fa-filter"></i> Advanced Filter</button> -->
+                                        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i
+                                            class="fa-solid fa-filter"></i> Advanced Filter</button> -->
                 </x-slot>
             </x-backend.section-header>
         </div>
@@ -268,7 +269,7 @@
                         sub_category_id: $('#column_subcategory').val(), // Add subcategory filter value
 
                         column_service_type: $('#column_service_type')
-                    .val(), // Add subcategory filter value
+                            .val(), // Add subcategory filter value
 
 
                     }

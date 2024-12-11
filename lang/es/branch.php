@@ -42,6 +42,10 @@ return [
     'branch_reserved' => 'Lo siento, su franja horaria seleccionada ya está reservada. Por favor, elija otra franja.',
     'branch_isempty' => 'No hay Centros de Mascotas Disponibles',
     'select_branch' => 'Seleccionar Centro de Mascotas',
-    'lbl_assign' => 'Asignar',
+    'select_pet' => 'Seleccionar Mascota',
+    'select_vet' => 'Seleccionar Veterinario',
+    'select_vet_category' => 'Seleccionar Categoría',
+    'select_service' => 'Seleccionar servicio',
+        'lbl_assign' => 'Asignar',
     'lbl_action' => 'Acción',
 ];

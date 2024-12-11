@@ -12,24 +12,7 @@
     <div class="card">
         <div class="card-header">
             <x-backend.section-header>
-                <div>
-                    <x-backend.quick-action url='{{ route('backend.categories.bulk_action') }}'>
-                        <div class="">
-                            <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
-                                style="width:100%">
-                                <option value="">{{ __('messages.no_action') }}</option>
-                                <option value="change-status">{{ __('messages.status') }}</option>
-                                <option value="delete">Delete</option>
-                            </select>
-                        </div>
-                        <div class="select-status d-none quick-action-field" id="change-status-action">
-                            <select name="status" class="form-control select2" id="status" style="width:100%">
-                                <option value="1">{{ __('messages.active') }}</option>
-                                <option value="0">{{ __('messages.inactive') }}</option>
-                            </select>
-                        </div>
-                    </x-backend.quick-action>
-                </div>
+
                 <x-slot name="toolbar">
                     <div>
                         <div class="datatable-filter">
@@ -59,8 +42,9 @@
 
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="icon-Search"></i></span>
-                        <input type="text" class="form-control form-control-sm dt-search" placeholder="Search..."
-                            aria-label="Search" aria-describedby="addon-wrapping">
+                        <input type="text" class="form-control form-control-sm dt-search"
+                            placeholder="{{ __('activity_levels.search_placeholder') }}" aria-label="Search"
+                            aria-describedby="addon-wrapping">
 
                     </div>
                     @hasPermission('add_subcategory')

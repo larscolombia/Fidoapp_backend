@@ -23,13 +23,13 @@ class PermissionRoleTableSeeder extends Seeder
         $admin = Role::firstOrCreate(['name' => 'admin', 'title' => 'Admin', 'is_fixed' => true]);
         $demo_admin = Role::firstOrCreate(['name' => 'demo_admin', 'title' => 'Demo Admin', 'is_fixed' => true]);
         $vet = Role::firstOrCreate(['name' => 'vet', 'title' => 'Veterinarian', 'is_fixed' => true]);
+        $trainer = Role::firstOrCreate(['name' => 'trainer', 'title' => 'Trainer', 'is_fixed' => true]);
+        $user = Role::firstOrCreate(['name' => 'user', 'title' => 'Customer', 'is_fixed' => true]);
+
         // $groomer = Role::firstOrCreate(['name' => 'groomer', 'title' => 'Groomer', 'is_fixed' => true]);
         // $walker = Role::firstOrCreate(['name' => 'walker', 'title' => 'Walker', 'is_fixed' => true]);
         // $boarder = Role::firstOrCreate(['name' => 'boarder', 'title' => 'Boarder', 'is_fixed' => true]);   
-        $trainer = Role::firstOrCreate(['name' => 'trainer', 'title' => 'Trainer', 'is_fixed' => true]);
         // $day_taker = Role::firstOrCreate(['name' => 'day_taker', 'title' => 'Day Care Taker', 'is_fixed' => true]);   
-        $user = Role::firstOrCreate(['name' => 'user', 'title' => 'Customer', 'is_fixed' => true]);
-        $petsitter = Role::firstOrCreate(['name' => 'pet_sitter', 'title' => 'Pet Sitter', 'is_fixed' => true]);
 
         // Create Permissions
         // Permission::firstOrCreate(['name' => 'view_backend', 'is_fixed' => true]);

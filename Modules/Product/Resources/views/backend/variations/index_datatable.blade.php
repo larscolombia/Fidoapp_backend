@@ -44,7 +44,8 @@
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i
                                 class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" class="form-control dt-search" placeholder="Search..." aria-label="Search"
+                        <input type="text" class="form-control dt-search"
+                            placeholder="{{ __('activity_levels.search_placeholder') }}" aria-label="Search"
                             aria-describedby="addon-wrapping">
                     </div>
                     @hasPermission('add_product_variation')

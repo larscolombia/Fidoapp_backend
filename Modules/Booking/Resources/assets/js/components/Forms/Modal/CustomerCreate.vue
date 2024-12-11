@@ -1,63 +1,57 @@
 <template>
-    <!-- Modal -->
-    <form @submit="formSubmit" class="">
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Create Customer</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row" id="form-offcanvas">
-                            <div class="form-group col-md-6">
-                                <label for="first_name">First Name</label>
-                                <input type="text" class="form-control" v-model="first_name" />
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="last_name">Last Name</label>
-                                <input type="text" class="form-control" v-model="last_name" />
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label for="e-mail">E-mail</label>
-                                <input type="text" class="form-control" v-model="email" />
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label for="e-mail">Phone Number</label>
-                                <input type="text" class="form-control" v-model="mobile" />
-                            </div>
-                            <div class="form-group col-md-12">
-                              <label for="" class="form-label w-100">Gender</label>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male">
-                                  <label class="form-check-label" for="male">
-                                    Male
-                                  </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female">
-                                  <label class="form-check-label" for="female">
-                                    Female
-                                  </label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other">
-                                  <label class="form-check-label" for="other">
-                                    Other
-                                  </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+  <!-- Modal -->
+  <form @submit="formSubmit" class="">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $t('messages.select_customer') }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row" id="form-offcanvas">
+              <div class="form-group col-md-6">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" v-model="first_name" />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" v-model="last_name" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="e-mail">E-mail</label>
+                <input type="text" class="form-control" v-model="email" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="e-mail">Phone Number</label>
+                <input type="text" class="form-control" v-model="mobile" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="" class="form-label w-100">Gender</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male" />
+                  <label class="form-check-label" for="male"> Male </label>
                 </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" />
+                  <label class="form-check-label" for="female"> Female </label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other" />
+                  <label class="form-check-label" for="other"> Other </label>
+                </div>
+              </div>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
         </div>
-    </form>
+      </div>
+    </div>
+  </form>
 </template>
 <script setup>
 import { ref } from 'vue'
@@ -71,7 +65,6 @@ import { CUSTOMER_STORE } from '../../../constant/booking'
 const emit = defineEmits(['submit'])
 const { storeRequest } = useRequest()
 
-
 /*
  * Form Data & Validation & Handeling
  */
@@ -83,8 +76,7 @@ const defaultData = () => {
     last_name: '',
     email: '',
     mobile: '',
-    gender: 'male',
-
+    gender: 'male'
   }
 }
 
@@ -96,17 +88,17 @@ const setFormData = (data) => {
       last_name: data.last_name,
       email: data.email,
       mobile: data.mobile,
-      gender: data.gender,
+      gender: data.gender
     }
   })
 }
 
 // Validations
 const validationSchema = yup.object({
-    first_name: yup.string().required(),
-    last_name: yup.string().required(),
-    email: yup.string().required(),
-    mobile: yup.string().required(),
+  first_name: yup.string().required(),
+  last_name: yup.string().required(),
+  email: yup.string().required(),
+  mobile: yup.string().required()
 })
 
 const { handleSubmit, errors, resetForm } = useForm({
@@ -121,15 +113,13 @@ const { value: mobile } = useField('mobile')
 
 const errorMessages = ref({})
 
-
 const formSubmit = handleSubmit((value) => {
   storeRequest({ url: CUSTOMER_STORE, body: value }).then((res) => {
-    if(res.status) {
-      emit('submit', {type: 'create_customer', value: res.data.id})
+    if (res.status) {
+      emit('submit', { type: 'create_customer', value: res.data.id })
       setFormData(defaultData())
-      bootstrap.Modal.getInstance(document.getElementById("exampleModal")).hide()
+      bootstrap.Modal.getInstance(document.getElementById('exampleModal')).hide()
     }
   })
 })
-
 </script>
