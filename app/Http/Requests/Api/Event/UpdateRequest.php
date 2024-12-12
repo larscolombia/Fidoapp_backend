@@ -28,16 +28,17 @@ class UpdateRequest extends FormRequest
         $eventId = $this->route('event');
 
         return [
-            'name' => 'sometimes|required|string|max:255',
-            'date' => 'sometimes|required|date',
-            'slug' => "sometimes|required|string|max:255|unique:events,slug,{$eventId}",
-            'user_id' => 'sometimes|required|exists:users,id',
-            'description' => 'nullable|string',
-            'location' => 'nullable|string',
-            'tipo' => 'sometimes|required|in:salud,entrenamiento',
-            'status' => 'sometimes|required|boolean',
-            'owner_id' => 'required|array',
-            'owner_id.*' => 'required|integer|exists:users,id'
+            'name' => 'sometimes|string|max:255',
+            'date' => 'sometimes|string',
+            'end_date' => 'sometimes|string',
+            'slug' => "sometimes|string|max:255|unique:events,slug,{$eventId}",
+            'user_id' => 'sometimes|exists:users,id',
+            'description' => 'sometimes|string',
+            'location' => 'sometimes|string',
+            'tipo' => 'sometimes|in:medico,entrenamiento,evento',
+            'status' => 'sometimes|boolean',
+            'owner_id' => 'sometimes|array',
+            'owner_id.*' => 'sometimes|integer|exists:users,id'
         ];
     }
 

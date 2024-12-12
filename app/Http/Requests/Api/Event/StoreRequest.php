@@ -27,13 +27,13 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'date' => 'required|string',
+            'end_date' => 'nullable|string',
             'slug' => 'required|string|max:255|unique:events',
             'user_id' => 'required|exists:users,id',
             'description' => 'nullable|string',
             'location' => 'nullable|string',
-            'tipo' => 'required|in:salud,entrenamiento',
+            'tipo' => 'required|in:medico,entrenamiento,evento',
             'status' => 'required|boolean',
             'pet_id' => 'required|integer',
             'owner_id' => 'required|array',

@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\EventDetail;
+use App\Trait\Notification;
 use Illuminate\Http\Request;
 use Modules\Event\Models\Event;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Event\StoreRequest;
 use App\Http\Requests\Api\Event\UpdateRequest;
-use App\Trait\Notification;
 
 
 class EventController extends Controller
@@ -46,12 +48,19 @@ class EventController extends Controller
     {
         try {
             $validatedData = $request->validated();
+            try {
+                $validatedData['date'] = Carbon::createFromFormat('Y-m-d', $validatedData['date'])->format('Y-m-d');
+                $validatedData['end_date'] = Carbon::createFromFormat('Y-m-d', $validatedData['end_date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $validatedData['date'] = Carbon::now()->format('Y-m-d');
+                $validatedData['end_date'] = Carbon::now()->format('Y-m-d');
+            }
             $eventTime = $request->input('event_time')
                 ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
             $event = Event::create([
                 'name'        => $request->input('name'),
-                'date'        => $request->input('date'),
-                'end_date'    => $request->input('end_date'),
+                'date'        => $validatedData['date'],
+                'end_date'    => $validatedData['end_date'],
                 'event_time'  => $eventTime,
                 'slug'        => $request->input('slug'),
                 'user_id'     => $request->input('user_id'),
@@ -60,6 +69,7 @@ class EventController extends Controller
                 'tipo'        => $request->input('tipo'),
                 'status'      => $request->input('status'),
             ]);
+
             $ownerIds = $request->input('owner_id');
             foreach ($ownerIds as $ownerId) {
                 EventDetail::create([
@@ -88,14 +98,23 @@ class EventController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         try {
+            Log::info($request->all());
             $event = Event::findOrFail($id);
+            $validatedData = $request->validated();
             $detailEvent = EventDetail::where('event_id', $event->id)->firstOrFail();
+            try {
+                $validatedData['date'] = Carbon::createFromFormat('Y-m-d', $validatedData['date'])->format('Y-m-d');
+                $validatedData['end_date'] = Carbon::createFromFormat('Y-m-d', $validatedData['end_date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $validatedData['date'] = null;
+                $validatedData['end_date'] = null;
+            }
             $eventTime = $request->input('event_time')
                 ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
             $event->update([
                 'name'        => $request->input('name', $event->name),
-                'date'        => $request->input('date', $event->date),
-                'end_date'    => $request->input('end_date', $event->end_date),
+                'date'        => !is_null($validatedData['date']) ? $validatedData['date'] : $event->date,
+                'end_date'    => !is_null($validatedData['end_date']) ? $validatedData['end_date'] : $event->end_date,
                 'event_time'  => !is_null($eventTime) ? $eventTime : $event->event_time,
                 'slug'        => $request->input('slug', $event->slug),
                 'user_id'     => $request->input('user_id', $event->user_id),
@@ -104,18 +123,25 @@ class EventController extends Controller
                 'tipo'        => $request->input('tipo', $event->tipo),
                 'status'      => $request->input('status', $event->status),
             ]);
-            // Eliminar detalles existentes
-            EventDetail::where('event_id', $event->id)->delete();
+            if ($request->has('owner_id')) {
+                // Eliminar detalles existentes
+                EventDetail::where('event_id', $event->id)->delete();
 
-            // Crear nuevos detalles del evento
-            $ownerIds = $request->input('owner_id');
-            foreach ($ownerIds as $ownerId) {
-                EventDetail::create([
-                    'event_id' => $event->id,
-                    'pet_id'   => $request->input('pet_id'),
-                    'owner_id' => $ownerId,
-                ]);
+                // Crear nuevos detalles del evento
+                $ownerIds = $request->input('owner_id');
+                foreach ($ownerIds as $ownerId) {
+                    EventDetail::create([
+                        'event_id' => $event->id,
+                        'pet_id'   => $request->input('pet_id'),
+                        'owner_id' => $ownerId,
+                    ]);
+                }
+            }else{
+                if($request->has('pet_id')){
+                    EventDetail::where('event_id', $event->id)->update(['pet_id' => $request->input('pet_id')]);
+                }
             }
+
 
             $this->sendNotification('event', $event, $request->input('owner_id'), $event->description);
             return response()->json([
@@ -143,11 +169,37 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::findOrFail($id);
+        $ownersEmails = [];
 
+        foreach ($event->detailEvent as $detail) {
+            if ($detail->owner_id) {
+                // Buscar el usuario por ID
+                $user = User::find($detail->owner_id);
+                if ($user) {
+                    // Agregar el correo electrónico al array
+                    $ownersEmails[] = $user->email;
+                }
+            }
+        }
+        $data =  [
+            'name' => $event->name,
+            'tipo'        => $event->tipo,
+            'date'        => $event->date,
+            'end_date'    => $event->end_date,
+            'slug'        => $event->slug,
+            'user_id'     => $event->user_id,
+            'user_email'  => $event->user->email,
+            'description' => $event->description,
+            'location'    => $event->location,
+            'status'      => $event->status,
+            'pet_id'      => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
+            'owner_ids'   => $ownersEmails
+
+        ];
         return response()->json([
             'success' => true,
             'message' => 'Evento recuperado exitosamente',
-            'data' => $event,
+            'data'    =>$data,
         ]);
     }
 
