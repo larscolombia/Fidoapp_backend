@@ -15,11 +15,13 @@
         <div class="card-header">
             <x-backend.section-header>
                 <div>
-                    <x-backend.quick-action url="{{ route('backend.employees.bulk_action_review') }}">
+                    <x-backend.quick-action url="{{ route('backend.employees.bulk_action_review') }}"
+                        formId="quick-action-form-rating">
                         <div class="">
                             <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
                                 style="width:100%">
                                 <option value="">{{ __('messages.no_action') }}</option>
+                                <option value="approve">{{ __('rating.approve') }}</option>
                                 <option value="delete">{{ __('messages.delete') }}</option>
                             </select>
                         </div>
@@ -59,78 +61,78 @@
     <!-- DataTables Core and Extensions -->
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
-<script type="text/javascript" defer>
-  const range_flatpicker = document.querySelectorAll('.booking-date-range')
-  Array.from(range_flatpicker, (elem) => {
-    if (typeof flatpickr !== typeof undefined) {
-      flatpickr(elem, {
-        mode: "range",
-        dateFormat: "d-m-Y",
-      })
-    }
-  })
-  const columns = [{
-      name: 'check',
-      data: 'check',
-      title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
-      width: '0%',
-      exportable: false,
-      orderable: false,
-      searchable: false,
-    },
-    // {
-    //   data: 'image',
-    //   name: 'image',
-    //   title: "{{ __('employee.lbl_image') }}",
-    //   orderable: false,
-    //   width: '10%'
-    // },
-    {
-      data: 'user_id',
-      name: 'user_id',
-      title: "{{ __('employee.lbl_client_name') }}",
-      orderable: true,
-      searchable: true,
-    },
-    {
-      data: 'module',
-      name: 'module',
-      title: "{{ __('rating.module') }}",
-      orderable: true,
-      searchable: true,
-    },
-    {
-      data: 'employee_id',
-      name: 'employee_id',
-      title: "{{ __('rating.name_or_description') }}",
-      orderable: true,
-      searchable: true,
-      // width: '10%'
-    },
-    {
-      data: 'review_msg',
-      name: 'review_msg',
-      title: "{{ __('employee.lbl_message') }}",
-      width: '10%'
-    },
-    {
-      data: 'rating',
-      name: 'rating',
-      title: "{{ __('employee.lbl_rating') }}",
-      width: '5%'
-    },
-    {
-      data: 'updated_at',
-      name: 'updated_at',
-      title: "{{ __('employee.lbl_updated') }}",
-      width: '5%'
-    },
-    {
-        data:'enabled',
-        name:'enabled',
-        title:"{{__('rating.enabled')}}",
-        width: '5%'
-    }
+    <script type="text/javascript" defer>
+        const range_flatpicker = document.querySelectorAll('.booking-date-range')
+        Array.from(range_flatpicker, (elem) => {
+            if (typeof flatpickr !== typeof undefined) {
+                flatpickr(elem, {
+                    mode: "range",
+                    dateFormat: "d-m-Y",
+                })
+            }
+        })
+        const columns = [{
+                name: 'check',
+                data: 'check',
+                title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" onclick="selectAllTableRating(this)">',
+                width: '0%',
+                exportable: false,
+                orderable: false,
+                searchable: false,
+            },
+            // {
+            //   data: 'image',
+            //   name: 'image',
+            //   title: "{{ __('employee.lbl_image') }}",
+            //   orderable: false,
+            //   width: '10%'
+            // },
+            {
+                data: 'user_id',
+                name: 'user_id',
+                title: "{{ __('employee.lbl_client_name') }}",
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: 'module',
+                name: 'module',
+                title: "{{ __('rating.module') }}",
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: 'employee_id',
+                name: 'employee_id',
+                title: "{{ __('rating.name_or_description') }}",
+                orderable: true,
+                searchable: true,
+                // width: '10%'
+            },
+            {
+                data: 'review_msg',
+                name: 'review_msg',
+                title: "{{ __('employee.lbl_message') }}",
+                width: '10%'
+            },
+            {
+                data: 'rating',
+                name: 'rating',
+                title: "{{ __('employee.lbl_rating') }}",
+                width: '5%'
+            },
+            {
+                data: 'updated_at',
+                name: 'updated_at',
+                title: "{{ __('employee.lbl_updated') }}",
+                width: '5%'
+            },
+            {
+                data: 'enabled',
+                name: 'enabled',
+                title: "{{ __('rating.enabled') }}",
+                width: '5%'
+            }
 
         ]
 
@@ -186,5 +188,249 @@
                 resetQuickAction()
             });
         })
+    </script>
+
+    <script>
+        const dataTableRowCheckRating = (id) => {
+            checkRow()
+            if ($('.select-table-row:checked').length > 0) {
+                $('#quick-action-form-rating').removeClass('form-disabled')
+                //if at-least one row is selected
+                document.getElementById('select-all-table').indeterminate = true
+                $('#quick-actions').find('input, textarea, button, select').removeAttr('disabled')
+            } else {
+                //if no row is selected
+                document.getElementById('select-all-table').indeterminate = false
+                $('#select-all-table').attr('checked', false)
+                resetActionButtons()
+            }
+
+            if ($('#datatable-row-' + id).is(':checked')) {
+                $('#row-' + id).addClass('table-active')
+            } else {
+                $('#row-' + id).removeClass('table-active')
+            }
+        }
+
+
+        const confirmSwal = async (message) => {
+            return await Swal.fire({
+                title: message,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#858482',
+                confirmButtonText: "{{ __('rating.do_it') }}",
+                cancelButtonText: "{{ __('rating.cancel') }}"
+            }).then((result) => {
+                return result
+            })
+        }
+
+        window.confirmSwal = confirmSwal
+
+        $('#quick-action-form-rating').on('submit', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const url = form.attr('action');
+            const message = $('[name="message_' + $('[name="action_type"]').val() + '"]').val();
+
+            // Obtener IDs seleccionados
+            const selectedCheckboxes = $('#datatable_wrapper .select-table-row:checked');
+
+            // Crear un array para almacenar los datos
+
+            const rowData = selectedCheckboxes.map(function() {
+                return {
+                    id: $(this).val(), // ID del checkbox
+                    module: $('input[name="module_name[' + $(this).val() + ']"]')
+                        .val() // Valor del input oculto
+                };
+            }).get();
+
+            // Confirmar la acción
+            confirmSwal(message).then((result) => {
+                if (!result.isConfirmed) return;
+
+                // Enviar datos a través de AJAX
+                callActionAjaxRating({
+                    url: url,
+                    body: form.serialize() + '&rowData=' + JSON.stringify(
+                        rowData) // Incluye rowData en el cuerpo de la solicitud
+                });
+            });
+        });
+
+
+        function callActionAjaxRating({
+            url,
+            body
+        }) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: body,
+                success: function(res) {
+                    if (res.status) {
+                        window.successSnackbar(res.message)
+                        window.renderedDataTable.ajax.reload(resetActionButtons, false)
+                        const event = new CustomEvent('update_quick_action', {
+                            detail: {
+                                value: true
+                            }
+                        })
+                        document.dispatchEvent(event)
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: res.message,
+                            icon: 'error'
+                        })
+                        // window.errorSnackbar(res.message)
+                    }
+                }
+            })
+        }
+
+        $(document).on('click', '.delete-button-rating', function(e) {
+            e.preventDefault();
+
+            var form = $(this).closest('form'); // Obtiene el formulario más cercano
+            var message = $(this).data('confirm'); // Obtiene el mensaje de confirmación
+
+            // Muestra SweetAlert para confirmar la eliminación
+            confirmSwal(message).then((result) => {
+                if (!result.isConfirmed) return;
+                // Envía el formulario mediante AJAX
+                $.ajax({
+                    url: form.attr('action'), // URL del formulario
+                    type: 'POST', // Método de envío
+                    data: form
+                        .serialize(), // Serializa los datos del formulario
+                    success: function(response) {
+                        // Maneja la respuesta aquí
+                        if (response.status) {
+                            // Muestra el mensaje de éxito con SweetAlert
+                            Swal.fire({
+                                title: 'Éxito',
+                                text: response
+                                    .message, // Mensaje recibido del servidor
+                                icon: 'success',
+                                confirmButtonText: "{{__('rating.accept')}}"
+                            }).then(() => {
+                                $('#datatable').DataTable().ajax
+                                    .reload(); // Recarga el DataTable
+                            });
+                        } else {
+                            // Manejar errores o mensajes de error
+                            Swal.fire({
+                                title: 'Error',
+                                text: response
+                                    .message, // Mensaje de error recibido del servidor
+                                icon: 'error',
+                                confirmButtonText: "{{__('rating.accept')}}"
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        // Manejo de errores en caso de que falle la solicitud AJAX
+                        console.error(xhr);
+                        Swal.fire({
+                            title: 'Error',
+                            text: "Ocurrió un error al intentar eliminar el registro.",
+                            icon: 'error',
+                            confirmButtonText: "{{__('rating.accept')}}"
+                        });
+                    }
+                });
+
+            });
+        });
+
+        const selectAllTableRating = (source) => {
+            const checkboxes = document.getElementsByName('datatable_ids[]');
+            let atLeastOneChecked = false; // Variable para verificar si al menos un checkbox está seleccionado
+
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                // Si el checkbox no está deshabilitado, se selecciona o deselecciona
+                if (!$('input#' + checkboxes[i].id).prop('disabled')) {
+                    checkboxes[i].checked = source.checked;
+                }
+
+                // Verifica el estado del checkbox y actualiza la clase de la fila
+                if ($('input#' + checkboxes[i].id).is(':checked')) {
+                    $('input#' + checkboxes[i].id).closest('tr').addClass('table-active');
+                    atLeastOneChecked = true; // Al menos un checkbox está seleccionado
+                } else {
+                    $('input#' + checkboxes[i].id).closest('tr').removeClass('table-active');
+                }
+            }
+
+            // Si al menos un checkbox está seleccionado, habilita los botones y quita la clase 'form-disabled'
+            if (atLeastOneChecked) {
+                $('#quick-action-form-rating').removeClass('form-disabled');
+                $('#quick-actions').find('input, textarea, button, select').removeAttr('disabled');
+                document.getElementById('select-all-table').indeterminate =
+                    false; // Asegúrate de que no esté en estado indeterminado
+            } else {
+                // Si no hay checkboxes seleccionados, vuelve a deshabilitar los botones
+                resetActionButtons(); // Asegúrate de que esta función maneje la lógica de deshabilitar botones
+                document.getElementById('select-all-table').indeterminate =
+                    false; // También puedes establecerlo en false aquí
+                $('#quick-action-form-rating').addClass('form-disabled');
+                $('#quick-actions').find('input, textarea, button, select').addAttr('disabled');
+            }
+
+            checkRow(); // Llama a tu función para verificar el estado de las filas
+        }
+
+
+        window.selectAllTable = selectAllTable
+
+        $(document).on('submit', '.approve-form-rating', function(e) {
+            e.preventDefault(); // Evita el envío normal del formulario
+
+            var form = $(this); // Obtiene el formulario
+            var url = form.attr('action'); // URL del formulario
+            var data = form.serialize(); // Serializa los datos del formulario
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    // Maneja la respuesta aquí
+                    if (response.status) {
+                        // Si la respuesta es exitosa, muestra un mensaje de éxito
+                        Swal.fire({
+                            title: 'Éxito',
+                            text: response.message, // Mensaje recibido del servidor
+                            icon: 'success',
+                            confirmButtonText: "{{__('rating.accept')}}"
+                        }).then(() => {
+                            $('#datatable').DataTable().ajax.reload(); // Recarga el DataTable
+                        });
+                    } else {
+                        // Manejar errores o mensajes de error
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.message, // Mensaje de error recibido del servidor
+                            icon: 'error',
+                            confirmButtonText: "{{__('rating.accept')}}"
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    // Manejo de errores en caso de que falle la solicitud AJAX
+                    console.error(xhr);
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Ocurrió un error al intentar aprobar el registro.",
+                        icon: 'error',
+                        confirmButtonText: "{{__('rating.accept')}}"
+                    });
+                }
+            });
+        });
     </script>
 @endpush

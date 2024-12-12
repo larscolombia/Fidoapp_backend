@@ -13,6 +13,7 @@ use App\Models\BookRating;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\CoursePlatformVideoRating;
 use Illuminate\Database\Query\Expression;
@@ -60,7 +61,7 @@ class EmployeesController extends Controller
         $customefield = CustomField::exportCustomFields(new User());
         $type = request()->employee_type;
 
-        switch($type) {
+        switch ($type) {
 
             case 'boarder':
 
@@ -83,12 +84,12 @@ class EmployeesController extends Controller
                 $module_title = 'menu.trainer_list';
                 $create_title  = 'booking.lbl_trainer';
 
-                 break;
+                break;
             case 'walker':
                 $module_title = 'menu.walker_list';
                 $create_title  = 'booking.lbl_walker';
 
-                 break;
+                break;
 
             case 'day_taker':
                 $module_title = 'menu.daycare_taker_list';
@@ -104,35 +105,35 @@ class EmployeesController extends Controller
                 $module_title = 'menu.pending_employee';
                 $create_title = 'booking.lbl_pending_employee';
 
-                    break;
+                break;
             default:
 
-                 $module_title = 'menu.lbl_employee_list';
-                 $create_title = 'menu.lbl_employee';
+                $module_title = 'menu.lbl_employee_list';
+                $create_title = 'menu.lbl_employee';
 
                 break;
-
         }
 
-       // $module_title = 'menu.lbl_employee_list';
-      //  $create_title = 'menu.lbl_employee';
+        // $module_title = 'menu.lbl_employee_list';
+        //  $create_title = 'menu.lbl_employee';
 
 
-      $filter = [
-        'commission' => $request->commission,
+        $filter = [
+            'commission' => $request->commission,
 
 
-       ];
+        ];
 
 
-      $commissions_list=Commission::all();
+        $commissions_list = Commission::all();
 
 
 
-        return view('employee::backend.employees.index', compact('module_action', 'columns', 'customefield','type','module_title','create_title','commissions_list','filter'));
+        return view('employee::backend.employees.index', compact('module_action', 'columns', 'customefield', 'type', 'module_title', 'create_title', 'commissions_list', 'filter'));
     }
 
-    public function employees_type_data($type){
+    public function employees_type_data($type)
+    {
 
 
         $module_action = 'List';
@@ -162,12 +163,12 @@ class EmployeesController extends Controller
                 $module_title = 'menu.trainer_list';
                 $create_title  = 'booking.lbl_trainer';
 
-                 break;
+                break;
             case 'walker':
                 $module_title = 'menu.walker_list';
                 $create_title  = 'booking.lbl_walker';
 
-                 break;
+                break;
 
             case 'day_taker':
                 $module_title = 'menu.daycare_taker_list';
@@ -184,22 +185,20 @@ class EmployeesController extends Controller
                 $module_title = 'menu.pending_employee';
                 $create_title = 'booking.lbl_pending_employee';
 
-                 break;
+                break;
 
             default:
-                 $module_title = 'menu.lbl_employee_list';
-                 $create_title = 'menu.lbl_employee';
+                $module_title = 'menu.lbl_employee_list';
+                $create_title = 'menu.lbl_employee';
 
                 break;
         }
 
-          // $module_title = 'menu.lbl_employee_list';
-         //  $create_title = 'menu.lbl_employee';
+        // $module_title = 'menu.lbl_employee_list';
+        //  $create_title = 'menu.lbl_employee';
 
 
-        return view('employee::backend.employees.index', compact('module_action', 'columns', 'customefield','type','module_title','create_title'));
-
-
+        return view('employee::backend.employees.index', compact('module_action', 'columns', 'customefield', 'type', 'module_title', 'create_title'));
     }
 
     /**
@@ -240,7 +239,7 @@ class EmployeesController extends Controller
         $role = $request->role;
 
         // Need To Add Role Base
-        $query_data = User::role(['vet','groomer','walker','boarder','pet_sitter','trainer'])->with('media', 'branches')->where(function ($q) use ($term) {
+        $query_data = User::role(['vet', 'groomer', 'walker', 'boarder', 'pet_sitter', 'trainer'])->with('media', 'branches')->where(function ($q) use ($term) {
             if (!empty($term)) {
                 $q->orWhere('first_name', 'LIKE', "%$term%");
                 $q->orWhere('last_name', 'LIKE', "%$term%");
@@ -312,27 +311,24 @@ class EmployeesController extends Controller
 
 
         $module_name = $this->module_name;
-        $query = User::select('users.*')->branch()->whereNotNull('email_verified_at')->with('media', 'mainBranch','commissions_data');
+        $query = User::select('users.*')->branch()->whereNotNull('email_verified_at')->with('media', 'mainBranch', 'commissions_data');
 
 
-        if($request->has('type') ){
+        if ($request->has('type')) {
 
-           if($request->type=='pending_employee'){
+            if ($request->type == 'pending_employee') {
 
-                $query = User::select('users.*')->branch()->whereNull('email_verified_at')->with('media', 'mainBranch','commissions_data');
+                $query = User::select('users.*')->branch()->whereNull('email_verified_at')->with('media', 'mainBranch', 'commissions_data');
+            } else {
 
-            }else{
-
-                $query =$query->role($request->type);
-
+                $query = $query->role($request->type);
             }
-
         }
 
         $filter = $request->filter;
 
 
-        if(isset($filter)) {
+        if (isset($filter)) {
             if (isset($filter['column_status'])) {
                 $query->whereHas('commissions_data', function ($subquery) use ($filter) {
                     $subquery->where('commission_id', $filter['column_status']);
@@ -346,23 +342,22 @@ class EmployeesController extends Controller
             })
             ->addColumn('action', function ($data) {
 
-                $other_settings=Setting::where('name','is_provider_push_notification')->first();
+                $other_settings = Setting::where('name', 'is_provider_push_notification')->first();
 
-                $enable_push_notification=0;
+                $enable_push_notification = 0;
 
-                if(!empty($other_settings)){
+                if (!empty($other_settings)) {
 
-                    $enable_push_notification= $other_settings->val;
-
+                    $enable_push_notification = $other_settings->val;
                 }
-                return view('employee::backend.employees.action_column', compact('data','enable_push_notification'));
+                return view('employee::backend.employees.action_column', compact('data', 'enable_push_notification'));
             })
             ->editColumn('user_id', function ($data) {
                 return view('employee::backend.employees.user_id', compact('data'));
             })
             ->filterColumn('user_id', function ($query, $keyword) {
                 if (!empty($keyword)) {
-                    $query->where('first_name', 'like', '%'.$keyword.'%')->orWhere('last_name', 'like', '%'.$keyword.'%')->orWhere('email', 'like', '%'.$keyword.'%');
+                    $query->where('first_name', 'like', '%' . $keyword . '%')->orWhere('last_name', 'like', '%' . $keyword . '%')->orWhere('email', 'like', '%' . $keyword . '%');
                 }
             })
             ->orderColumn('user_id', function ($query, $order) {
@@ -374,19 +369,17 @@ class EmployeesController extends Controller
 
             ->editColumn('email_verified_at', function ($data) {
 
-               return view('employee::backend.employees.verify_action', compact('data'));
+                return view('employee::backend.employees.verify_action', compact('data'));
             })
             ->editColumn('user_type', function ($data) {
-                return '<span class="badge booking-status bg-soft-primary p-3">'.str_replace("_","",ucfirst($data->user_type)).'</span>';
-
+                return '<span class="badge booking-status bg-soft-primary p-3">' . str_replace("_", "", ucfirst($data->user_type)) . '</span>';
             })
             ->editColumn('full_name', function ($data) {
-                return $data->first_name .' ' .$data->last_name;
-
+                return $data->first_name . ' ' . $data->last_name;
             })
             ->filterColumn('full_name', function ($query, $keyword) {
                 if (!empty($keyword)) {
-                    $query->where('first_name', 'like', '%'.$keyword.'%')->orWhere('last_name', 'like', '%'.$keyword.'%');
+                    $query->where('first_name', 'like', '%' . $keyword . '%')->orWhere('last_name', 'like', '%' . $keyword . '%');
                 }
             })
             ->orderColumn('full_name', function ($query, $order) {
@@ -491,7 +484,7 @@ class EmployeesController extends Controller
 
         $roles = [$request->user_type];
 
-       // $roles = ['vet','groomer','walker','boarder','pet_sitter','trainer'];
+        // $roles = ['vet','groomer','walker','boarder','pet_sitter','trainer'];
 
         // if ($request->is_manager) {
         //     array_push($roles, 'manager');
@@ -568,7 +561,7 @@ class EmployeesController extends Controller
     {
         $module_action = 'Show';
 
-        $data = User::role(['vet','groomer','walker','boarder','pet_sitter','trainer'])->findOrFail($id);
+        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'pet_sitter', 'trainer'])->findOrFail($id);
 
         return view('employee::backend.employees.show', compact('module_action', "$data"));
     }
@@ -582,7 +575,7 @@ class EmployeesController extends Controller
     public function edit($id)
     {
 
-        $data = User::role(['vet','groomer','walker','boarder','trainer','day_taker','pet_sitter'])->where('id',$id)->with('branches', 'services', 'commissions_data', 'profile')->first();
+        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->where('id', $id)->with('branches', 'services', 'commissions_data', 'profile')->first();
 
 
         if (!is_null($data)) {
@@ -625,7 +618,7 @@ class EmployeesController extends Controller
      */
     public function update(EmployeeRequest $request, $id)
     {
-        $data = User::role(['vet','groomer','walker','boarder','trainer','day_taker','pet_sitter'])->findOrFail($id);
+        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
 
         $request_data = $request->except('profile_image');
 
@@ -655,10 +648,9 @@ class EmployeesController extends Controller
             $data->updateCustomFieldData(json_decode($request->custom_fields_data));
         }
 
-        if($request->file('profile_image') !=null){
+        if ($request->file('profile_image') != null) {
 
             storeMediaFile($data, $request->file('profile_image'), 'profile_image');
-
         }
 
 
@@ -733,7 +725,7 @@ class EmployeesController extends Controller
                 }
             }
         }
-        $usertype = str_replace("_"," ",ucfirst($request->user_type));
+        $usertype = str_replace("_", " ", ucfirst($request->user_type));
 
         $message = __('messages.update_form', ['form' => $usertype]);
 
@@ -753,7 +745,7 @@ class EmployeesController extends Controller
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
 
-        $data = User::role(['vet','groomer','walker','boarder','trainer','day_taker','pet_sitter'])->findOrFail($id);
+        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
 
         $data->delete();
 
@@ -776,7 +768,7 @@ class EmployeesController extends Controller
 
         $employee_id = $data['employee_id'];
 
-        $data = User::role(['vet','groomer','walker','boarder','trainer','day_taker','pet_sitter'])->findOrFail($employee_id);
+        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($employee_id);
 
         $request_data = $request->only('password');
         $request_data['password'] = Hash::make($request_data['password']);
@@ -806,7 +798,7 @@ class EmployeesController extends Controller
 
     public function verify_employee(Request $request, $id)
     {
-        $data = User::role(['vet','groomer','walker','boarder','trainer','day_taker','pet_sitter'])->findOrFail($id);
+        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
 
         $current_time = Carbon::now();
 
@@ -825,17 +817,17 @@ class EmployeesController extends Controller
     public function review_data(Datatables $datatable, Request $request)
     {
         //consultas
-        $employeeQuery = EmployeeRating::with('user')->select('id', 'user_id', 'employee_id', 'review_msg', 'rating', 'status' ,'created_at', 'updated_at')
-        ->addSelect(DB::raw("'employee' as module"));
-        $bookQuery = BookRating::with('user','ebook')
-        ->select('id', 'user_id', 'e_book_id', 'review_msg', 'rating','status', 'created_at', 'updated_at')
-        ->addSelect(DB::raw("'books' as module"));
+        $employeeQuery = EmployeeRating::with('user')->select('id', 'user_id', 'employee_id', 'review_msg', 'rating', 'status', 'created_at', 'updated_at')
+            ->addSelect(DB::raw("'employee' as module"));
+        $bookQuery = BookRating::with('user', 'ebook')
+            ->select('id', 'user_id', 'e_book_id', 'review_msg', 'rating', 'status', 'created_at', 'updated_at')
+            ->addSelect(DB::raw("'books' as module"));
         $videoQuery = CoursePlatformVideoRating::with('user')
-        ->select('id', 'user_id','course_platform_video_id', 'review_msg', 'rating', 'status', 'created_at','updated_at')
-        ->addSelect(DB::raw("'courses' as module"));
+            ->select('id', 'user_id', 'course_platform_video_id', 'review_msg', 'rating', 'status', 'created_at', 'updated_at')
+            ->addSelect(DB::raw("'courses' as module"));
         $blogQuery = BlogRating::with('user')
-        ->select('id', 'user_id','blog_id', 'review_msg', 'rating', 'status', 'created_at','updated_at')
-        ->addSelect(DB::raw("'courses' as module"));
+            ->select('id', 'user_id', 'blog_id', 'review_msg', 'rating', 'status', 'created_at', 'updated_at')
+            ->addSelect(DB::raw("'blogs' as module"));
         //union
         $query = $employeeQuery->union($bookQuery)->union($videoQuery)->union($blogQuery);
         $filter = $request->filter;
@@ -844,20 +836,23 @@ class EmployeesController extends Controller
                 $query->where('status', $filter['column_status']);
             }
         }
-        if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
+        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
             $query;
         } else {
             $query->where('employee_id', auth()->id());
         }
         $datatable = $datatable->eloquent($query)
             ->addColumn('check', function ($data) {
-                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $data->id . '"  name="datatable_ids[]" value="' . $data->id . '" onclick="dataTableRowCheck(' . $data->id . ')">';
+                $html = '<div class="form-check">';
+                $html .= '<input type="checkbox" class="form-check-input select-table-row" id="datatable-row-' . $data->id . '" name="datatable_ids[]" value="' . $data->id . '" onclick="dataTableRowCheckRating(' . $data->id . ')">';
+                $html .= '<input type="hidden" value="' . $data->module . '" name="module_name[' . $data->id . ']">'; // Cambia aquí para usar un array
+                $html .= '</div>';
+                return $html;
             })
             ->addColumn('image', function ($data) {
-                if(isset($data->user->profile_image)){
+                if (isset($data->user->profile_image)) {
                     return '<img src=' . $data->user->profile_image . " class='avatar avatar-50 rounded-pill'>";
-                }
-                else{
+                } else {
                     return "<img src='https://dummyimage.com/600x300/cfcfcf/000000.png' class='avatar avatar-50 rounded-pill'>";
                 }
             })
@@ -873,34 +868,33 @@ class EmployeesController extends Controller
                 }
             })
             ->editColumn('employee_id', function ($data) {
-                if($data->module === 'employee'){
+                if ($data->module === 'employee') {
                     $employee_id = isset($data->employee->full_name) ? $data->employee->full_name : '-';
-                    if(isset($data->employee->profile_image)){
-                        return '<img src=' . $data->employee->profile_image . " class='avatar avatar-40 rounded-pill me-2'>".' '.$employee_id;
-                    }
-                    else{
+                    if (isset($data->employee->profile_image)) {
+                        return '<img src=' . $data->employee->profile_image . " class='avatar avatar-40 rounded-pill me-2'>" . ' ' . $employee_id;
+                    } else {
                         $assetImage = asset('images/default/default.jpg');
-                        return "<img style='max-width:40px;' src='".$assetImage."' class='avatar avatar-10 rounded-pill me-2'>".' '.$employee_id;
+                        return "<img style='max-width:40px;' src='" . $assetImage . "' class='avatar avatar-10 rounded-pill me-2'>" . ' ' . $employee_id;
                     }
                 }
-                if($data->module === 'books'){
+                if ($data->module === 'books') {
                     $bookRatoing = BookRating::find($data->id);
-                    if($bookRatoing){
+                    if ($bookRatoing) {
                         return $bookRatoing->ebook->title;
                     }
                     return __('rating.title_not_found');
                 }
-                if($data->module === 'courses'){
+                if ($data->module === 'courses') {
                     $courseRating = CoursePlatformVideoRating::find($data->id);
-                    if($courseRating){
+                    if ($courseRating) {
                         return $courseRating->course_platform_video->title;
                     }
                     return __('rating.title_not_found');
                 }
 
-                if($data->module === 'blogs'){
+                if ($data->module === 'blogs') {
                     $blogRating = BlogRating::find($data->id);
-                    if($blogRating){
+                    if ($blogRating) {
                         return $blogRating->blog->name;
                     }
                     return __('rating.title_not_found');
@@ -908,12 +902,12 @@ class EmployeesController extends Controller
                 // return $employee_id;
             })
             ->editColumn('review_msg', function ($data) {
-                return '<div class="text-desc">'.$data->review_msg.'</div>';
+                return '<div class="text-desc">' . $data->review_msg . '</div>';
             })
             ->editColumn('rating', function ($data) {
                 $ratingNumber = $data->rating - floor($data->rating) > 0 ? number_format($data->rating, 1) : $data->rating;
                 $iconsHtml = '';
-                if(empty($ratingNumber)){
+                if (empty($ratingNumber)) {
                     $ratingNumber = 1;
                 }
                 $icon = '<i class="fas fa-star" style="color: #FFD43B;"></i>';
@@ -921,22 +915,22 @@ class EmployeesController extends Controller
                     $iconsHtml .= $icon;
                 }
 
-                $container = "<div class='d-flex justify-content-center'>".$iconsHtml."</div>";
+                $container = "<div class='d-flex justify-content-center'>" . $iconsHtml . "</div>";
 
                 return $container;
             })
             ->addColumn('module', function ($data) {
-                if($data->module === 'employee'){
+                if ($data->module === 'employee') {
                     $nameModule = __('rating.employee');
                 }
-                if($data->module === 'books'){
+                if ($data->module === 'books') {
                     $nameModule = __('rating.books');
                 }
-                if($data->module === 'courses'){
+                if ($data->module === 'courses') {
                     $nameModule = __('rating.courses');
                 }
 
-                if($data->module === 'blogs'){
+                if ($data->module === 'blogs') {
                     $nameModule = __('rating.blogs');
                 }
 
@@ -954,10 +948,9 @@ class EmployeesController extends Controller
 
             ->editColumn('user_id', function ($data) {
                 $user_id = isset($data->user->full_name) ? $data->user->full_name : '-';
-                if(isset($data->user->profile_image)){
-                    return '<img src=' . $data->user->profile_image . " class='avatar avatar-40 rounded-pill me-2'>".$user_id;
-                }
-                else{
+                if (isset($data->user->profile_image)) {
+                    return '<img src=' . $data->user->profile_image . " class='avatar avatar-40 rounded-pill me-2'>" . $user_id;
+                } else {
                     return "<img src='https://dummyimage.com/600x300/cfcfcf/000000.png' class='avatar avatar-40 rounded-pill me-2'>.$user_id";
                 }
 
@@ -979,78 +972,117 @@ class EmployeesController extends Controller
             })
             ->addColumn('enabled', function ($data) {
                 $text = __('rating.no');
-                if($data->status == 1){
+                if ($data->status == 1) {
                     $text = __('rating.yes');
                 }
                 return $text;
             })
             ->orderColumns(['id'], '-:column $1');
 
-        return $datatable->rawColumns(array_merge(['action', 'image', 'check', 'employee_id', 'user_id','review_msg','module','rating']))
+        return $datatable->rawColumns(array_merge(['action', 'image', 'check', 'employee_id', 'user_id', 'review_msg', 'module', 'rating']))
             ->toJson();
     }
 
     public function bulk_action_review(Request $request)
     {
-        $ids = explode(',', $request->rowIds);
         $actionType = $request->action_type;
+        $rowData = json_decode($request->input('rowData', '[]'), true);
 
-        $message = __('messages.bulk_update');
+        // Mapeo de módulos a modelos
+        $modelMap = [
+            'employee' => EmployeeRating::class,
+            'books' => BookRating::class,
+            'blogs' => BlogRating::class,
+            'courses' => CoursePlatformVideoRating::class,
+        ];
+
+        // Agrupar IDs por módulo
+        $idsByModule = [];
+        foreach ($rowData as $data) {
+            if (isset($modelMap[$data['module']])) {
+                $idsByModule[$data['module']][] = $data['id'];
+            }
+        }
+
+        // Mensajes para las acciones
+        $messages = [
+            'delete' => __('messages.bulk_review_delete'),
+            'approve' => __('messages.bulk_review_update'),
+        ];
+
+        // Verificación del entorno demo
+        if (env('IS_DEMO')) {
+            return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
+        }
 
         switch ($actionType) {
-
             case 'delete':
-
-                if (env('IS_DEMO')) {
-                    return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
+                foreach ($idsByModule as $module => $ids) {
+                    if (!empty($ids)) {
+                        $modelMap[$module]::whereIn('id', $ids)->delete();
+                    }
                 }
-                EmployeeRating::whereIn('id', $ids)->delete();
-                $message = __('messages.bulk_review_delete');
+                break;
+
+            case 'approve':
+                foreach ($idsByModule as $module => $ids) {
+                    if (!empty($ids)) {
+                        $modelMap[$module]::whereIn('id', $ids)->update(['status' => 1]);
+                    }
+                }
                 break;
 
             default:
                 return response()->json(['status' => false, 'message' => __('branch.invalid_action')]);
-                break;
         }
 
-        return response()->json(['status' => true, 'message' => __('messages.bulk_update')]);
+        return response()->json(['status' => true, 'message' => $messages[$actionType]]);
     }
-    public function destroy_review($id)
-    {
 
+    public function destroy_review(Request $request, $id)
+    {
         $module_title = __('employee.review');
 
         if (env('IS_DEMO')) {
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
+        if ($request->module_name === 'employee') {
+            $data = EmployeeRating::findOrFail($id);
+            $data->delete();
+        }
+        if ($request->module_name === 'books') {
+            $data = BookRating::findOrFail($id);
+            $data->delete();
+        }
+        if ($request->module_name === 'blogs') {
+            $data = BlogRating::findOrFail($id);
+            $data->delete();
+        }
+        if ($request->module_name === 'courses') {
+            $data = CoursePlatformVideoRating::findOrFail($id);
+            $data->delete();
+        }
 
-        $data = EmployeeRating::findOrFail($id);
-
-        $data->delete();
 
         $message = __('messages.delete_form', ['form' => __($module_title)]);
 
         return response()->json(['message' => $message, 'status' => true], 200);
     }
 
-    public function send_push_notification(Request $request){
+    public function send_push_notification(Request $request)
+    {
 
-          $data= SendPushNotification($request->all());
+        $data = SendPushNotification($request->all());
 
-          $decoded_data = json_decode($data, true);
+        $decoded_data = json_decode($data, true);
 
-          if(isset($decoded_data['errors'])) {
+        if (isset($decoded_data['errors'])) {
 
-            return response()->json(['message' =>$decoded_data['errors'][0], 'status' => false], 200);
-
+            return response()->json(['message' => $decoded_data['errors'][0], 'status' => false], 200);
         } else {
 
             return response()->json(['message' => __('messages.notification_send'), 'status' => true], 200);
-
         }
-
-
-
     }
 
     public function enableRating(Request $request)
@@ -1079,7 +1111,7 @@ class EmployeesController extends Controller
                 $model = BlogRating::class;
                 break;
             default:
-                return redirect()->back()->with('error', 'Módulo no válido.');
+                return response()->json(['status' => false, 'message' => 'Módulo no válido.'], 400);
         }
 
         try {
@@ -1090,14 +1122,13 @@ class EmployeesController extends Controller
             if ($rating) {
                 $rating->status = 1; // Habilitar la calificación
                 $rating->save(); // Guardar cambios
-                return redirect()->back()->with('message', 'Calificación habilitada exitosamente.');
+                return response()->json(['status' => true, 'message' => __('messages.Qualification successfully enabled')]);
             } else {
-                return redirect()->back()->with('error', 'Registro no encontrado.');
+                return response()->json(['status' => false, 'message' =>  __('messages.Record not found')], 404);
             }
         } catch (\Exception $e) {
             // Manejo de excepciones
-            return redirect()->back()->with('error', 'Ocurrió un error al habilitar la calificación: ' . $e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
 }
