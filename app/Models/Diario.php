@@ -12,7 +12,7 @@ class Diario extends Model
     use HasFactory;
 
     protected $table = 'diarios';
-    protected $guarded = [];
+    protected $guarded = ['id'];
     protected $appends = ['image'];
     public function pet()
     {
@@ -20,7 +20,7 @@ class Diario extends Model
     }
     public function getImageAttribute()
     {
-        return asset($this->attributes['image']);
+        return $this->attributes['image'] ? asset($this->attributes['image']) : null;
     }
 
     public function category()
