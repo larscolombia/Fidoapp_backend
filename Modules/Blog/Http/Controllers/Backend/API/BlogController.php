@@ -51,10 +51,18 @@ class BlogController extends Controller
                 'blog_id' => 'required|exists:blogs,id',
             ]);
 
+            if(is_null($data['rating'])){
+                $data['rating'] = 1;
+            }
+            if($data['rating']>=3){
+                $data['status'] = 1;
+            }
+
             $blogRating = BlogRating::create($data);
             return response()->json([
                 'success' => true,
-                'data' => $blogRating
+                'data' => $blogRating,
+                'message' => $blogRating->status == 0 ? __('messages.comment_review') : null
             ], 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -90,7 +98,7 @@ class BlogController extends Controller
             $blogRatings->where('user_id', $data['user_id']);
         }
 
-        $blogRatings = $blogRatings->orderByDesc('id')->get();
+        $blogRatings = $blogRatings->where('status',1)->orderByDesc('id')->get();
 
         if ($blogRatings->isEmpty()) {
             return response()->json([
@@ -104,6 +112,7 @@ class BlogController extends Controller
                 'id' => $rating->id,
                 'rating' => $rating->rating,
                 'review_msg' => $rating->review_msg,
+                'status' => $rating->status,
                 'user_name' => $rating->user->full_name,
                 'user_avatar' => asset($rating->user->avatar),
                 'blog_name' => $rating->blog->name,

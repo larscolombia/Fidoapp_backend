@@ -295,8 +295,22 @@ class EBookController extends Controller
                 'rating' => 'nullable|numeric|min:1|max:5'
             ]);
 
+            if (is_null($data['rating'])) {
+                $data['rating'] = 1;
+            }
+            if ($data['rating'] >= 3) {
+                $data['status'] = 1;
+            }
+
             $bookRating = BookRating::create($data);
-            return response()->json(['status' => true, 'data' => $bookRating], 200);
+            return response()->json(
+                [
+                    'status' => true,
+                    'data' => $bookRating,
+                    'message' => $bookRating->status == 0 ? __('messages.comment_review') : null
+                ],
+                200
+            );
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -311,7 +325,7 @@ class EBookController extends Controller
             'e_book_id' => 'required|exists:e_book,id',
         ]);
 
-        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->get();
+        $bookRating = BookRating::with('user')->where('e_book_id', $data['e_book_id'])->where('status',1)->get();
 
         if ($bookRating->isEmpty()) {
             return response()->json([
@@ -325,6 +339,7 @@ class EBookController extends Controller
                 'id' => $rating->id,
                 'rating' => $rating->rating,
                 'review_msg' => $rating->review_msg,
+                'status' => $rating->status,
                 'user_id' => $rating->user->id,
                 'user_full_name' => $rating->user->full_name,
                 'user_avatar' => asset($rating->user->profile_image)

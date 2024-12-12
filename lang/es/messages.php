@@ -232,6 +232,7 @@ return [
     'bulk_review_update' => 'Actualizació masiva realizada exitosamente',
     'Qualification successfully enabled' => 'Calificación habilitada exitosamente',
     'Record not found' => 'Registro no encontrado',
+    'comment_review' => '¡Gracias por compartir tus pensamientos! Tu comentario está bajo revisión y esperamos publicarlo pronto.',
 
 
 ];

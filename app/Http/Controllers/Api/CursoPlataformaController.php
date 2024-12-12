@@ -379,11 +379,17 @@ class CursoPlataformaController extends Controller
                 'rating' => 'nullable|numeric|min:1|max:5',
                 'course_platform_video_id' => 'required|exists:course_platform_videos,id',
             ]);
-
+            if(is_null($data['rating'])){
+                $data['rating'] = 1;
+            }
+            if($data['rating']>=3){
+                $data['status'] = 1;
+            }
             $coursePlatformVideoRating = CoursePlatformVideoRating::create($data);
             return response()->json([
                 'success' => true,
-                'data' => $coursePlatformVideoRating
+                'data' => $coursePlatformVideoRating,
+                'message' => $coursePlatformVideoRating->status == 0 ? __('messages.comment_review') : null
             ], 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -413,7 +419,8 @@ class CursoPlataformaController extends Controller
 
         // Inicializar la consulta
         $query = CoursePlatformVideoRating::query()
-            ->where('course_platform_video_id', $data['course_platform_video_id']);
+            ->where('course_platform_video_id', $data['course_platform_video_id'])
+            ->where('status',1);
 
         // Filtrar por user_id si se proporciona
         if (isset($data['user_id']) && !is_null($data['user_id'])) {
@@ -438,6 +445,7 @@ class CursoPlataformaController extends Controller
                 'course_platform_video_id' => $rating->course_platform_video_id,
                 'rating' => $rating->rating,
                 'review_msg' => $rating->review_msg,
+                'status' => $rating->status,
                 'user_full_name' => $rating->user->full_name,
                 'user_avatar' => !is_null($rating->user->avatar) ? asset($rating->user->avatar) : asset('images/default/default.jpg'),
                 'created_at' => $rating->created_at,

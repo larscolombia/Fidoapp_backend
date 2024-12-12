@@ -18,12 +18,20 @@ class EmployeeController extends Controller
                 'rating' => 'nullable|numeric|min:1|max:5'
             ]);
 
+            if (is_null($data['rating'])) {
+                $data['rating'] = 1;
+            }
+            if ($data['rating'] >= 3) {
+                $data['status'] = 1;
+            }
+
             // Crear la calificación del empleado
             $employeeRating = EmployeeRating::create($data);
 
             return response()->json([
                 'success' => true,
-                'data' => $employeeRating
+                'data' => $employeeRating,
+                'message' => $employeeRating->status == 0 ? __('messages.comment_review') : null
             ], 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -104,7 +112,7 @@ class EmployeeController extends Controller
         }
 
         // Ejecutar la consulta
-        $employeeRating = $query->get();
+        $employeeRating = $query->where('status',1)->get();
 
         // Manejo de errores: si no se encuentra ninguna calificación
         if ($employeeRating->isEmpty()) {
