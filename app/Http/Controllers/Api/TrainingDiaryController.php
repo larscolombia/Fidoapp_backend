@@ -113,7 +113,7 @@ class TrainingDiaryController extends Controller
                     'actividad' => $trainingDiary->actividad,
                     'notas' => $trainingDiary->notas,
                     'pet_id' => $trainingDiary->pet_id,
-                    'image' => is_null($trainingDiary->image) ? null : asset($trainingDiary->image),
+                    'image' => $trainingDiary->image,
                     'created_at' => $trainingDiary->created_at,
                     'updated_at' => $trainingDiary->updated_at
                 ];
@@ -132,7 +132,6 @@ class TrainingDiaryController extends Controller
 
     public function update(Request $request, $id)
     {
-        Log::info($request->all());
         try {
             $data = $request->validate([
                 'date' => 'sometimes|string',
