@@ -203,4 +203,12 @@ return [
     'export' => 'Export',
     'parameters' => 'Parameters',
     'to' => 'To',
+
+    'permission_roles' => 'Permissions and roles',
+    'default_permission' => 'Default permissions',
+    'permission' => 'Permissions',
+    'view' => 'View',
+    'add' => 'Add',
+    'edit' => 'Edit',
+    'more' => 'More'
 ];

@@ -9,7 +9,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title mb-0">Permission & Role</h4>
+                        <h4 class="card-title mb-0">
+                            {{ __('messages.permission_roles') }}
+                        </h4>
                     </div>
                     <div>
                         <x-backend.section-header>
@@ -40,7 +42,7 @@
 
                             <div class="permission-collapse border rounded p-3 mb-3" id="permission_{{ $role->id }}">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h6>{{ ucfirst($role->title) }}</h6>
+                                    <h6>{{ __('employee.' . $role->name) }}</h6>
                                     <div class="toggle-btn-groups">
                                         @if ($role->is_fixed == 0)
                                             <button class="btn btn-danger" type="button"
@@ -50,12 +52,12 @@
                                         @endif
                                         <button class="btn btn-gray ms-2" type="button"
                                             onclick="reset_permission({{ $role->id }})">
-                                            Default Permission
+                                            {{ __('messages.default_permission') }}
                                         </button>
                                         <button class="btn btn-primary ms-2" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseBox1_{{ $role->id }}" aria-expanded="false"
                                             aria-controls="collapseExample_{{ $role->id }}">
-                                            Permission
+                                            {{ __('messages.permission') }}
                                         </button>
                                     </div>
                                 </div>
@@ -64,11 +66,11 @@
                                         <table class="table table-condensed table-striped mb-0">
                                             <thead class="sticky-top">
                                                 <tr>
-                                                    <th>Modules</th>
-                                                    <th>View</th>
-                                                    <th>Add</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
+                                                    <th>{{ __('menu.modules') }}</th>
+                                                    <th>{{ __('messages.view') }}</th>
+                                                    <th>{{ __('messages.add') }}</th>
+                                                    <th>{{ __('messages.edit') }}</th>
+                                                    <th>{{ __('messages.delete') }} </th>
                                                     <th class="text-end">
                                                         {{ Form::submit(__('messages.save'), ['class' => 'btn btn-md btn-secondary']) }}
                                                     </th>
@@ -122,7 +124,8 @@
                                                                 <a data-bs-toggle="collapse"
                                                                     data-bs-target="#demo_{{ $module->id }}"
                                                                     class="accordion-toggle  btn btn-primary btn-xs"><i
-                                                                        class="fa-solid fa-chevron-down me-2"> </i>More</a>
+                                                                        class="fa-solid fa-chevron-down me-2">
+                                                                    </i>{{ __('messages.more') }}</a>
                                                             </td>
                                                         @else
                                                             <td>

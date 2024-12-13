@@ -240,6 +240,15 @@ return [
     'code' => 'Código',
     'export' => 'Exportar',
     'parameters' => 'Parámetros',
-    'to' => 'Para'
+    'to' => 'Para',
+
+
+    'permission_roles' => 'Permisos y roles',
+    'default_permission' => 'Permisos por defecto',
+    'permission' => 'Permisos',
+    'view' => 'Vista',
+    'add' => 'Agregar',
+    'edit' => 'Editar',
+    'more' => 'Más'
 
 ];
