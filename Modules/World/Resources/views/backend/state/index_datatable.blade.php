@@ -51,7 +51,7 @@
                     @hasPermission('add_state')
                         <x-buttons.offcanvas target='#form-offcanvas'
                             title="{{ __('messages.create') }} {{ __($module_title) }}">
-                            {{ __('messages.create') }} {{ __('state.singule_title') }}</x-buttons.offcanvas>
+                            {{ __('messages.create') }} {{ __('state.singular_title') }}</x-buttons.offcanvas>
                     @endhasPermission
                 </x-slot>
             </x-backend.section-header>

@@ -52,11 +52,11 @@
                             aria-describedby="addon-wrapping">
 
                     </div>
-                    @hasPermission('add_page')
+                    {{-- @hasPermission('add_page')
                         <x-buttons.offcanvas target='#form-offcanvas' class=" d-flex align-items-center gap-1"
                             title="{{ __('Create') }} {{ __($module_title) }}">
                             {{ __('messages.new') }}</x-buttons.offcanvas>
-                    @endhasPermission
+                    @endhasPermission --}}
                 </x-slot>
             </x-backend.section-header>
         </div>

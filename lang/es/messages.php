@@ -239,6 +239,7 @@ return [
     'reset' => 'Reiniciar',
     'code' => 'Código',
     'export' => 'Exportar',
-
+    'parameters' => 'Parámetros',
+    'to' => 'Para'
 
 ];
