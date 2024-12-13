@@ -1,32 +1,42 @@
-# Usa la imagen base oficial de PHP con soporte para Laravel
-FROM php:8.0-fpm
+FROM php:8.2-apache
 
-# Instalar extensiones de PHP requeridas por Laravel
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip && \
-    docker-php-ext-install pdo mbstring gd
+WORKDIR /var/www/laravel
 
-# Instalar Composer
-COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+RUN curl -o /usr/local/bin/composer https://getcomposer.org/download/latest-stable/composer.phar \
+    && chmod +x /usr/local/bin/composer
 
-# Configurar el directorio de trabajo
-WORKDIR /var/www/balance-dog
+# hadolint ignore=DL3008
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    cron \
+    icu-devtools \
+    jq \
+    libfreetype6-dev libicu-dev libjpeg62-turbo-dev libpng-dev libpq-dev \
+    libsasl2-dev libssl-dev libwebp-dev libxpm-dev libzip-dev libzstd-dev \
+    unzip \
+    zlib1g-dev \
+    && apt-get clean \
+    && apt-get autoclean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Copiar los archivos de Laravel al contenedor
-COPY . .
+# hadolint ignore=DL3059
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
+    && pecl install --configureoptions='enable-redis-igbinary="yes" enable-redis-lzf="yes" enable-redis-zstd="yes"' igbinary zstd redis \
+    && pecl clear-cache \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm \
+    && docker-php-ext-install gd intl pdo_mysql pdo_pgsql zip \
+    && docker-php-ext-enable igbinary opcache redis zstd
 
-# Asignar permisos
-RUN chown -R www-data:www-data /var/www/balance-dog \
-    && chmod -R 755 /var/www/balance-dog/storage
+COPY composer.json composer.lock ./
+RUN composer install --no-autoloader --no-scripts --no-dev
 
-# Exponer el puerto 9000 (PHP-FPM)
-EXPOSE 9000
+COPY docker/ /
+RUN a2enmod rewrite headers \
+    && a2ensite laravel \
+    && a2dissite 000-default \
+    && chmod +x /usr/local/bin/docker-laravel-entrypoint
 
-# Iniciar PHP-FPM
-CMD ["php-fpm"]
+COPY . /var/www/laravel
+RUN composer install --optimize-autoloader --no-dev
+
+CMD ["docker-laravel-entrypoint"]
