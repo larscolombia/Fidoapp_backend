@@ -9,7 +9,7 @@
       </div>
       <div class="d-flex flex-column border-bottom p-3">
         <div class="">
-          <label class="form-label btn btn-primary d-block my-0" for="branch_feature_image">Upload Images</label>
+          <label class="form-label btn btn-primary d-block my-0" for="branch_feature_image">{{ $t('messages.upload') }}</label>
           <input ref="fileInputRef" type="file" class="form-control d-none" id="branch_feature_image" accept=".jpeg, .jpg, .png, .gif" multiple @change="handleImageUpload" />
         </div>
       </div>
@@ -24,7 +24,9 @@
         </div>
       </div>
       <div class="offcanvas-footer">
-        <p class="text-center mb-0"><small>{{ $t('messages.gallery_for_branch') }}</small></p>
+        <p class="text-center mb-0">
+          <small>{{ $t('messages.gallery_for_branch') }}</small>
+        </p>
         <div class="d-grid gap-3 p-3">
           <button class="btn btn-primary d-block"><i class="fa-solid fa-floppy-disk mx-2"></i>Update</button>
           <button class="btn btn-outline-primary d-block" type="button" data-bs-dismiss="offcanvas"><i class="fa-solid fa-angles-left"></i>Close</button>
@@ -42,15 +44,15 @@ import { useRequest, useModuleId } from '@/helpers/hooks/useCrudOpration'
 import { createRequestWithFormData } from '@/helpers/utilities'
 
 // Request
-const { getRequest} = useRequest()
+const { getRequest } = useRequest()
 
-const fileInputRef = ref(null);
+const fileInputRef = ref(null)
 
 // Branch Name Values
 const branch = ref(null)
 const branchId = useModuleId(() => {
   getRequest({ url: GET_GALLERY_URL, id: branchId.value }).then((res) => {
-    if(res.status) {
+    if (res.status) {
       branch.value = res.branch
       featureImages.value = res.data
     }
@@ -62,17 +64,17 @@ let featureImages = ref([])
 
 // Function for Images in Array
 const handleImageUpload = (event) => {
-  const files = event.target.files;
+  const files = event.target.files
 
   for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const reader = new FileReader();
+    const file = files[i]
+    const reader = new FileReader()
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file)
 
     reader.onload = () => {
-      featureImages.value.push({file: file, full_url: reader.result, id: null})
-      fileInputRef.value.value = '';
+      featureImages.value.push({ file: file, full_url: reader.result, id: null })
+      fileInputRef.value.value = ''
     }
   }
 }
@@ -95,25 +97,24 @@ const reset_close_offcanvas = (res) => {
 
 //Form Submit
 const formSubmit = () => {
-  let formData = new FormData();
+  let formData = new FormData()
   Object.keys(featureImages.value).map((index) => {
     Object.keys(featureImages.value[index]).map((fieldName) => {
       let value = featureImages.value[index][fieldName]
-      if(fieldName == 'full_url') value = ''
-      formData.append(`gallery[${index}][${fieldName}]`, value);
+      if (fieldName == 'full_url') value = ''
+      formData.append(`gallery[${index}][${fieldName}]`, value)
     })
-  });
-  createRequestWithFormData(POST_GALLERY_URL(branchId.value), {'Accept': 'application/json'}, formData).then((res) => reset_close_offcanvas(res));
+  })
+  createRequestWithFormData(POST_GALLERY_URL(branchId.value), { Accept: 'application/json' }, formData).then((res) => reset_close_offcanvas(res))
 }
-
 </script>
 
 <style scoped>
 .gallery-images {
   display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
-    grid-gap: 1rem;
-    align-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  grid-gap: 1rem;
+  align-items: stretch;
 }
 .image-container {
   position: relative;

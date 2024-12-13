@@ -19,7 +19,8 @@ use Modules\Tax\Http\Controllers\Backend\TaxesController;
 *
 * --------------------------------------------------------------------
 */
-Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['web', 'auth','permission:view_tax']], function () {
+
+Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['web', 'auth', 'permission:view_tax']], function () {
     /*
     * These routes need view-backend permission
     * (good if you want to allow more than one group in the backend,
@@ -44,8 +45,6 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['web', 'au
         Route::post('bulk-action', [TaxesController::class, 'bulk_action'])->name('bulk_action');
 
         Route::get('tax-list', [TaxesController::class, 'tax_list'])->name('tax-list');
-
-        
     });
     Route::resource('tax', TaxesController::class);
 });

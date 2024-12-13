@@ -17,11 +17,12 @@ return [
     'lbl_payment_type' => 'Payment Type',
     'lbl_date' => 'Payment Date',
     'lbl_branch_name' => 'Branch Name',
-    'lbl_action'=>'Action',
+    'lbl_action' => 'Action',
     'lbl_tot_booking' => 'Total Bookings',
-    'lbl_title_earning'=>'Staff Earnings',
+    'lbl_title_earning' => 'Staff Earnings',
     'lbl_image' => 'Image',
     'lbl_commission' => 'Commission Earn',
     'lbl_total' => 'Total Pay',
-    
+    'lbl_payout' => 'Payout'
+
 ];

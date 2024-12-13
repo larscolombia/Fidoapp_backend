@@ -64,12 +64,12 @@
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" />
-              <label class="form-check-label" for="female"> Female </label>
+              <label class="form-check-label" for="female"> {{ $t('customer.lbl_female') }}</label>
             </div>
 
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other" />
-              <label class="form-check-label" for="other"> Other </label>
+              <label class="form-check-label" for="other"> {{ $t('customer.lbl_other') }}</label>
             </div>
           </div>
         </div>

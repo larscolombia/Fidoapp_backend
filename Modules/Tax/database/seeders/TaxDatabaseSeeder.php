@@ -20,19 +20,19 @@ class TaxDatabaseSeeder extends Seeder
 
         $taxes = [
             [
-                'title' => 'Sales Tax',
+                'title' => 'Impuesto sobre las ventas',
                 'type' => 'percentage',
                 'value' => 1,
             ],
-       
+
             [
-                'title' => 'Other Taxes',
+                'title' => 'Otros impuestos',
                 'type' => 'percentage',
                 'value' => 2,
             ],
-           
+
             [
-                'title' => 'Service Tax or Gross Receipts Tax',
+                'title' => 'Impuesto de servicio o impuesto sobre ingresos brutos',
                 'type' => 'fixed',
                 'value' => 5,
             ],

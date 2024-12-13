@@ -1,20 +1,16 @@
 <template>
   <form @submit="formSubmit">
     <div class="d-flex justify-content-between align-items-center">
-      <CardTitle title="Change Password" icon="fa-solid fa-key"></CardTitle>
+      <CardTitle :title="$t('profile.change_pass')" icon="fa-solid fa-key"></CardTitle>
     </div>
 
-      <InputField type="password" class="col-md-12" :is-required="true" :label="$t('users.lbl_old_password')" :value="old_password"
-       v-model="old_password" :error-message="errors.old_password"></InputField>
+    <InputField type="password" class="col-md-12" :is-required="true" :label="$t('users.lbl_old_password')" :value="old_password" v-model="old_password" :error-message="errors.old_password"></InputField>
 
-      <InputField type="password" class="col-md-12" :is-required="true" :label="$t('users.lbl_new_password')" :value="new_password"
-      v-model="new_password" :error-message="errors.new_password"></InputField>
+    <InputField type="password" class="col-md-12" :is-required="true" :label="$t('users.lbl_new_password')" :value="new_password" v-model="new_password" :error-message="errors.new_password"></InputField>
 
-      <InputField type="password" class="col-md-12" :is-required="true" :label="$t('users.lbl_confirm_password')" :value="confirm_password"
-      v-model="confirm_password" :error-message="errors.confirm_password"></InputField>
+    <InputField type="password" class="col-md-12" :is-required="true" :label="$t('users.lbl_confirm_password')" :value="confirm_password" v-model="confirm_password" :error-message="errors.confirm_password"></InputField>
 
     <SubmitButton :IS_SUBMITED="IS_SUBMITED"></SubmitButton>
-
   </form>
 </template>
 
@@ -29,22 +25,19 @@ import InputField from '@/vue/components/form-elements/InputField.vue'
 import SubmitButton from './Forms/SubmitButton.vue'
 // props
 defineProps({
-  createTitle: { type: String, default: '' },
-
+  createTitle: { type: String, default: '' }
 })
 const IS_SUBMITED = ref(false)
-const {storeRequest} = useRequest()
+const { storeRequest } = useRequest()
 
 // Validations
 const validationSchema = yup.object({
-  old_password: yup.string()
-    .required('Old Password is required field'),
-  new_password: yup.string()
-    .required('New password is required field')
-    .min(8, 'New password must be at least 8 characters'),
-  confirm_password: yup.string()
+  old_password: yup.string().required('Old Password is required field'),
+  new_password: yup.string().required('New password is required field').min(8, 'New password must be at least 8 characters'),
+  confirm_password: yup
+    .string()
     .oneOf([yup.ref('new_password'), null], 'Passwords must match')
-    .required('Confirm Password is required field'),
+    .required('Confirm Password is required field')
 })
 
 const defaultData = () => {
@@ -52,22 +45,22 @@ const defaultData = () => {
   return {
     password: '',
     old_password: '',
-    new_password:'',
-    confirm_password: '',
+    new_password: '',
+    confirm_password: ''
   }
 }
 
 const setFormData = (data) => {
   resetForm({
     values: {
-      old_password:'' ,
-      confirm_password:'',
-      new_password:''
+      old_password: '',
+      confirm_password: '',
+      new_password: ''
     }
   })
 }
 
-const { handleSubmit, errors,resetForm } = useForm({
+const { handleSubmit, errors, resetForm } = useForm({
   validationSchema
 })
 
@@ -89,14 +82,12 @@ const display_submit_message = (res) => {
 // Form Submit
 const formSubmit = handleSubmit((values) => {
   IS_SUBMITED.value = true
-  storeRequest({ url: CHANGE_PASSWORD_URL, body: values}).then((res) => {
+  storeRequest({ url: CHANGE_PASSWORD_URL, body: values }).then((res) => {
     display_submit_message(res)
     if (res.status) {
       setFormData() // Reset form fields to default values
     }
   })
 })
-
-
 </script>
 

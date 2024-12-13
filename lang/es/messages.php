@@ -228,6 +228,8 @@ return [
     'create_service' => 'Crear servicio',
     'included_tax' => 'Con impuestos ',
     'unpaid' => 'Sin pagar',
+    'upload' => 'Subir',
+
     'bulk_review_delete' => 'Eliminación masiva realizada exitosamente',
     'bulk_review_update' => 'Actualizació masiva realizada exitosamente',
     'Qualification successfully enabled' => 'Calificación habilitada exitosamente',

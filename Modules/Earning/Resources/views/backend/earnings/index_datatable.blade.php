@@ -86,13 +86,13 @@
                         title: "{{ __('earning.lbl_staff_earning') }}",
                         orderable: false
                     },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        title: "{{ __('earning.lbl_action') }}",
-                        orderable: false,
-                        searchable: false
-                    }
+                    // {
+                    //     data: 'action',
+                    //     name: 'action',
+                    //     title: "{{ __('earning.lbl_action') }}",
+                    //     orderable: false,
+                    //     searchable: false
+                    // }
                 ]
             });
         })

@@ -23,4 +23,6 @@ return [
     'lbl_image' => 'Imagen',
     'lbl_commission' => 'Comisión Ganada',
     'lbl_total' => 'Pago Total',
+    'lbl_payout' => 'Pago'
+
 ];

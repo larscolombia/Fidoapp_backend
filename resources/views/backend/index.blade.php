@@ -560,7 +560,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-6">
+                        <div class="col-xl-6 col-lg-6">
                             <div class="card card-block card-stretch card-height">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h5 class="card-title mb-0">{{ __('dashboard.bookings') }}</h5>
@@ -653,7 +653,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-6">
+                        <div class="col-xl-6 col-lg-6">
                             <div class="card card-block card-stretch card-height">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h5 class="card-title mb-0">{{ __('dashboard.best_doctors') }}</h5>
@@ -723,7 +723,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-6">
+                        {{-- <div class="col-xl-4 col-lg-6">
                             <div class="card card-block card-stretch card-height">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">{{ __('dashboard.top') }}
@@ -767,7 +767,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>

@@ -32,23 +32,23 @@
           <tbody>
             <tr class="variant" v-for="(variation, index) in variations">
               <td>
-                <input type="text" v-model="variation.value.name" class="form-control" disabled="" readonly>
-                <input type="hidden" name="variationsIds[]" v-model="variation.value.product_variation_id">
+                <input type="text" v-model="variation.value.name" class="form-control" disabled="" readonly />
+                <input type="hidden" name="variationsIds[]" v-model="variation.value.product_variation_id" />
               </td>
               <td>
-                <input type="number" name="variationStocks[]" :min="1" class="form-control" required="" v-model="variation.value.stock">
+                <input type="number" name="variationStocks[]" :min="1" class="form-control" required="" v-model="variation.value.stock" />
               </td>
             </tr>
           </tbody>
         </table>
       </template>
       <template v-else>
-        <InputField  class="col-md-12" type="number" :min="1" :label="$t('product.stock')" placeholder="" v-model="stock" :error-message="errors['stock']" :error-messages="errorMessages['stock']"></InputField>
-        <input type="hidden" v-model="product_variation_id">
+        <InputField class="col-md-12" type="number" :min="1" :label="$t('product.stock')" placeholder="" v-model="stock" :error-message="errors['stock']" :error-messages="errorMessages['stock']"></InputField>
+        <input type="hidden" v-model="product_variation_id" />
       </template>
     </template>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary" :disabled="!product_id">Submit</button>
+      <button type="submit" class="btn btn-primary" :disabled="!product_id">{{ $t('dashboard.lbl_submit') }}</button>
     </div>
   </form>
 </template>
@@ -59,13 +59,13 @@ import { STOCK_STORE_URL, GET_PRODUCT_VARIATIONS_LIST } from '../constant'
 import { useField, useForm, useFieldArray } from 'vee-validate'
 import InputField from '@/vue/components/form-elements/InputField.vue'
 
-import {useRequest } from '@/helpers/hooks/useCrudOpration'
+import { useRequest } from '@/helpers/hooks/useCrudOpration'
 import * as yup from 'yup'
 
 // props
 const props = defineProps({
-  locations: {type: Array, default: () => []},
-  products: {type: Array, default: () => []}
+  locations: { type: Array, default: () => [] },
+  products: { type: Array, default: () => [] }
 })
 
 const PRODUCT_OPTIONS = ref(props.products)
@@ -84,13 +84,13 @@ const getProductVariationsData = () => {
     location_id: location_id.value,
     product_id: product_id.value
   }
-  if(location_id.value && product_id.value) {
-    getRequest({url: GET_PRODUCT_VARIATIONS_LIST, id: data}).then((res) => {
+  if (location_id.value && product_id.value) {
+    getRequest({ url: GET_PRODUCT_VARIATIONS_LIST, id: data }).then((res) => {
       variationsReplace([])
       product_variation_id.value = null
       stock.value = 0
       has_variation.value = res.has_variation
-      if(res.has_variation) {
+      if (res.has_variation) {
         variationsReplace(res.data)
       } else {
         product_variation_id.value = res.data.product_variation_id
@@ -142,9 +142,7 @@ const reset_datatable_close_offcanvas = (res) => {
 }
 
 // Validations
-const validationSchema = yup.object({
-})
-
+const validationSchema = yup.object({})
 
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema
@@ -154,7 +152,7 @@ const { value: product_id } = useField('product_id')
 const { value: has_variation } = useField('has_variation')
 const { value: product_variation_id } = useField('product_variation_id')
 const { value: stock } = useField('stock')
-const { fields: variations, replace: variationsReplace} = useFieldArray('variations')
+const { fields: variations, replace: variationsReplace } = useFieldArray('variations')
 
 const errorMessages = ref({})
 
@@ -163,8 +161,6 @@ onMounted(() => {
 })
 
 const formSubmit = handleSubmit((values) => {
-  storeRequest({ url: STOCK_STORE_URL, body: values})
-    .then((res) => reset_datatable_close_offcanvas(res));
-});
-
+  storeRequest({ url: STOCK_STORE_URL, body: values }).then((res) => reset_datatable_close_offcanvas(res))
+})
 </script>
