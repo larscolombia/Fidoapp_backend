@@ -14,13 +14,16 @@
             <x-backend.section-header>
                 <x-slot name="toolbar">
                     <div class="input-group gap-2 flex-nowrap">
-                        <input type="text" name="booking_date" id="booking_date" placeholder="Select Date" class="booking-date-range form-control form-control-sm" readonly />
+                        <input type="text" name="booking_date" id="booking_date"
+                            placeholder="{{ __('messages.select_date') }}"
+                            class="booking-date-range form-control form-control-sm" readonly />
                         <select id="column_employee_id" placeholder="Select an employee" name="column_employee_id"
                             data-filter="select" class="select2 form-control form-control"
                             data-ajax--url="{{ route('backend.get_search_data', ['type' => 'employees']) }}"
                             data-ajax--cache="true" width="100%">
                         </select>
-                        <button id="reset" class="btn btn-soft-primary rounded" data-bs-toggle="tooltip" title="Reset">
+                        <button id="reset" class="btn btn-soft-primary rounded" data-bs-toggle="tooltip"
+                            title="{{ __('messages.reset') }}">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -35,7 +38,7 @@
                 </x-slot>
             </x-backend.section-header>
         </div>
-        <div class="card-body p-0">            
+        <div class="card-body p-0">
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
         </div>

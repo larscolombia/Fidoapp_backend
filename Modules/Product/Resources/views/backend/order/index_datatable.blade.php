@@ -25,10 +25,10 @@
                         </div>
                     </x-backend.quick-action>
                     <!-- <div>
-                                                  <button type="button" class="btn btn-secondary" data-modal="export">
-                                                    <i class="fa-solid fa-download"></i> Export
-                                                  </button>
-                                                </div> -->
+                                                          <button type="button" class="btn btn-secondary" data-modal="export">
+                                                            <i class="fa-solid fa-download"></i> {{ __('messages.export') }}
+                                                          </button>
+                                                        </div> -->
                 </div>
                 <x-slot name="toolbar">
                     <div class="flex-grow-1">
@@ -36,8 +36,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text rounded-end-0">{{ setting('inv_prefix') }}</span>
                             </div>
-                            <input type="text" class="form-control order-code" placeholder="code" name="code"
-                                value="{{ isset($searchCode) ? $searchCode : '' }}">
+                            <input type="text" class="form-control order-code" placeholder="{{ __('messages.code') }}"
+                                name="code" value="{{ isset($searchCode) ? $searchCode : '' }}">
                         </div>
                     </div>
                     <div>

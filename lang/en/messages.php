@@ -196,5 +196,12 @@ return [
     'service_inactive' => 'This service is inactive. Please contact your Administration.',
     'create_pet_note' => 'Pet notes save successfully',
     'delete_notes' => 'Notes deleted successfully',
-    'verify_account' => 'Do you want to verify this Account ?'
+    'verify_account' => 'Do you want to verify this Account ?',
+    'select_date' => 'Select Date',
+    'reset' => 'Reset',
+    'code' => 'Code',
+    'export' => 'Export',
+
+
+
 ];

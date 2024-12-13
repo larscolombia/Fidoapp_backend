@@ -88,7 +88,7 @@
                         data-ajax--cache="true">
                     </select>
                 </div>
-                <button type="reset" class="btn btn-danger" id="reset-filter">Reset</button>
+                <button type="reset" class="btn btn-danger" id="reset-filter">{{ __('messages.reset') }}</button>
             </form>
         </x-backend.advance-filter>
         <div data-render="app">

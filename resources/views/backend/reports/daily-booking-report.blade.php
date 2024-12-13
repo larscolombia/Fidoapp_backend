@@ -16,8 +16,11 @@
             <x-backend.section-header>
                 <x-slot name="toolbar">
                     <div class="input-group gap-2 flex-nowrap">
-                        <input type="text" name="booking_date" id="booking_date" placeholder="Select Date" class="booking-date-range form-control form-control-sm" readonly />
-                        <button id="reset" class="btn bg-primary rounded" data-bs-toggle="tooltip" title="Reset">
+                        <input type="text" name="booking_date" id="booking_date"
+                            placeholder="{{ __('messages.select_date') }}"
+                            class="booking-date-range form-control form-control-sm" readonly />
+                        <button id="reset" class="btn bg-primary rounded" data-bs-toggle="tooltip"
+                            title="{{ __('messages.reset') }}">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -33,7 +36,7 @@
             </x-backend.section-header>
         </div>
         <div class="card-body p-0">
-            
+
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
         </div>
