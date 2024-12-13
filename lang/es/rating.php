@@ -1,7 +1,7 @@
 <?php
 
     return [
-        'employee' => 'Empleado',
+        'employee' => 'Profesional',
         'module' => 'Módulo',
         'courses' => 'Cursos',
         'books' => 'Libros',

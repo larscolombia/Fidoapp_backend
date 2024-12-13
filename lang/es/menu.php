@@ -56,9 +56,9 @@ return [
     'pet_sitter_list_menu' => 'Cuidadores de Mascotas',
     'profile' => 'Perfil',
 
-    'lbl_employee' => 'Empleado',
-    'lbl_employees' => 'Empleados',
-    'lbl_employee_list' => 'Lista de Empleados',
+    'lbl_employee' => 'Profesional',
+    'lbl_employees' => 'Profesionales',
+    'lbl_employee_list' => 'Lista de Profesionales',
     'lbl_employee_pets' => 'Dueños y Mascotas',
     'lbl_review' => 'Reseñas',
     'lbl_events' => 'Eventos',
@@ -79,10 +79,10 @@ return [
     'country' => 'País',
     'walking_booking_request' => 'Solicitud de Reserva',
 
-    'pending_employee' => 'Empleado Pendiente',
+    'pending_employee' => 'Profesional Pendiente',
 
 
 
-  
+
 
 ];

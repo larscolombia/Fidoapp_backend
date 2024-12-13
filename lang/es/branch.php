@@ -35,7 +35,7 @@ return [
     'branch_noservice' => 'No se encontraron servicios para el centro',
     'branch_service' => 'Servicios del Centro de Mascotas',
     'branch_review' => 'Reseñas del Centro de Mascotas',
-    'branch_employee' => 'Empleados del Centro de Mascotas',
+    'branch_employee' => 'Profesionales del Centro de Mascotas',
     'branch_nogallery' => 'No se encontraron galerías para el centro',
     'branch_gallery' => 'Galería del Centro de Mascotas',
     'branch_gal_retrived' => 'Galería del Centro de Mascotas recuperada exitosamente.',

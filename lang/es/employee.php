@@ -40,7 +40,7 @@ return [
     'lbl_action' => 'Acción',
     'review_title' => 'Reseñas',
     'lbl_client_name' => 'Nombre del Cliente',
-    'lbl_emp_name' => 'Nombre del Empleado',
+    'lbl_emp_name' => 'Nombre del Profesional',
     'lbl_message' => 'Mensaje',
     'lbl_rating' => 'Calificación',
     'lbl_updated' => 'Actualizado',

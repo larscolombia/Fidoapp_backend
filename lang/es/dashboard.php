@@ -22,7 +22,7 @@ return [
     'monthly_revenue' => 'Ingresos Mensuales',
     'recently_booking' => 'Reservas Recientes',
     'top_products' => 'Productos Principales',
-    'popular_employees' => 'Empleados Populares',
+    'popular_employees' => 'Profesionales Populares',
     'view_all' => 'Ver Todos',
     'rejected' => 'Rechazado',
     'pending' => 'Pendiente',

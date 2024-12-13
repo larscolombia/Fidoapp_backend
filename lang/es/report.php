@@ -25,20 +25,20 @@ return [
     'title_overall_report' => 'Informe General de Reservas',
     'lbl_booking_date' => 'Fecha de Reserva',
     'lbl_inv_id' => 'ID de Factura',
-    'lbl_staff' => 'Empleado',
+    'lbl_staff' => 'Profesional',
     'lbl_tot_service' => 'Total de Servicios',
     'lbl_tot_service_amt' => 'Monto Total de Servicios',
     'lbl_taxes' => 'Impuestos',
     'lbl_tips' => 'Propinas',
     'lbl_tot_amt' => 'Monto Total',
 
-    'title_staff_report' => 'Informe de Pago a Empleados',
+    'title_staff_report' => 'Informe de Pago a Profesionales',
     'lbl_payment_date' => 'Fecha de Pago',
     'lbl_commission_amt' => 'Monto de Comisión',
     'lbl_payment_type' => 'Tipo de Pago',
     'lbl_tot_pay' => 'Pago Total',
 
-    'title_staff_service_report' => 'Informes de Servicios de Empleados',
+    'title_staff_service_report' => 'Informes de Servicios de Profesionales',
     'lbl_commissions_earn' => 'Comisiones Ganadas',
     'lbl_tips_earn' => 'Propinas Ganadas',
     'lbl_total_earning' => 'Ganancia Total'
