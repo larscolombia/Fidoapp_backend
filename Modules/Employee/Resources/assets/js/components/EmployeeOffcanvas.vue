@@ -216,7 +216,67 @@ import FormHeader from '@/vue/components/form-elements/FormHeader.vue'
 import FormFooter from '@/vue/components/form-elements/FormFooter.vue'
 import InputField from '@/vue/components/form-elements/InputField.vue'
 import FormElement from '@/helpers/custom-field/FormElement.vue'
+import axios from 'axios';
+let translations = {};
+const defaultTranslations = {
+  required: 'Este campo es obligatorio.',
+  string: 'Este campo debe ser una cadena.',
+  email: 'Este campo debe ser un correo electrónico válido.',
+  min: 'Este campo debe tener al menos :min caracteres.',
+  confirmed: 'La confirmación no coincide.',
+  not_especial: 'No se permiten caracteres especiales.',
+  only_digits: 'El campo debe contener solo dígitos.',
+  first_strings_are_allowed: 'Se permiten las primeras cadenas.',
+};
 
+// Función para cargar las traducciones
+async function loadTranslations() {
+  // Intentar cargar desde localStorage
+  const storedTranslations = localStorage.getItem('translations');
+
+  if (storedTranslations) {
+    translations = JSON.parse(storedTranslations);
+    console.log('Cargadas traducciones desde localStorage:', translations);
+    return; // Salir si ya tenemos traducciones
+  }
+
+  try {
+    const response = await axios.get('/api/translations');
+    translations = response.data;
+
+    // Almacenar en localStorage
+    localStorage.setItem('translations', JSON.stringify(translations));
+    console.log('Cargadas traducciones desde el servidor:', translations);
+  } catch (error) {
+    console.error('Error loading translations:', error);
+    // Si hay un error, usar los mensajes por defecto
+    translations = defaultTranslations;
+  }
+}
+
+// Llamar a la función para cargar las traducciones
+loadTranslations();
+function getTranslation(key,default_min = null, default_max = null) {
+  // Intenta obtener las traducciones del localStorage
+  const storedTranslations = localStorage.getItem('translations');
+
+  if (storedTranslations) {
+    const translationsFromStorage = JSON.parse(storedTranslations);
+    // Devuelve la traducción correspondiente si existe
+    if (translationsFromStorage[key]) {
+      if(default_min !== null){
+        translationsFromStorage[key].replace(':min', default_min);
+      }
+      if(default_max !== null){
+        translationsFromStorage[key].replace(':max', default_max);
+      }
+      return translationsFromStorage[key].replace(':attribute', '');
+    }
+  }
+
+  // Si no se encuentra, devolvemos el mensaje por defecto
+  return defaultTranslations[key] || `Missing translation for ${key}`;
+}
 // props
 const props = defineProps({
   createTitle: { type: String, default: '' },
@@ -257,7 +317,6 @@ const currentId = useModuleId(() => {
   useSelect({ url: COMMISSION_LIST }, { value: 'id', label: 'name' }).then((data) => (commissions.value = data))
   if (currentId.value > 0) {
     getRequest({ url: EDIT_URL, id: currentId.value }).then((res) => {
-      console.log(res.data)
       if (res.status && res.data) {
         setFormData(res.data)
         branchSelect()
@@ -339,7 +398,7 @@ const defaultData = () => {
 const setFormData = (data) => {
   ImageViewer.value = data.profile_image
 
-  console.log(data.profile_image)
+
   resetForm({
     values: {
       id: data.id,
@@ -391,51 +450,51 @@ const EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 const validationSchema = yup.object({
   first_name: yup
     .string()
-    .required('First name is a required field')
-    .test('is-string', 'Special characters are not allowed', (value) => {
+    .required(getTranslation('required'))
+    .test('is-string', getTranslation('not_special'), (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
   last_name: yup
     .string()
-    .required('Last name is a required field')
-    .test('is-string', 'Special characters are not allowed ', (value) => {
+    .required(getTranslation('required'))
+    .test('is-string', getTranslation('not_special'), (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
   email: yup
     .string()
-    .required('Email is a required field')
-    .test('is-string', 'First strings are allowed', (value) => !numberRegex.test(value))
-    .matches(EMAIL_REGX, 'Must be a valid email'),
+    .required(getTranslation('required'))
+    .test('is-string', getTranslation('first_strings_are_allowed'), (value) => !numberRegex.test(value))
+    .matches(EMAIL_REGX, getTranslation('email')),
   mobile: yup
     .string()
-    .required('Phone Number is a required field')
-    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
+    .required(getTranslation('required'))
+    .matches(/^(\+?\d+)?(\s?\d+)*$/, getTranslation('only_digits')),
   password: yup
     .string()
-    .test('password', 'Password is required', function (value) {
+    .test('password', getTranslation('required'), function (value) {
       if (currentId === 0 && !value) {
         return false
       }
       return true
     })
-    .min(8, 'Password must be at least 8 characters long'),
+    .min(8, getTranslation('required',8)),
   confirm_password: yup
     .string()
-    .test('confirm_password', 'Current password is required', function (value) {
+    .test('confirm_password', getTranslation('required'), function (value) {
       if (currentId === 0 && !value) {
         return false
       }
       return true
     })
-    .oneOf([yup.ref('password')], 'Passwords must match'),
-  commission_id: yup.array().required('Select commission is a required field'),
-  branch_id: yup.string().required('Select Branch is a required field'),
+    .oneOf([yup.ref('password')], getTranslation('confirmed')),
+  commission_id: yup.array().required(getTranslation('required')),
+  branch_id: yup.string().required(getTranslation('required')),
 
-  user_type: yup.string().test('user_type', 'User Type is required', function (value) {
+  user_type: yup.string().test('user_type', getTranslation('required'), function (value) {
     if (this.parent.user_type === 'staff') {
       return false
     }
@@ -490,7 +549,6 @@ const handleInput = (phone, phoneObject) => {
 const formSubmit = handleSubmit((values) => {
   values.custom_fields_data = JSON.stringify(values.custom_fields_data)
   if (currentId.value > 0) {
-    console.log(values)
     updateRequest({ url: UPDATE_URL, id: currentId.value, body: values, type: 'file' }).then((res) => reset_datatable_close_offcanvas(res))
   } else {
     storeRequest({ url: STORE_URL, body: values, type: 'file' }).then((res) => reset_datatable_close_offcanvas(res))

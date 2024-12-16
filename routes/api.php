@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\VacunaController;
 use App\Http\Controllers\Api\ComandoController;
 use App\Http\Controllers\Api\TrainerController;
+use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\Api\AntiTickController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Backend\UserController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Api\ActivityLevelController;
 use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
-use App\Http\Controllers\Api\CursoPlataformaController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\CursoPlataformaController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Backend\API\AddressController;
 use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\Backend\API\UserApiController;
@@ -3666,5 +3667,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::delete('/activity-levels/{id}', [ActivityLevelController::class, 'destroy']);
+
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
+ //translations
+ Route::get('/translations', [TranslationController::class, 'index']);

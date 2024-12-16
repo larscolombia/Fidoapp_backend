@@ -3,11 +3,12 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Events\Backend\UserEventNotification;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use App\Models\UserNotification as UserNotificationModel;
 
 class UserNotification implements ShouldQueue
@@ -36,12 +37,14 @@ class UserNotification implements ShouldQueue
         list($title, $eventData, $userIds,$description) = $this->data;
 
         foreach ($userIds as $userId) {
-            UserNotificationModel::create([
+           $userNotificationModel = UserNotificationModel::create([
                 'user_id' => $userId,
                 'type' => $title,
                 'description' => $description,
                 'is_read' => false,
             ]);
+
+            event(new UserEventNotification($userNotificationModel));
         }
     }
 }
