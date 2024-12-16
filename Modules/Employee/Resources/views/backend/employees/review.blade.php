@@ -46,7 +46,7 @@
     </div>
     <x-backend.advance-filter>
         <x-slot name="title">
-            <h4>Advanced Filter</h4>
+            <h4>{{__('employee.advanced_filter')}}</h4>
         </x-slot>
     </x-backend.advance-filter>
     </div>

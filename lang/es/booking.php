@@ -151,5 +151,5 @@ return [
     'booking_already_accepted' => 'Reserva ya aceptada',
     'lbl_pending_employee' => 'Profesional Pendiente',
     'unpaid' => 'Sin pagar',
-
+    'booking_commission' => 'Comisión de reserva'
 ];

@@ -372,7 +372,8 @@ class EmployeesController extends Controller
                 return view('employee::backend.employees.verify_action', compact('data'));
             })
             ->editColumn('user_type', function ($data) {
-                return '<span class="badge booking-status bg-soft-primary p-3">' . str_replace("_", "", ucfirst($data->user_type)) . '</span>';
+                $userType = $this->getTranslateUserType($data->user_type);
+                return '<span class="badge booking-status bg-soft-primary p-3">' . str_replace("_", "", ucfirst($userType)) . '</span>';
             })
             ->editColumn('full_name', function ($data) {
                 return $data->first_name . ' ' . $data->last_name;
@@ -1131,4 +1132,27 @@ class EmployeesController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
+    private function getTranslateUserType($userType)
+    {
+        switch ($userType) {
+            case 'vet':
+                return __('employee.vet');
+            case 'trainer':
+                return __('employee.trainer');
+            case 'groomer':
+                return __('employee.groomer');
+            case 'walker':
+                return __('employee.walker');
+            case 'boarder':
+                return __('employee.boarder');
+            case 'day_taker':
+                return __('employee.day_taker');
+            case 'pet_sitter':
+                return __('employee.pet_sitter');
+            default:
+                return __('employee.user');
+        }
+    }
+
 }

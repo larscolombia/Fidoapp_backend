@@ -28,7 +28,7 @@ class CommissionDatabaseSeeder extends Seeder
         if (env('IS_DUMMY_DATA')) {
             $data = [
                 [
-                    'title' => 'Booking Commission',
+                    'title' => __('booking.booking_commission'),
                     'commission_type' => 'percentage',
                     'commission_value' => 5,
                     'status' => 1,

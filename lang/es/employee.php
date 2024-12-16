@@ -59,4 +59,6 @@ return [
     'latitude' => 'Latitud',
     'longitude' => 'Longitud',
     'all_commission' => 'Toda la Comisión',
+    'user' => 'Usuario',
+    'advanced_filter' => 'Filtro avanzado',
 ];
