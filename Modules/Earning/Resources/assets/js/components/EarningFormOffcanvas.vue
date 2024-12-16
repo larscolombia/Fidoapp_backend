@@ -1,67 +1,7 @@
 <template>
   <form @submit="formSubmit">
     <div class="offcanvas offcanvas-end offcanvas-booking" tabindex="-1" id="form-offcanvas" aria-labelledby="form-offcanvasLabel">
-      <FormHeader :currentId="currentId" editTitle="Payout To" createTitle="Payout To"></FormHeader>
-      <div class="offcanvas-body">
-        <div class="">
-          <div class="d-flex align-items-center gap-3 mb-2 bg-white p-3">
-            <img :src="profile_image" alt="avatar" class="img-fluid avatar avatar-60 rounded-pill" />
-            <div class="flex-grow-1">
-              <div class="gap-2">
-                <strong>{{ full_name }}</strong>
-                <p class="m-0">
-                  <small>{{ email }}</small>
-                </p>
-                <p class="m-0">
-                  <small>{{ mobile }}</small>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" >
-          <div class="col-12 py-2">
-            <div class="form-group">
-               <label class="form-label">{{ $t('earning.lbl_select_method') }} <span class="text-danger">*</span></label>
-
-               <Multiselect id="payment_method" v-model="payment_method" v-bind="singleSelectOption" :options="payment_method_data.options" @select="branchSelect" class="form-group"></Multiselect>
-               <span class="text-danger">{{ errors.payment_method }}</span>
-            </div>
-          </div>
-
-
-          <div class="col-12">
-            <div class="form-group">
-              <label class="form-label" for="name"> {{ $t('earning.lbl_description') }}  <span class="text-danger">*</span> </label>
-              <textarea type="textarea" class="form-control" v-model="description" id="description"></textarea>
-              <span v-if="errorMessages['description']">
-                <ul class="text-danger">
-                  <li v-for="err in errorMessages['description']" :key="err">{{ err }}</li>
-                </ul>
-              </span>
-              <span class="text-danger">{{ errors.description }}</span>
-            </div>
-          </div>
-
-          <div class="col-12 py-1">
-            <div class="d-flex justify-content-between align-items-center">
-              <span>{{$t('earning.lbl_commission')}}</span>
-              <strong>{{ commission_earn }}</strong>
-            </div>
-            <!-- <div class="d-flex justify-content-between align-items-center">
-              <span>Tip Earn</span>
-              <strong>{{ tip_earn }}</strong>
-            </div> -->
-            <div class="d-flex justify-content-between align-items-center border-top py-3 mt-3">
-              <span class="flex-grow-1">{{$t('earning.lbl_total')}}</span>
-              <h6><strong>{{ amount }}</strong></h6>
-            </div>
-         </div>
-        </div>
-      </div>
-      <FormFooter></FormFooter>
+    
     </div>
   </form>
 </template>

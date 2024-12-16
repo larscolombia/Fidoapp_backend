@@ -49,6 +49,8 @@ return [
     'lbl_name' => 'Nombre',
     'upload' => 'Subir',
     'vet' => 'Veterinario',
+    'user' => 'Dueño',
+    'demo_admin' => 'Admin',
     'trainer' => 'Entrenador',
     'groomer' => 'Peluquero',
     'walker' => 'Paseador',

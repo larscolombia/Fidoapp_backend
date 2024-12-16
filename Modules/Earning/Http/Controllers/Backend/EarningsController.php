@@ -72,7 +72,7 @@ class EarningsController extends Controller
         foreach ($query_data as $row) {
             $data[] = [
                 'id' => $row->id,
-                'text' => $row->name.' (Slug: '.$row->slug.')',
+                'text' => $row->name . ' (Slug: ' . $row->slug . ')',
             ];
         }
 
@@ -90,13 +90,13 @@ class EarningsController extends Controller
     {
         $module_name = $this->module_name;
 
-              $query = User::select('users.*')
-              ->withCount(['employeeBooking as totalBookings' => function ($q) {
-                  $q->whereHas('payment', function ($paymentQuery) {
-                      $paymentQuery->where('payment_status', 1);
-                  })->groupBy('employee_id');
-              }])
-    
+        $query = User::select('users.*')
+            ->withCount(['employeeBooking as totalBookings' => function ($q) {
+                $q->whereHas('payment', function ($paymentQuery) {
+                    $paymentQuery->where('payment_status', 1);
+                })->groupBy('employee_id');
+            }])
+
             ->with(['employeeBooking' => function ($q) {
                 $q->select('employee_id')
                     ->selectRaw('COUNT(DISTINCT id) as totalBookings')
@@ -114,25 +114,25 @@ class EarningsController extends Controller
             })->orderBy('updated_at', 'desc');
 
         return $datatable->eloquent($query)
-            ->addColumn('action', function ($data) use ($module_name) {
-                $commissionAmount = $data->commission_earning->where('commission_status', 'unpaid')->sum('commission_amount');
-                $tipAmount = $data->tip_earning->where('tip_status', 'unpaid')->sum('tip_amount');
-                $data['total_pay'] = $commissionAmount + $tipAmount;
+            // ->addColumn('action', function ($data) use ($module_name) {
+            //     $commissionAmount = $data->commission_earning->where('commission_status', 'unpaid')->sum('commission_amount');
+            //     $tipAmount = $data->tip_earning->where('tip_status', 'unpaid')->sum('tip_amount');
+            //     $data['total_pay'] = $commissionAmount + $tipAmount;
 
-                return view('earning::backend.earnings.action_column', compact('module_name', 'data'));
-            })
+            //     return view('earning::backend.earnings.action_column', compact('module_name', 'data'));
+            // })
 
             ->editColumn('user_id', function ($data) {
                 return view('earning::backend.earnings.user_id', compact('data'));
             })
             ->filterColumn('user_id', function ($query, $keyword) {
                 if (!empty($keyword)) {
-                    $query->where('first_name', 'like', '%'.$keyword.'%')->orWhere('last_name', 'like', '%'.$keyword.'%')->orWhere('email', 'like', '%'.$keyword.'%');
+                    $query->where('first_name', 'like', '%' . $keyword . '%')->orWhere('last_name', 'like', '%' . $keyword . '%')->orWhere('email', 'like', '%' . $keyword . '%');
                 }
             })
             ->orderColumn('user_id', function ($query, $order) {
                 $query->orderByRaw("CONCAT(first_name, ' ', last_name) $order");
-            }, 1)  
+            }, 1)
 
             // ->editColumn('image', function ($data) {
             //     return "<img src='" . $data->profile_image . "'class='avatar avatar-50 rounded-pill'>";
@@ -142,14 +142,13 @@ class EarningsController extends Controller
             // })
             ->editColumn('total_booking', function ($data) {
 
-                if($data->totalBookings >0){
+                if ($data->totalBookings > 0) {
 
-                    return "<b><a href='" . route('backend.booking.datatable_view', ['commission_employee_id' => $data->id]) . "' data-assign-module='".$data->id."'  class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Bookings'>".$data->totalBookings."</a> </b>";
-                }else{
+                    return "<b><a href='" . route('backend.booking.datatable_view', ['commission_employee_id' => $data->id]) . "' data-assign-module='" . $data->id . "'  class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Bookings'>" . $data->totalBookings . "</a> </b>";
+                } else {
 
-                    return "<b><span  data-assign-module='".$data->id."'  class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Bookings'>0</span>";
+                    return "<b><span  data-assign-module='" . $data->id . "'  class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Bookings'>0</span>";
                 }
-
             })
             ->editColumn('total_service_amount', function ($data) {
                 $totalServiceAmount = $data->employeeBooking->isEmpty() ? 0 : $data->employeeBooking->first()->total_service_amount;
@@ -158,17 +157,15 @@ class EarningsController extends Controller
             })
             ->editColumn('total_commission_earn', function ($data) {
 
-               return "<b><span  data-assign-module='".$data->id."' data-assign-target='#view_commission_list' data-assign-event='assign_commssions' class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Commissions'> <i class='fa-regular fa-eye'></i></span>";
+                //return "<b><span  data-assign-module='".$data->id."' data-assign-target='#view_commission_list' data-assign-event='assign_commssions' class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Commissions'> <i class='fa-regular fa-eye'></i></span>";
 
-            //    if($data->commission->getCommission->commission_type =='percentage'){
+                if ($data->commission->getCommission->commission_type == 'percentage') {
 
-            //     return $data->commission->getCommission->commission_value.''.'%';
-                
-            //    }else{
+                    return $data->commission->getCommission->commission_value . '' . '%';
+                } else {
 
-            //        return Currency::format($data->commission->getCommission->commission_value);
-            //    }
-                
+                    return Currency::format($data->commission->getCommission->commission_value);
+                }
             })
             ->editColumn('total_pay', function ($data) {
                 return Currency::format($this->getUnpaidAmount($data)->total_pay);
@@ -183,7 +180,7 @@ class EarningsController extends Controller
             //     $query->orderBy(new Expression('(SELECT SUM(commission_amount) FROM commission_earnings WHERE employee_id = users.id)'), $order);
             // }, 1)
             ->addIndexColumn()
-            ->rawColumns(['action', 'image','user_id','total_commission_earn','total_booking'])
+            ->rawColumns(['image', 'user_id', 'total_commission_earn', 'total_booking'])
             ->toJson();
     }
 
@@ -210,7 +207,7 @@ class EarningsController extends Controller
      */
 
 
-      public function edit($id)
+    public function edit($id)
     {
         $query = User::where('id', $id)->select('users.id', 'users.first_name', 'users.last_name', 'users.email', 'users.mobile')
             ->withCount(['employeeBooking as totalBookings' => function ($q) {
@@ -271,7 +268,7 @@ class EarningsController extends Controller
 
         $earning_data = EmployeeEarning::create($earning_data);
 
-        CommissionEarning::where('employee_id', $id)->where('commission_status','unpaid')->update(['commission_status' => 'paid']);
+        CommissionEarning::where('employee_id', $id)->where('commission_status', 'unpaid')->update(['commission_status' => 'paid']);
         TipEarning::where('employee_id', $id)->update(['tip_status' => 'paid']);
 
         $message = __('messages.payment_done');
@@ -279,13 +276,12 @@ class EarningsController extends Controller
         return response()->json(['message' => $message, 'status' => true], 200);
     }
 
-    public function get_employee_commissions($id){
+    public function get_employee_commissions($id)
+    {
 
 
-        $data = User::where('id',$id)->with('commissions_data')->first();
+        $data = User::where('id', $id)->with('commissions_data')->first();
 
         return response()->json(['data' => $data, 'status' => true]);
-    
-        
     }
 }

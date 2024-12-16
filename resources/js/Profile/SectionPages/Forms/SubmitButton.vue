@@ -5,7 +5,7 @@
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         Loading...
       </template>
-      <template v-else>  Submit <i class="fa-solid fa-floppy-disk"></i> </template>
+      <template v-else>  {{$t('dashboard.lbl_submit')}} <i class="fa-solid fa-floppy-disk"></i> </template>
     </button>
   </div>
 </template>

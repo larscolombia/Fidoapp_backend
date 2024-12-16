@@ -9,6 +9,8 @@ return [
     'lbl_status' => 'Estado',
     'lbl_action' => 'Acción',
     'percent' => 'Porcentaje',
+    'percentage' => 'Porcentaje',
+
     'fixed' => 'Fijo',
     'all' => 'Todos',
     'lbl_module_type' => 'Tipo de Módulo',

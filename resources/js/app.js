@@ -236,39 +236,50 @@
 
   window.initDatatable = initDatatable
 
-  function formatCurrency(number, noOfDecimal, decimalSeparator, thousandSeparator, currencyPosition, currencySymbol) {
-    // Convert the number to a string with the desired decimal places
+  function formatCurrency(number, noOfDecimal = 2, decimalSeparator = '.', thousandSeparator = ',', currencyPosition = 'left', currencySymbol = '$') {
+    // Verifica si 'number' es un número válido
+    if (isNaN(number) || number == null) {
+      return '' // Si no es un número válido, devuelve una cadena vacía
+    }
+
+    // Convertir el número a un valor con los decimales deseados
     let formattedNumber = number.toFixed(noOfDecimal)
 
-    // Split the number into integer and decimal parts
+    // Divide el número en parte entera y decimal
     let [integerPart, decimalPart] = formattedNumber.split('.')
 
-    // Add thousand separators to the integer part
+    // Añadir separadores de miles a la parte entera
     integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator)
 
-    // Set decimalPart to an empty string if it is undefined
+    // Si no hay parte decimal, asigna una cadena vacía
     decimalPart = decimalPart || ''
 
-    // Construct the final formatted currency string
+    // Construir el string final para la moneda
     let currencyString = ''
 
+    // Si el símbolo de la moneda está a la izquierda
     if (currencyPosition === 'left' || currencyPosition === 'left_with_space') {
       currencyString += currencySymbol
       if (currencyPosition === 'left_with_space') {
         currencyString += ' '
       }
       currencyString += integerPart
-      // Add decimal part and decimal separator if applicable
-      if (noOfDecimal > 0) {
+
+      // Añadir la parte decimal y el separador decimal si es necesario
+      if (noOfDecimal > 0 && decimalPart) {
         currencyString += decimalSeparator + decimalPart
       }
     }
 
+    // Si el símbolo de la moneda está a la derecha
     if (currencyPosition === 'right' || currencyPosition === 'right_with_space') {
-      // Add decimal part and decimal separator if applicable
-      if (noOfDecimal > 0) {
+      // Añadir la parte decimal y el separador decimal si es necesario
+      if (noOfDecimal > 0 && decimalPart) {
         currencyString += integerPart + decimalSeparator + decimalPart
+      } else {
+        currencyString += integerPart
       }
+
       if (currencyPosition === 'right_with_space') {
         currencyString += ' '
       }

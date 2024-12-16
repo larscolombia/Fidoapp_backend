@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('status')->default(1);
             // $table->string('feature_image');
 
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('sub_category_id')->nullable();
 
             $table->integer('created_by')->unsigned()->nullable();

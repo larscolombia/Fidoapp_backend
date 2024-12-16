@@ -50,7 +50,7 @@
                 <InputField class="col-md-12" :is-required="true" :label="$t('currency.lbl_number_of_decimals')" placeholder="" v-model="no_of_decimal" :error-message="errors.no_of_decimal" :error-messages="errorMessages['no_of_decimal']"></InputField>
 
                 <div class="form-group">
-                  <label class="form-label" for="label">Example:- {{ formatCurrencyVue(labelValue, no_of_decimal, decimal_separator, thousand_separator, currency_position, currency_symbol) }}</label>
+                  <!-- <label class="form-label" for="label">Example:- {{ formatCurrencyVue(labelValue, no_of_decimal, decimal_separator, thousand_separator, currency_position, currency_symbol) }}</label> -->
                 </div>
               </div>
             </div>

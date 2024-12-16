@@ -72,7 +72,7 @@
         <x-slot name="title">
             <h4>{{ __('service.lbl_advanced_filter') }}</h4>
         </x-slot>
-        <button type="reset" class="btn btn-danger" id="reset-filter">Reset</button>
+        <button type="reset" class="btn btn-danger" id="reset-filter">{{ __('messages.reset') }}</button>
     </x-backend.advance-filter>
 @endsection
 

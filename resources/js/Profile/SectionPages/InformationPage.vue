@@ -1,7 +1,7 @@
 <template>
   <form @submit="formSubmit">
     <div class="d-flex justify-content-between align-items-center">
-      <CardTitle title="Personal Information" icon="fa-solid fa-user"></CardTitle>
+      <CardTitle :title="$t('profile.personal_information')" icon="fa-solid fa-user"></CardTitle>
     </div>
     <div class="row">
       <div class="col-12 row">
@@ -22,7 +22,7 @@
           <img :src="ImageViewer || defaultImage" class="img-fluid avatar avatar-120 avatar-rounded mb-2" alt="profile-image" />
           <div class="d-flex align-items-center justify-content-center gap-2">
             <input type="file" ref="profileInputRef" class="form-control d-none" id="logo" name="profile_image" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
-            <label class="btn btn-info" for="logo">Upload</label>
+            <label class="btn btn-info" for="logo">{{ $t('messages.upload') }}</label>
             <input type="button" class="btn btn-danger" name="remove" :value="$t('messages.remove')" @click="removeLogo()" v-if="ImageViewer" />
           </div>
           <span class="text-danger">{{ errors.profile_image }}</span>
@@ -31,16 +31,16 @@
           <label for="" class="form-label w-100">{{ $t('profile.lbl_gender') }}</label>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male" :checked="gender == 'male'" />
-            <label class="form-check-label" for="male"> Male </label>
+            <label class="form-check-label" for="male"> {{ $t('customer.lbl_male') }} </label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" :checked="gender == 'female'" />
-            <label class="form-check-label" for="female"> Female </label>
+            <label class="form-check-label" for="female"> {{ $t('customer.lbl_female') }}</label>
           </div>
 
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other" :checked="gender == 'other'" />
-            <label class="form-check-label" for="other"> Other </label>
+            <label class="form-check-label" for="other"> {{ $t('customer.lbl_other') }}</label>
           </div>
           <p class="mb-0 text-danger">{{ errors.gender }}</p>
         </div>

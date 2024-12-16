@@ -9,7 +9,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title mb-0">Permission & Role</h4>
+                        <h4 class="card-title mb-0">
+                            {{ __('messages.permission_roles') }}
+                        </h4>
                     </div>
                     <div>
                         <x-backend.section-header>

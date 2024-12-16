@@ -51,7 +51,7 @@
                     @hasPermission('add_state')
                         <x-buttons.offcanvas target='#form-offcanvas'
                             title="{{ __('messages.create') }} {{ __($module_title) }}">
-                            {{ __('messages.create') }} {{ __('state.singule_title') }}</x-buttons.offcanvas>
+                            {{ __('messages.create') }} {{ __('state.singular_title') }}</x-buttons.offcanvas>
                     @endhasPermission
                 </x-slot>
             </x-backend.section-header>
@@ -68,7 +68,7 @@
         <x-slot name="title">
             <h4>{{ __('service.lbl_advanced_filter') }}</h4>
         </x-slot>
-        <button type="reset" class="btn btn-danger" id="reset-filter">Reset</button>
+        <button type="reset" class="btn btn-danger" id="reset-filter">{{ __('messages.reset') }}</button>
     </x-backend.advance-filter>
 @endsection
 

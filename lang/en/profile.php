@@ -39,4 +39,6 @@ return [
     'lbl_twitter_link' => 'Twitter Link',
     'lbl_dribbble_link' => 'Dribbble Link',
     'lbl_mobile' => 'Contact Number',
+    'personal_information' => 'Personal Information',
+    'change_pass' => 'Change Password',
 ];

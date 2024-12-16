@@ -33,6 +33,7 @@ return [
     'image' => 'Imagen',
     'quantity' => 'Cantidad',
     'percent' => 'Porcentaje',
+    
     'add_stock' => 'Agregar Existencias',
     'small' => 'Pequeño',
     'medium' => 'Mediano',

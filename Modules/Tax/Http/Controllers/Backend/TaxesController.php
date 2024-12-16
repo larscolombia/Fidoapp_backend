@@ -69,7 +69,7 @@ class TaxesController extends Controller
         foreach ($query_data as $row) {
             $data[] = [
                 'id' => $row->id,
-                'text' => $row->name.' (Slug: '.$row->slug.')',
+                'text' => $row->name . ' (Slug: ' . $row->slug . ')',
             ];
         }
 
@@ -97,7 +97,7 @@ class TaxesController extends Controller
 
         return $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
-                return '<input type="checkbox" class="form-check-input select-table-row "  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
+                return '<input type="checkbox" class="form-check-input select-table-row "  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->addColumn('action', function ($data) {
                 return view('tax::backend.tax.action_column', compact('data'));
@@ -110,7 +110,7 @@ class TaxesController extends Controller
 
                 return '
                     <div class="form-check form-switch ">
-                        <input type="checkbox" data-url="'.route('backend.tax.update_status', $row->id).'" data-token="'.csrf_token().'" class="switch-status-change form-check-input"  id="datatable-row-'.$row->id.'"  name="status" value="'.$row->id.'" '.$checked.'>
+                        <input type="checkbox" data-url="' . route('backend.tax.update_status', $row->id) . '" data-token="' . csrf_token() . '" class="switch-status-change form-check-input"  id="datatable-row-' . $row->id . '"  name="status" value="' . $row->id . '" ' . $checked . '>
                     </div>
                 ';
             })
@@ -120,14 +120,15 @@ class TaxesController extends Controller
                     return $value;
                 }
                 if ($data->type === 'percentage') {
-                    $value = $data->value.'%';
+                    $value = $data->value . '%';
 
                     return $value;
                 }
             })
             ->editColumn('type', function ($data) {
-                return ucwords($data->type);
+                return ucfirst(__('tax.' . $data->type));
             })
+
             ->editColumn('updated_at', function ($data) {
                 $module_name = $this->module_name;
 
@@ -234,7 +235,7 @@ class TaxesController extends Controller
         if (env('IS_DEMO')) {
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
-        
+
         $data = Tax::findOrFail($id);
 
         $data->delete();
@@ -244,11 +245,11 @@ class TaxesController extends Controller
         return response()->json(['message' => $message, 'status' => true], 200);
     }
 
-    public function tax_list(){
+    public function tax_list()
+    {
 
-        $data = Tax::where('status',1)->get();
+        $data = Tax::where('status', 1)->get();
 
         return response()->json(['data' => $data, 'status' => true]);
-
     }
 }

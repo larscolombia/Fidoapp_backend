@@ -15,15 +15,15 @@
             <x-backend.section-header>
                 <div>
                     <!-- <div class="datatable-filter">
-                                        <select name="column_status" id="column_status" class="select2 form-control"
-                                            data-filter="select" style="width: 100%">
-                                            <option value="">{{ __('service.all') }}</option>
-                                            <option value="0" {{ $filter['status'] == '0' ? 'selected' : '' }}>
-                                                {{ __('messages.inactive') }}</option>
-                                            <option value="1" {{ $filter['status'] == '1' ? 'selected' : '' }}>
-                                                {{ __('messages.active') }}</option>
-                                        </select>
-                                    </div> -->
+                                            <select name="column_status" id="column_status" class="select2 form-control"
+                                                data-filter="select" style="width: 100%">
+                                                <option value="">{{ __('service.all') }}</option>
+                                                <option value="0" {{ $filter['status'] == '0' ? 'selected' : '' }}>
+                                                    {{ __('messages.inactive') }}</option>
+                                                <option value="1" {{ $filter['status'] == '1' ? 'selected' : '' }}>
+                                                    {{ __('messages.active') }}</option>
+                                            </select>
+                                        </div> -->
                     <x-backend.quick-action url="{{ route('backend.services.bulk_action') }}">
                         <div class="">
                             <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
@@ -86,8 +86,8 @@
                             {{ __('messages.new') }}</x-buttons.offcanvas>
                     @endhasPermission
                     <!-- <button class="btn btn-outline-primary btn-group" data-bs-toggle="offcanvas"
-                                        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i
-                                            class="fa-solid fa-filter"></i> Advanced Filter</button> -->
+                                            data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i
+                                                class="fa-solid fa-filter"></i> Advanced Filter</button> -->
                 </x-slot>
             </x-backend.section-header>
         </div>
@@ -127,7 +127,7 @@
                 @endforeach
             </select>
         </div>
-        <button type="reset" class="btn btn-danger" id="reset-filter">Reset</button>
+        <button type="reset" class="btn btn-danger" id="reset-filter">{{ __('messages.reset') }}</button>
         <div class="form-group custom-range">
             <div class="filter-slider slider-secondary"></div>
         </div>

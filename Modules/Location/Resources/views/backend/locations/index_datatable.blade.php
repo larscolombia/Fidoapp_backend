@@ -27,7 +27,7 @@
                     </x-backend.quick-action>
                     <div>
                         <button type="button" class="btn btn-secondary" data-modal="export">
-                            <i class="fa-solid fa-download"></i> Export
+                            <i class="fa-solid fa-download"></i> {{ __('messages.export') }}
                         </button>
                         {{--          <button type="button" class="btn btn-secondary" data-modal="import"> --}}
                         {{--            <i class="fa-solid fa-upload"></i> Import --}}
@@ -80,7 +80,7 @@
         <x-slot name="title">
             <h4>{{ __('service.lbl_advanced_filter') }}</h4>
         </x-slot>
-        <button type="reset" class="btn btn-danger" id="reset-filter">Reset</button>
+        <button type="reset" class="btn btn-danger" id="reset-filter">{{ __('messages.reset') }}</button>
     </x-backend.advance-filter>
 @endsection
 

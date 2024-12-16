@@ -228,11 +228,27 @@ return [
     'create_service' => 'Crear servicio',
     'included_tax' => 'Con impuestos ',
     'unpaid' => 'Sin pagar',
+    'upload' => 'Subir',
+
     'bulk_review_delete' => 'Eliminación masiva realizada exitosamente',
     'bulk_review_update' => 'Actualizació masiva realizada exitosamente',
     'Qualification successfully enabled' => 'Calificación habilitada exitosamente',
     'Record not found' => 'Registro no encontrado',
     'comment_review' => '¡Gracias por compartir tus pensamientos! Tu comentario está bajo revisión y esperamos publicarlo pronto.',
+    'select_date' => 'Seleccionar Fecha',
+    'reset' => 'Reiniciar',
+    'code' => 'Código',
+    'export' => 'Exportar',
+    'parameters' => 'Parámetros',
+    'to' => 'Para',
 
+
+    'permission_roles' => 'Permisos y roles',
+    'default_permission' => 'Permisos por defecto',
+    'permission' => 'Permisos',
+    'view' => 'Vista',
+    'add' => 'Agregar',
+    'edit' => 'Editar',
+    'more' => 'Más'
 
 ];
