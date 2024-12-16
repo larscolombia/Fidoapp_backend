@@ -514,7 +514,7 @@ class PetController extends Controller
         return response()->json([
             'data' => $pet,
             'message' => __('messages.pet_lost'),
-        ],202);
+        ],200);
 
     }
 
