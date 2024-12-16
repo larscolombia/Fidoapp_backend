@@ -16,6 +16,7 @@ return [
     'lbl_select_branch' => 'Seleccionar Centro de Cuidado de Mascotas',
     'lbl_select_service' => 'Seleccionar Servicio',
     'lbl_status' => 'Estado',
+    'lbl_status_verify' => 'Verificar',
     'lbl_role' => 'Rol',
     'lbl_verification_status' => 'Estado de Verificación',
     'lbl_blocked' => 'Bloqueado',

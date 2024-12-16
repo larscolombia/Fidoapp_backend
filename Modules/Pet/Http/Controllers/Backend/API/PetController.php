@@ -494,6 +494,30 @@ class PetController extends Controller
         ]);
     }
 
+    public function updateLost(Request $request)
+    {
+        $data= $request->validate([
+            'pet_id' => ['required','exists:pets,id'],
+        ]);
+
+        $pet = Pet::findOrFail($data['pet_id']);
+        $pet->lost = true;
+        $pet->save();
+
+        $userIds = User::where('status', 1)->pluck('id')->toArray();
+        $message = __('messages.pet_lost_notification', [
+            'pet_name' => $pet->name,
+            'owner_name' => $pet->owner->full_name,
+        ]);
+        $this->sendNotification('pets', $pet, $userIds, $message);
+
+        return response()->json([
+            'data' => $pet,
+            'message' => __('messages.pet_lost'),
+        ],202);
+
+    }
+
     public function destroy($id)
     {
         $petSelected = Pet::find($id);

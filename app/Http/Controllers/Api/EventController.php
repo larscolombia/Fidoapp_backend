@@ -116,8 +116,6 @@ class EventController extends Controller
                 'date'        => !is_null($validatedData['date']) ? $validatedData['date'] : $event->date,
                 'end_date'    => !is_null($validatedData['end_date']) ? $validatedData['end_date'] : $event->end_date,
                 'event_time'  => !is_null($eventTime) ? $eventTime : $event->event_time,
-                'slug'        => $request->input('slug', $event->slug),
-                'user_id'     => $request->input('user_id', $event->user_id),
                 'description' => $request->input('description', $event->description),
                 'location'    => $request->input('location', $event->location),
                 'tipo'        => $request->input('tipo', $event->tipo),
@@ -132,7 +130,7 @@ class EventController extends Controller
                 foreach ($ownerIds as $ownerId) {
                     EventDetail::create([
                         'event_id' => $event->id,
-                        'pet_id'   => $request->input('pet_id'),
+                        'pet_id'   => $request->input('pet_id',$event->detailEvent->first()->pet_id),
                         'owner_id' => $ownerId,
                     ]);
                 }

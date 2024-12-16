@@ -395,6 +395,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/pets/breed-age-info', [PetController::class, 'getAllPetsWithBreedInfo']);
 
+    Route::post('pets/update-lost',[PetController::class,'updateLost']);
     /**
      * Obtener Todos los Usuarios con Información del Perfil
      * Método HTTP: GET

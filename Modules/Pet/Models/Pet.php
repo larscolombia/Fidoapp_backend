@@ -24,7 +24,7 @@ class Pet extends BaseModel
 
     protected $table = 'pets';
     protected $fillable = ['name', 'slug','passport', 'pettype_id', 'breed_id', 'date_of_birth', 'age', 'gender', 'weight', 'height', 'weight_unit',
-    'height_unit', 'additional_info', 'user_id', 'status', 'qr_code','pet_fur'];
+    'height_unit', 'additional_info', 'user_id', 'status', 'qr_code','pet_fur','lost'];
     protected $appends = ['pet_image','qr_code'];
 
     /**

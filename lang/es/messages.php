@@ -249,6 +249,7 @@ return [
     'view' => 'Vista',
     'add' => 'Agregar',
     'edit' => 'Editar',
-    'more' => 'Más'
-
+    'more' => 'Más',
+    'pet_lost' => 'Se ha actualizado el registro de mascota perdida exitosamente',
+    'pet_lost_notification' => 'La mascota :pet_name se ha perdido. Cualquier información que tengas, por favor contacta a :owner_name.',
 ];
