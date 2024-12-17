@@ -140,10 +140,10 @@ class PetsController extends Controller
         $usertype = $user->user_type;
 
         if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
- 
+
           $UserIds = Booking::where('employee_id', $user->id)->pluck('user_id');
 
-          $query->whereIn('id', $UserIds);   
+          $query->whereIn('id', $UserIds);
 
          }
 
@@ -161,9 +161,9 @@ class PetsController extends Controller
                         })
                         ->orderColumn('user_id', function ($query, $order) {
                             $query->orderByRaw("CONCAT(first_name, ' ', last_name) $order");
-                        }, 1) 
-                
-            
+                        }, 1)
+
+
                         ->editColumn('pet_count', function ($data) {
 
                             $pet_count = Pet::where('user_id', $data->id)->count();
@@ -171,36 +171,43 @@ class PetsController extends Controller
                             $user=Auth::User();
 
                             $usertype = $user->user_type;
-                            
+
                             if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
- 
+
                                 $petIds = Booking::where('employee_id', $user->id)->pluck('pet_id');
 
                                 $pet_count = Pet::whereIn('id',$petIds)->count();
-                      
+
                                }
-                        
+
                             $viewButton = '';
 
                             $addButton ='';
 
 
                             if (auth()->user()->can("view_owner's_pet")) {
-                               
-                                $viewButton = "<b><button type='button' data-assign-module='{$data->id}' data-assign-target='#pet-assign-form' data-assign-event='assign_pet' class='btn btn-secondary btn-sm rounded text-nowrap px-1' data-bs-toggle='tooltip' title='View all pet'> {$pet_count}</button></b>";
+
+                                $viewButton = "<b><button type='button' data-assign-module='{$data->id}' data-assign-target='#pet-assign-form' data-assign-event='assign_pet' class='btn btn-secondary btn-sm rounded text-nowrap px-1' data-bs-toggle='tooltip' title='".__('pet.view_all_pet')."'> {$pet_count}</button></b>";
                             }
 
                             if (auth()->user()->can("add_owner's_pet")) {
-                        
-                            $addButton = "<button type='button' data-assign-module='{$data->id}' data-assign-target='#add-pet-form' data-assign-event='add_pet' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2' data-bs-toggle='tooltip' title='Create New Pet'><i class='fa-solid fa-plus p-0'></i></button>";
+
+                            $addButton = "<button type='button' data-assign-module='{$data->id}' data-assign-target='#add-pet-form' data-assign-event='add-pet-form' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2' data-bs-toggle='tooltip' title='".__('pet.create')."'><i class='fa-solid fa-plus p-0'></i></button>";
                             }
-                        
+
                             return $viewButton . $addButton;
                         })
 
                        ->editColumn('gender', function ($data) {
-
-                          return ucfirst($data->gender);
+                            $gender = ucfirst($data->gender);
+                            $genderTranslate = trans('users.other');
+                            if($gender == 'Male'){
+                                $genderTranslate = trans('users.male');
+                            }
+                            if($gender == 'Female'){
+                                $genderTranslate = trans('users.female');
+                            }
+                          return $genderTranslate;
 
                         })
 
@@ -217,7 +224,7 @@ class PetsController extends Controller
 
                             }
 
-                         
+
 
                             return view('pet::backend.pets.owner_action_column', compact('data','enable_push_notification'));
                         })
@@ -226,7 +233,7 @@ class PetsController extends Controller
                             if ($row->status) {
                                 $checked = 'checked="checked"';
                             }
-            
+
                             return '
                                 <div class="form-check form-switch ">
                                     <input type="checkbox" data-url="'.route('backend.customers.update_status', $row->id).'" data-token="'.csrf_token().'" class="switch-status-change form-check-input"  id="datatable-row-'.$row->id.'"  name="status" value="'.$row->id.'" '.$checked.'>
@@ -246,9 +253,9 @@ class PetsController extends Controller
                         })
                         ->filterColumn('user_id', function ($query, $keyword) {
                             if (! empty($keyword)) {
-                              
+
                                     $query->where('first_name', 'like', '%'.$keyword.'%');
-                                
+
                             }
                         })
                         ->rawColumns(['action','status', 'check','pet_count'])
@@ -284,7 +291,7 @@ class PetsController extends Controller
             $data['age'] = $this->calculateAge($data['date_of_birth']);
         }
 
-        
+
         $query = Pet::create($data);
         $data['qr_code'] = $this->generateQrCode($query);
         Log::info($data['qr_code']);
@@ -294,7 +301,7 @@ class PetsController extends Controller
         Log::info($query);
 
         storeMediaFile($query, $request->file('pet_image'), 'pet_image');
-        
+
         $this->module_title='pet.title';
 
         $message = __('messages.create_form', ['form' => __($this->module_title)]);
@@ -393,7 +400,7 @@ class PetsController extends Controller
         $data = $request->except('pet_image');
         $data['breed_id']=$request->breed;
         $query->update($data);
-      
+
 
         storeMediaFile($query, $request->file('pet_image'), 'pet_image');
         $this->module_title='pet.title';
@@ -410,7 +417,7 @@ class PetsController extends Controller
      */
     public function destroy($id)
     {
-        
+
         $data = Pet::findOrFail($id);
 
         $user_id=$data['user_id'];
@@ -460,9 +467,9 @@ class PetsController extends Controller
 
     public function user_pet_list($id){
 
-        
+
       $all_pets = Pet::with('media')->get();
-      
+
       $user_pet=Pet::where('user_id',$id)->with('breed')->get();
 
       $user_data=User::where('id',$id)->first();
@@ -479,7 +486,7 @@ class PetsController extends Controller
           $user_pet = Pet::whereIn('id',$petIds)->with('breed')->get();
 
          }
-    
+
       $data=[
 
          'all_pet'=> $all_pets,
@@ -495,7 +502,7 @@ class PetsController extends Controller
 
         $user = Auth::user();
         $usertype = $user->user_type;
-    
+
         $pet_notes = PetNote::where('pet_id', $id)
             ->when(
                 $usertype !== "admin" && $usertype !== "demo_admin",
@@ -516,7 +523,7 @@ class PetsController extends Controller
         return response()->json(['data' => $pet_notes, 'status' => true]);
 
     }
-    
+
     public function add_pet_notes(Request $request){
 
        $data=$request->all();
@@ -528,7 +535,7 @@ class PetsController extends Controller
        $message = __('messages.create_pet_note');
 
        return response()->json(['message' => $message, 'status' => true], 200);
-  
+
     }
 
     public function delete_pet_note($id)
@@ -546,7 +553,7 @@ class PetsController extends Controller
         return response()->json(['message' => $message, 'data'=>$notes, 'status' => true], 200);
     }
 
-    
+
     public function generateQrCode($pet)
     {
         // Convierte el array $pet a una cadena JSON

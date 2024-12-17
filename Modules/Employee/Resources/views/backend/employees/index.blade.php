@@ -89,7 +89,7 @@
 
         <employee-slot-mapping-form-offcanvas></employee-slot-mapping-form-offcanvas>
         <change-password
-            create-title="{{ __('messages.change_password') }}></change-password>
+            create-title="{{ __('messages.change_password') }}"></change-password>
 
         <send-push-notification create-title="Send
             Push Notification"></send-push-notification>

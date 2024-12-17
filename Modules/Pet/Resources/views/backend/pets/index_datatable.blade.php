@@ -62,17 +62,13 @@
         </customer-offcanvas>
         <send-push-notification create-title="Send Push Notification"></send-push-notification>
         <change-password
-            create-title="{{ __('messages.change_password') }}></change-password>
+            create-title="{{ __('messages.change_password') }}"></change-password>
         <assign-pet create-title="Assign
             Pet"></assign-pet>
             <pet-offcanvas create-title="{{ __('messages.create') }} {{ __('pet.title') }}"
                 edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
             </pet-offcanvas>
-    </div>
-
-
-    <div data-render="app">
-        <pets-offcanvas create-title="{{ __('Create') }} {{ __('pet.title') }}"
+            <pets-offcanvas create-title="{{ __('Create') }} {{ __('pet.title') }}"
             edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
         </pets-offcanvas>
     </div>
@@ -108,22 +104,23 @@
     </div>
     </div>
 
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 @endsection
 
 @push('after-styles')
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- DataTables Core and Extensions -->
     <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 @endpush
 
 @push('after-scripts')
-    <script src="{{ mix('modules/pet/script.js') }}"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ mix('modules/pet/script.js') }}" defer></script>
     <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
-
     <!-- DataTables Core and Extensions -->
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 

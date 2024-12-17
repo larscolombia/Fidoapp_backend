@@ -7,7 +7,7 @@
         <div class="form-group">
               <div class="text-center">
                 <img :src="ImageViewer || props.defaultImage" alt="pet-image" class="img-fluid mb-2 avatar avatar-140 avatar-rounded" />
-             
+
               </div>
               <label class="form-label" for="pet_image">{{$t('pet.lbl_pet_image')}}</label>
               <input type="file" class="form-control" id="pet_image" @change="fileUpload" accept=".jpeg, .jpg, .png, .gif" />
@@ -43,14 +43,14 @@
           <span class="text-danger">{{ errors.breed }}</span>
         </div>
 
-        
+
         <div v-if="!unknownAge" class="form-group">
           <label class="form-label d-block" for="name">{{ $t('pet.lbl_date_of_birth') }}</label>
           <flat-pickr v-model="date_of_birth" :config="config" class="form-control d-block" />
         </div>
 
         <InputField v-if="unknownAge" class="col-md-12" type="text" :label="$t('pet.lbl_age')" placeholder="" v-model="age" :error-message="errors['age']" :error-messages="errorMessages['age']"></InputField>
-        
+
         <div class="form-group">
           <input type="checkbox" id="unknown-age" v-model="unknownAge" @change="toggleUnknownAge" />
           <label for="unknown-age" class="form-label">{{ $t('pet.lbl_unknown_age') }}</label>
@@ -385,4 +385,4 @@
   width: 100% !important;
   display: block;
 }
-</style>  
+</style>

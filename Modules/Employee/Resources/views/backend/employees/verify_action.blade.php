@@ -4,6 +4,6 @@
 
 @else
 
- <span href="{{route("backend.employees.verify-employee", $data->id)}}" id="delete-{{$module_name}}-{{$data->id}}" class="text-capitalize badge bg-soft-danger p-3" data-type="ajax" data-method="GET" data-token="{{csrf_token()}}" data-bs-toggle="tooltip" title="{{__('Verify')}}" data-confirm="{{ __('messages.verify_account') }}"> {{__('employee.lbl_status_verify')}} </span>
+ <span href="{{route("backend.employees.verify-employee", $data->id)}}" id="delete-{{$module_name}}-{{$data->id}}" class="text-capitalize badge bg-soft-danger p-3" data-type="ajax" data-method="GET" data-token="{{csrf_token()}}" data-bs-toggle="tooltip" title="{{__('employee.lbl_status_verify')}}" data-confirm="{{ __('messages.verify_account') }}"> {{__('employee.lbl_status_verify')}} </span>
 
 @endif

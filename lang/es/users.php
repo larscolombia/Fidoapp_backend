@@ -13,4 +13,7 @@ return [
     'lbl_new_password' => 'Nueva contraseña',
     'lbl_confirm_password' => 'Confirmar contraseña',
     'user_list' => 'Lista de usuarios',
+    'male' => 'Hombre',
+    'female' => 'Mujer',
+    'other' => 'Otro',
 ];

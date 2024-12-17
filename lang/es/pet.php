@@ -61,4 +61,8 @@ return [
     'invalid_image_format' => 'El formato de la imagen no es válido. Los formatos permitidos son jpeg, png, jpg, gif.',
     'pet_history_create' => 'Creado el historial clinico de la mascota',
     'pet_history_update' => 'Actualizado el historial clinico de la mascota',
+    'view_all_pet' => 'Ver todas las mascotas',
+    'create' => 'Crear nueva mascota',
+    'send_push_notification' => 'Enviar notificación push',
+    'edit' => 'Editar',
 ];
