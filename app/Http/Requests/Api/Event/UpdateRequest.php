@@ -31,7 +31,6 @@ class UpdateRequest extends FormRequest
             'name' => 'sometimes|string|max:255',
             'date' => 'sometimes|string',
             'end_date' => 'sometimes|string',
-            'slug' => "sometimes|string|max:255|unique:events,slug,{$eventId}",
             'user_id' => 'sometimes|exists:users,id',
             'description' => 'sometimes|string',
             'location' => 'sometimes|string',

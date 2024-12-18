@@ -36,11 +36,40 @@ class EventController extends Controller
     public function getEventsByUser($user_id)
     {
         $events = Event::where('user_id', $user_id)->get();
+        $data = $events->map(function ($event) {
+            $owners = [];
 
+            foreach ($event->detailEvent as $detail) {
+                if ($detail->owner_id) {
+                    // Buscar el usuario por ID
+                    $user = User::find($detail->owner_id);
+                    if ($user) {
+                        $avatar = !is_null($user->avatar) && !empty($user->avatar) ? asset($user->avatar) : null;
+                        // Agregar el id, correo electrónico y avatar al array
+                        $owners[] = ['id' => $user->id, 'email' => $user->email, 'avatar' => $avatar];
+                    }
+                }
+            }
+
+            return [
+                'name' => $event->name,
+                'tipo' => $event->tipo,
+                'date' => $event->date,
+                'end_date' => $event->end_date,
+                'slug' => $event->slug,
+                'user_id' => $event->user_id,
+                'user_email' => $event->user ? $event->user->email : null,
+                'description' => $event->description,
+                'location' => $event->location,
+                'status' => $event->status,
+                'pet_id' => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
+                'owners' => $owners
+            ];
+        });
         return response()->json([
             'success' => true,
             'message' => 'Eventos recuperados exitosamente',
-            'data' => $events
+            'data' => $data
         ]);
     }
 
