@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Event\StoreRequest;
 use App\Http\Requests\Api\Event\UpdateRequest;
+use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
 
 
 class EventController extends Controller
@@ -86,7 +87,7 @@ class EventController extends Controller
                 $validatedData['end_date'] = Carbon::now()->format('Y-m-d');
             }
             $eventTime = $request->input('event_time')
-                ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+                ? Carbon::createFromFormat('H:i:s', $request->input('event_time'))->format('H:i:s') : null;
 
             if (!file_exists(public_path('images/event'))) {
                 mkdir(public_path('images/event'), 0755, true);
@@ -122,6 +123,39 @@ class EventController extends Controller
                     'owner_id' => $ownerId,
                 ]);
             }
+            //reserva
+            if($request->input('tipo') == 'medico' || $request->input('tipo') == 'entrenamiento'){
+                $bookingType = $request->input('tipo') == 'medico' ? 'veterinary' : 'training';
+                $service = null;
+                $serviceDuration = null;
+                $training = null;
+                if($request->input('service_id')){
+                    $service = Service::find($request->input('service_id'));
+                }
+                if($request->input('duration_id')){
+                    $serviceDuration = ServiceDuration::find($request->input('duration_id'));
+                }
+                if($request->input('training_id')){
+                    $training = Service::find($request->input('training_id'));
+                }
+                // $bookingData = [
+                //     'booking_type' => $bookingType,
+                //     'date_time' => $validatedData['date'],
+                //     'user_id' => $request->input('user_id'),
+                //     'service_amount' => !is_null($service) ? $service->default_price : 0,
+                //     'price' => !is_null($service) ? $service->default_price : 0,
+                //     'system_service_id' => !is_null($service) ? $request->input('service_id') : null,
+                //     'service_name' => !is_null($service) ? $service->name : null,
+                //     'reason' => $request->input('description'),
+                //     'service_id' => !is_null($service) ? $service->id : null,
+                //     'duration' => !is_null($serviceDuration) ? $serviceDuration->duration : 0,
+                //     'start_video_link' => null,
+                //     'join_video_link' => null,
+                //     'training_id' => !is_null($training) ? $training->id : null,
+                // ];
+            }
+
+            //notificacion
             $this->sendNotification('event', $event, $request->input('owner_id'), $event->description);
             return response()->json([
                 'success' => true,
@@ -145,7 +179,7 @@ class EventController extends Controller
             Log::info($request->all());
             $event = Event::findOrFail($id);
             $validatedData = $request->validated();
-            $detailEvent = EventDetail::where('event_id', $event->id)->firstOrFail();
+            $detailEvent = EventDetail::where('event_id', $event->id)->first();
             try {
                 $validatedData['date'] = Carbon::createFromFormat('Y-m-d', $validatedData['date'])->format('Y-m-d');
                 $validatedData['end_date'] = Carbon::createFromFormat('Y-m-d', $validatedData['end_date'])->format('Y-m-d');
@@ -154,7 +188,7 @@ class EventController extends Controller
                 $validatedData['end_date'] = null;
             }
             $eventTime = $request->input('event_time')
-                ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+                ? Carbon::createFromFormat('H:i:s', $request->input('event_time'))->format('H:i:s') : null;
 
              // Manejar la imagen si se proporciona
              if ($request->hasFile('image')) {
@@ -183,14 +217,16 @@ class EventController extends Controller
             ]);
             if ($request->has('owner_id')) {
                 // Eliminar detalles existentes
-                EventDetail::where('event_id', $event->id)->delete();
-
+                $pet_id = !is_null($event->detailEvent->first()) ? $event->detailEvent->first()->pet_id : null;
+                if($detailEvent){
+                    $detailEvent->delete();
+                }
                 // Crear nuevos detalles del evento
                 $ownerIds = $request->input('owner_id');
                 foreach ($ownerIds as $ownerId) {
                     EventDetail::create([
                         'event_id' => $event->id,
-                        'pet_id'   => $request->input('pet_id',$event->detailEvent->first()->pet_id),
+                        'pet_id'   => $request->input('pet_id',$pet_id),
                         'owner_id' => $ownerId,
                     ]);
                 }
@@ -355,4 +391,13 @@ class EventController extends Controller
             'message' => 'Evento eliminado exitosamente',
         ]);
     }
+
+    //reserva
+    // private function bookingCreate($data)
+    // {
+    //     $bookingController = new BookingsController();
+    //     if($data['event_type'] =='medico'){
+    //         $data['']
+    //     }
+    // }
 }
