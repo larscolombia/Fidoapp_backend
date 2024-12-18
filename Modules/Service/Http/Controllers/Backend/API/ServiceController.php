@@ -2,6 +2,7 @@
 
 namespace Modules\Service\Http\Controllers\Backend\API;
 
+use Modules\Tax\Models\Tax;
 use Illuminate\Http\Request;
 use Modules\Service\Models\Service;
 use App\Http\Controllers\Controller;
@@ -23,11 +24,10 @@ class ServiceController extends Controller
 
         $data['type'] = $type;
 
-          if(auth()->user()->hasRole('admin') && auth()->user()->hasRole('demo_admin')) {
+        if (auth()->user()->hasRole('admin') && auth()->user()->hasRole('demo_admin')) {
 
-             $query = Service::create($data);
-
-           }else{
+            $query = Service::create($data);
+        } else {
 
             $data['created_by'] = auth()->id();
 
@@ -37,10 +37,9 @@ class ServiceController extends Controller
                 'service_id' => $query->id,
                 'employee_id' => auth()->id(),
             ]);
+        }
 
-         }
-
-         storeMediaFile($query, $request->file('feature_image'));
+        storeMediaFile($query, $request->file('feature_image'));
 
         $message = __('messages.create_form', ['form' => __('service.singular_title')]);
 
@@ -72,7 +71,7 @@ class ServiceController extends Controller
 
     public function update(ServiceRequest $request)
     {
-        $id=$request->id;
+        $id = $request->id;
 
         $data = Service::findOrFail($id);
 
@@ -89,9 +88,9 @@ class ServiceController extends Controller
 
     public function destroy(Request $request)
     {
-        $id=$request->id;
+        $id = $request->id;
 
-        if(env('IS_DEMO')) {
+        if (env('IS_DEMO')) {
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
 
@@ -235,7 +234,7 @@ class ServiceController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $service =  Service::where('status',1)->with(['category','employee']);
+        $service =  Service::where('status', 1)->with(['category', 'employee']);
 
         if ($request->has('category_id') && $request->category_id != '') {
             $service = $service->Where('category_id', $request->category_id);
@@ -247,48 +246,42 @@ class ServiceController extends Controller
                     $query->where('type', $request->type)
                         ->orWhere('type', 'video-consultancy');
                 });
-            }
-             else{
+            } else {
                 $service = $service->Where('type', $request->type);
-             }
-         }
+            }
+        }
 
-        if($request->has('employee_id') && $request->employee_id !=''){
+        if ($request->has('employee_id') && $request->employee_id != '') {
 
-            $employee_id=$request->employee_id;
+            $employee_id = $request->employee_id;
 
             $service = $service->whereHas('employee', function ($q) use ($employee_id) {
                 $q->where('employee_id', $employee_id);
             });
 
-            if($request->has('service_type') && $request->service_type=='assign_by_admin') {
+            if ($request->has('service_type') && $request->service_type == 'assign_by_admin') {
 
-                $service = $service->where('created_by',null);
+                $service = $service->where('created_by', null);
+            } else if ($request->has('service_type') && $request->service_type == 'added_by_me') {
 
-                }else if($request->has('service_type') && $request->service_type=='added_by_me'){
+                $service = $service->where('created_by', $employee_id);
+            } else {
 
-                    $service = $service->where('created_by', $employee_id);
-
-               }else{
-
-                $service  =  $service ->whereHas('employee', function ($q) use ($employee_id) {
-                     $q->where('employee_id', $employee_id);
-                  });
-
-               }
-
-           }
+                $service  =  $service->whereHas('employee', function ($q) use ($employee_id) {
+                    $q->where('employee_id', $employee_id);
+                });
+            }
+        }
 
 
         if ($request->has('search')) {
             $searchTerm = $request->search;
             $service = $service->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', "%{$searchTerm}%")
-                ->orWhere('description', 'like', "%{$searchTerm}%")
-                ->orWhereHas('category', function ($categoryQuery) use ($searchTerm) {
-                    $categoryQuery->where('name', 'like', "%{$searchTerm}%");
-                });
-
+                    ->orWhere('description', 'like', "%{$searchTerm}%")
+                    ->orWhereHas('category', function ($categoryQuery) use ($searchTerm) {
+                        $categoryQuery->where('name', 'like', "%{$searchTerm}%");
+                    });
             });
         }
 
@@ -327,7 +320,7 @@ class ServiceController extends Controller
         }
         if ($request->has('name')) {
             $keyword = $request->input('name');
-            $services->where('name', 'LIKE', '%'.$keyword.'%');
+            $services->where('name', 'LIKE', '%' . $keyword . '%');
         }
         $filteredServices = $services->get();
         if ($filteredServices->isEmpty()) {
@@ -346,9 +339,9 @@ class ServiceController extends Controller
         }
 
         $services = Service::where(function ($query) use ($searchQuery) {
-            $query->where('name', 'like', '%'.$searchQuery.'%')
-                ->orWhere('description', 'like', '%'.$searchQuery.'%')
-                ->orWhere('category', 'like', '%'.$searchQuery.'%');
+            $query->where('name', 'like', '%' . $searchQuery . '%')
+                ->orWhere('description', 'like', '%' . $searchQuery . '%')
+                ->orWhere('category', 'like', '%' . $searchQuery . '%');
         })->get();
 
         return response()->json($services);
@@ -357,11 +350,11 @@ class ServiceController extends Controller
     public function serviceListByCategory(Request $request)
     {
         $data = $request->validate([
-            'category_id' => ['nullable','exists:categories,id'],
+            'category_id' => ['nullable', 'exists:categories,id'],
             'type' => ['nullable']
         ]);
 
-        $service =  Service::where('status',1)->with(['category','employee']);
+        $service =  Service::where('status', 1)->with(['category', 'employee']);
 
         if ($request->has('category_id')) {
             $service = $service->Where('category_id', $request->category_id);
@@ -372,11 +365,10 @@ class ServiceController extends Controller
                     $query->where('type', $request->type)
                         ->orWhere('type', 'video-consultancy');
                 });
-            }
-             else{
+            } else {
                 $service = $service->Where('type', $request->type);
-             }
-         }
+            }
+        }
 
         $service = $service->orderBy('updated_at', 'desc')->get();
 
@@ -389,4 +381,35 @@ class ServiceController extends Controller
         ], 200);
     }
 
+    public function servicePrice(Request $request)
+    {
+
+        $data = $request->validate([
+            'service_id' => ['required', 'exists:services,id']
+        ]);
+        $service = Service::where('id', $data['service_id'])->first();
+        $price = $service->default_price ?? 0;
+        $servicePrice = $this->calculateTotalWithTax($price);
+        return response()->json(['data' => $servicePrice, 'status' => true]);
+    }
+
+    private function calculateTotalWithTax(float $amount): float
+    {
+        $taxAmount = 0.0;
+
+        // Obtener todos los impuestos desde el modelo Tax
+        $taxes = Tax::where('status', 1)->get();
+
+        foreach ($taxes as $tax) {
+            if ($tax->type === 'fixed') {
+                $taxAmount += $tax->value;
+            } elseif ($tax->type === 'percentage') {
+                $taxAmount += ($amount * ($tax->value / 100));
+            }
+        }
+
+        // Calcular el monto total
+        $totalAmount = $amount + $taxAmount;
+        return round($totalAmount, 2);
+    }
 }
