@@ -254,5 +254,6 @@ return [
     'pet_lost_notification' => 'La mascota :pet_name se ha perdido. Cualquier información que tengas, por favor contacta a :owner_name.',
     'found_pet' => 'Mascota encontrada',
     'pets_success' => 'Mascotas actualizadas',
+    'pet_success' => 'Mascota actualizada',
     'question_found_pet' => '¿Está seguro de que desea marcar estas mascotas como encontradas?',
 ];

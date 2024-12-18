@@ -623,7 +623,7 @@ class PetsController extends Controller
 
         return Datatables::of($query)
             ->addColumn('check', function ($row) {
-                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheckFoundPet(' . $row->id . ')">';
             })
             ->editColumn('name', function ($data) {
                 return ucfirst($data->name);
@@ -655,21 +655,23 @@ class PetsController extends Controller
     public function lostPetStoreId(Request $request, $id)
     {
         try {
+
             // Intenta encontrar la mascota por ID
             $pet = Pet::findOrFail($id);
-
             // Actualiza el estado de la mascota
             $pet->lost = false;
-            $pet->found_data = Carbon::now();
+            $pet->found_date = Carbon::now();
             $pet->save();
 
             // Devuelve una respuesta exitosa
-            return response()->json(['status' => true, 'message' => __('messages.pets_success')]);
+            return response()->json(['status' => true, 'message' => __('messages.pet_success')]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // Maneja el caso en que no se encuentra la mascota
+            Log::info($e->getMessage());
             return response()->json(['status' => false, 'message' => __('messages.pet_not_found')], 404);
         } catch (\Exception $e) {
             // Maneja cualquier otro tipo de excepción
+            Log::info($e->getMessage());
             return response()->json(['status' => false, 'message' => __('messages.general_error')], 500);
         }
     }

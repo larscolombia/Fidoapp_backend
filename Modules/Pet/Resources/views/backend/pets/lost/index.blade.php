@@ -172,12 +172,12 @@
         });
 
         $(document).on('update_quick_action', function() {
-            // resetActionButtons()
+            // resetActionButtonsFoundPet()
         })
     </script>
 
 <script>
-    const dataTableRowCheckRating = (id) => {
+    const dataTableRowCheckFoundPet = (id) => {
         checkRow()
         if ($('.select-table-row:checked').length > 0) {
             $('#quick-action-form-found-pet').removeClass('form-disabled')
@@ -188,7 +188,7 @@
             //if no row is selected
             document.getElementById('select-all-table').indeterminate = false
             $('#select-all-table').attr('checked', false)
-            resetActionButtons()
+            resetActionButtonsFoundPet()
         }
 
         if ($('#datatable-row-' + id).is(':checked')) {
@@ -240,7 +240,7 @@
             if (!result.isConfirmed) return;
 
             // Enviar datos a través de AJAX
-            callActionAjaxRating({
+            callActionAjaxFoundPet({
                 url: url,
                 body: form.serialize() + '&rowData=' + JSON.stringify(
                     rowData) // Incluye rowData en el cuerpo de la solicitud
@@ -249,7 +249,7 @@
     });
 
 
-    function callActionAjaxRating({
+    function callActionAjaxFoundPet({
         url,
         body
     }) {
@@ -260,7 +260,7 @@
             success: function(res) {
                 if (res.status) {
                     window.successSnackbar(res.message)
-                    window.renderedDataTable.ajax.reload(resetActionButtons, false)
+                    window.renderedDataTable.ajax.reload(resetActionButtonsFoundPet, false)
                     const event = new CustomEvent('update_quick_action', {
                         detail: {
                             value: true
@@ -307,7 +307,7 @@
                 false; // Asegúrate de que no esté en estado indeterminado
         } else {
             // Si no hay checkboxes seleccionados, vuelve a deshabilitar los botones
-            resetActionButtons(); // Asegúrate de que esta función maneje la lógica de deshabilitar botones
+            resetActionButtonsFoundPet(); // Asegúrate de que esta función maneje la lógica de deshabilitar botones
             document.getElementById('select-all-table').indeterminate =
                 false; // También puedes establecerlo en false aquí
             $('#quick-action-form-found-pet').addClass('form-disabled');
@@ -326,8 +326,10 @@
         var form = $(this); // Obtiene el formulario
         var url = form.attr('action'); // URL del formulario
         var data = form.serialize(); // Serializa los datos del formulario
-
-        $.ajax({
+        const message = $('[name="message_found_pet" ]').val();
+        confirmSwal(message).then((result) => {
+            if (!result.isConfirmed) return;
+            $.ajax({
             url: url,
             type: 'POST',
             data: data,
@@ -364,6 +366,20 @@
                 });
             }
         });
+        });
+
     });
+     const resetActionButtonsFoundPet = () => {
+    checkRow()
+    if (document.getElementById('select-all-table') !== undefined && document.getElementById('select-all-table') !== null) {
+      document.getElementById('select-all-table').checked = false
+      document.getElementById('select-all-table').indeterminate = false
+      // $("#quick-action-form")[0].reset();
+      $('#quick-actions').find('input, textarea, button, select').attr('disabled', 'disabled')
+      $('#quick-action-form').find('select').select2('destroy').select2().val(null).trigger('change')
+    }
+  }
+
+  window.resetActionButtonsFoundPet = resetActionButtonsFoundPet
 </script>
 @endpush
