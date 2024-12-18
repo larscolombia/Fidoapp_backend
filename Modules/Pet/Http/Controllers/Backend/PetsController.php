@@ -43,11 +43,11 @@ class PetsController extends Controller
         $this->module_path = 'pet::backend';
 
         view()->share([
-          'module_title' => $this->module_title,
-          'module_icon' => 'fa-regular fa-sun',
-          'module_name' => $this->module_name,
-          'module_path' => $this->module_path,
-      ]);
+            'module_title' => $this->module_title,
+            'module_icon' => 'fa-regular fa-sun',
+            'module_name' => $this->module_name,
+            'module_path' => $this->module_path,
+        ]);
     }
 
     /**
@@ -119,7 +119,7 @@ class PetsController extends Controller
             $data->where('pettype_id', $pettype_id);
         }
 
-        $user_id =$request->user_id;
+        $user_id = $request->user_id;
 
         if (isset($user_id)) {
             $data->where('user_id', $user_id);
@@ -133,134 +133,129 @@ class PetsController extends Controller
     public function index_data()
     {
         $query = User::role('user')
-        ->with('pets');
+            ->with('pets');
 
-        $user=Auth::User();
+        $user = Auth::User();
 
         $usertype = $user->user_type;
 
-        if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
+        if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
 
-          $UserIds = Booking::where('employee_id', $user->id)->pluck('user_id');
+            $UserIds = Booking::where('employee_id', $user->id)->pluck('user_id');
 
-          $query->whereIn('id', $UserIds);
-
-         }
+            $query->whereIn('id', $UserIds);
+        }
 
         return Datatables::of($query)
-                        ->addColumn('check', function ($row) {
-                            return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
-                        })
-                        ->editColumn('user_id', function ($data) {
-                            return view('pet::backend.pets.user_id', compact('data'));
-                        })
-                        ->filterColumn('user_id', function ($query, $keyword) {
-                            if (!empty($keyword)) {
-                                $query->where('first_name', 'like', '%'.$keyword.'%')->orWhere('last_name', 'like', '%'.$keyword.'%')->orWhere('email', 'like', '%'.$keyword.'%');
-                            }
-                        })
-                        ->orderColumn('user_id', function ($query, $order) {
-                            $query->orderByRaw("CONCAT(first_name, ' ', last_name) $order");
-                        }, 1)
+            ->addColumn('check', function ($row) {
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
+            })
+            ->editColumn('user_id', function ($data) {
+                return view('pet::backend.pets.user_id', compact('data'));
+            })
+            ->filterColumn('user_id', function ($query, $keyword) {
+                if (!empty($keyword)) {
+                    $query->where('first_name', 'like', '%' . $keyword . '%')->orWhere('last_name', 'like', '%' . $keyword . '%')->orWhere('email', 'like', '%' . $keyword . '%');
+                }
+            })
+            ->orderColumn('user_id', function ($query, $order) {
+                $query->orderByRaw("CONCAT(first_name, ' ', last_name) $order");
+            }, 1)
 
 
-                        ->editColumn('pet_count', function ($data) {
+            ->editColumn('pet_count', function ($data) {
 
-                            $pet_count = Pet::where('user_id', $data->id)->count();
+                $pet_count = Pet::where('user_id', $data->id)->count();
 
-                            $user=Auth::User();
+                $user = Auth::User();
 
-                            $usertype = $user->user_type;
+                $usertype = $user->user_type;
 
-                            if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
+                if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
 
-                                $petIds = Booking::where('employee_id', $user->id)->pluck('pet_id');
+                    $petIds = Booking::where('employee_id', $user->id)->pluck('pet_id');
 
-                                $pet_count = Pet::whereIn('id',$petIds)->count();
+                    $pet_count = Pet::whereIn('id', $petIds)->count();
+                }
 
-                               }
+                $viewButton = '';
 
-                            $viewButton = '';
-
-                            $addButton ='';
-
-
-                            if (auth()->user()->can("view_owner's_pet")) {
-
-                                $viewButton = "<b><button type='button' data-assign-module='{$data->id}' data-assign-target='#pet-assign-form' data-assign-event='assign_pet' class='btn btn-secondary btn-sm rounded text-nowrap px-1' data-bs-toggle='tooltip' title='".__('pet.view_all_pet')."'> {$pet_count}</button></b>";
-                            }
-
-                            if (auth()->user()->can("add_owner's_pet")) {
-
-                            $addButton = "<button type='button' data-assign-module='{$data->id}' data-assign-target='#add-pet-form' data-assign-event='add-pet-form' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2' data-bs-toggle='tooltip' title='".__('pet.create')."'><i class='fa-solid fa-plus p-0'></i></button>";
-                            }
-
-                            return $viewButton . $addButton;
-                        })
-
-                       ->editColumn('gender', function ($data) {
-                            $gender = ucfirst($data->gender);
-                            $genderTranslate = trans('users.other');
-                            if($gender == 'Male'){
-                                $genderTranslate = trans('users.male');
-                            }
-                            if($gender == 'Female'){
-                                $genderTranslate = trans('users.female');
-                            }
-                          return $genderTranslate;
-
-                        })
-
-                        ->addColumn('action', function ($data) {
+                $addButton = '';
 
 
-                            $other_settings=Setting::where('name','is_user_push_notification')->first();
+                if (auth()->user()->can("view_owner's_pet")) {
 
-                            $enable_push_notification=0;
+                    $viewButton = "<b><button type='button' data-assign-module='{$data->id}' data-assign-target='#pet-assign-form' data-assign-event='assign_pet' class='btn btn-secondary btn-sm rounded text-nowrap px-1' data-bs-toggle='tooltip' title='" . __('pet.view_all_pet') . "'> {$pet_count}</button></b>";
+                }
 
-                            if(!empty($other_settings)){
+                if (auth()->user()->can("add_owner's_pet")) {
 
-                                $enable_push_notification= $other_settings->val;
+                    $addButton = "<button type='button' data-assign-module='{$data->id}' data-assign-target='#add-pet-form' data-assign-event='add-pet-form' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2' data-bs-toggle='tooltip' title='" . __('pet.create') . "'><i class='fa-solid fa-plus p-0'></i></button>";
+                }
 
-                            }
+                return $viewButton . $addButton;
+            })
+
+            ->editColumn('gender', function ($data) {
+                $gender = ucfirst($data->gender);
+                $genderTranslate = trans('users.other');
+                if ($gender == 'Male') {
+                    $genderTranslate = trans('users.male');
+                }
+                if ($gender == 'Female') {
+                    $genderTranslate = trans('users.female');
+                }
+                return $genderTranslate;
+            })
+
+            ->addColumn('action', function ($data) {
+
+
+                $other_settings = Setting::where('name', 'is_user_push_notification')->first();
+
+                $enable_push_notification = 0;
+
+                if (!empty($other_settings)) {
+
+                    $enable_push_notification = $other_settings->val;
+                }
 
 
 
-                            return view('pet::backend.pets.owner_action_column', compact('data','enable_push_notification'));
-                        })
-                        ->editColumn('status', function ($row) {
-                            $checked = '';
-                            if ($row->status) {
-                                $checked = 'checked="checked"';
-                            }
+                return view('pet::backend.pets.owner_action_column', compact('data', 'enable_push_notification'));
+            })
+            ->editColumn('status', function ($row) {
+                $checked = '';
+                if ($row->status) {
+                    $checked = 'checked="checked"';
+                }
 
-                            return '
+                return '
                                 <div class="form-check form-switch ">
-                                    <input type="checkbox" data-url="'.route('backend.customers.update_status', $row->id).'" data-token="'.csrf_token().'" class="switch-status-change form-check-input"  id="datatable-row-'.$row->id.'"  name="status" value="'.$row->id.'" '.$checked.'>
+                                    <input type="checkbox" data-url="' . route('backend.customers.update_status', $row->id) . '" data-token="' . csrf_token() . '" class="switch-status-change form-check-input"  id="datatable-row-' . $row->id . '"  name="status" value="' . $row->id . '" ' . $checked . '>
                                 </div>
                             ';
-                        })
-                        ->editColumn('updated_at', function ($data) {
-                            $module_name = $this->module_name;
+            })
+            ->editColumn('updated_at', function ($data) {
+                $module_name = $this->module_name;
 
-                            $diff = Carbon::now()->diffInHours($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
-                            if ($diff < 25) {
-                                return $data->updated_at->diffForHumans();
-                            } else {
-                                return $data->updated_at->isoFormat('llll');
-                            }
-                        })
-                        ->filterColumn('user_id', function ($query, $keyword) {
-                            if (! empty($keyword)) {
+                if ($diff < 25) {
+                    return $data->updated_at->diffForHumans();
+                } else {
+                    return $data->updated_at->isoFormat('llll');
+                }
+            })
+            ->filterColumn('user_id', function ($query, $keyword) {
+                if (! empty($keyword)) {
 
-                                    $query->where('first_name', 'like', '%'.$keyword.'%');
-
-                            }
-                        })
-                        ->rawColumns(['action','status', 'check','pet_count'])
-                        ->orderColumns(['id'], '-:column $1')
-                        ->make(true);
+                    $query->where('first_name', 'like', '%' . $keyword . '%');
+                }
+            })
+            ->rawColumns(['action', 'status', 'check', 'pet_count'])
+            ->orderColumns(['id'], '-:column $1')
+            ->make(true);
     }
 
     /**
@@ -284,9 +279,9 @@ class PetsController extends Controller
     public function store(PetsRequest $request)
     {
         $data = $request->except('pet_image');
-        $data['breed_id']=$request->breed;
+        $data['breed_id'] = $request->breed;
 
-        if($request->age == NULL) {
+        if ($request->age == NULL) {
             // Calcular la edad de la mascota
             $data['age'] = $this->calculateAge($data['date_of_birth']);
         }
@@ -302,7 +297,7 @@ class PetsController extends Controller
 
         storeMediaFile($query, $request->file('pet_image'), 'pet_image');
 
-        $this->module_title='pet.title';
+        $this->module_title = 'pet.title';
 
         $message = __('messages.create_form', ['form' => __($this->module_title)]);
 
@@ -367,7 +362,7 @@ class PetsController extends Controller
         // }
         $data = Pet::findOrFail($id);
 
-        $data['breed_list'] = Breed::where('pettype_id',$data['pettype_id'])->with('pettype')->get();
+        $data['breed_list'] = Breed::where('pettype_id', $data['pettype_id'])->with('pettype')->get();
 
         $data['pet_image'] = $data->pet_image;
         return response()->json(['data' => $data, 'status' => true]);
@@ -398,12 +393,12 @@ class PetsController extends Controller
 
         $query = Pet::findOrFail($id);
         $data = $request->except('pet_image');
-        $data['breed_id']=$request->breed;
+        $data['breed_id'] = $request->breed;
         $query->update($data);
 
 
         storeMediaFile($query, $request->file('pet_image'), 'pet_image');
-        $this->module_title='pet.title';
+        $this->module_title = 'pet.title';
         $message = __('messages.update_form', ['form' => __($this->module_title)]);
 
         return response()->json(['message' => $message, 'status' => true], 200);
@@ -420,17 +415,17 @@ class PetsController extends Controller
 
         $data = Pet::findOrFail($id);
 
-        $user_id=$data['user_id'];
+        $user_id = $data['user_id'];
 
         $data->delete();
 
-        $user_pet=Pet::where('user_id',$user_id)->with('breed')->get();
+        $user_pet = Pet::where('user_id', $user_id)->with('breed')->get();
 
-        $this->module_title='pet.title';
+        $this->module_title = 'pet.title';
 
         $message = __('messages.delete_form', ['form' => __($this->module_title)]);
 
-        return response()->json(['message' => $message, 'data'=>$user_pet, 'status' => true], 200);
+        return response()->json(['message' => $message, 'data' => $user_pet, 'status' => true], 200);
     }
 
     /**
@@ -454,7 +449,7 @@ class PetsController extends Controller
         $data = Pet::withTrashed()->find($id);
         $data->restore();
 
-        $message = Str::singular($this->module_title).' Data Restoreded Successfully';
+        $message = Str::singular($this->module_title) . ' Data Restoreded Successfully';
 
         return redirect('app/pets');
     }
@@ -465,40 +460,40 @@ class PetsController extends Controller
         return response()->json(['status' => true, 'message' => __('branch.status_update')]);
     }
 
-    public function user_pet_list($id){
+    public function user_pet_list($id)
+    {
 
 
-      $all_pets = Pet::with('media')->get();
+        $all_pets = Pet::with('media')->get();
 
-      $user_pet=Pet::where('user_id',$id)->with('breed')->get();
+        $user_pet = Pet::where('user_id', $id)->with('breed')->get();
 
-      $user_data=User::where('id',$id)->first();
+        $user_data = User::where('id', $id)->first();
 
-      $user=Auth::User();
+        $user = Auth::User();
 
-      $usertype = $user->user_type;
+        $usertype = $user->user_type;
 
 
-      if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker"){
+        if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
 
-          $petIds = Booking::where('employee_id', $user->id)->pluck('pet_id');
+            $petIds = Booking::where('employee_id', $user->id)->pluck('pet_id');
 
-          $user_pet = Pet::whereIn('id',$petIds)->with('breed')->get();
+            $user_pet = Pet::whereIn('id', $petIds)->with('breed')->get();
+        }
 
-         }
+        $data = [
 
-      $data=[
+            'all_pet' => $all_pets,
+            'user_pet' => $user_pet,
+            'user_name' => $user_data['first_name'] . ' ' . $user_data['last_name']
+        ];
 
-         'all_pet'=> $all_pets,
-         'user_pet'=> $user_pet,
-         'user_name'=>$user_data['first_name'].' '.$user_data['last_name']
-      ];
-
-     return response()->json(['data' => $data, 'status' => true,]);
-
+        return response()->json(['data' => $data, 'status' => true,]);
     }
 
-    public function pet_notes_list($id){
+    public function pet_notes_list($id)
+    {
 
         $user = Auth::user();
         $usertype = $user->user_type;
@@ -521,36 +516,35 @@ class PetsController extends Controller
             ->get();
 
         return response()->json(['data' => $pet_notes, 'status' => true]);
-
     }
 
-    public function add_pet_notes(Request $request){
+    public function add_pet_notes(Request $request)
+    {
 
-       $data=$request->all();
+        $data = $request->all();
 
-       $data['created_by'] = auth()->user()->id;
+        $data['created_by'] = auth()->user()->id;
 
-       PetNote::create($data);
+        PetNote::create($data);
 
-       $message = __('messages.create_pet_note');
+        $message = __('messages.create_pet_note');
 
-       return response()->json(['message' => $message, 'status' => true], 200);
-
+        return response()->json(['message' => $message, 'status' => true], 200);
     }
 
     public function delete_pet_note($id)
     {
         $data = PetNote::findOrFail($id);
 
-        $pet_id=$data->pet_id;
+        $pet_id = $data->pet_id;
 
         $data->delete();
 
-        $notes = PetNote::where('pet_id',$pet_id)->orderBy('created_at', 'desc')->get();
+        $notes = PetNote::where('pet_id', $pet_id)->orderBy('created_at', 'desc')->get();
 
         $message = __('messages.delete_notes');
 
-        return response()->json(['message' => $message, 'data'=>$notes, 'status' => true], 200);
+        return response()->json(['message' => $message, 'data' => $notes, 'status' => true], 200);
     }
 
 
@@ -591,7 +585,8 @@ class PetsController extends Controller
         }
     }
 
-    public function sharedOwner (Request $request, $id) {
+    public function sharedOwner(Request $request, $id)
+    {
         $user = $request->user;
         foreach ($user as $user_id) {
             SharedOwner::create([
@@ -603,7 +598,8 @@ class PetsController extends Controller
         return redirect()->back()->with('success', __('pet.Pet shared successfully'));
     }
 
-    public function users_and_owners (Request $request, $petId) {
+    public function users_and_owners(Request $request, $petId)
+    {
         $users = User::all();
 
         $sharedOwners = SharedOwner::where('pet_id', $petId)->pluck('user_id')->toArray();
@@ -613,5 +609,92 @@ class PetsController extends Controller
             'users' => $users,
             'sharedOwners' => $sharedOwners
         ]);
+    }
+
+    //lost pet
+    public function lostsPet()
+    {
+        $module_title = __('pet.lost_pets');
+        return view('pet::backend.pets.lost.index',  compact('module_title'));
+    }
+    public function lostPetData()
+    {
+        $query = Pet::where('lost', 1)->get();
+
+        return Datatables::of($query)
+            ->addColumn('check', function ($row) {
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
+            })
+            ->editColumn('name', function ($data) {
+                return ucfirst($data->name);
+            })
+            ->editColumn('age', function ($data) {
+                return ucfirst($data->age);
+            })
+            ->editColumn('breed_id', function ($data) {
+                return ucfirst($data->breed->name);
+            })
+            ->editColumn('user_id', function ($data) {
+                $data = $data->owner;
+                return view('pet::backend.pets.user_id', compact('data'));
+            })
+
+            ->editColumn('lost_date', function ($data) {
+                $formattedDate = Carbon::parse($data->lost_date)->format('d-m-Y');
+                return $formattedDate;
+            })
+
+            ->addColumn('action', function ($data) {
+                return view('pet::backend.pets.lost.actions', compact('data'));
+            })
+            ->rawColumns(['action', 'check'])
+
+            ->make(true);
+    }
+
+    public function lostPetStoreId(Request $request, $id)
+    {
+        try {
+            // Intenta encontrar la mascota por ID
+            $pet = Pet::findOrFail($id);
+
+            // Actualiza el estado de la mascota
+            $pet->lost = false;
+            $pet->found_data = Carbon::now();
+            $pet->save();
+
+            // Devuelve una respuesta exitosa
+            return response()->json(['status' => true, 'message' => __('messages.pets_success')]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Maneja el caso en que no se encuentra la mascota
+            return response()->json(['status' => false, 'message' => __('messages.pet_not_found')], 404);
+        } catch (\Exception $e) {
+            // Maneja cualquier otro tipo de excepción
+            return response()->json(['status' => false, 'message' => __('messages.general_error')], 500);
+        }
+    }
+
+
+    public function lostPetsStoreIds(Request $request)
+    {
+        $rowData = json_decode($request->input('rowData', '[]'), true);
+        $idsByModule = [];
+        foreach ($rowData as $data) {
+            $idsByModule[] = $data['id'];
+        }
+        $actionType = $request->action_type;
+        $message = __('messages.pets_success');
+        $foundDate = Carbon::now();
+        switch ($actionType) {
+            case 'found_pet':
+                $branches = Pet::whereIn('id', $idsByModule)->update(['lost' => false, 'found_date' => $foundDate]);
+                $message = __('messages.pets_success');
+                break;
+            default:
+                return response()->json(['status' => false, 'message' => __('branch.invalid_action')]);
+                break;
+        }
+
+        return response()->json(['status' => true, 'message' => __('messages.pets_success')]);
     }
 }

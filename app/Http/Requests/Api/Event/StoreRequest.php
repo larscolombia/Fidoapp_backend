@@ -37,7 +37,8 @@ class StoreRequest extends FormRequest
             'status' => 'required|boolean',
             'pet_id' => 'required|integer',
             'owner_id' => 'required|array',
-            'owner_id.*' => 'required|integer|exists:users,id'
+            'owner_id.*' => 'required|integer|exists:users,id',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png',
         ];
     }
 

@@ -65,4 +65,8 @@ return [
     'create' => 'Crear nueva mascota',
     'send_push_notification' => 'Enviar notificación push',
     'edit' => 'Editar',
+    'lost_pets' => 'Mascotas Perdidas',
+    'age' => 'Edad',
+    'report_date' => 'Fecha del reporte',
+    'owner' => 'Dueño',
 ];

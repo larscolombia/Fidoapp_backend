@@ -51,11 +51,12 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['web', 'au
       Route::delete('delete_pet_note/{id}', [PetsController::class, 'delete_pet_note'])->name("delete_pet_note");
       Route::get('edit_pet_note/{id}', [PetNoteController::class, 'edit'])->name("edit_pet_note");
       Route::post('update_pet_note/{id}', [PetNoteController::class, 'update'])->name("update_pet_note");
-
-        
+      Route::get('lost-pets', [PetsController::class, 'lostsPet'])->name('lost');
     });
     Route::resource("pets", PetsController::class);
-
+    Route::get('lost-pet-data', [PetsController::class, 'lostPetData'])->name('lost_pet_data');
+    Route::post('lost-pet-data', [PetsController::class, 'lostPetsStoreIds'])->name('lost_pets_store_ids');
+    Route::post('lost-pet-data/{id}', [PetsController::class, 'lostPetStoreId'])->name('lost_pet_store_id');
     Route::group(['prefix' => 'pet', 'as' => 'pet.'],function () {
         Route::group(['prefix' => '/pettype', 'as' => 'pettype.'],function () {
             Route::get("index_list", [PettypeController::class, 'index_list'])->name("index_list");
@@ -77,7 +78,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['web', 'au
             Route::patch("breed_list/{id}", [BreedController::class, 'breed_list'])->name("breed_list");
         });
         Route::resource("breed", BreedController::class);
-        
+
     });
 });
 

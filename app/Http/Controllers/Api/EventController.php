@@ -57,6 +57,19 @@ class EventController extends Controller
             }
             $eventTime = $request->input('event_time')
                 ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+
+            if (!file_exists(public_path('images/event'))) {
+                mkdir(public_path('images/event'), 0755, true);
+            }
+            $data['image'] = null;
+             // Manejar la imagen si se proporciona
+             if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalName();
+                $image->move(public_path('images/event'), $imageName);
+                $imagePath = 'images/event/' . $imageName;
+                $data['image'] = $imagePath;
+            }
             $event = Event::create([
                 'name'        => $request->input('name'),
                 'date'        => $validatedData['date'],
@@ -68,6 +81,7 @@ class EventController extends Controller
                 'location'    => $request->input('location'),
                 'tipo'        => $request->input('tipo'),
                 'status'      => $request->input('status'),
+                'image'       => $data['image']
             ]);
 
             $ownerIds = $request->input('owner_id');
@@ -111,6 +125,21 @@ class EventController extends Controller
             }
             $eventTime = $request->input('event_time')
                 ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i:s') : null;
+
+             // Manejar la imagen si se proporciona
+             if ($request->hasFile('image')) {
+                // Eliminar la imagen anterior si existe
+                if ($event->image && file_exists(public_path($event->image))) {
+                    unlink(public_path($event->image)); // Elimina la imagen anterior
+                }
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalName();
+                $image->move(public_path('images/event'), $imageName);
+                $imagePath = 'images/event/' . $imageName;
+                $data['image'] = $imagePath;
+            }else{
+                $data['image'] = $event->image;
+            }
             $event->update([
                 'name'        => $request->input('name', $event->name),
                 'date'        => !is_null($validatedData['date']) ? $validatedData['date'] : $event->date,
@@ -120,6 +149,7 @@ class EventController extends Controller
                 'location'    => $request->input('location', $event->location),
                 'tipo'        => $request->input('tipo', $event->tipo),
                 'status'      => $request->input('status', $event->status),
+                'image'       => $data['image'],
             ]);
             if ($request->has('owner_id')) {
                 // Eliminar detalles existentes
@@ -167,15 +197,15 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::findOrFail($id);
-        $ownersEmails = [];
-
+        $owners = [];
         foreach ($event->detailEvent as $detail) {
             if ($detail->owner_id) {
                 // Buscar el usuario por ID
                 $user = User::find($detail->owner_id);
                 if ($user) {
-                    // Agregar el correo electrónico al array
-                    $ownersEmails[] = $user->email;
+                    $avatar = !is_null($user->avatar) && !empty($user->avatar) ? asset($user->avatar) : null;
+                    // Agregar el id, correo electrónico y avatar al array
+                    $owners[] = ['id'=> $user->id, 'email' => $user->email, 'avatar' => $avatar];
                 }
             }
         }
@@ -191,7 +221,7 @@ class EventController extends Controller
             'location'    => $event->location,
             'status'      => $event->status,
             'pet_id'      => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
-            'owner_ids'   => $ownersEmails
+            'owners'   => $owners
 
         ];
         return response()->json([

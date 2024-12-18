@@ -502,6 +502,7 @@ class PetController extends Controller
 
         $pet = Pet::findOrFail($data['pet_id']);
         $pet->lost = true;
+        $pet->lost_date = Carbon::now();
         $pet->save();
 
         $userIds = User::where('status', 1)->pluck('id')->toArray();

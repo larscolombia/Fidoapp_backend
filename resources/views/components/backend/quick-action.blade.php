@@ -6,5 +6,6 @@
     <input type="hidden" name="message_change-status" value="{{__('rating.message_change-status')}}">
     <input type="hidden" name="message_delete" value="{{__('rating.message_delete')}}">
     <input type="hidden" name="message_approve" value="{{__('rating.message_approve')}}">
+    <input type="hidden" name="message_found_pet" value="{{__('messages.question_found_pet')}}">
     <button class="btn btn-soft-primary" id="quick-action-apply">Aplicar</button>
 </form>

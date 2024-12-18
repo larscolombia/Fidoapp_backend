@@ -562,6 +562,15 @@ class GenerateMenus
             ]);
 
             $this->mainRoute($menu, [
+                'icon' => 'icon-pet',
+                'title' => __('menu.lost_pets'),
+                'route' => ['backend.pets.lost'],
+                'active' => ['app/pets'],
+                'permission' => 'view_owners',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
                 'icon' => ' icon-Reviews',
                 'title' => __('menu.lbl_review'),
                 'route' => ['backend.employees.review'],

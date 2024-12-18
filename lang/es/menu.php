@@ -80,8 +80,8 @@ return [
     'walking_booking_request' => 'Solicitud de Reserva',
 
     'pending_employee' => 'Profesional Pendiente',
-    'permission' => 'Permisos'
-
+    'permission' => 'Permisos',
+    'lost_pets' => 'Mascotas Perdidas',
 
 
 

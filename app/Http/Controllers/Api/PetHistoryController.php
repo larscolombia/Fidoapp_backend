@@ -118,7 +118,7 @@ class PetHistoryController extends Controller
                 'date' => 'nullable|date',
                 'report_name' => 'required|string',
                 'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png',
                 'name' => 'required|string|max:255',
                 'fecha_aplicacion' => 'required|date',
                 'fecha_refuerzo' => 'required|date|after_or_equal:fecha_aplicacion',
