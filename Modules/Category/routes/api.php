@@ -9,6 +9,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('subcategory-list', [CategoryController::class, 'subCategoryList']);
     Route::post('subcategory-detail', [CategoryController::class, 'subCategoryDetail']);
     Route::get('subcategories', [CategoryController::class, 'index_SubCategory']);
+
+    Route::get('category-list-by-type', [CategoryController::class, 'categoryListByType']);
+    Route::get('sub-category-list-by-category', [CategoryController::class, 'subCategoryListByCategory']);
 });
 ?>
 

@@ -2,18 +2,19 @@
 
 namespace Modules\Service\Http\Controllers\Backend\API;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Category\Models\Category;
 use Modules\Service\Models\Service;
+use App\Http\Controllers\Controller;
+use Modules\Category\Models\Category;
+use Modules\Service\Models\ServiceGallery;
 use Modules\Service\Models\ServiceBranches;
 use Modules\Service\Models\ServiceEmployee;
-use Modules\Service\Models\ServiceGallery;
-use Modules\Service\Transformers\ServiceResource;
 use Modules\Service\Http\Requests\ServiceRequest;
+use Modules\Service\Transformers\ServiceResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ServiceController extends Controller
-{  
+{
 
     public function store(ServiceRequest $request)
     {
@@ -23,7 +24,7 @@ class ServiceController extends Controller
         $data['type'] = $type;
 
           if(auth()->user()->hasRole('admin') && auth()->user()->hasRole('demo_admin')) {
-           
+
              $query = Service::create($data);
 
            }else{
@@ -40,11 +41,34 @@ class ServiceController extends Controller
          }
 
          storeMediaFile($query, $request->file('feature_image'));
-        
+
         $message = __('messages.create_form', ['form' => __('service.singular_title')]);
 
         return response()->json(['message' => $message, 'status' => true], 200);
     }
+
+    public function show($id)
+    {
+        try {
+            $service = Service::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'data' => $service
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Servicio no encontrado.'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error inesperado.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function update(ServiceRequest $request)
     {
@@ -212,7 +236,7 @@ class ServiceController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $service =  Service::where('status',1)->with(['category','employee']);
-      
+
         if ($request->has('category_id') && $request->category_id != '') {
             $service = $service->Where('category_id', $request->category_id);
         }
@@ -240,7 +264,7 @@ class ServiceController extends Controller
             if($request->has('service_type') && $request->service_type=='assign_by_admin') {
 
                 $service = $service->where('created_by',null);
- 
+
                 }else if($request->has('service_type') && $request->service_type=='added_by_me'){
 
                     $service = $service->where('created_by', $employee_id);
@@ -252,12 +276,12 @@ class ServiceController extends Controller
                   });
 
                }
-                               
+
            }
 
-    
+
         if ($request->has('search')) {
-            $searchTerm = $request->search; 
+            $searchTerm = $request->search;
             $service = $service->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', "%{$searchTerm}%")
                 ->orWhere('description', 'like', "%{$searchTerm}%")
@@ -329,4 +353,40 @@ class ServiceController extends Controller
 
         return response()->json($services);
     }
+
+    public function serviceListByCategory(Request $request)
+    {
+        $data = $request->validate([
+            'category_id' => ['nullable','exists:categories,id'],
+            'type' => ['nullable']
+        ]);
+
+        $service =  Service::where('status',1)->with(['category','employee']);
+
+        if ($request->has('category_id')) {
+            $service = $service->Where('category_id', $request->category_id);
+        }
+        if ($request->has('type') && $request->type != '') {
+            if ($request->type == 'veterinary') {
+                $service = $service->where(function ($query) use ($request) {
+                    $query->where('type', $request->type)
+                        ->orWhere('type', 'video-consultancy');
+                });
+            }
+             else{
+                $service = $service->Where('type', $request->type);
+             }
+         }
+
+        $service = $service->orderBy('updated_at', 'desc')->get();
+
+        $responseData = ServiceResource::collection($service);
+
+        return response()->json([
+            'status' => true,
+            'data' => $responseData,
+            'message' => __('service.service_list'),
+        ], 200);
+    }
+
 }

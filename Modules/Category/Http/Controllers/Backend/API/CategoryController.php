@@ -9,15 +9,13 @@ use Modules\Category\Transformers\CategoryResource;
 
 class CategoryController extends Controller
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function categoryList(Request $request)
     {
         $perPage = $request->input('per_page', 10);
 
-        $category =  Category::where('status',1);
+        $category =  Category::where('status', 1);
 
         if ($request->has('type') && $request->type != '') {
             if ($request->type == 'veterinary') {
@@ -37,12 +35,12 @@ class CategoryController extends Controller
         }
 
         if ($request->has('search')) {
-            $searchTerm = $request->search; 
+            $searchTerm = $request->search;
             $category = $category->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', "%{$searchTerm}%");
             });
         }
-        
+
         $category = $category->paginate($perPage);
         $categoryCollection = CategoryResource::collection($category);
 
@@ -103,6 +101,90 @@ class CategoryController extends Controller
             return response()->json(['status' => true, 'data' => $subcategories, 'message' => __('category.category_detail')]);
         } else {
             return response()->json(['status' => false, 'message' => __('category.category_notfound')]);
+        }
+    }
+
+
+    public function categoryListByType(Request $request)
+    {
+        try {
+            // Validar la entrada
+            $data = $request->validate([
+                'type' => ['required'],
+                'category_id' => ['nullable']
+            ]);
+
+            // Iniciar la consulta de categorías
+            $category = Category::where('status', 1);
+
+            // Filtrar por tipo
+            if ($request->has('type') && $data['type'] != '') {
+                if ($data['type'] == 'veterinary') {
+                    $category = $category->where(function ($query) use ($data) {
+                        $query->where('type', $data['type'])
+                            ->orWhere('type', 'video-consultancy');
+                    });
+                } else {
+                    $category = $category->where('type', $data['type']);
+                }
+            }
+
+            // Filtrar por category_id
+            if ($request->has('category_id') && $request->category_id != '') {
+                $category = $category->where('parent_id', $request->category_id);
+            } else {
+                $category = $category->whereNull('parent_id');
+            }
+
+            // Obtener las categorías
+            $category = $category->get();
+            $categoryCollection = CategoryResource::collection($category);
+
+            // Retornar la respuesta exitosa
+            return response()->json([
+                'status' => true,
+                'data' => $categoryCollection,
+                'message' => __('category.category_list'),
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejar excepciones y retornar un error
+            return response()->json([
+                'status' => false,
+                'message' => __('An error occurred: ') . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    public function subCategoryListByCategory(Request $request)
+    {
+        try {
+            // Validar la entrada
+            $data = $request->validate([
+                'category_id' => ['required', 'exists:categories,id']
+            ]);
+
+            // Obtener las subcategorías
+            $subcategories = Category::where('parent_id', $data['category_id'])->get();
+            $subcategoryCollection = CategoryResource::collection($subcategories);
+
+            // Mapear los datos de respuesta
+            $responseData = $subcategoryCollection->map(function ($item) {
+                return $item->resource->toArray(request());
+            });
+
+            // Retornar la respuesta exitosa
+            return response()->json([
+                'status' => true,
+                'data' => $responseData,
+                'message' => __('category.subcategory_list'),
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejar excepciones y retornar un error
+            return response()->json([
+                'status' => false,
+                'message' => __('An error occurred: ') . $e->getMessage(),
+            ], 500);
         }
     }
 }

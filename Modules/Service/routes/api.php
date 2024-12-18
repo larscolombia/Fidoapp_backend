@@ -28,7 +28,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('search-service', [ServiceController::class, 'searchServices']);
 
     Route::resource('service-training', ServiceTrainingController::class);
-
+    Route::get('service-list-by-category',[ServiceController::class, 'serviceListByCategory']);
 });
 
 
