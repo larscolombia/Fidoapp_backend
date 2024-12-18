@@ -52,6 +52,7 @@ class EventController extends Controller
             }
 
             return [
+                'id' => $event->id,
                 'name' => $event->name,
                 'tipo' => $event->tipo,
                 'date' => $event->date,
@@ -239,6 +240,7 @@ class EventController extends Controller
             }
         }
         $data =  [
+            'id' => $event->id,
             'name' => $event->name,
             'tipo'        => $event->tipo,
             'date'        => $event->date,

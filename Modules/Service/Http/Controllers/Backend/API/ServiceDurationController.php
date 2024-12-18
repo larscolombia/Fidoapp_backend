@@ -15,7 +15,7 @@ class ServiceDurationController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $serviceduration =  ServiceDuration::where('status',1);
-      
+
         if ($request->has('search')) {
             $serviceduration->where('type', 'like', "%{$request->search}%");
         }
@@ -26,7 +26,7 @@ class ServiceDurationController extends Controller
 
         $serviceduration = $serviceduration->paginate($perPage);
         $items = ServiceDurationResource::collection($serviceduration);
-      
+
 
         return response()->json([
             'status' => true,
@@ -34,4 +34,35 @@ class ServiceDurationController extends Controller
             'message' => __('service.duration_list'),
         ], 200);
     }
+
+    public function durationListAll(Request $request)
+    {
+
+        $serviceduration =  ServiceDuration::where('status',1);
+
+        if ($request->has('type') && $request->type != '') {
+            $serviceduration = $serviceduration->Where('type', $request->type);
+        }
+
+        $serviceduration = $serviceduration->get();
+        $items = ServiceDurationResource::collection($serviceduration);
+
+
+        return response()->json([
+            'status' => true,
+            'data' => $items,
+            'message' => __('service.duration_list'),
+        ], 200);
+    }
+
+    public function duration_price(Request $request){
+
+        $data = $request->validate([
+            'duration_id' => ['required']
+        ]);
+        $data = ServiceDuration::where('id',$data['duration'])->first();
+
+        return response()->json(['data' => $data, 'status' => true]);
+
+     }
 }

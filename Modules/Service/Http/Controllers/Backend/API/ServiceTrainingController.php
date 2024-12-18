@@ -175,4 +175,20 @@ class ServiceTrainingController extends Controller
             );
         }
     }
+
+    public function trainingListAll(Request $request)
+    {
+
+        $servicetraining =  ServiceTraining::where('status', 1);
+
+        $servicetraining = $servicetraining->get();
+        $items = ServiceTrainingResource::collection($servicetraining);
+
+        return response()->json([
+            'status' => true,
+            'data' => $items,
+            'message' => __('service.training_list'),
+        ], 200);
+    }
+
 }
