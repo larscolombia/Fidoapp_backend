@@ -2,6 +2,7 @@
 
 namespace Modules\Service\Http\Controllers\Backend\API;
 
+use App\Helpers\Functions;
 use Modules\Tax\Models\Tax;
 use Illuminate\Http\Request;
 use Modules\Service\Models\Service;
@@ -383,33 +384,40 @@ class ServiceController extends Controller
 
     public function servicePrice(Request $request)
     {
+        try {
+            // Validación de los datos de entrada
+            $data = $request->validate([
+                'service_id' => ['required', 'exists:services,id']
+            ]);
 
-        $data = $request->validate([
-            'service_id' => ['required', 'exists:services,id']
-        ]);
-        $service = Service::where('id', $data['service_id'])->first();
-        $price = $service->default_price ?? 0;
-        $servicePrice = $this->calculateTotalWithTax($price);
-        return response()->json(['data' => $servicePrice, 'status' => true]);
-    }
+            // Recuperar el servicio basado en el ID
+            $service = Service::findOrFail($data['service_id']);
 
-    private function calculateTotalWithTax(float $amount): float
-    {
-        $taxAmount = 0.0;
+            // Obtener el precio por defecto del servicio
+            $price = $service->default_price ?? 0;
 
-        // Obtener todos los impuestos desde el modelo Tax
-        $taxes = Tax::where('status', 1)->get();
+            // Calcular el precio total con impuestos
+            $servicePrice = round(Functions::calculateTotalWithTax($price), 2);
 
-        foreach ($taxes as $tax) {
-            if ($tax->type === 'fixed') {
-                $taxAmount += $tax->value;
-            } elseif ($tax->type === 'percentage') {
-                $taxAmount += ($amount * ($tax->value / 100));
-            }
+            // Calcular el impuesto
+            $tax = round(($servicePrice - $price), 2);
+
+            // Retornar la respuesta JSON
+            return response()->json([
+                'data' => [
+                    'amount' => $price,
+                    'tax' => $tax,
+                    'total_amount' => $servicePrice
+                ],
+                'status' => true
+            ]);
+        } catch (\Exception $e) {
+            // Manejo de errores: retornar un mensaje de error
+            return response()->json([
+                'message' => 'Error al obtener el precio del servicio.',
+                'error' => $e->getMessage(),
+                'status' => false
+            ], 500);
         }
-
-        // Calcular el monto total
-        $totalAmount = $amount + $taxAmount;
-        return round($totalAmount, 2);
     }
 }

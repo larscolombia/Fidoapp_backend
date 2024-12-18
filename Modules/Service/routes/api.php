@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 Route::get('duration-list', [ServiceDurationController::class, 'durationList']);
 Route::get('duration-list-all', [ServiceDurationController::class, 'durationListAll']);
+Route::get('duration-price', [ServiceDurationController::class, 'duration_price']);
 Route::get('facility-list', [ServiceFacilityController::class, 'facilityList']);
 Route::get('training-list', [ServiceTrainingController::class, 'trainingList']);
 Route::get('training-list-all', [ServiceTrainingController::class, 'trainingListAll']);
