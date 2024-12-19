@@ -43,8 +43,8 @@ class StoreRequest extends FormRequest
             // Reglas condicionales
             'service_id' => 'nullable|integer|exists:services,id',
             'category_id' => 'nullable|integer|exists:categories,id',
-            'duration_id' => 'nullable|integer|exists:durations,id',
-            'training_id' => 'nullable|integer|exists=service_training,id',
+            'duration_id' => 'nullable|integer|exists:service_duration,id',
+            'training_id' => 'nullable|integer|exists:service_training,id',
         ];
     }
 

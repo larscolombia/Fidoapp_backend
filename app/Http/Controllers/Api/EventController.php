@@ -130,17 +130,24 @@ class EventController extends Controller
 
             // Crear los detalles del evento
             $ownerIds = $request->input('owner_id');
+            $professionalId = ['employee_id' => null];
             foreach ($ownerIds as $ownerId) {
                 EventDetail::create([
                     'event_id' => $event->id,
                     'pet_id'   => $request->input('pet_id'),
                     'owner_id' => $ownerId,
                 ]);
+                $professionalUser = User::find($ownerId);
+                if($professionalUser->user_type == 'vet' || $professionalUser->user_type == 'trainer'){
+                    $professionalId = ['employee_id' => $ownerId];
+                }
             }
 
             // Reserva
             if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
                 // Llamar a bookingCreate y manejar su resultado
+
+                $request->merge($professionalId);
                 $this->bookingCreate($request, $validatedData, $event);
             }
 
@@ -206,7 +213,6 @@ class EventController extends Controller
                 'event_time'  => !is_null($eventTime) ? $eventTime : $event->event_time,
                 'description' => $request->input('description', $event->description),
                 'location'    => $request->input('location', $event->location),
-                'tipo'        => $request->input('tipo', $event->tipo),
                 'status'      => $request->input('status', $event->status),
                 'image'       => $data['image'],
             ]);
@@ -406,7 +412,7 @@ class EventController extends Controller
             'tax' => 0,
             'total_amount' => 0
         ];
-        if ($request->input('service_id')) {
+        if ($request->input('service_id') && $bookingType=='veterinary') {
             $service = Service::find($request->input('service_id'));
             $serviceController = new ServiceController();
             $response = $serviceController->servicePrice($request);
@@ -417,7 +423,7 @@ class EventController extends Controller
                 $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
             }
         }
-        if ($request->input('duration_id')) {
+        if ($request->input('duration_id') && $bookingType=='training') {
             $serviceDuration = ServiceDuration::find($request->input('duration_id'));
             $serviceDurationController = new ServiceDurationController();
             $response = $serviceDurationController->duration_price($request);
@@ -429,7 +435,7 @@ class EventController extends Controller
                 $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
             }
         }
-        if ($request->input('training_id')) {
+        if ($request->input('training_id') && $bookingType=='training') {
             $training = Service::find($request->input('training_id'));
         }
         // Crear el array de datos de la reserva
