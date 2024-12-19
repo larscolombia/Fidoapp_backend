@@ -2,13 +2,14 @@
 
 namespace Modules\Event\Models;
 
-use App\Models\BaseModel;
-use App\Models\CalendarEvent;
-use App\Models\EventDetail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use App\Models\BaseModel;
+use App\Models\EventDetail;
+use App\Models\CalendarEvent;
 use App\Models\Traits\HasSlug;
+use Modules\Booking\Models\Booking;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Event extends BaseModel
 {
@@ -65,5 +66,10 @@ class Event extends BaseModel
     public function detailEvent()
     {
         return $this->hasMany(EventDetail::class,'event_id');
+    }
+
+    public function booking()
+    {
+        return $this->hasOne(Booking::class,'event_id','id');
     }
 }

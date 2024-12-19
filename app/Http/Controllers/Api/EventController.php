@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Modules\Event\Models\Event;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Modules\Booking\Models\Booking;
 use Modules\Service\Models\Service;
 use App\Http\Controllers\Controller;
 use Modules\Service\Models\ServiceDuration;
@@ -61,8 +62,9 @@ class EventController extends Controller
                 'id' => $event->id,
                 'name' => $event->name,
                 'tipo' => $event->tipo,
-                'date' => $event->date,
-                'end_date' => $event->end_date,
+                'date'        =>  \Carbon\Carbon::parse($event->date)->format('d-m-Y'),
+                'end_date'    => \Carbon\Carbon::parse($event->end_date)->format('d-m-Y'),
+                'event_time' => \Carbon\Carbon::parse($event->event_time)->format('H:i'),
                 'slug' => $event->slug,
                 'user_id' => $event->user_id,
                 'user_email' => $event->user ? $event->user->email : null,
@@ -70,7 +72,11 @@ class EventController extends Controller
                 'location' => $event->location,
                 'status' => $event->status,
                 'pet_id' => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
-                'owners' => $owners
+                'owners' => $owners,
+                'service_id' => $event->booking->veterinary ? $event->booking->veterinary->service_id : null,
+                'category_id' => $event->booking->veterinary ? $event->booking->veterinary->category->id : null,
+                'training_id' => $event->booking->training ? $event->booking->training->training_id : null,
+                'duration_id' => $event->booking->training ? $event->booking->training->duration->id : null
             ];
         });
         return response()->json([
@@ -96,7 +102,7 @@ class EventController extends Controller
             }
 
             $eventTime = $request->input('event_time')
-                ? Carbon::createFromFormat('H:i:s', $request->input('event_time'))->format('H:i:s') : null;
+                ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i') : null;
 
             if (!file_exists(public_path('images/event'))) {
                 mkdir(public_path('images/event'), 0755, true);
@@ -138,7 +144,7 @@ class EventController extends Controller
                     'owner_id' => $ownerId,
                 ]);
                 $professionalUser = User::find($ownerId);
-                if($professionalUser->user_type == 'vet' || $professionalUser->user_type == 'trainer'){
+                if ($professionalUser->user_type == 'vet' || $professionalUser->user_type == 'trainer') {
                     $professionalId = ['employee_id' => $ownerId];
                 }
             }
@@ -190,7 +196,7 @@ class EventController extends Controller
                 $validatedData['end_date'] = null;
             }
             $eventTime = $request->input('event_time')
-                ? Carbon::createFromFormat('H:i:s', $request->input('event_time'))->format('H:i:s') : null;
+                ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i') : null;
 
             // Manejar la imagen si se proporciona
             if ($request->hasFile('image')) {
@@ -280,8 +286,9 @@ class EventController extends Controller
             'id' => $event->id,
             'name' => $event->name,
             'tipo'        => $event->tipo,
-            'date'        => $event->date,
-            'end_date'    => $event->end_date,
+            'date'        =>  \Carbon\Carbon::parse($event->date)->format('d-m-Y'),
+            'end_date'    => \Carbon\Carbon::parse($event->end_date)->format('d-m-Y'),
+            'event_time' => \Carbon\Carbon::parse($event->event_time)->format('H:i'),
             'slug'        => $event->slug,
             'user_id'     => $event->user_id,
             'user_email'  => $event->user->email,
@@ -289,7 +296,11 @@ class EventController extends Controller
             'location'    => $event->location,
             'status'      => $event->status,
             'pet_id'      => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
-            'owners'   => $owners
+            'owners'   => $owners,
+            'service_id' => $event->booking->veterinary ? $event->booking->veterinary->service_id : null,
+            'category_id' => $event->booking->veterinary ? $event->booking->veterinary->category->id : null,
+            'training_id' => $event->booking->training ? $event->booking->training->training_id : null,
+            'duration_id' => $event->booking->training ? $event->booking->training->duration->id : null
 
         ];
         return response()->json([
@@ -317,6 +328,7 @@ class EventController extends Controller
                 $eventDetail->update([
                     'confirm' => $data['confirm'] ? 'A' : 'R'
                 ]);
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Evento actualizado exitosamente',
@@ -326,6 +338,8 @@ class EventController extends Controller
                     ],
                 ]);
             }
+            //actualizar reserva
+            Booking::where('event_id', $data['event_id'])->update(['status' => $data['confirm'] ? 'confirmed' : 'rejected']);
 
             return response()->json([
                 'success' => false,
@@ -345,17 +359,20 @@ class EventController extends Controller
             $data = $request->validate([
                 'user_id' => 'required|exists:users,id',
             ]);
+
             $eventDetails = EventDetail::where('owner_id', $data['user_id'])
                 ->where('confirm', 'A')
                 ->get();
+
             $results = $eventDetails->map(function ($eventDetail) {
                 return [
                     'event_id' => $eventDetail->event->id,
                     'event_detail_id' => $eventDetail->id,
-                    'event_date' => $eventDetail->event->date,
-                    'event_end_date' => $eventDetail->event->end_date,
+                    // Formatear las fechas y la hora
+                    'event_date' => \Carbon\Carbon::parse($eventDetail->event->date)->format('d-m-Y'),
+                    'event_end_date' => \Carbon\Carbon::parse($eventDetail->event->end_date)->format('d-m-Y'),
                     'event_name' => $eventDetail->event->name,
-                    'event_time' => $eventDetail->event->event_time,
+                    'event_time' => \Carbon\Carbon::parse($eventDetail->event->event_time)->format('H:i'),
                     'pet_id' => $eventDetail->pet->id,
                     'pet_name' => $eventDetail->pet->name,
                     'pet_qr_code' => is_null($eventDetail->pet->qr_code) || empty($eventDetail->pet->qr_code) ? null : asset($eventDetail->pet->qr_code),
@@ -364,6 +381,7 @@ class EventController extends Controller
                     'user_avatar' => is_null($eventDetail->pet->user->avatar) || empty($eventDetail->pet->user->avatar) ? null : asset($eventDetail->pet->user->avatar)
                 ];
             });
+
             return response()->json([
                 'success' => true,
                 'data' => $results,
@@ -375,6 +393,7 @@ class EventController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * Eliminar un evento específico.
@@ -412,7 +431,7 @@ class EventController extends Controller
             'tax' => 0,
             'total_amount' => 0
         ];
-        if ($request->input('service_id') && $bookingType=='veterinary') {
+        if ($request->input('service_id') && $bookingType == 'veterinary') {
             $service = Service::find($request->input('service_id'));
             $serviceController = new ServiceController();
             $response = $serviceController->servicePrice($request);
@@ -423,7 +442,7 @@ class EventController extends Controller
                 $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
             }
         }
-        if ($request->input('duration_id') && $bookingType=='training') {
+        if ($request->input('duration_id') && $bookingType == 'training') {
             $serviceDuration = ServiceDuration::find($request->input('duration_id'));
             $serviceDurationController = new ServiceDurationController();
             $response = $serviceDurationController->duration_price($request);
@@ -435,7 +454,7 @@ class EventController extends Controller
                 $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
             }
         }
-        if ($request->input('training_id') && $bookingType=='training') {
+        if ($request->input('training_id') && $bookingType == 'training') {
             $training = Service::find($request->input('training_id'));
         }
         // Crear el array de datos de la reserva
@@ -451,7 +470,7 @@ class EventController extends Controller
             'service_name' => !is_null($service) ? $service->name : null,
             'reason' => $request->input('description'),
             'service_id' => !is_null($service) ? $service->id : null,
-            'duration' => $bookingType=='training' ? $serviceDuration->duration : 0,
+            'duration' => $bookingType == 'training' ? $serviceDuration->id : 0,
             'start_video_link' => null,
             'join_video_link' => null,
             'training_id' => !is_null($training) ? $training->id : null,
