@@ -139,13 +139,13 @@ class EventController extends Controller
             }
 
             // Reserva
-            // if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
-            //     // Llamar a bookingCreate y manejar su resultado
-            //     $this->bookingCreate($request, $validatedData, $event);
-            // }
+            if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
+                // Llamar a bookingCreate y manejar su resultado
+                $this->bookingCreate($request, $validatedData, $event);
+            }
 
             // Notificación
-            $this->sendNotification('event', $event, $request->input('owner_id'), $event->description);
+            $this->sendNotification('event', $event, $ownerIds, $event->description);
 
             DB::commit(); // Confirmar la transacción
 
@@ -432,7 +432,6 @@ class EventController extends Controller
         if ($request->input('training_id')) {
             $training = Service::find($request->input('training_id'));
         }
-
         // Crear el array de datos de la reserva
         $bookingData = [
             'booking_type' => $bookingType,
@@ -441,12 +440,12 @@ class EventController extends Controller
             'total_amount' => isset($serviceAmount) ? round($serviceAmount['total_amount'], 2) : 0,
             'event_id' => $event->id,
             'service_amount' => isset($serviceAmount) ? round($serviceAmount['amount'], 2) : 0,
-            'price' => !is_null($service) ? $service->default_price : 0,
+            'price' => isset($serviceAmount) ? round($serviceAmount['amount'], 2) : 0,
             'system_service_id' => !is_null($service) ? $request->input('service_id') : null,
             'service_name' => !is_null($service) ? $service->name : null,
             'reason' => $request->input('description'),
             'service_id' => !is_null($service) ? $service->id : null,
-            'duration' => !is_null($serviceDuration) ? $serviceDuration->duration : 0,
+            'duration' => $bookingType=='training' ? $serviceDuration->duration : 0,
             'start_video_link' => null,
             'join_video_link' => null,
             'training_id' => !is_null($training) ? $training->id : null,

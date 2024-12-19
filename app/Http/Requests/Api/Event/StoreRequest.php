@@ -31,7 +31,7 @@ class StoreRequest extends FormRequest
             'end_date' => 'nullable|string',
             'slug' => 'required|string|max:255|unique:events',
             'user_id' => 'required|exists:users,id',
-            'description' => 'nullable|string',
+            'description' => 'required|string|max:255',
             'location' => 'nullable|string',
             'tipo' => 'required|in:medico,entrenamiento,evento',
             'status' => 'required|boolean',
@@ -39,6 +39,12 @@ class StoreRequest extends FormRequest
             'owner_id' => 'required|array',
             'owner_id.*' => 'required|integer|exists:users,id',
             'image' => 'nullable|image|mimes:jpg,jpeg,png',
+
+            // Reglas condicionales
+            'service_id' => 'nullable|integer|exists:services,id',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'duration_id' => 'nullable|integer|exists:durations,id',
+            'training_id' => 'nullable|integer|exists=service_training,id',
         ];
     }
 
@@ -49,5 +55,26 @@ class StoreRequest extends FormRequest
             'message' => 'Error de validación',
             'errors' => $validator->errors()
         ], 422));
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $data = $validator->getData();
+
+            if ($data['tipo'] === 'medico') {
+                if (empty($data['service_id']) || empty($data['category_id'])) {
+                    $validator->errors()->add('service_id', 'El campo service_id es requerido cuando tipo es "medico".');
+                    $validator->errors()->add('category_id', 'El campo category_id es requerido cuando tipo es "medico".');
+                }
+            }
+
+            if ($data['tipo'] === 'entrenamiento') {
+                if (empty($data['duration_id']) || empty($data['training_id'])) {
+                    $validator->errors()->add('duration_id', 'El campo duration_id es requerido cuando tipo es "entrenamiento".');
+                    $validator->errors()->add('training_id', 'El campo training_id es requerido cuando tipo es "entrenamiento".');
+                }
+            }
+        });
     }
 }
