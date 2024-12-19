@@ -57,7 +57,6 @@ class EventController extends Controller
                     }
                 }
             }
-
             return [
                 'id' => $event->id,
                 'name' => $event->name,
@@ -73,10 +72,14 @@ class EventController extends Controller
                 'status' => $event->status,
                 'pet_id' => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
                 'owners' => $owners,
-                'service_id' => $event->booking->veterinary ? $event->booking->veterinary->service_id : null,
-                'category_id' => $event->booking->veterinary ? $event->booking->veterinary->category->id : null,
-                'training_id' => $event->booking->training ? $event->booking->training->training_id : null,
-                'duration_id' => $event->booking->training ? $event->booking->training->duration->id : null
+                //valores complementarios
+                'service_id' => isset($event->booking->employee_veterinary) ? $event->booking->employee_veterinary->service_id : null,
+                'category_id' => isset($event->booking->employee_veterinary) && isset($event->booking->employee_veterinary->service) ?
+                    $event->booking->employee_veterinary->service->category->id : null,
+
+                'training_id' => isset($event->booking->employee_training) ? $event->booking->employee_training->training_id : null,
+               'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null
+
             ];
         });
         return response()->json([
@@ -297,10 +300,13 @@ class EventController extends Controller
             'status'      => $event->status,
             'pet_id'      => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
             'owners'   => $owners,
-            'service_id' => $event->booking->veterinary ? $event->booking->veterinary->service_id : null,
-            'category_id' => $event->booking->veterinary ? $event->booking->veterinary->category->id : null,
-            'training_id' => $event->booking->training ? $event->booking->training->training_id : null,
-            'duration_id' => $event->booking->training ? $event->booking->training->duration->id : null
+            //valores complementarios
+            'service_id' => isset($event->booking->employee_veterinary) ? $event->booking->employee_veterinary->service_id : null,
+            'category_id' => isset($event->booking->employee_veterinary) && isset($event->booking->employee_veterinary->service) ?
+                $event->booking->employee_veterinary->service->category->id : null,
+
+            'training_id' => isset($event->booking->employee_training) ? $event->booking->employee_training->training_id : null,
+           'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null
 
         ];
         return response()->json([

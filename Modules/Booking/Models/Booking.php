@@ -23,7 +23,7 @@ class Booking extends BaseModel
 
     protected $table = 'bookings';
     protected $casts = [
-        'start_date_time' => 'datetime', 
+        'start_date_time' => 'datetime',
     ];
 
     protected $appends = ['medical_report'];
@@ -41,7 +41,7 @@ class Booking extends BaseModel
     protected function getMedicalReportAttribute()
     {
         $media = $this->getFirstMediaUrl('medical_report');
-        
+
 
         return isset($media) && ! empty($media) ? $media : default_feature_image();
     }
@@ -104,6 +104,10 @@ class Booking extends BaseModel
     {
         return $this->belongsTo(BookingTrainerMapping::class,'id','booking_id')->with('trainingtype','duration');
     }
+    public function employee_training()
+    {
+        return $this->hasOne(BookingTrainerMapping::class,'booking_id','id');
+    }
     public function daycare()
     {
         return $this->belongsTo(BookingDayCareMapping::class,'id','booking_id');
@@ -119,6 +123,10 @@ class Booking extends BaseModel
     public function veterinary()
     {
         return $this->belongsTo(BookingVeterinaryMapping::class,'id','booking_id')->with('service');
+    }
+    public function employee_veterinary()
+    {
+        return $this->hasOne(BookingVeterinaryMapping::class,'booking_id','id');
     }
     public function pet()
     {
