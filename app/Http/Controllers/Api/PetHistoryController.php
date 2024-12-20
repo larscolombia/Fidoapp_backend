@@ -255,7 +255,7 @@ class PetHistoryController extends Controller
                 'veterinarian_id' => 'sometimes|exists:users,id',
                 'detail_history_id' => 'sometimes|integer',
                 'application_date' => 'sometimes|date',
-                'medical_conditions' => 'sometimes|string',
+                // 'medical_conditions' => 'sometimes|string',
                 'test_results' => 'sometimes|string',
                 'vet_visits' => 'sometimes|integer',
                 'category' => 'sometimes|integer',
