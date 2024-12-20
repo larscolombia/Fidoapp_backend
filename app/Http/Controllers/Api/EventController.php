@@ -74,7 +74,7 @@ class EventController extends Controller
                 'owners' => $owners,
                 //valores complementarios
                 'service_id' => isset($event->booking->employee_veterinary) ? $event->booking->employee_veterinary->service_id : null,
-                'category_id' => isset($event->booking->employee_veterinary) && isset($event->booking->employee_veterinary->service) ?
+                'category_id' => isset($event->booking->employee_veterinary) && isset($event->booking->employee_veterinary->service) && isset($event->booking->employee_veterinary->service->category) ?
                     $event->booking->employee_veterinary->service->category->id : null,
 
                 'training_id' => isset($event->booking->employee_training) ? $event->booking->employee_training->training_id : null,
