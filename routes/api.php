@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\TrainerController;
 use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\Api\AntiTickController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Backend\CoinController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Auth\API\AuthController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Api\SharedOwnerController;
 use App\Http\Controllers\Api\ActivityLevelController;
 use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
-use App\Http\Controllers\Backend\API\BranchController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Backend\API\BranchController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Backend\API\AddressController;
 use App\Http\Controllers\Backend\API\SettingController;
@@ -3668,7 +3669,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * }
      */
     Route::delete('/activity-levels/{id}', [ActivityLevelController::class, 'destroy']);
-
+    //fidocoin
+    Route::get('coin', [CoinController::class, 'index']);
+    Route::post('coin', [CoinController::class, 'store']);
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
  //translations

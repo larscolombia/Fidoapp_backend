@@ -80,5 +80,7 @@ return [
     'currency_settings' => 'Configuración de Moneda',
     'commission' => 'Comisión',
     'holiday' => 'Días festivos',
-    'payment_method' => 'Métodos de pago'
+    'payment_method' => 'Métodos de pago',
+    'fidocoin' => 'FidoCoin',
+    'coin_configuration' => 'Configuración de FidoCoin',
 ];

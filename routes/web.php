@@ -1,40 +1,41 @@
 <?php
 
-use App\Http\Controllers\ActivityLevelController;
-use App\Http\Controllers\Backend\BackendController;
-use App\Http\Controllers\Backend\BackupController;
-use App\Http\Controllers\Backend\BranchController;
-use App\Http\Controllers\Backend\CustomerController;
-use App\Http\Controllers\Backend\NotificationsController;
-use App\Http\Controllers\Backend\SettingController;
-use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\ChipsController;
-use App\Http\Controllers\ClaseController;
-use App\Http\Controllers\ComandoController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\CoursePlatformConroller;
-use App\Http\Controllers\CursoPlataformaController;
-use App\Http\Controllers\DiarioController;
-use App\Http\Controllers\EBookController;
-use App\Http\Controllers\EjercicioController;
-use App\Http\Controllers\FabricanteController;
-use App\Http\Controllers\GarrapataController;
-use App\Http\Controllers\GoogleCalendarController;
-use App\Http\Controllers\HerramientaController;
-use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\QRCodeController;
-use App\Http\Controllers\ReportsController;
+use Illuminate\Support\Facades\Route;
+use App\Providers\RouteServiceProvider;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermission;
+use App\Http\Controllers\ChipsController;
+use App\Http\Controllers\ClaseController;
+use App\Http\Controllers\EBookController;
 use App\Http\Controllers\SaludController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DiarioController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VacunaController;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Route;
-use Modules\Booking\Http\Controllers\Backend\TrainingController;
+use App\Http\Controllers\ComandoController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\EjercicioController;
+use App\Http\Controllers\GarrapataController;
+use App\Http\Controllers\FabricanteController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\HerramientaController;
+use App\Http\Controllers\Backend\CoinController;
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\ActivityLevelController;
+use App\Http\Controllers\CoursePlatformConroller;
+use App\Http\Controllers\Backend\BackupController;
+use App\Http\Controllers\Backend\BranchController;
+use App\Http\Controllers\GoogleCalendarController;
+use App\Http\Controllers\Backend\BackendController;
+use App\Http\Controllers\Backend\SettingController;
+use App\Http\Controllers\CursoPlataformaController;
+use App\Http\Controllers\Backend\CustomerController;
 use Modules\Pet\Http\Controllers\Backend\PetsController;
+use App\Http\Controllers\Backend\NotificationsController;
+use Modules\Booking\Http\Controllers\Backend\TrainingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -429,5 +430,6 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('/antiparasitantes_data', [GarrapataController::class, 'antiparasitantes_data'])->name('antiparasitantes_data');
         });
         Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('antigarrapata.destroy');
+
     });
 });

@@ -124,6 +124,14 @@
               {{ $t('setting_general_page.language_settings') }}
             </router-link>
           </div>
+          <!-- coin -->
+          <div class="mb-3" @click="toggle()">
+            <router-link :to="{ name: 'Settings.fidocoin' }" class="btn btn-border"
+              ><i class="fa fa-ils" aria-hidden="true"></i>
+              {{ $t('setting_general_page.fidocoin') }}
+            </router-link>
+          </div>
+          <!--end coin-->
         </div>
       </div>
     </div>

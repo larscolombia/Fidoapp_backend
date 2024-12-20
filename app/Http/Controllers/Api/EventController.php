@@ -201,20 +201,20 @@ class EventController extends Controller
             $eventTime = $request->input('event_time')
                 ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i') : null;
 
-            // Manejar la imagen si se proporciona
-            if ($request->hasFile('image')) {
-                // Eliminar la imagen anterior si existe
-                if ($event->image && file_exists(public_path($event->image))) {
-                    unlink(public_path($event->image)); // Elimina la imagen anterior
-                }
-                $image = $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalName();
-                $image->move(public_path('images/event'), $imageName);
-                $imagePath = 'images/event/' . $imageName;
-                $data['image'] = $imagePath;
-            } else {
-                $data['image'] = $event->image;
-            }
+            // // Manejar la imagen si se proporciona
+            // if ($request->hasFile('image')) {
+            //     // Eliminar la imagen anterior si existe
+            //     if ($event->image && file_exists(public_path($event->image))) {
+            //         unlink(public_path($event->image)); // Elimina la imagen anterior
+            //     }
+            //     $image = $request->file('image');
+            //     $imageName = time() . '.' . $image->getClientOriginalName();
+            //     $image->move(public_path('images/event'), $imageName);
+            //     $imagePath = 'images/event/' . $imageName;
+            //     $data['image'] = $imagePath;
+            // } else {
+            //     $data['image'] = $event->image;
+            // }
             $event->update([
                 'name'        => $request->input('name', $event->name),
                 'date'        => !is_null($validatedData['date']) ? $validatedData['date'] : $event->date,
@@ -223,7 +223,6 @@ class EventController extends Controller
                 'description' => $request->input('description', $event->description),
                 'location'    => $request->input('location', $event->location),
                 'status'      => $request->input('status', $event->status),
-                'image'       => $data['image'],
             ]);
             if ($request->has('owner_id')) {
                 // Eliminar detalles existentes

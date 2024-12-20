@@ -24,6 +24,7 @@ import QuickBooking from '@/Setting/SectionPages/QuickBooking.vue'
 import BookingConfiguration from '@/Setting/SectionPages/BookingConfiguration.vue'
 import InvoiceSetting from '@/Setting/SectionPages/InvoiceSetting.vue'
 import OtherSetting from '@/Setting/SectionPages/OtherSetting.vue'
+import FidoCoin from '@/Setting/SectionPages/FidoCoin.vue'
 
 const routes = [
   {
@@ -156,6 +157,12 @@ const routes = [
         name: 'Settings.other-settings',
         meta: {permission: 'setting_menu_builder'},
         component: OtherSetting
+      },
+      {
+        path: 'fidocoin',
+        name: 'Settings.fidocoin',
+        meta: {permission: 'setting_menu_builder'},
+        component: FidoCoin
       }
     ]
   }
