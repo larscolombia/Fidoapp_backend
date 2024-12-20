@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\PetHistory;
+use App\Trait\Notification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Trait\Notification;
+
 class PetHistoryController extends Controller
 {
     use Notification;
@@ -115,7 +117,7 @@ class PetHistoryController extends Controller
                 'test_results' => 'nullable|string',
                 'vet_visits' => 'nullable|integer',
                 'category' => 'nullable|integer',
-                'date' => 'nullable|date',
+                'date' => 'nullable|string',
                 'report_name' => 'required|string',
                 'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png',
@@ -127,7 +129,11 @@ class PetHistoryController extends Controller
             ]);
             $request->merge(['method' => 'store']);
             $data = $request->all();
-
+            try {
+                $data['date'] = Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $data['date'] = Carbon::now()->format('Y-m-d');
+            }
             // Asignar IDs según el tipo de reporte
             if (isset($data['report_type'])) {
                 if ($data['report_type'] === 1) {
@@ -166,8 +172,8 @@ class PetHistoryController extends Controller
             // Crear el historial con los datos procesados
             $history = PetHistory::create($data);
             //notify
-            $this->sendNotification('pet_histories',$history,[$request->input('veterinarian_id')],__('pet.pet_history_create'));
-           // $this->sendNotification('history',$history,'history');
+            $this->sendNotification('pet_histories', $history, [$request->input('veterinarian_id')], __('pet.pet_history_create'));
+            // $this->sendNotification('history',$history,'history');
             return response()->json([
                 'success' => true,
                 'data' => $history
@@ -274,6 +280,15 @@ class PetHistoryController extends Controller
             // Obtener todos los datos del request
             $request->merge(['method' => 'update']);
             $data = $request->all();
+            if (isset($data['date'])) {
+                try {
+                    $data['date'] = Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    $data['date'] = Carbon::now()->format('Y-m-d');
+                }
+            }
+
+
             if (isset($data['report_type']) && isset($data['detail_history_id'])) {
                 if ($data['report_type'] === 1) {
                     $data['vacuna_id'] = $this->createReportType($data);
@@ -293,7 +308,7 @@ class PetHistoryController extends Controller
                 $file->move(public_path('files/pet_histories'), $fileName);
                 $filePath = 'files/pet_histories/' . $fileName;
                 $data['file'] = 'pet_histories/' . $filePath;
-            }else{
+            } else {
                 $data['file'] = $history->file;
             }
 
@@ -308,30 +323,30 @@ class PetHistoryController extends Controller
                 $image->move(public_path('images/pet_histories'), $imageName);
                 $imagePath = 'images/pet_histories/' . $imageName;
                 $data['image'] = $imagePath;
-            }else{
+            } else {
                 $data['image'] = $history->image;
             }
 
 
             $history->update(
-               [
-                    'pet_id' => $request->input('pet_id',$history->pet_id),
-                    'report_type' => $request->input('report_type',$history->report_type),
-                    'veterinarian_id' => $request->input('veterinarian_id',$history->veterinarian_id),
+                [
+                    'pet_id' => $request->input('pet_id', $history->pet_id),
+                    'report_type' => $request->input('report_type', $history->report_type),
+                    'veterinarian_id' => $request->input('veterinarian_id', $history->veterinarian_id),
                     'antigarrapata_id' => isset($data['antigarrapata_id']) ? $data['antigarrapata_id'] : $history->antigarrapata_id,
                     'vacuna_id' => isset($data['vacuna_id']) ? $data['vacuna_id'] : $history->vacuna_id,
                     'antidesparasitante_id' => isset($data['antidesparasitante_id']) ? $data['antidesparasitante_id'] : $history->antidesparasitante_id,
-                    'application_date' => $request->input('application_date',$history->application_date),
-                    'medical_conditions' => $request->input('medical_conditions',$history->medical_conditions),
-                    'test_results' => $request->input('test_results',$history->test_results),
-                    'vet_visits' => $request->input('vet_visits',$history->vet_visits),
-                    'category' => $request->input('category',$history->category),
-                    'name' => $request->input('report_name',$history->name),
+                    'application_date' => $request->input('application_date', $history->application_date),
+                    'medical_conditions' => $request->input('medical_conditions', $history->medical_conditions),
+                    'test_results' => $request->input('test_results', $history->test_results),
+                    'vet_visits' => $request->input('vet_visits', $history->vet_visits),
+                    'category' => $request->input('category', $history->category),
+                    'name' => $request->input('report_name', $history->name),
                     'file' => $data['file'],
                     'image' => $data['image'],
                 ]
             );
-            $this->sendNotification('pet_histories',$history,[$request->input('veterinarian_id')],__('pet.pet_history_update'));
+            $this->sendNotification('pet_histories', $history, [$request->input('veterinarian_id')], __('pet.pet_history_update'));
             return response()->json([
                 'success' => true,
                 'data' => $history
@@ -350,43 +365,43 @@ class PetHistoryController extends Controller
             $data = $request->validate([
                 'pet_id' => 'required|exists:pets,id',
             ]);
-            $histories = PetHistory::where('pet_id',$data['pet_id'])
+            $histories = PetHistory::where('pet_id', $data['pet_id'])
                 ->get();
-               // Usar map para transformar los datos
-        $responseHistories = $histories->map(function ($history) {
-            $reportData = $this->getReportData($history); // Asumiendo que esta función existe
+            // Usar map para transformar los datos
+            $responseHistories = $histories->map(function ($history) {
+                $reportData = $this->getReportData($history); // Asumiendo que esta función existe
 
-            return [
-                'report_id' => $history->id,
-                'report_name' => $history->name,
-                'report_type' =>  $reportData['report_type'],
-                'application_date' => $history->application_date ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : null,
-                'pet_id' => $history->pet->id,
-                'pet_name' => $history->pet->name,
-                'category_id' => $history->category,
-                'owner_id' => $history->pet->owner->id,
-                'owner_name' => $history->pet->owner->full_name,
-                'owner_avatar' => !is_null($history->pet->owner->avatar) && !empty($history->pet->owner->avatar) ? asset($history->pet->owner->avatar) : null,
-                'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
-                'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] : null,
-                'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] : null,
-                'fecha_aplicacion' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_aplicacion'])
-                    ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_aplicacion'])->format('d-m-Y')
-                    : null,
-                'fecha_refuerzo' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_refuerzo'])
-                    ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_refuerzo'])->format('d-m-Y')
-                    : null,
-                'weight' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['weight']) ? $reportData['detail_type']['weight'] : null,
-                'notes' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['notes'])  ? $reportData['detail_type']['notes'] : null,
-                'veterinarian_id' => $history->veterinarian->id,
-                'veterinarian_name' => $history->veterinarian->full_name,
-                'medical_conditions' => $history->medical_conditions,
-                'test_results' => $history->test_results,
-                'vet_visits' => $history->vet_visits,
-                'file' => !is_null($history->file) ? asset($history->file) : null,
-                'image' => !is_null($history->image) ? asset($history->image) : null
-            ];
-        });
+                return [
+                    'report_id' => $history->id,
+                    'report_name' => $history->name,
+                    'report_type' =>  $reportData['report_type'],
+                    'application_date' => $history->application_date ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : null,
+                    'pet_id' => $history->pet->id,
+                    'pet_name' => $history->pet->name,
+                    'category_id' => $history->category,
+                    'owner_id' => $history->pet->owner->id,
+                    'owner_name' => $history->pet->owner->full_name,
+                    'owner_avatar' => !is_null($history->pet->owner->avatar) && !empty($history->pet->owner->avatar) ? asset($history->pet->owner->avatar) : null,
+                    'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
+                    'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] : null,
+                    'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] : null,
+                    'fecha_aplicacion' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_aplicacion'])
+                        ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_aplicacion'])->format('d-m-Y')
+                        : null,
+                    'fecha_refuerzo' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['fecha_refuerzo'])
+                        ? \Carbon\Carbon::parse($reportData['detail_type']['fecha_refuerzo'])->format('d-m-Y')
+                        : null,
+                    'weight' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['weight']) ? $reportData['detail_type']['weight'] : null,
+                    'notes' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['notes'])  ? $reportData['detail_type']['notes'] : null,
+                    'veterinarian_id' => $history->veterinarian->id,
+                    'veterinarian_name' => $history->veterinarian->full_name,
+                    'medical_conditions' => $history->medical_conditions,
+                    'test_results' => $history->test_results,
+                    'vet_visits' => $history->vet_visits,
+                    'file' => !is_null($history->file) ? asset($history->file) : null,
+                    'image' => !is_null($history->image) ? asset($history->image) : null
+                ];
+            });
             return response()->json([
                 'success' => true,
                 'data' => $responseHistories
