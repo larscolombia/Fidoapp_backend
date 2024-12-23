@@ -78,7 +78,8 @@ class EventController extends Controller
                     $event->booking->employee_veterinary->service->category->id : null,
 
                 'training_id' => isset($event->booking->employee_training) ? $event->booking->employee_training->training_id : null,
-               'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null
+               'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null,
+               'image' => isset($event->image) ? asset($event->image) : null
 
             ];
         });
@@ -305,7 +306,8 @@ class EventController extends Controller
                 $event->booking->employee_veterinary->service->category->id : null,
 
             'training_id' => isset($event->booking->employee_training) ? $event->booking->employee_training->training_id : null,
-           'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null
+           'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null,
+           'image' => isset($event->image) ? asset($event->image) : null
 
         ];
         return response()->json([
