@@ -62,6 +62,7 @@ class PetHistoryController extends Controller
                     'veterinarian_id' => $history->veterinarian->id,
                     'veterinarian_name' => $history->veterinarian->full_name,
                     //filtrato tipo de reporte
+                    'category' => isset($history->category_rel) ? $history->category_rel->id : null,
                     'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
                     'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] : null,
                     'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] : null,
@@ -174,7 +175,7 @@ class PetHistoryController extends Controller
             // Crear el historial con los datos procesados
             $history = PetHistory::create($data);
             //notify
-            $this->sendNotification('pet_histories', $history, [$request->input('veterinarian_id')], __('pet.pet_history_create'));
+            //$this->sendNotification('pet_histories', $history, [$request->input('veterinarian_id')], __('pet.pet_history_create'));
             // $this->sendNotification('history',$history,'history');
             return response()->json([
                 'success' => true,
@@ -212,6 +213,7 @@ class PetHistoryController extends Controller
             'owner_id' => $history->pet->owner->id,
             'owner_name' => $history->pet->owner->full_name,
             'owner_avatar' => !is_null($history->pet->owner->avatar) && !empty($history->pet->owner->avatar) ? asset($history->pet->owner->avatar) : null,
+            'category' => isset($history->category_rel) ? $history->category_rel->id : null,
             'category_name' => isset($history->category_rel) && !is_null($history->category_rel) ? $history->category_rel->name : null,
             'detail_history_id' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['id']) ? $reportData['detail_type']['id'] : null,
             'detail_history_name' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['name']) ? $reportData['detail_type']['name'] : null,
@@ -350,7 +352,7 @@ class PetHistoryController extends Controller
                     'image' => $data['image'],
                 ]
             );
-            $this->sendNotification('pet_histories', $history, [$request->input('veterinarian_id')], __('pet.pet_history_update'));
+            //$this->sendNotification('pet_histories', $history, [$request->input('veterinarian_id')], __('pet.pet_history_update'));
             return response()->json([
                 'success' => true,
                 'data' => $history
