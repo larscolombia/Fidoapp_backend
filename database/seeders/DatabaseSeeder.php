@@ -63,5 +63,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(ProductVariationsTableSeeder::class);
         // $this->call(ProductVariationCombinationsTableSeeder::class);
         // $this->call(ProductVariationStocksTableSeeder::class);
+
+        //cargar wallet
+        $this->call(WalletSeeder::class);
     }
 }

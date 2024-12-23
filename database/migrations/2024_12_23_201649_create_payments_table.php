@@ -13,7 +13,6 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
             Schema::create('payments', function (Blueprint $table) {
                 $table->increments('id');
                 $table->double('amount', 10, 2)->default(0);
@@ -21,10 +20,7 @@ return new class extends Migration
                 $table->bigInteger('user_id')->unsigned();
                 $table->integer('payment_method_id')->unsigned();
                 $table->timestamps();
-                $table->foreign('user_id')->references('id')->on('users');
-                $table->foreign('payment_method_id')->references('id')->on('settings');
             });
-        });
     }
 
     /**
