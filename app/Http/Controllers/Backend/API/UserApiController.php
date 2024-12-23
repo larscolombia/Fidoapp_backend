@@ -94,7 +94,8 @@ class UserApiController extends Controller
         ], 200);
     }
 
-    public function user_list_without_auth (Request $request, $user_id = null) {
+    public function user_list_without_auth(Request $request, $user_id = null)
+    {
         $term = trim($request->q);
         $role = $request->role;
 
@@ -145,5 +146,46 @@ class UserApiController extends Controller
             'data' => $data,
             'message' => __('users.user_list'),
         ], 200);
+    }
+
+    public function updateAvatar(Request $request, $id)
+    {
+        // Validación de la solicitud
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        try {
+            // Buscar al usuario por ID
+            $user = User::findOrFail($id);
+            if ($request->file('avatar')) {
+                // Eliminar la imagen anterior si existe
+                if ($user->hasMedia('profile_image')) {
+                    $user->getFirstMedia('profile_image')->delete();
+                }
+
+                // Agregar la nueva imagen a la colección de medios
+                $mediaItem = $user->addMedia($request->file('avatar'))
+                    ->toMediaCollection('profile_image');
+                $fullPath = $mediaItem->getUrl();
+                $relativePath = explode('public/', $fullPath)[1];
+                $user->avatar = $relativePath;
+                $user->save();
+                // Recargar el modelo para obtener los datos actualizados
+                $user->load('media');
+            }
+
+            // Respuesta exitosa
+            return response()->json([
+                'status' => true,
+                'data' => $user,
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejo de errores
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al actualizar el avatar: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

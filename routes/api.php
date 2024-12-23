@@ -87,6 +87,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('branch/assign/{id}', [BranchController::class, 'assign_update']);
     Route::apiResource('branch', BranchController::class);
     Route::apiResource('user', UserApiController::class);
+    Route::post('user/{id}/avatar',[UserApiController::class,'updateAvatar']);
     Route::apiResource('setting', SettingController::class);
     Route::apiResource('notification', NotificationsController::class);
     Route::get('notification-list', [NotificationsController::class, 'notificationList']);
