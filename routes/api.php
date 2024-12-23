@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ChipsController;
 use App\Http\Controllers\Api\ClaseController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\VacunaController;
+use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Api\ComandoController;
 use App\Http\Controllers\Api\TrainerController;
 use App\Http\Controllers\TranslationController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Api\HerramientaController;
 use App\Http\Controllers\Api\SharedOwnerController;
 use App\Http\Controllers\Api\ActivityLevelController;
 use App\Http\Controllers\Api\TrainingDiaryController;
-use App\Http\Controllers\Api\GoogleCalendarController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\GoogleCalendarController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Api\CursoPlataformaController;
 use App\Http\Controllers\Backend\API\AddressController;
@@ -87,7 +88,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('branch/assign/{id}', [BranchController::class, 'assign_update']);
     Route::apiResource('branch', BranchController::class);
     Route::apiResource('user', UserApiController::class);
-    Route::post('user/{id}/avatar',[UserApiController::class,'updateAvatar']);
+    Route::post('user/{id}/avatar', [UserApiController::class, 'updateAvatar']);
     Route::apiResource('setting', SettingController::class);
     Route::apiResource('notification', NotificationsController::class);
     Route::get('notification-list', [NotificationsController::class, 'notificationList']);
@@ -397,7 +398,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/pets/breed-age-info', [PetController::class, 'getAllPetsWithBreedInfo']);
 
-    Route::post('pets/update-lost',[PetController::class,'updateLost']);
+    Route::post('pets/update-lost', [PetController::class, 'updateLost']);
     /**
      * Obtener Todos los Usuarios con Información del Perfil
      * Método HTTP: GET
@@ -1587,7 +1588,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          */
         Route::delete('/{id}', [ComandoController::class, 'destroy']);
 
-  /**
+        /**
          * Crear un nuevo comando.
          * Método HTTP: POST
          * Ruta: /api/comandos/command-by-user
@@ -1620,8 +1621,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     }
          * }
          */
-        Route::post('command-by-user',[ComandoController::class,'storeCommandUser']);
-   /**
+        Route::post('command-by-user', [ComandoController::class, 'storeCommandUser']);
+        /**
          * Actualizar un comando por ID.
          * Método HTTP: PUT
          * Ruta: /api/comandos/comamand-by-user/update/{id}
@@ -1655,8 +1656,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     }
          * }
          */
-        Route::put('comamand-by-user/update/{id}',[ComandoController::class,'updateCommandUser']);
-            /**
+        Route::put('comamand-by-user/update/{id}', [ComandoController::class, 'updateCommandUser']);
+        /**
          * Mostrar comandos por mascota.
          * Método HTTP: GET
          * Ruta: /api/comandos/commands-by-user/get
@@ -1680,10 +1681,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
          *     }
          * }
          */
-        Route::get('commands-by-user/get',[ComandoController::class,'getCommandByUser']);
-        Route::get('commands-by-user/get-category-commands',[ComandoController::class,'getCategoryCommand']);
+        Route::get('commands-by-user/get', [ComandoController::class, 'getCommandByUser']);
+        Route::get('commands-by-user/get-category-commands', [ComandoController::class, 'getCategoryCommand']);
 
-        Route::put('commands-by-user/setLearned',[ComandoController::class,'setLearned']);
+        Route::put('commands-by-user/setLearned', [ComandoController::class, 'setLearned']);
     });
 
 
@@ -3673,7 +3674,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //fidocoin
     Route::get('coin', [CoinController::class, 'index']);
     Route::post('coin', [CoinController::class, 'store']);
+
+    // Obtener información de la wallet del usuario autenticado
+    Route::get('wallet', [WalletController::class, 'index']);
+
+    // Depositar fondos en la wallet
+    Route::post('/wallet/deposit', [WalletController::class, 'deposit']);
+
+    // Retirar fondos de la wallet
+    Route::post('/wallet/withdraw', [WalletController::class, 'withdraw']);
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
- //translations
- Route::get('/translations', [TranslationController::class, 'index']);
+//translations
+Route::get('/translations', [TranslationController::class, 'index']);
