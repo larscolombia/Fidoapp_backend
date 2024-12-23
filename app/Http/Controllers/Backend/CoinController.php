@@ -19,7 +19,6 @@ class CoinController extends Controller
 
     public function store(Request $request)
     {
-        Log::info($request->all());
         // Validar los datos entrantes
         $data = $request->validate([
             'symbol' => 'required|string|max:10',
