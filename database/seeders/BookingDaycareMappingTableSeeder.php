@@ -14,24 +14,24 @@ class BookingDaycareMappingTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('booking_daycare_mapping')->delete();
-        
-        \DB::table('booking_daycare_mapping')->insert(array (
-            0 => 
-            array (
+
+        \DB::table('booking_daycare_mapping')->insert(array(
+            0 =>
+            array(
                 'id' => 1,
                 'booking_id' => 50,
                 'date' => '2023-08-27 00:00:00',
                 'dropoff_time' => '08:30:00',
                 'pickup_time' => '22:20:00',
-                'food' => 'Wet Food, Salmon, Chicken, Tuna, Temptations Treats',
-                'activity' => 'Play with Toys, Bird Watching, Napping in Cozy Spots, Cuddling with Humans',
+                'food' => 'Comida Húmeda, Salmón, Pollo, Atún, Golosinas Temptations',
+                'activity' => 'Jugar con Juguetes, Observar Aves, Dormitar en Lugares Acogedores, Acurrucarse con Humanos',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -40,19 +40,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 14:17:53',
                 'deleted_at' => NULL,
             ),
-            1 => 
-            array (
+            1 =>
+            array(
                 'id' => 2,
                 'booking_id' => 51,
                 'date' => '2023-08-02 00:00:00',
                 'dropoff_time' => '07:20:00',
                 'pickup_time' => '19:35:00',
-                'food' => 'Kibble, Chicken, Carrots, Peanut Butter, Cheese',
-                'activity' => 'Fetch, Sniffing Around, Playing with Toys, Running, Belly Rubs',
+                'food' => 'Croquetas, Pollo, Zanahorias, Mantequilla de Maní, Queso',
+                'activity' => 'Buscar, Olfatear, Jugar con Juguetes, Correr, Masajes en la Barriga',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -61,19 +61,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 14:18:53',
                 'deleted_at' => NULL,
             ),
-            2 => 
-            array (
+            2 =>
+            array(
                 'id' => 3,
                 'booking_id' => 52,
                 'date' => '2023-08-03 00:00:00',
                 'dropoff_time' => '09:10:00',
                 'pickup_time' => '22:45:00',
-                'food' => 'Fruits, Nuts, Seeds, Vegetables, Pellets',
-                'activity' => 'Chewing, Playing, Talking and Mimicking, Bathing, Social Interaction,',
+                'food' => 'Frutas, Nueces, Semillas, Verduras, Pellets',
+                'activity' => 'Masticar, Jugar, Hablar y Imitar, Bañarse, Interacción Social',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -82,19 +82,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 14:20:02',
                 'deleted_at' => NULL,
             ),
-            3 => 
-            array (
+            3 =>
+            array(
                 'id' => 4,
                 'booking_id' => 53,
                 'date' => '2023-08-04 00:00:00',
                 'dropoff_time' => '07:55:00',
                 'pickup_time' => '23:30:00',
-                'food' => 'Bloodworms, Brine Shrimp, Daphnia, Pellets',
-                'activity' => 'Exploring, Flaring, Building Bubble Nests, Swimming Through Plants',
+                'food' => 'Lombrices de Sangre, Camarones de Salmuera, Dafnias, Pellets',
+                'activity' => 'Explorar, Inflar a Color, Construir Nidos de Burbuja, Nadar Entre Plantas',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -103,19 +103,20 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 14:21:01',
                 'deleted_at' => NULL,
             ),
-            4 => 
-            array (
+
+            4 =>
+            array(
                 'id' => 5,
                 'booking_id' => 54,
                 'date' => '2023-08-21 00:00:00',
                 'dropoff_time' => '08:20:00',
                 'pickup_time' => '20:15:00',
-                'food' => 'Fruits, Seeds, Nuts, Vegetables, Grains',
-                'activity' => 'Running, Climbing, Exploring, Chewing, Socializing',
+                'food' => 'Frutas, Semillas, Nueces, Verduras, Granos',
+                'activity' => 'Correr, Trepar, Explorar, Masticar, Socializar',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -124,19 +125,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 14:22:00',
                 'deleted_at' => NULL,
             ),
-            5 => 
-            array (
+            5 =>
+            array(
                 'id' => 6,
                 'booking_id' => 55,
                 'date' => '2023-08-31 00:00:00',
                 'dropoff_time' => '07:05:00',
                 'pickup_time' => '22:45:00',
-                'food' => 'Insects, Worms, Crickets, Grasshoppers',
-                'activity' => 'Climbing, Camouflaging, Sunbathing, Tongue Flicking',
+                'food' => 'Insectos, Lombrices, Grillos, Saltamontes',
+                'activity' => 'Trepar, Camuflarse, Tomar el Sol, Movimientos de Lengua',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -145,19 +146,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 14:23:08',
                 'deleted_at' => NULL,
             ),
-            6 => 
-            array (
+            6 =>
+            array(
                 'id' => 7,
                 'booking_id' => 58,
                 'date' => '2023-08-17 00:00:00',
                 'dropoff_time' => '09:35:00',
                 'pickup_time' => '22:35:00',
-                'food' => 'Carrots, apples, oats, and fresh grass',
-                'activity' => 'Racing, jumping, and competitive events',
+                'food' => 'Zanahorias, manzanas, avena y hierba fresca',
+                'activity' => 'Carreras, saltos y eventos competitivos',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -166,19 +167,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-02 05:47:41',
                 'deleted_at' => NULL,
             ),
-            7 => 
-            array (
+            7 =>
+            array(
                 'id' => 8,
                 'booking_id' => 59,
                 'date' => '2023-08-30 00:00:00',
                 'dropoff_time' => '07:55:00',
                 'pickup_time' => '23:15:00',
-                'food' => 'High-quality canned tuna or salmon, chicken liver',
-                'activity' => 'Lounging in sunbeams',
+                'food' => 'Atún o salmón enlatado de alta calidad, hígado de pollo',
+                'activity' => 'Descansar en los rayos del sol',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -187,19 +188,20 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-02 05:48:37',
                 'deleted_at' => NULL,
             ),
-            8 => 
-            array (
+
+            8 =>
+            array(
                 'id' => 9,
                 'booking_id' => 60,
                 'date' => '2023-08-20 00:00:00',
                 'dropoff_time' => '09:05:00',
                 'pickup_time' => '22:20:00',
-                'food' => 'Tasty and nutritious chicken!',
-                'activity' => 'Fetching balls and playing catch!',
+                'food' => '¡Pollo sabroso y nutritivo!',
+                'activity' => '¡Recoger pelotas y jugar a atrapar!',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -208,19 +210,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-02 05:49:43',
                 'deleted_at' => NULL,
             ),
-            9 => 
-            array (
+            9 =>
+            array(
                 'id' => 10,
                 'booking_id' => 66,
                 'date' => '2023-08-28 00:00:00',
                 'dropoff_time' => '06:30:00',
                 'pickup_time' => '21:30:00',
-                'food' => 'Seeds, Fruits, Nuts, Leafy Greens, Berries, Grains, Pellets, Vegetables, Treats',
-                'activity' => 'Exploring, Chirping, Talking, Feather Preening, Puzzle Solving, Playful Interactions, Climbing, Eating, Sunbathing',
+                'food' => 'Semillas, Frutas, Nueces, Verduras de Hoja, Bayas, Granos, Pellets, Verduras, Golosinas',
+                'activity' => 'Explorar, Cantar, Hablar, Acicalarse las Plumas, Resolver Rompecabezas, Interacciones Juguetonas, Trepar, Comer, Tomar el Sol',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -229,19 +231,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 06:56:54',
                 'deleted_at' => NULL,
             ),
-            10 => 
-            array (
+            10 =>
+            array(
                 'id' => 11,
                 'booking_id' => 67,
                 'date' => '2023-08-27 00:00:00',
                 'dropoff_time' => '06:25:00',
                 'pickup_time' => '21:15:00',
-                'food' => 'Nutritious Pellets, Fresh Fruits, Leafy Greens',
-                'activity' => 'Perching, Foraging, Gentle Play, Observing Household Happenings',
+                'food' => 'Pellets nutritivos, Frutas frescas, Verduras de hoja',
+                'activity' => 'Posarse, Buscar comida, Juego suave, Observar lo que sucede en el hogar',
                 'address' => '"123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512"',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512"',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -250,19 +252,19 @@ Postal Code: 544512"',
                 'updated_at' => '2023-08-26 06:59:41',
                 'deleted_at' => NULL,
             ),
-            11 => 
-            array (
+            11 =>
+            array(
                 'id' => 12,
                 'booking_id' => 68,
                 'date' => '2023-08-31 00:00:00',
                 'dropoff_time' => '10:40:00',
                 'pickup_time' => '22:40:00',
-                'food' => 'Nutritious Pellets, Fresh Fruits, Leafy Greens',
-                'activity' => 'Perching, Foraging, Gentle Play, Observing Household Happenings',
+                'food' => 'Pellets nutritivos, Frutas frescas, Verduras de hoja',
+                'activity' => 'Posarse, Buscar comida, Juego suave, Observar lo que sucede en el hogar',
                 'address' => '"123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512"',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512"',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -271,19 +273,19 @@ Postal Code: 544512"',
                 'updated_at' => '2023-08-26 07:00:50',
                 'deleted_at' => NULL,
             ),
-            12 => 
-            array (
+            12 =>
+            array(
                 'id' => 13,
                 'booking_id' => 69,
                 'date' => '2023-09-08 00:00:00',
                 'dropoff_time' => '08:30:00',
                 'pickup_time' => '20:20:00',
-                'food' => 'Nutritious Pellets, Fresh Fruits, Leafy Greens',
-                'activity' => 'Gentle Play, Observing Household Happenings',
+                'food' => 'Pellets nutritivos, Frutas frescas, Verduras de hoja',
+                'activity' => 'Juego suave, Observar lo que sucede en el hogar',
                 'address' => '"123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512"',
+                Reino Unido,
+                Plaza Central, Londres
+                Código Postal: 544512"',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -292,19 +294,19 @@ Postal Code: 544512"',
                 'updated_at' => '2023-08-26 07:01:50',
                 'deleted_at' => NULL,
             ),
-            13 => 
-            array (
+            13 =>
+            array(
                 'id' => 14,
                 'booking_id' => 73,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '07:30:00',
                 'pickup_time' => '18:20:00',
-                'food' => 'Fruits, Nuts',
-                'activity' => 'Tunneling, Climbing, Grooming, Snacking, Playful Scurrying',
+                'food' => 'Frutas, Nueces',
+                'activity' => 'Cavar túneles, Trepar, Acicalarse, Picoteo, Correr juguetonamente',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -313,19 +315,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 07:15:55',
                 'deleted_at' => NULL,
             ),
-            14 => 
-            array (
+            14 =>
+            array(
                 'id' => 15,
                 'booking_id' => 74,
                 'date' => '2023-09-02 00:00:00',
                 'dropoff_time' => '10:25:00',
                 'pickup_time' => '23:30:00',
-                'food' => 'Fresh Fruits, Seeds, Millet Treats',
-                'activity' => 'Cuddling, Chirping, Nesting, Mirror Play, Social Bonding',
+                'food' => 'Frutas frescas, Semillas, Golosinas de Mijo',
+                'activity' => 'Acurrucarse, Cantar, Anidar, Jugar con el espejo, Vínculo social',
                 'address' => '"123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512"',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512"',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -334,19 +336,19 @@ Postal Code: 544512"',
                 'updated_at' => '2023-08-26 07:17:33',
                 'deleted_at' => NULL,
             ),
-            15 => 
-            array (
+            15 =>
+            array(
                 'id' => 16,
                 'booking_id' => 89,
                 'date' => '2023-08-27 00:00:00',
                 'dropoff_time' => '20:30:00',
                 'pickup_time' => '05:30:00',
-                'food' => 'Blood worms and Brine Shrimp',
-                'activity' => 'Darting among plants, Exploring underwater hideouts',
+                'food' => 'Lombrices de sangre y camarones de salmuera',
+                'activity' => 'Nadar entre plantas, Explorar escondites submarinos',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -355,19 +357,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 07:40:42',
                 'deleted_at' => NULL,
             ),
-            16 => 
-            array (
+            16 =>
+            array(
                 'id' => 17,
                 'booking_id' => 90,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '19:30:00',
                 'pickup_time' => '10:40:00',
-                'food' => 'Micro Pellets, Brine Shrimp, Daphnia',
-                'activity' => 'Schooling, Gliding Among Plants',
+                'food' => 'Micro Pellets, Camarones de Salmuera, Dafnias',
+                'activity' => 'Agrupamiento, Deslizarse entre plantas',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+            Reino Unido,
+            Plaza Central, Londres
+            Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -376,19 +378,20 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 07:42:07',
                 'deleted_at' => NULL,
             ),
-            17 => 
-            array (
+
+            17 =>
+            array(
                 'id' => 18,
                 'booking_id' => 98,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '21:30:00',
                 'pickup_time' => '17:05:00',
-                'food' => 'Tender Salmon',
-                'activity' => 'Pouncing, Gazing Out Windows, Napping, Cuddling, Playful Hunting',
+                'food' => 'Salmón tierno',
+                'activity' => 'Saltos, Mirando por las ventanas, Durmiendo, Acurrucándose, Caza juguetona',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -397,19 +400,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 08:10:53',
                 'deleted_at' => NULL,
             ),
-            18 => 
-            array (
+            18 =>
+            array(
                 'id' => 19,
                 'booking_id' => 105,
                 'date' => '2023-08-27 00:00:00',
                 'dropoff_time' => '05:20:00',
                 'pickup_time' => '21:35:00',
-                'food' => 'Fresh Fruit Medley',
-                'activity' => 'Chirping Conversations, Nest Building, Colorful Toy Play, Climbing, Socializing',
+                'food' => 'Ensalada de frutas frescas',
+                'activity' => 'Conversaciones trinos, Construcción de nidos, Juego con juguetes coloridos, Escalada, Socializando',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -418,19 +421,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 09:14:16',
                 'deleted_at' => NULL,
             ),
-            19 => 
-            array (
+            19 =>
+            array(
                 'id' => 20,
                 'booking_id' => 112,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '07:20:00',
                 'pickup_time' => '21:35:00',
-                'food' => 'Gut-loaded Crickets',
+                'food' => 'Grillos cargados de nutrientes',
                 'activity' => NULL,
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -439,19 +442,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 09:38:49',
                 'deleted_at' => NULL,
             ),
-            20 => 
-            array (
+            20 =>
+            array(
                 'id' => 21,
                 'booking_id' => 118,
                 'date' => '2023-08-27 00:00:00',
                 'dropoff_time' => '07:30:00',
                 'pickup_time' => '19:55:00',
-                'food' => 'Acorns and Nuts',
-                'activity' => 'Tree Climbing, Nut Burying, Curious Explorations',
+                'food' => 'Bellotas y nueces',
+                'activity' => 'Escalada de árboles, Enterramiento de nueces, Exploraciones curiosas',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -460,19 +463,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 09:58:30',
                 'deleted_at' => NULL,
             ),
-            21 => 
-            array (
+            21 =>
+            array(
                 'id' => 22,
                 'booking_id' => 124,
                 'date' => '2023-09-20 00:00:00',
                 'dropoff_time' => '07:45:00',
                 'pickup_time' => '21:30:00',
-                'food' => 'Insects with Calcium Dusting',
-                'activity' => 'Tree Climbing, Color Changing, Swiveling Eyes, Sunning, Stealthy Movement',
+                'food' => 'Insectos con polvo de calcio',
+                'activity' => 'Escalada de árboles, Cambio de color, Ojos giratorios, Tomando el sol, Movimiento sigiloso',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -481,19 +484,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:10:08',
                 'deleted_at' => NULL,
             ),
-            22 => 
-            array (
+            22 =>
+            array(
                 'id' => 23,
                 'booking_id' => 130,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '06:25:00',
                 'pickup_time' => '20:35:00',
-                'food' => 'Acorns, Nuts, Fruits',
-                'activity' => 'Foraging, Jumping, Tail Flicking, Social Interactions',
+                'food' => 'Bellotas, Nueces, Frutas',
+                'activity' => 'Forrajeo, Saltos, Movimiento de cola, Interacciones sociales',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -502,19 +505,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:23:24',
                 'deleted_at' => NULL,
             ),
-            23 => 
-            array (
+            23 =>
+            array(
                 'id' => 24,
                 'booking_id' => 136,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '06:40:00',
                 'pickup_time' => '21:40:00',
-                'food' => 'Fresh Millet Sprays',
-                'activity' => 'Cuddling, Chirping, Playing with Toys',
+                'food' => 'Racimos de mijo fresco',
+                'activity' => 'Acurrucándose, Trinos, Jugando con juguetes',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -523,19 +526,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:38:02',
                 'deleted_at' => NULL,
             ),
-            24 => 
-            array (
+            24 =>
+            array(
                 'id' => 26,
                 'booking_id' => 144,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '06:25:00',
                 'pickup_time' => '21:35:00',
-                'food' => 'Fresh Fruits and Nut Mixes',
-                'activity' => 'Vocalizing, Swinging, Puzzle Solving, Feather Fluffing, Socializing, Exploring',
+                'food' => 'Mezclas de frutas y nueces frescas',
+                'activity' => 'Vocalizando, Balanceándose, Resolviendo acertijos, Acariciando plumas, Socializando, Explorando',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -544,19 +547,20 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:56:00',
                 'deleted_at' => NULL,
             ),
-            25 => 
-            array (
+
+            25 =>
+            array(
                 'id' => 27,
                 'booking_id' => 152,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '06:40:00',
                 'pickup_time' => '20:45:00',
-                'food' => 'Grilled Chicken',
-                'activity' => 'Fetch, Cuddling, Short Walks, Sunbathing',
+                'food' => 'Pollo a la parrilla',
+                'activity' => 'Buscar, Acurrucarse, Paseos cortos, Tomando el sol',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -565,19 +569,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 11:48:00',
                 'deleted_at' => NULL,
             ),
-            26 => 
-            array (
+            26 =>
+            array(
                 'id' => 28,
                 'booking_id' => 153,
                 'date' => '2023-08-26 00:00:00',
                 'dropoff_time' => '07:15:00',
                 'pickup_time' => '22:20:00',
-                'food' => 'Roasted Chicken Bits',
-                'activity' => 'Warm Cuddles, Playing Hide-and-Seek, Purring Serenades',
+                'food' => 'Trozos de pollo asado',
+                'activity' => 'Acurrucamientos cálidos, Jugando al escondite, Serenatas ronroneantes',
                 'address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'price' => 100.0,
                 'created_by' => NULL,
                 'updated_by' => NULL,
@@ -586,8 +590,7 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 11:54:16',
                 'deleted_at' => NULL,
             ),
+
         ));
-        
-        
     }
 }

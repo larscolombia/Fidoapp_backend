@@ -73,6 +73,8 @@ class PetHistoryController extends Controller
                         : null,
                     'weight' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['weight']) ? $reportData['detail_type']['weight'] : null,
                     'notes' => !is_null($reportData['detail_type']) && !is_null($reportData['detail_type']['notes'])  ? $reportData['detail_type']['notes'] : null,
+                   'created_at' => Carbon::parse($history->created_at)->format('d-m-Y'),
+                    'updated_at' => Carbon::parse($history->updated_at)->format('d-m-Y'),
                 ];
             });
 
@@ -227,7 +229,9 @@ class PetHistoryController extends Controller
             'test_results' => $history->test_results,
             'vet_visits' => $history->vet_visits,
             'file' => !is_null($history->file) ? asset($history->file) : null,
-            'image' => !is_null($history->image) ? asset($history->image) : null
+            'image' => !is_null($history->image) ? asset($history->image) : null,
+            'created_at' => Carbon::parse($history->created_at)->format('d-m-Y'),
+            'updated_at' => Carbon::parse($history->updated_at)->format('d-m-Y'),
         ];
         return response()->json($response);
     }
@@ -399,7 +403,9 @@ class PetHistoryController extends Controller
                     'test_results' => $history->test_results,
                     'vet_visits' => $history->vet_visits,
                     'file' => !is_null($history->file) ? asset($history->file) : null,
-                    'image' => !is_null($history->image) ? asset($history->image) : null
+                    'image' => !is_null($history->image) ? asset($history->image) : null,
+                    'created_at' => Carbon::parse($history->created_at)->format('d-m-Y'),
+                    'updated_at' => Carbon::parse($history->updated_at)->format('d-m-Y'),
                 ];
             });
             return response()->json([

@@ -14,24 +14,24 @@ class BookingBoardingMappingTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('booking_boarding_mapping')->delete();
-        
-        \DB::table('booking_boarding_mapping')->insert(array (
-            0 => 
-            array (
+
+        \DB::table('booking_boarding_mapping')->insert(array(
+            0 =>
+            array(
                 'id' => 1,
                 'booking_id' => 1,
                 'dropoff_date_time' => '2023-08-01 09:15:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-02 18:30:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Feeding and Watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Alimentación y Agua","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -39,19 +39,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 12:54:01',
                 'deleted_at' => NULL,
             ),
-            1 => 
-            array (
+            1 =>
+            array(
                 'id' => 2,
                 'booking_id' => 2,
                 'dropoff_date_time' => '2023-08-10 17:50:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-12 10:25:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Feeding and Watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Alimentación y Agua","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -59,19 +59,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 12:55:54',
                 'deleted_at' => NULL,
             ),
-            2 => 
-            array (
+            2 =>
+            array(
                 'id' => 3,
                 'booking_id' => 3,
                 'dropoff_date_time' => '2023-08-02 16:30:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-04 12:45:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Feeding and Watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Alimentación y Agua","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -79,19 +79,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 12:58:18',
                 'deleted_at' => NULL,
             ),
-            3 => 
-            array (
+            3 =>
+            array(
                 'id' => 4,
                 'booking_id' => 4,
                 'dropoff_date_time' => '2023-08-16 08:15:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-18 19:55:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":4,"slug":"play-areas","name":"Play Areas","description":"Designated areas or play yards where pets can exercise and interact with other compatible animals.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":4,"slug":"play-areas","name":"Áreas de Juego","description":"Áreas designadas o patios de juego donde las mascotas pueden hacer ejercicio e interactuar con otros animales compatibles.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -99,19 +99,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 13:00:03',
                 'deleted_at' => NULL,
             ),
-            4 => 
-            array (
+            4 =>
+            array(
                 'id' => 5,
                 'booking_id' => 5,
                 'dropoff_date_time' => '2023-08-17 14:30:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-19 07:15:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Feeding and Watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Alimentación y Agua","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -119,19 +119,20 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 13:01:46',
                 'deleted_at' => NULL,
             ),
-            5 => 
-            array (
+
+            5 =>
+            array(
                 'id' => 6,
                 'booking_id' => 6,
                 'dropoff_date_time' => '2023-08-24 09:15:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-27 19:40:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":5,"slug":"private-suites","name":"Private Suites","description":"Offer private, comfortable rooms or suites for pets who prefer more solitude and a quiet environment.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":5,"slug":"private-suites","name":"Suites Privadas","description":"Ofrecemos habitaciones o suites privadas y cómodas para mascotas que prefieren más soledad y un ambiente tranquilo.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -139,19 +140,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 13:04:41',
                 'deleted_at' => NULL,
             ),
-            6 => 
-            array (
+            6 =>
+            array(
                 'id' => 7,
                 'booking_id' => 7,
                 'dropoff_date_time' => '2023-08-18 20:40:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-21 22:45:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":4,"slug":"play-areas","name":"Play Areas","description":"Designated areas or play yards where pets can exercise and interact with other compatible animals.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":4,"slug":"play-areas","name":"Áreas de Juego","description":"Áreas designadas o patios de juego donde las mascotas pueden hacer ejercicio e interactuar con otros animales compatibles.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -159,19 +160,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 13:06:08',
                 'deleted_at' => NULL,
             ),
-            7 => 
-            array (
+            7 =>
+            array(
                 'id' => 8,
                 'booking_id' => 8,
                 'dropoff_date_time' => '2023-08-12 19:50:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-14 08:15:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Feeding and Watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Alimentación y Agua","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -179,19 +180,19 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 13:08:58',
                 'deleted_at' => NULL,
             ),
-            8 => 
-            array (
+            8 =>
+            array(
                 'id' => 9,
                 'booking_id' => 9,
                 'dropoff_date_time' => '2023-08-02 21:30:00',
                 'dropoff_address' => '123 Main St,
-United Kingdom,
-Central Square, London
-Postal Code: 544512',
+Reino Unido,
+Plaza Central, Londres
+Código Postal: 544512',
                 'pickup_date_time' => '2023-08-03 06:30:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Feeding and Watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Alimentación y Agua","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-01T12:36:19.000000Z","updated_at":"2023-08-01T12:36:19.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -199,16 +200,17 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-01 13:16:59',
                 'deleted_at' => NULL,
             ),
-            9 => 
-            array (
+
+            9 =>
+            array(
                 'id' => 10,
                 'booking_id' => 62,
                 'dropoff_date_time' => '2023-08-26 17:30:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-28 19:40:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -216,16 +218,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 06:21:36',
                 'deleted_at' => NULL,
             ),
-            10 => 
-            array (
+            10 =>
+            array(
                 'id' => 11,
                 'booking_id' => 80,
                 'dropoff_date_time' => '2023-08-26 17:30:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-29 10:20:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -233,16 +235,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 07:27:16',
                 'deleted_at' => NULL,
             ),
-            11 => 
-            array (
+            11 =>
+            array(
                 'id' => 12,
                 'booking_id' => 83,
                 'dropoff_date_time' => '2023-08-27 18:20:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-28 10:30:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -250,16 +252,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 07:33:49',
                 'deleted_at' => NULL,
             ),
-            12 => 
-            array (
+            12 =>
+            array(
                 'id' => 13,
                 'booking_id' => 87,
                 'dropoff_date_time' => '2023-09-13 20:35:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-09-18 18:40:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -267,16 +269,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 07:38:02',
                 'deleted_at' => NULL,
             ),
-            13 => 
-            array (
+            13 =>
+            array(
                 'id' => 14,
                 'booking_id' => 88,
                 'dropoff_date_time' => '2023-09-20 07:20:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-09-23 21:30:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":3,"slug":"special-care-for-seniors-and-special-needs-pets","name":"Special Care for Seniors and Special Needs Pets","description":"Catering to the specific requirements of older pets or those with medical conditions.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":3,"slug":"special-care-for-seniors-and-special-needs-pets","name":"Cuidado Especial para Mascotas Mayores y con Necesidades Especiales","description":"Atendiendo los requisitos específicos de mascotas mayores o aquellas con condiciones médicas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -284,16 +286,17 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 07:39:05',
                 'deleted_at' => NULL,
             ),
-            14 => 
-            array (
+
+            14 =>
+            array(
                 'id' => 15,
                 'booking_id' => 96,
                 'dropoff_date_time' => '2023-08-26 16:35:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-28 18:20:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -301,16 +304,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 08:05:00',
                 'deleted_at' => NULL,
             ),
-            15 => 
-            array (
+            15 =>
+            array(
                 'id' => 16,
                 'booking_id' => 104,
                 'dropoff_date_time' => '2023-08-27 18:25:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-29 20:45:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -318,16 +321,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 09:07:24',
                 'deleted_at' => NULL,
             ),
-            16 => 
-            array (
+            16 =>
+            array(
                 'id' => 17,
                 'booking_id' => 111,
                 'dropoff_date_time' => '2023-09-21 09:35:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-09-25 18:25:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":4,"slug":"play-areas","name":"Play Areas","description":"Designated areas or play yards where pets can exercise and interact with other compatible animals.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":4,"slug":"play-areas","name":"Áreas de Juego","description":"Áreas designadas o patios de juego donde las mascotas pueden hacer ejercicio e interactuar con otros animales compatibles.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -335,8 +338,8 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 09:29:10',
                 'deleted_at' => NULL,
             ),
-            17 => 
-            array (
+            17 =>
+            array(
                 'id' => 18,
                 'booking_id' => 119,
                 'dropoff_date_time' => '2023-08-27 15:29:00',
@@ -344,7 +347,7 @@ Postal Code: 544512',
                 'pickup_date_time' => '2023-08-29 15:29:00',
                 'pickup_address' => '123 Main St',
                 'price' => 400.0,
-                'additional_facility' => '[{"id":1,"name":"Feeding and Watering","slug":"feeding-and-watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":2,"name":"24/7 Supervision","slug":"247-supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null}]',
+                'additional_facility' => '[{"id":1,"name":"Alimentación y Agua","slug":"feeding-and-watering","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":2,"name":"Supervisión 24/7","slug":"247-supervision","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -352,16 +355,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 09:59:30',
                 'deleted_at' => NULL,
             ),
-            18 => 
-            array (
+            18 =>
+            array(
                 'id' => 19,
                 'booking_id' => 125,
                 'dropoff_date_time' => '2023-08-26 21:30:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-28 08:35:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -369,16 +372,17 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:12:07',
                 'deleted_at' => NULL,
             ),
-            19 => 
-            array (
+
+            19 =>
+            array(
                 'id' => 20,
                 'booking_id' => 135,
                 'dropoff_date_time' => '2023-08-26 06:35:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-28 07:45:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -386,8 +390,8 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:33:00',
                 'deleted_at' => NULL,
             ),
-            20 => 
-            array (
+            20 =>
+            array(
                 'id' => 21,
                 'booking_id' => 138,
                 'dropoff_date_time' => '2023-08-27 16:11:00',
@@ -403,16 +407,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:42:23',
                 'deleted_at' => NULL,
             ),
-            21 => 
-            array (
+            21 =>
+            array(
                 'id' => 22,
                 'booking_id' => 142,
                 'dropoff_date_time' => '2023-09-21 07:25:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-09-25 21:40:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -420,16 +424,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 10:51:25',
                 'deleted_at' => NULL,
             ),
-            22 => 
-            array (
+            22 =>
+            array(
                 'id' => 23,
                 'booking_id' => 147,
                 'dropoff_date_time' => '2023-08-26 05:35:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-28 07:30:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"24\\/7 Supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":2,"slug":"247-supervision","name":"Supervisión 24/7","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -437,16 +441,17 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 11:06:50',
                 'deleted_at' => NULL,
             ),
-            23 => 
-            array (
+
+            23 =>
+            array(
                 'id' => 24,
                 'booking_id' => 148,
                 'dropoff_date_time' => '2023-08-27 21:37:00',
                 'dropoff_address' => '123 Main St',
                 'pickup_date_time' => '2023-08-28 16:37:00',
                 'pickup_address' => '123 Main St',
-                'price' => 200.0,
-                'additional_facility' => '[{"id":1,"name":"Feeding and Watering","slug":"feeding-and-watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":2,"name":"24/7 Supervision","slug":"247-supervision","description":"Round-the-clock monitoring to ensure the safety and well-being of all pets.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":3,"name":"Special Care for Seniors and Special Needs Pets","slug":"special-care-for-seniors-and-special-needs-pets","description":"Catering to the specific requirements of older pets or those with medical conditions.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":4,"name":"Play Areas","slug":"play-areas","description":"Designated areas or play yards where pets can exercise and interact with other compatible animals.","status":1,"created_by":null,"updated_by":null,"deleted_by":null}]',
+                'price' => 400.0,
+                'additional_facility' => '[{"id":1,"name":"Alimentación y Agua","slug":"feeding-and-watering","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":2,"name":"Supervisión 24/7","slug":"247-supervision","description":"Monitoreo constante para garantizar la seguridad y el bienestar de todas las mascotas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":3,"name":"Cuidado Especial para Mascotas Mayores y con Necesidades Especiales","slug":"special-care-for-seniors-and-special-needs-pets","description":"Atendiendo los requisitos específicos de mascotas mayores o aquellas con condiciones médicas.","status":1,"created_by":null,"updated_by":null,"deleted_by":null},{"id":4,"name":"Áreas de Juego","slug":"play-areas","description":"Áreas designadas o patios de juego donde las mascotas pueden hacer ejercicio e interactuar con otros animales compatibles.","status":1,"created_by":null,"updated_by":null,"deleted_by":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -454,16 +459,16 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 11:07:52',
                 'deleted_at' => NULL,
             ),
-            24 => 
-            array (
+            24 =>
+            array(
                 'id' => 25,
                 'booking_id' => 155,
                 'dropoff_date_time' => '2023-08-27 07:10:00',
-                'dropoff_address' => '123 Main St<br>United Kingdom<br>Central Square<br>London-544512',
+                'dropoff_address' => '123 Main St<br>Reino Unido<br>Plaza Central<br>Londres-544512',
                 'pickup_date_time' => '2023-08-29 11:30:00',
                 'pickup_address' => NULL,
                 'price' => 200.0,
-                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Feeding and Watering","description":"Ensuring pets are fed according to their dietary needs and have access to fresh water.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
+                'additional_facility' => '[{"id":1,"slug":"feeding-and-watering","name":"Alimentación y Agua","description":"Asegurando que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.","status":1,"created_by":null,"updated_by":null,"deleted_by":null,"created_at":"2023-08-26T05:15:57.000000Z","updated_at":"2023-08-26T05:15:57.000000Z","deleted_at":null}]',
                 'created_by' => NULL,
                 'updated_by' => NULL,
                 'deleted_by' => NULL,
@@ -471,8 +476,7 @@ Postal Code: 544512',
                 'updated_at' => '2023-08-26 12:04:29',
                 'deleted_at' => NULL,
             ),
+
         ));
-        
-        
     }
 }
