@@ -109,7 +109,7 @@ class CoinController extends Controller
     private function setStripeApiKey()
     {
         $setting = Setting::where('name', 'stripe_secretkey')->first();
-        $stripeSecret = $setting->stripe_secretkey ?? env('STRIPE_SECRET');
+        $stripeSecret = $setting->val ?? env('STRIPE_SECRET');
         Stripe::setApiKey($stripeSecret);
     }
 
