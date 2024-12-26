@@ -9,4 +9,9 @@ class Coin extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function coinPrice()
+    {
+        return $this->hasOne(CoinPrice::class);
+    }
 }

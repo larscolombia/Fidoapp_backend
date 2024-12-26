@@ -1,6 +1,11 @@
 <template>
   <CardTitle :title="$t('setting_general_page.coin_configuration')">
+  <div class="d-flex justify-content-around">
     <h2>{{ $t('setting_general_page.coin_configuration') }}</h2>
+    <form @submit.prevent="linkToStripe">
+      <button type="submit" class="btn btn-primary">{{ buttonText }}</button>
+    </form>
+  </div>
   </CardTitle>
   <div class="update-form">
     <!-- Barra de notificación -->
@@ -23,6 +28,7 @@
         <input v-model.number="form.conversion_rate" min="1" type="number" id="conversion_rate" class="form-control" required />
       </div>
       <button type="submit" class="btn btn-primary">{{ $t('coin.update') }}</button>
+
     </form>
   </div>
 </template>
@@ -40,6 +46,7 @@ export default {
   },
   data() {
     return {
+      isButtonDisabled: false,
       form: {
         id: null, // Inicializa como null
         symbol: '',
@@ -47,6 +54,7 @@ export default {
         conversion_rate: null,
       },
       notification: null, // Para manejar la notificación
+      buttonText: this.$t('coin.link_to_stripe'),
     };
   },
   methods: {
@@ -54,9 +62,11 @@ export default {
       axios.get(`/api/coin`) // Obtener la moneda por su ID
         .then(response => {
           this.form = response.data;
+
           if (!this.form.id) {
             this.form.id = null; // Asegúrate de que sea null si no hay ID
           }
+          this.buttonText = response.data.coin_price ? this.$t('coin.link_update_stripe') : this.$t('coin.link_to_stripe');
         })
         .catch(error => {
           console.error("Error al obtener los datos:", error);
@@ -64,6 +74,7 @@ export default {
         });
     },
     updateData() {
+      this.isButtonDisabled = true;
       axios.post(`/api/coin`, this.form)
         .then(response => {
           this.showNotification(this.$t('coin.success_update'), 'success');
@@ -71,7 +82,25 @@ export default {
         })
         .catch(error => {
           console.error("Error al actualizar los datos:", error);
-          this.showNotification(this.$t('coin.error_update'), 'error');
+          this.showNotification(this.$t('coin.error'), 'error');
+        })
+        .finally(() => {
+          this.isButtonDisabled = false; // Volver a activar el botón después de la respuesta
+        });
+    },
+    linkToStripe() {
+      this.isButtonDisabled = true;
+      axios.post(`/api/link-to-stripe`, this.form)
+        .then(response => {
+          this.showNotification(this.$t('coin.link_success_stripe'), 'success');
+          this.buttonText =  this.$t('coin.link_update_stripe');
+        })
+        .catch(error => {
+          console.error("Error al actualizar los datos:", error);
+          this.showNotification(this.$t('coin.error'), 'error');
+        })
+        .finally(() => {
+          this.isButtonDisabled = false; // Volver a activar el botón después de la respuesta
         });
     },
     showNotification(message, type) {

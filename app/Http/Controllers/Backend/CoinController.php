@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers\Backend;
 
+use Stripe\Price;
+use Stripe\Stripe;
+use Stripe\Product;
 use App\Models\Coin;
+use App\Models\Setting;
+use App\Models\CoinPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -11,11 +16,11 @@ class CoinController extends Controller
 {
     public function index()
     {
-         // Buscar el registro existente por ID
-        $coin = Coin::first();
-
+        // Buscar el registro existente por ID
+        $coin = Coin::with('coinPrice')->first();
         return response()->json($coin, 200);
     }
+
 
     public function store(Request $request)
     {
@@ -29,7 +34,7 @@ class CoinController extends Controller
         try {
             // Buscar si ya existe una moneda con el mismo símbolo
             $currency = Coin::where('id', $request->id)
-            ->first();
+                ->first();
 
             if ($currency) {
                 // Actualizar la moneda existente
@@ -50,7 +55,6 @@ class CoinController extends Controller
                 'success' => true,
                 'data' => $currency,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -59,4 +63,121 @@ class CoinController extends Controller
             ], 500);
         }
     }
+
+    //metodos para stripe
+    public function linkToStripe()
+    {
+        try {
+            $this->setStripeApiKey();
+            $coin = $this->getFirstCoin();
+
+            if (!$coin) {
+                return response()->json(['error' => 'No se encontró ninguna moneda.'], 404);
+            }
+
+            // Verifica si el producto ya existe
+            $productId = $this->getProductId($coin); // Método para obtener el ID del producto
+            if ($productId) {
+                // Si existe, actualiza el producto
+                $product = $this->updateProduct($productId);
+            } else {
+                // Si no existe, crea un nuevo producto
+                $product = $this->createProduct();
+            }
+
+            // Verifica si el precio ya existe
+            $priceId = $this->getPriceId($product->id); // Método para obtener el ID del precio
+            if ($priceId) {
+                // Si existe, actualiza el precio
+                $price = $this->updatePrice($priceId, $coin->conversion_rate);
+            } else {
+                // Si no existe, crea un nuevo precio
+                $price = $this->createPrice($product->id, $coin->conversion_rate);
+            }
+
+            // Guarda los datos en la base de datos local
+            $this->saveCoinPrice($coin->id, $product->id, $price->id);
+            $data = [$product,$price];
+            return response()->json(['success' => true,'data' => $data], 201);
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            return response()->json(['error' => 'Error en Stripe: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al crear o actualizar el producto o precio en Stripe: ' . $e->getMessage()], 500);
+        }
+    }
+
+    private function setStripeApiKey()
+    {
+        $setting = Setting::where('name', 'stripe_secretkey')->first();
+        $stripeSecret = $setting->stripe_secretkey ?? env('STRIPE_SECRET');
+        Stripe::setApiKey($stripeSecret);
+    }
+
+    private function getFirstCoin()
+    {
+        return Coin::first();
+    }
+
+    private function getProductId($coin)
+    {
+        $coinPrice = CoinPrice::where('coin_id',$coin->id)->first();
+        if($coinPrice){
+            return $coinPrice->stripe_product_id;
+        }
+        return null;
+    }
+
+    private function createProduct()
+    {
+        return Product::create([
+            'name' => 'FidoCoins',
+            'description' => 'Moneda FidoCoins',
+        ]);
+    }
+
+    private function updateProduct($productId)
+    {
+        return Product::update($productId, [
+            'name' => 'FidoCoins',
+            'description' => 'Moneda FidoCoins',
+        ]);
+    }
+
+    private function getPriceId($productId)
+    {
+        $coinPrice = CoinPrice::where('stripe_product_id',$productId)->first();
+        if($coinPrice){
+            return $coinPrice->stripe_product_id;
+        }
+        return null;
+    }
+
+    private function createPrice($productId, $conversionRate)
+    {
+        return Price::create([
+            'unit_amount' => $conversionRate * 100,
+            'currency' => 'usd',
+            'product' => $productId,
+        ]);
+    }
+
+    private function updatePrice($priceId, $conversionRate)
+    {
+        return Price::update($priceId, [
+            'unit_amount' => $conversionRate * 100,
+            // Puedes actualizar otros campos según sea necesario
+        ]);
+    }
+
+    private function saveCoinPrice($coinId, $productId, $priceId)
+    {
+        CoinPrice::updateOrInsert(
+            ['coin_id' => $coinId],
+            [
+                'stripe_product_id' => $productId,
+                'stripe_price_id' => $priceId,
+            ]
+        );
+    }
+
 }
