@@ -3,143 +3,147 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
+use Stripe\Stripe;
+use App\Models\Coin;
+use App\Models\Wallet;
 use App\Models\Payment;
+use App\Models\Setting;
 use Illuminate\Support\Str;
 use App\Models\CachePayment;
 use Illuminate\Http\Request;
+use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 
 class StripeController extends Controller
 {
-    public $sk_key = "sk_test_51I3R8hFWfM6dcSbz41CTp614CT2MCUOvFKyaY9XHpdxov8nn34SpTq59hoMOLjeMgiXTsfyi9PxgskQoW7UTItng00KWw2a7Ye";
-    public $url_stripe = 'https://api.stripe.com/v1';
-
-    public function enpoint($key)
+    private $sk_key, $product;
+    private $coin;
+    public function __construct()
     {
-        $data = [
-            'price' => "{$this->url_stripe}/prices",
-            'producto' =>  "{$this->url_stripe}/products",
-            'checkout' => "checkout/sessions"
-        ];
-        return $data[$key];
+        // Obtener la clave secreta de Stripe
+        $setting = Setting::where('name', 'stripe_secretkey')->first();
+        $this->sk_key = $setting->val ?? null;
+        // Obtener el primer registro de Coin
+        $coin = Coin::first();
+        $this->coin = $coin;
+
+        // Asignar el precio del producto basado en la moneda
+        $this->product = $coin->coinPrice ?? null;
     }
-    public function createSession(Request $request)
+
+
+    public function checkout(Request $request)
     {
+        // Validar los datos de entrada
+        $min = $this->coin->minimum_recharge;
+        $data = $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+            'quantity' => ['required', 'integer', 'min:' . $min]
+        ]);
+
+        // Configura la clave secreta de Stripe
+        $this->setStripeApiKey($this->sk_key);
+
+        // ID del precio del producto que deseas vender
+        $priceId = $this->product->stripe_price_id;
+        $amount = $this->coin->conversion_rate * $data['quantity'];
         try {
-            $request->validate([
-                'amount' => 'required',
-                'description' => 'required',
-                'id_user' => 'required',
-                'id_service' => 'required'
+            // Crea una sesión de checkout
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price' => $priceId,
+                    'quantity' => $data['quantity'],
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('checkout.cancel'),
+                'metadata' => [
+                    'amount' => $amount,
+                    'descripcion' => "Recarga de FidoCoin",
+                    'id_user' => $data['user_id'],
+                    'id_service' => 19,
+                ],
             ]);
-            // Generar un token único para identificar el request
-            $token = Str::random(32); // Genera un token aleatorio de 32 caracteres
-            //almacenamos en la cache
-            CachePayment::create([
-                'metadata' => json_encode($request->all()),
-                'token' => $token
-            ]);
-            //buscamos la clave de stripe
-            $appSetting = DB::table('app_settings')->where('key', 'stripe_secret')->where('key', '!=', null)->first();
-            if ($appSetting) {
-                $this->sk_key = $appSetting->value;
-            } else {
-                $this->sk_key = env('SK_STRIPER');
-            }
-            $priceId = "price_1OjTDdFWfM6dcSbzYPInqFnW";
-            $response = Http::withBasicAuth($this->sk_key, '')
-                ->asForm() // Asegura que los datos se envíen como application/x-www-form-urlencoded
-                ->post('https://api.stripe.com/v1/checkout/sessions', [
 
-                    'line_items[0][price]' =>  $priceId, //'price_1OjTDdFWfM6dcSbzYPInqFnW', // ID del precio
-                    'line_items[0][quantity]' => 1, // Cantidad
-                    'mode' => 'payment', // Modo de pago
-                    'success_url' => route('striper.sucess', ['id_servicio' => $request['id_service'], 'token' => $token]), // URL de redireccionamiento de éxito
-                    'cancel_url' => route('striper.cancel', $request['id_service']),
-                ]);
+            // Retorna la URL de la sesión de checkout como respuesta JSON
+            return response()->json([
+                'success' => true,
+                'url' => $session->url,
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejo de errores: registrar el error y retornar un mensaje de error en formato JSON
+            \Log::error('Error al crear la sesión de checkout: ' . $e->getMessage());
 
-            if (isset($response['url'])) {
-                return $response['url'];
-            } else {
-                return response()->json([
-                    'success' => 'error',
-                    'message' => __('lang.stripe_url_error')
-                ]);
-            }
-        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-
-                'message' => $e->getMessage(),
-            ]);
+                'message' => 'Hubo un problema al procesar su pago. Por favor, inténtelo de nuevo.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-        return $response;
     }
 
-    public function success($id_servicio, $token)
+
+    public function success(Request $request)
     {
-        //recuperamos el token de la session para identificar la request
+        $this->setStripeApiKey($this->sk_key);
+        // Aquí puedes manejar la lógica después del pago exitoso
+        $sessionId = $request->get('session_id');
+
         try {
-            $cahce = CachePayment::where('token', $token)->first();
-            if ($cahce) {
-                $metadata =  json_decode($cahce->metadata, true);
-                //buscamos si existe el pago
+            // Recuperar la sesión de Stripe para verificar el estado del pago
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
+            if ($session->payment_status === 'paid') {
+                 // Extraer los metadatos de la sesión
+                $metadata = $session->metadata;
+                Log::info($metadata);
                 Payment::create([
                     'amount' => $metadata['amount'],
                     'description' => $metadata['descripcion'] ?? '',
                     'user_id' => $metadata['id_user'],
                     'id_service' => $metadata['id_service'],
-                    'payment_method_id' => 7,
-                    'payment_status_id' => 4
+                    'payment_method_id' => 19,
                 ]);
+                //actualizar wallet del usuario
+                $wallet = Wallet::where('user_id',$metadata['id_user'])->first();
+                if($wallet){
+                    $wallet->balance = $wallet->balance + $metadata['amount'];
+                    $wallet->save();
+                }
                 return response()->json([
-                    'success' => 'success',
-                    'message' => __('lang.stripe_success'),
-                    'id_servicio' => $id_servicio,
-                    'token' => $token
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-
-                    'message' => __('lang.stripe_success_error'),
-                ]);
+                    'status' => 'success',
+                    'message' => 'El pago ha sido procesado exitosamente.',
+                    'session' => $session,
+                ], 200);
             }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
 
-                'message' => $e->getMessage(),
-            ]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'El pago no se completó.',
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al recuperar la sesión: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
-    public function cancel($id)
+    public function cancel()
     {
         return response()->json([
-            'success' => 'cancel',
-            'message' => 'Pago cancelado',
-        ]);
+            'status' => 'canceled',
+            'message' => 'El proceso de pago ha sido cancelado.',
+        ], 200);
     }
 
-    //enpoitn   ['price' ,'producto' ]
-    public function getItemsStriper($enpoint, $id_items)
-    {
-        $appSetting = DB::table('app_settings')->where('key', 'stripe_fpx_secret')->where('key', '!=', null)->first();
-        if ($appSetting) {
-            $this->sk_key = $appSetting->value;
-        }
-        $response = Http::withBasicAuth($this->sk_key, '')
-            ->get($this->enpoint($enpoint) . "/$id_items");
 
-        if ($response->successful()) {
-            // La solicitud fue exitosa, procesa la respuesta
-            return $planData = $response->json();
-        } else {
-            // Maneja errores
-            return response()->json(['error' => $response->json()], 500);
-        }
+    private function setStripeApiKey($secretKey)
+    {
+        Stripe::setApiKey($secretKey);
     }
 }

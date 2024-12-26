@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Api\ChipsController;
 use App\Http\Controllers\Api\ClaseController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\StripeController;
 use App\Http\Controllers\Api\VacunaController;
 use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Api\ComandoController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Api\AntiWormersController;
 use App\Http\Controllers\Api\HerramientaController;
 use App\Http\Controllers\Api\SharedOwnerController;
 use App\Http\Controllers\Api\ActivityLevelController;
-use App\Http\Controllers\Api\TrainingDiaryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\TrainingDiaryController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
 use App\Http\Controllers\Api\CursoPlataformaController;
@@ -3675,7 +3676,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('coin', [CoinController::class, 'index']);
     Route::post('coin', [CoinController::class, 'store']);
     //rutas stripe
-    Route::post('link-to-stripe',[CoinController::class,'linkToStripe']);
+    Route::post('link-to-stripe', [CoinController::class, 'linkToStripe']);
+    Route::get('/checkout', [StripeController::class, 'checkout']);
+
     // Obtener información de la wallet del usuario autenticado
     Route::get('wallet', [WalletController::class, 'index']);
 
@@ -3688,3 +3691,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 //translations
 Route::get('/translations', [TranslationController::class, 'index']);
+Route::get('/checkout/success', [StripeController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/cancel', [StripeController::class, 'cancel'])->name('checkout.cancel');
