@@ -41,7 +41,7 @@ class StripeController extends Controller
         $min = $this->coin->minimum_recharge;
         $data = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
-            'quantity' => ['required', 'integer', 'min:' . $min]
+            'quantity' => ['required', 'string', 'min:' . $min]
         ]);
 
         // Configura la clave secreta de Stripe
@@ -65,7 +65,7 @@ class StripeController extends Controller
                     'amount' => $amount,
                     'descripcion' => "Recarga de FidoCoin",
                     'id_user' => $data['user_id'],
-                    'id_service' => 19,
+                    'id_service' => 19
                 ],
             ]);
 
@@ -107,6 +107,7 @@ class StripeController extends Controller
                     'user_id' => $metadata['id_user'],
                     'id_service' => $metadata['id_service'],
                     'payment_method_id' => 19,
+                    'stripe_session_id' =>  $sessionId
                 ]);
                 //actualizar wallet del usuario
                 $wallet = Wallet::where('user_id',$metadata['id_user'])->first();
