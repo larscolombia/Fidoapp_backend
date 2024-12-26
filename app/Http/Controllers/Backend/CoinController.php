@@ -86,7 +86,7 @@ class CoinController extends Controller
             }
 
             // Verifica si el precio ya existe
-            $priceId = $this->getPriceId($product->id); // Método para obtener el ID del precio
+            $priceId = $this->getPriceId($coin->id); // Método para obtener el ID del precio
             if ($priceId) {
                 // Si existe, actualiza el precio
                 $price = $this->updatePrice($priceId, $coin->conversion_rate);
@@ -143,9 +143,9 @@ class CoinController extends Controller
         ]);
     }
 
-    private function getPriceId($productId)
+    private function getPriceId($coinId)
     {
-        $coinPrice = CoinPrice::where('stripe_product_id',$productId)->first();
+        $coinPrice = CoinPrice::where('coind_id',$coinId)->first();
         if($coinPrice){
             return $coinPrice->stripe_product_id;
         }
