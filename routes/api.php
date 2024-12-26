@@ -3677,7 +3677,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('coin', [CoinController::class, 'store']);
     //rutas stripe
     Route::post('link-to-stripe', [CoinController::class, 'linkToStripe']);
-    Route::get('/checkout', [StripeController::class, 'checkout']);
+    Route::post('/checkout', [StripeController::class, 'checkout']);
 
     // Obtener información de la wallet del usuario autenticado
     Route::get('wallet', [WalletController::class, 'index']);
