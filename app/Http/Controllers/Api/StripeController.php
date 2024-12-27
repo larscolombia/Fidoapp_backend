@@ -104,7 +104,7 @@ class StripeController extends Controller
                     $metadata = $session->metadata;
                     //buscamos el id del metodo de pago
                     $setting = Setting::where('name', 'str_payment_method')->first();
-                    Payment::create([
+                    $payment = Payment::create([
                         'amount' => $metadata['amount'],
                         'description' => $metadata['descripcion'] ?? '',
                         'user_id' => $metadata['id_user'],
@@ -118,11 +118,16 @@ class StripeController extends Controller
                         $wallet->balance = $wallet->balance + $metadata['amount'];
                         $wallet->save();
                     }
-                    return response()->json([
-                        'status' => 'success',
-                        'message' => 'El pago ha sido procesado exitosamente.',
+                    return view('backend.payment.success', [
                         'session' => $session,
-                    ], 200);
+                        'payment' => $payment,
+                        'message' => 'Recarga hecha con éxito',
+                    ]);
+                    // return response()->json([
+                    //     'status' => 'success',
+                    //     'message' => 'El pago ha sido procesado exitosamente.',
+                    //     'session' => $session,
+                    // ], 200);
                 }
             }
 
