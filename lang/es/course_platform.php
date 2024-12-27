@@ -33,4 +33,5 @@ return [
     'add_video' => 'Agregar video',
     'thumbnail' => 'Miniatura',
     'Are you sure you want to delete this course platform?' => '¿Estás seguro de que quieres eliminar este curso de la plataforma?',
+    'buy_course' => 'Compra del curso ',
 ];
