@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Wallet;
 use App\Trait\Notification;
 use Illuminate\Http\Request;
+use App\Models\CursoPlataforma;
 use App\Models\CoursePlatformVideo;
 use App\Http\Controllers\Controller;
 use App\Models\CoursePlatformUserProgress;
 use App\Http\Controllers\CheckoutController;
 use App\Models\CoursePlatformUserSubscription;
-use App\Models\CursoPlataforma;
 
 class CoursePlatformUserController extends Controller
 {
