@@ -57,7 +57,7 @@
                     </div>
                     @hasPermission('add_employees')
                         @if ($type != 'pending_employee')
-                            <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('Create') }} {{ __($create_title) }}"
+                            <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('employee.create') }} {{ __($create_title) }}"
                                 class=" d-flex align-items-center gap-1">{{ __('messages.new') }}</x-buttons.offcanvas>
                         @endif
                     @endhasPermission

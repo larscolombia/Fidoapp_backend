@@ -3,6 +3,7 @@
 return [
     'title' => 'Personal',
     'singular_title' => 'Personal',
+    'create' => 'Crear',
     'lbl_first_name' => 'Nombre',
     'lbl_last_name' => 'Apellido',
     'lbl_Email' => 'Correo Electrónico',
