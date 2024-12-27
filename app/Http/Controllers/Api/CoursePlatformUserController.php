@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
+use App\Models\Wallet;
+use App\Trait\Notification;
 use Illuminate\Http\Request;
+use App\Models\CursoPlataforma;
 use App\Models\CoursePlatformVideo;
 use App\Http\Controllers\Controller;
 use App\Models\CoursePlatformUserProgress;
+use App\Http\Controllers\CheckoutController;
 use App\Models\CoursePlatformUserSubscription;
-use App\Trait\Notification;
 
 class CoursePlatformUserController extends Controller
 {
@@ -30,7 +34,7 @@ class CoursePlatformUserController extends Controller
             CoursePlatformUserProgress::updateOrCreate(
                 [
                     'user_id' => $data['user_id'],
-                    'course_platform_video_id' =>$data['course_platform_video_id'],
+                    'course_platform_video_id' => $data['course_platform_video_id'],
                 ],
                 ['watched' => $data['watched']]
             );
@@ -76,20 +80,38 @@ class CoursePlatformUserController extends Controller
 
     public function subscribe(Request $request)
     {
-        try{
+        try {
             $data = $request->validate([
                 'user_id' => 'required|exists:users,id',
                 'course_platform_id' => 'required|exists:courses_platform,id'
             ]);
+            //buscamos el curso
+            $coursePlatform = CursoPlataforma::findOrFail($data['course_platform_id']);
+            $checkBalance = $this->checkBalance($request, $coursePlatform->price);
+            if (!$checkBalance['success']) {
+                return response()->json(['success' => false, 'error' => 'Insufficient balance'], 400);
+            }
+            $existSubscription = CoursePlatformUserSubscription::where('course_platform_id', $data['course_platform_id'])
+                ->where('user_id', $data['user_id'])->first();
+            if ($existSubscription) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'There is already a subscription',
+                    'data' => $existSubscription
+                ], 400);
+            }
+            $chekcoutController = new CheckoutController();
+            $chekcoutController->store($request,$coursePlatform->price);
             $subscription = CoursePlatformUserSubscription::create($data);
 
             //notify
+            $this->sendNotification('event', $subscription, [$data['user_id']], __('course_platform.buy_course'). $coursePlatform->name );
             //$this->sendNotification('subscribe',$subscription,'suscription');
             return response()->json([
                 'success' => true,
                 'data' => $subscription
             ], 200);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -131,6 +153,15 @@ class CoursePlatformUserController extends Controller
                 })
             ],
         ]);
+    }
+
+    private function checkBalance($request, $amount)
+    {
+        $chekcoutController = new CheckoutController();
+        $user = User::find($request->input('user_id'));
+        $wallet = Wallet::where('user_id', $user->id)->first();
+        $checkBalance = $chekcoutController->checkBalance($wallet, $amount);
+        return $checkBalance;
     }
 
 }
