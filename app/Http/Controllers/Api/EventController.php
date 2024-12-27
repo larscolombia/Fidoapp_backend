@@ -44,7 +44,13 @@ class EventController extends Controller
 
     public function getEventsByUser($user_id)
     {
-        $events = Event::where('user_id', $user_id)->orderBy('updated_at', 'desc')->get();
+        $today = \Carbon\Carbon::today();
+        $fiveDaysLater = $today->copy()->addDays(5);
+
+        // Obtener eventos filtrando por user_id y el rango de fechas
+        $events = Event::where('user_id', $user_id)
+            ->whereBetween('updated_at', [$today, $fiveDaysLater])
+            ->get();
         $data = $events->map(function ($event) {
             $owners = [];
 
@@ -106,9 +112,9 @@ class EventController extends Controller
                     'entrenamiento' => 'training'
                 };
                 $service = $this->service($request, $bookingType);
-                $checkBalance = $this->checkBalance($request,$service);
-                if(!$checkBalance['success']){
-                    return response()->json(['success' => false,'error' => 'Insufficient balance'], 400);
+                $checkBalance = $this->checkBalance($request, $service);
+                if (!$checkBalance['success']) {
+                    return response()->json(['success' => false, 'error' => 'Insufficient balance'], 400);
                 }
             }
             try {
@@ -178,11 +184,11 @@ class EventController extends Controller
                     $chekcoutController = new CheckoutController();
                     $booking = ['booking_id' => $dataArray['data']['id']];
                     $request->merge($booking);
-                    $chekcoutController->store($request,$service['total_amount']);
+                    $chekcoutController->store($request, $service['total_amount']);
                 }
             }
 
-            $titleEvent = in_array($request->input('tipo'), ['medico', 'entrenamiento']) ? __('event.event'). ' '.($request->input('tipo') == 'medico' ? 'médico' : $request->input('tipo')) : __('event.event');
+            $titleEvent = in_array($request->input('tipo'), ['medico', 'entrenamiento']) ? __('event.event') . ' ' . ($request->input('tipo') == 'medico' ? 'médico' : $request->input('tipo')) : __('event.event');
             // Notificación
             $this->sendNotification($titleEvent, $event, $ownerIds, $event->description);
 
@@ -263,11 +269,11 @@ class EventController extends Controller
                     ]);
                 }
                 //buscamos al profesional en la reserva en base al eventId
-                $existBooking = Booking::where('event_id',$event->id)->first();
-                if($existBooking){
+                $existBooking = Booking::where('event_id', $event->id)->first();
+                if ($existBooking) {
                     //verificamos si esta el profesional en la reserva
-                    $existProfessional = EventDetail::where('event_id',$event->id)->where('owner_id',$existBooking->employee_id)->first();
-                    if(!$existProfessional){
+                    $existProfessional = EventDetail::where('event_id', $event->id)->where('owner_id', $existBooking->employee_id)->first();
+                    if (!$existProfessional) {
                         EventDetail::create([
                             'event_id' => $event->id,
                             'pet_id'   => $request->input('pet_id', $pet_id),
@@ -275,7 +281,6 @@ class EventController extends Controller
                         ]);
                     }
                 }
-
             } else {
                 if ($request->has('pet_id')) {
                     EventDetail::where('event_id', $event->id)->update(['pet_id' => $request->input('pet_id')]);
@@ -402,10 +407,13 @@ class EventController extends Controller
             $data = $request->validate([
                 'user_id' => 'required|exists:users,id',
             ]);
-
+            // Definir las fechas de inicio y fin para el rango
+            $today = \Carbon\Carbon::today();
+            $fiveDaysLater = $today->copy()->addDays(5);
             $eventDetails = EventDetail::where('owner_id', $data['user_id'])
                 ->where('confirm', 'A')
                 ->orderBy('updated_at', 'desc')
+                ->whereBetween('updated_at', [$today, $fiveDaysLater])
                 ->get();
 
             $results = $eventDetails->map(function ($eventDetail) {
@@ -534,7 +542,7 @@ class EventController extends Controller
         $chekcoutController = new CheckoutController();
         $user = User::find($request->input('user_id'));
         $wallet = Wallet::where('user_id', $user->id)->first();
-        $checkBalance = $chekcoutController->checkBalance($wallet,$amount);
+        $checkBalance = $chekcoutController->checkBalance($wallet, $amount);
         return $checkBalance;
     }
 
