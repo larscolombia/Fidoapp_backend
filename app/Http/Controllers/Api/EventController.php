@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Models\EventDetail;
 use App\Trait\Notification;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Modules\Booking\Models\Booking;
 use Modules\Service\Models\Service;
 use App\Http\Controllers\Controller;
 use Modules\Service\Models\ServiceDuration;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Requests\Api\Event\StoreRequest;
 use App\Http\Requests\Api\Event\UpdateRequest;
 use Modules\Service\Http\Controllers\Backend\API\ServiceController;
@@ -78,8 +80,8 @@ class EventController extends Controller
                     $event->booking->employee_veterinary->service->category->id : null,
 
                 'training_id' => isset($event->booking->employee_training) ? $event->booking->employee_training->training_id : null,
-               'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null,
-               'image' => isset($event->image) ? asset($event->image) : null
+                'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null,
+                'image' => isset($event->image) ? asset($event->image) : null
 
             ];
         });
@@ -93,10 +95,22 @@ class EventController extends Controller
     public function store(StoreRequest $request)
     {
         DB::beginTransaction(); // Iniciar la transacción
-
+        $service = null;
         try {
             $validatedData = $request->validated();
-
+            // Verificar si el tipo es "medico" o "entrenamiento"
+            if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
+                // Asignar el tipo de reserva basado en el enum
+                $bookingType = match ($request->input('tipo')) {
+                    'medico' => 'veterinary',
+                    'entrenamiento' => 'training'
+                };
+                $service = $this->service($request, $bookingType);
+                $checkBalance = $this->checkBalance($request,$service);
+                if(!$checkBalance['success']){
+                    return response()->json(['success' => false,'error' => 'Insufficient balance'], 400);
+                }
+            }
             try {
                 $validatedData['date'] = Carbon::createFromFormat('Y-m-d', $validatedData['date'])->format('Y-m-d');
                 $validatedData['end_date'] = Carbon::createFromFormat('Y-m-d', $validatedData['end_date'])->format('Y-m-d');
@@ -158,7 +172,14 @@ class EventController extends Controller
                 // Llamar a bookingCreate y manejar su resultado
 
                 $request->merge($professionalId);
-                $this->bookingCreate($request, $validatedData, $event);
+                $bookingData = $this->bookingCreate($request, $validatedData, $event);
+                $dataArray = json_decode($bookingData->getContent(), true);
+                if ($dataArray['status'] === true && $bookingData->getStatusCode() === 200) {
+                    $chekcoutController = new CheckoutController();
+                    $booking = ['booking_id' => $dataArray['data']['id']];
+                    $request->merge($booking);
+                    $chekcoutController->store($request,$service['total_amount']);
+                }
             }
 
             // Notificación
@@ -240,6 +261,20 @@ class EventController extends Controller
                         'owner_id' => $ownerId,
                     ]);
                 }
+                //buscamos al profesional en la reserva en base al eventId
+                $existBooking = Booking::where('event_id',$event->id)->first();
+                if($existBooking){
+                    //verificamos si esta el profesional en la reserva
+                    $existProfessional = EventDetail::where('event_id',$event->id)->where('owner_id',$existBooking->employee_id)->first();
+                    if(!$existProfessional){
+                        EventDetail::create([
+                            'event_id' => $event->id,
+                            'pet_id'   => $request->input('pet_id', $pet_id),
+                            'owner_id' => $existBooking->employee_id,
+                        ]);
+                    }
+                }
+
             } else {
                 if ($request->has('pet_id')) {
                     EventDetail::where('event_id', $event->id)->update(['pet_id' => $request->input('pet_id')]);
@@ -306,8 +341,8 @@ class EventController extends Controller
                 $event->booking->employee_veterinary->service->category->id : null,
 
             'training_id' => isset($event->booking->employee_training) ? $event->booking->employee_training->training_id : null,
-           'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null,
-           'image' => isset($event->image) ? asset($event->image) : null
+            'duration_id' => isset($event->booking->employee_training) ? intval($event->booking->employee_training->duration) : null,
+            'image' => isset($event->image) ? asset($event->image) : null
 
         ];
         return response()->json([
@@ -489,5 +524,49 @@ class EventController extends Controller
 
         // Llamar al método store del controlador
         return $bookingController->store($request);
+    }
+
+    private function checkBalance($request, $service)
+    {
+        $amount = $service['total_amount'];
+        $chekcoutController = new CheckoutController();
+        $user = User::find($request->input('user_id'));
+        $wallet = Wallet::where('user_id', $user->id)->first();
+        $checkBalance = $chekcoutController->checkBalance($wallet,$amount);
+        return $checkBalance;
+    }
+
+    private function service($request, $bookingType)
+    {
+        $serviceAmount = [
+            'amount' => 0,
+            'tax' => 0,
+            'total_amount' => 0
+        ];
+        if ($request->input('service_id') && $bookingType == 'veterinary') {
+            $service = Service::find($request->input('service_id'));
+            $serviceController = new ServiceController();
+            $response = $serviceController->servicePrice($request);
+            $responseData = json_decode($response->getContent(), true);
+            if ($responseData['status']) {
+                $serviceAmount['amount'] = round($responseData['data']['amount'], 2);
+                $serviceAmount['tax'] = round($responseData['data']['tax'], 2);
+                $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
+            }
+        }
+        if ($request->input('duration_id') && $bookingType == 'training') {
+            $serviceDuration = ServiceDuration::find($request->input('duration_id'));
+            $serviceDurationController = new ServiceDurationController();
+            $response = $serviceDurationController->duration_price($request);
+            // Asegurarse de que la respuesta sea válida y extraer los datos
+            $responseData = json_decode($response->getContent(), true);
+            if ($responseData['status']) {
+                $serviceAmount['amount'] = round($responseData['data']['amount'], 2);
+                $serviceAmount['tax'] = round($responseData['data']['tax'], 2);
+                $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
+            }
+        }
+
+        return $serviceAmount;
     }
 }
