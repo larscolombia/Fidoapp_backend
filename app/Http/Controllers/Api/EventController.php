@@ -182,8 +182,9 @@ class EventController extends Controller
                 }
             }
 
+            $titleEvent = in_array($request->input('tipo'), ['medico', 'entrenamiento']) ? __('event.event'). ' '.($request->input('tipo') == 'medico' ? 'médico' : $request->input('tipo')) : __('event.event');
             // Notificación
-            $this->sendNotification('event', $event, $ownerIds, $event->description);
+            $this->sendNotification($titleEvent, $event, $ownerIds, $event->description);
 
             DB::commit(); // Confirmar la transacción
 
