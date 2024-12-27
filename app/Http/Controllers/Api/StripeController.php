@@ -98,28 +98,32 @@ class StripeController extends Controller
             $session = \Stripe\Checkout\Session::retrieve($sessionId);
 
             if ($session->payment_status === 'paid') {
-                 // Extraer los metadatos de la sesión
-                $metadata = $session->metadata;
-                Log::info($metadata);
-                Payment::create([
-                    'amount' => $metadata['amount'],
-                    'description' => $metadata['descripcion'] ?? '',
-                    'user_id' => $metadata['id_user'],
-                    'id_service' => $metadata['id_service'],
-                    'payment_method_id' => 19,
-                    'stripe_session_id' =>  $sessionId
-                ]);
-                //actualizar wallet del usuario
-                $wallet = Wallet::where('user_id',$metadata['id_user'])->first();
-                if($wallet){
-                    $wallet->balance = $wallet->balance + $metadata['amount'];
-                    $wallet->save();
+                $existPayment = Payment::where('stripe_session_id', $sessionId)->first();
+                if (!$existPayment) {
+                    // Extraer los metadatos de la sesión
+                    $metadata = $session->metadata;
+                    //buscamos el id del metodo de pago
+                    $setting = Setting::where('name', 'str_payment_method')->first();
+                    Payment::create([
+                        'amount' => $metadata['amount'],
+                        'description' => $metadata['descripcion'] ?? '',
+                        'user_id' => $metadata['id_user'],
+                        'id_service' => $metadata['id_service'],
+                        'payment_method_id' => !is_null($setting) ? $setting->id : 19,
+                        'stripe_session_id' =>  $sessionId
+                    ]);
+                    //actualizar wallet del usuario
+                    $wallet = Wallet::where('user_id', $metadata['id_user'])->first();
+                    if ($wallet) {
+                        $wallet->balance = $wallet->balance + $metadata['amount'];
+                        $wallet->save();
+                    }
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'El pago ha sido procesado exitosamente.',
+                        'session' => $session,
+                    ], 200);
                 }
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'El pago ha sido procesado exitosamente.',
-                    'session' => $session,
-                ], 200);
             }
 
             return response()->json([
