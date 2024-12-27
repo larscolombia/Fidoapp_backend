@@ -33,5 +33,6 @@ yarn-error.log
 # !/public/modules/.gitkeep
 # /public/mix-manifest.json
 node_modules
-node_modules
+docker-compose.yml
+composer.lock
 /storage/media-library/**/*

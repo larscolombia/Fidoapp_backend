@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment('local')) {
+        if ($this->app->environment('dev')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
@@ -31,13 +31,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-    Blade::directive('hasPermission', function ($permission) {
-        return "<?php if (auth()->check() && auth()->user()->hasPermission({$permission})) : ?>";
-    });
-    
-    Blade::directive('endhasPermission', function () {
-        return '<?php endif; ?>';
-    });
- 
-}
+        Blade::directive('hasPermission', function ($permission) {
+            return "<?php if (auth()->check() && auth()->user()->hasPermission({$permission})) : ?>";
+        });
+
+        Blade::directive('endhasPermission', function () {
+            return '<?php endif; ?>';
+        });
+    }
 }
