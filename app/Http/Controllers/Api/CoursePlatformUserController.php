@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use App\Models\Wallet;
 use App\Trait\Notification;
 use Illuminate\Http\Request;
 use App\Models\CoursePlatformVideo;
@@ -100,7 +99,8 @@ class CoursePlatformUserController extends Controller
                     'data' => $existSubscription
                 ], 400);
             }
-            $this->updateWallet($data['user_id'],$coursePlatform->price);
+            $chekcoutController = new CheckoutController();
+            $chekcoutController->store($request,$coursePlatform->price);
             $subscription = CoursePlatformUserSubscription::create($data);
 
             //notify
@@ -163,10 +163,4 @@ class CoursePlatformUserController extends Controller
         return $checkBalance;
     }
 
-    private function updateWallet($userId,$amount)
-    {
-        $wallet = Wallet::where('user_id', $userId)->first();
-        $wallet->balance = $wallet->balance - $amount;
-        $wallet->save();
-    }
 }
