@@ -44,7 +44,7 @@ class EventController extends Controller
 
     public function getEventsByUser($user_id)
     {
-        $events = Event::where('user_id', $user_id)->get();
+        $events = Event::where('user_id', $user_id)->orderBy('updated_at', 'desc')->get();
         $data = $events->map(function ($event) {
             $owners = [];
 
@@ -405,6 +405,7 @@ class EventController extends Controller
 
             $eventDetails = EventDetail::where('owner_id', $data['user_id'])
                 ->where('confirm', 'A')
+                ->orderBy('updated_at', 'desc')
                 ->get();
 
             $results = $eventDetails->map(function ($eventDetail) {
