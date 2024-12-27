@@ -86,22 +86,21 @@ class CoinController extends Controller
             }
 
             // Verifica si el precio ya existe
-            $priceId = $this->getPriceId($product->id); // Método para obtener el ID del precio
+            $priceId = $this->getPriceId($coin->id); // Método para obtener el ID del precio
             if ($priceId) {
-                // Si existe, actualiza el precio
-                $price = $this->updatePrice($priceId, $coin->conversion_rate);
-            } else {
-                // Si no existe, crea un nuevo precio
-                $price = $this->createPrice($product->id, $coin->conversion_rate);
+                // Si existe, lo desactivamos
+                $this->deactivatePrice($priceId);
             }
-
+            $price = $this->createPrice($product->id, $coin->conversion_rate);
             // Guarda los datos en la base de datos local
             $this->saveCoinPrice($coin->id, $product->id, $price->id);
-            $data = [$product,$price];
-            return response()->json(['success' => true,'data' => $data], 201);
+            $data = [$product, $price];
+            return response()->json(['success' => true, 'data' => $data], 201);
         } catch (\Stripe\Exception\ApiErrorException $e) {
+            Log::info($e);
             return response()->json(['error' => 'Error en Stripe: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+            Log::info($e);
             return response()->json(['error' => 'Error al crear o actualizar el producto o precio en Stripe: ' . $e->getMessage()], 500);
         }
     }
@@ -120,8 +119,8 @@ class CoinController extends Controller
 
     private function getProductId($coin)
     {
-        $coinPrice = CoinPrice::where('coin_id',$coin->id)->first();
-        if($coinPrice){
+        $coinPrice = CoinPrice::where('coin_id', $coin->id)->first();
+        if ($coinPrice) {
             return $coinPrice->stripe_product_id;
         }
         return null;
@@ -143,10 +142,10 @@ class CoinController extends Controller
         ]);
     }
 
-    private function getPriceId($productId)
+    private function getPriceId($coinId)
     {
-        $coinPrice = CoinPrice::where('stripe_product_id',$productId)->first();
-        if($coinPrice){
+        $coinPrice = CoinPrice::where('coin_id', $coinId)->first();
+        if ($coinPrice) {
             return $coinPrice->stripe_product_id;
         }
         return null;
@@ -161,13 +160,28 @@ class CoinController extends Controller
         ]);
     }
 
-    private function updatePrice($priceId, $conversionRate)
+    private function deactivatePrice($priceId)
     {
-        return Price::update($priceId, [
-            'unit_amount' => $conversionRate * 100,
-            // Puedes actualizar otros campos según sea necesario
-        ]);
+        try {
+            // Intentar recuperar el precio
+            $price = \Stripe\Price::retrieve($priceId);
+
+            // Si se recupera correctamente, desactivar el precio
+            return \Stripe\Price::update($priceId, [
+                'active' => false,
+            ]);
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
+            // Manejar el caso donde el precio no existe
+            if ($e->getHttpStatus() === 404) {
+                // El precio no existe, no hacemos nada
+                return null; // O puedes lanzar un mensaje o loguear la información
+            }
+
+            // Manejar otros errores
+            throw $e;
+        }
     }
+
 
     private function saveCoinPrice($coinId, $productId, $priceId)
     {
@@ -179,5 +193,4 @@ class CoinController extends Controller
             ]
         );
     }
-
 }
