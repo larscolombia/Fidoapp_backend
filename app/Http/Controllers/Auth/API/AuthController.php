@@ -6,6 +6,7 @@ use DB;
 use Auth;
 use Hash;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use App\Models\PermissionRequest;
@@ -32,7 +33,7 @@ class AuthController extends Controller
         $success['name'] = $user->name;
 
         $userResource = new RegisterResource($user);
-
+        $this->createWallet($user);
         return $this->sendResponse($userResource, __('messages.register_successfull'));
     }
 
@@ -184,7 +185,7 @@ class AuthController extends Controller
             $user->assignRole($usertype);
 
             $user->save();
-
+            $this->createWallet($user);
             if ($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker") {
                 $commission = Commission::first();
                 EmployeeCommission::create([
@@ -529,5 +530,14 @@ class AuthController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    private function createWallet($user)
+    {
+        Wallet::firstOrCreate([
+            'user_id' => $user->id,
+        ], [
+            'balance' => 0, // Puedes establecer un saldo inicial si lo deseas
+        ]);
     }
 }

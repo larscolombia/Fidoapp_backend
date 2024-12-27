@@ -29,12 +29,6 @@
                     <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
                 </div>
 
-
-                <div class="mb-3">
-                    <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
-                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
-                </div>
-
                 <div class="mb-3">
                     <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
                     <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" required>
