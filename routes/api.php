@@ -3681,7 +3681,29 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Obtener información de la wallet del usuario autenticado
     Route::get('wallet', [WalletController::class, 'index']);
-
+       /**
+     * Obtener las transacciones de un usuario
+     *
+     * Método HTTP: GET
+     * Ruta: /api/wallet-transactions
+     * Descripción: Obtiene las operaciones que haya hecho el usuario
+     *
+     * Parámetros de Ruta:
+     * - user_id: int (Requerido) - ID del usuario.
+     *
+     * Respuesta Exitosa:
+     * {
+     *     "data": "Informacion de las operaciones",
+     *     "success": true
+     * }
+     *
+     * Respuesta de Error:
+     * {
+     *     "message": "Error al consultar las operaciones",
+     *     "success": false
+     * }
+     */
+    Route::get('wallet-transactions',[WalletController::class, 'transactions']);
     // Depositar fondos en la wallet
     Route::post('/wallet/deposit', [WalletController::class, 'deposit']);
 

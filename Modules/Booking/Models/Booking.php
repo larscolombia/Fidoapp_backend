@@ -2,17 +2,18 @@
 
 namespace Modules\Booking\Models;
 
-use App\Models\BaseModel;
-use App\Models\Branch;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Branch;
+use App\Models\BaseModel;
+use Modules\Pet\Models\Pet;
+use Modules\Event\Models\Event;
+use Modules\Tip\Trait\TipTrait;
+use Modules\Service\Models\Service;
+use Modules\Service\Models\SystemService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Commission\Trait\CommissionTrait;
-use Modules\Service\Models\Service;
-use Modules\Tip\Trait\TipTrait;
-use Modules\Pet\Models\Pet;
-use Modules\Service\Models\SystemService;
 use Modules\Booking\Models\BookingRequestMapping;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Booking extends BaseModel
 {
@@ -146,5 +147,10 @@ class Booking extends BaseModel
         } else {
             return $query->whereNotNull('branch_id');
         }
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class,'event_id','id');
     }
 }
