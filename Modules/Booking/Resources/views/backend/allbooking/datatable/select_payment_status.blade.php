@@ -8,7 +8,7 @@
         @foreach ($payment_status as $key => $value )
 
         <option value="{{$value->value}}" {{$data->payment->payment_status  == $value->value ? 'selected' : ''}}>
-            {{$value->name}}</option>
+            {{__('messages.'.$value->name)}}</option>
         @endforeach
     </select>
 
@@ -19,15 +19,15 @@
 @if(isset($data->payment))
     @if($data->payment->payment_status==$value->value)
 
-    <span class="text-capitalize badge bg-soft-info p-3">{{$value->name}}</span>
+    <span class="text-capitalize badge bg-soft-info p-3">{{__('messages.'.$value->name)}}</span>
     @endif
 @endif
 
 @endforeach
 
-@endif 
+@endif
 @else
 
 <span class="text-capitalize badge bg-soft-danger p-3">Failed</span>
 
-@endif 
+@endif

@@ -2,34 +2,35 @@
 
 namespace Modules\Booking\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Http\Controllers\Controller;
-use App\Models\User;
+use DateTime;
 use Carbon\Carbon;
-use Illuminate\Database\Query\Expression;
+use App\Models\Coin;
+use App\Models\User;
+use App\Authorizable;
+use Modules\Tax\Models\Tax;
 use Illuminate\Http\Request;
-use Modules\Booking\Http\Requests\BookingRequest;
+use Yajra\DataTables\DataTables;
 use Modules\Booking\Models\Booking;
-use Modules\Booking\Models\BookingService;
-use Modules\Booking\Models\BookingTransaction;
+use Modules\Service\Models\Service;
+use App\Http\Controllers\Controller;
+use Modules\Constant\Models\Constant;
 use Modules\Booking\Trait\BookingTrait;
 use Modules\Booking\Trait\PaymentTrait;
-use Modules\Booking\Transformers\BookingResource;
-use Modules\Constant\Models\Constant;
-use Modules\Service\Models\Service;
-use Modules\Tax\Models\Tax;
-use Yajra\DataTables\DataTables;
-use Modules\Booking\Models\BookingBoardingMapping;
-use Modules\Booking\Models\BookingVeterinaryMapping;
-use Modules\Booking\Models\BookingGroomingMapping;
-use Modules\Booking\Models\BookingTrainerMapping;
-use Modules\Booking\Models\BookingWalkerMapping;
-use Modules\Booking\Models\BookingDayCareMapping;
+use Illuminate\Database\Query\Expression;
 use Modules\Service\Models\SystemService;
-use  Modules\Service\Models\ServiceDuration;
+use Modules\Booking\Models\BookingService;
 use Modules\Service\Models\ServiceFacility;
+use  Modules\Service\Models\ServiceDuration;
+use Modules\Booking\Models\BookingTransaction;
+use Modules\Booking\Models\BookingWalkerMapping;
+use Modules\Booking\Http\Requests\BookingRequest;
+use Modules\Booking\Models\BookingDayCareMapping;
+use Modules\Booking\Models\BookingTrainerMapping;
+use Modules\Booking\Transformers\BookingResource;
+use Modules\Booking\Models\BookingBoardingMapping;
 
-use DateTime;
+use Modules\Booking\Models\BookingGroomingMapping;
+use Modules\Booking\Models\BookingVeterinaryMapping;
 // use Modules\CustomField\Models\CustomField;
 // use Modules\CustomField\Models\CustomFieldGroup;
 
@@ -254,7 +255,7 @@ class AllBookingsController extends Controller
         $employee = User::where('user_type', 'boarder')->get();
 
         $payment_status = Constant::getAllConstant()->where('type', 'PAYMENT_STATUS')->where('status', '=', '1');
-        
+        $coin = Coin::first();
         return $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
@@ -322,7 +323,7 @@ class AllBookingsController extends Controller
                 }
             })
             ->editColumn('system_service_id', function ($data) {
-                return $data->systemservice->name;
+                return $this->translateService($data->systemservice->name);
             })
             ->orderColumn('system_service_id', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT name FROM system_services WHERE id = bookings.system_service_id LIMIT 1)'), $order);
@@ -335,8 +336,8 @@ class AllBookingsController extends Controller
                     });
                 }
             })
-            ->editColumn('service_amount', function ($data) {
-                return '<span class="text-primary">'.\Currency::format($data->total_amount).'</span>';
+            ->editColumn('service_amount', function ($data) use ($coin) {
+                return '<span class="text-primary">'.number_format($data->total_amount,2).$coin->symbol.'</span>';
             })
             ->orderColumn('service_amount', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT total_amount FROM booking_transactions WHERE booking_id = bookings.id)'), $order);
@@ -416,6 +417,24 @@ class AllBookingsController extends Controller
             ->rawColumns(['check', 'action','pet_name', 'status', 'services', 'service_duration', 'pick_date_time','service_amount','start_date_time','id'])
             ->orderColumns(['id'], '-:column $1')
             ->make(true);
+    }
+    private function translateService($serviceName) {
+        switch ($serviceName) {
+            case 'Training':
+                return 'Entrenador';
+            case 'Boarding':
+                return 'Pensión';
+            case 'DayCare':
+                return 'Guardería';
+            case 'Veterinary':
+                return 'Veterinario';
+            case 'Grooming':
+                return 'Estética';
+            case 'Walking':
+                return 'Paseador';
+            default:
+                return 'Servicio no disponible';
+        }
     }
 
     /**
