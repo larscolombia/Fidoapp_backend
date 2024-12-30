@@ -89,12 +89,30 @@ const props = defineProps({
   }
 })
 
-const formatCurrencyVue = (value) => {
-  if (window.currencyFormat !== undefined) {
-    return window.currencyFormat(value)
+// const formatCurrencyVue = (value) => {
+//   if (window.currencyFormat !== undefined) {
+//     return window.currencyFormat(value)
+//   }
+//   return value
+// }
+
+const formatCurrencyVue = async (value) => {
+  // Convertir el valor a número y formatearlo a dos decimales
+  const formattedValue = Number(value).toFixed(2);
+
+  try {
+    // Hacer la consulta al endpoint para obtener el símbolo
+    const response = await axios.get('/api/get-symbol');
+    const symbol = response.data.symbol; // Obtener el símbolo de la respuesta
+
+    // Retornar el valor formateado concatenado con el símbolo
+    return `${formattedValue} ${symbol}`;
+  } catch (error) {
+    console.error('Error al obtener el símbolo de la moneda:', error);
+    // Retornar solo el valor formateado si hay un error
+    return formattedValue;
   }
-  return value
-}
+};
 
 const prevTabChange = (val) => emit('tab-change', val)
 

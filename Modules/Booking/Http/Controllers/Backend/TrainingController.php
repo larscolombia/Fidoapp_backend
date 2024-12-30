@@ -2,18 +2,19 @@
 
 namespace Modules\Booking\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Http\Controllers\Controller;
-use App\Models\Herramienta;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Query\Expression;
+use App\Models\Coin;
+use App\Models\User;
+use App\Authorizable;
+use App\Models\Herramienta;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Modules\Booking\Trait\BookingTrait;
-use Modules\Constant\Models\Constant;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
+use App\Http\Controllers\Controller;
+use Modules\Constant\Models\Constant;
+use Modules\Booking\Trait\BookingTrait;
+use Illuminate\Database\Query\Expression;
 
 
 class TrainingController extends Controller
@@ -182,7 +183,7 @@ class TrainingController extends Controller
         $payment_status = Constant::getAllConstant()->where('type', 'PAYMENT_STATUS')->where('status', '=', '1');
 
         $employee = User::where('user_type', 'trainer')->get();
-
+        $coin = Coin::first();
         return $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
@@ -221,8 +222,10 @@ class TrainingController extends Controller
                     return view('booking::backend.bookings.datatable.select_employee', compact('data', 'employee'));
                 }
             })
-            ->editColumn('service_amount', function ($data) {
-                return '<span>' . \Currency::format($data->total_amount) . '</span>';
+            ->editColumn('service_amount', function ($data) use ($coin) {
+                $value = $data->total_amount;
+                $valueFormat = str_replace('$','',$value);
+                return '<span>' . $valueFormat.$coin->symbol . '</span>';
             })
             ->orderColumn('service_amount', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT total_amount FROM booking_transactions WHERE booking_id = bookings.id)'), $order);

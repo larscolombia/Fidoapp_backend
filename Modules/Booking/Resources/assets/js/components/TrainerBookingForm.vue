@@ -1,22 +1,27 @@
 <template>
   <form>
-    <div :class="`offcanvas offcanvas-end offcanvas-booking`" data-bs-scroll="true" tabindex="-1" id="form-offcanvas" aria-labelledby="offcanvasBookingForm">
+    <div :class="`offcanvas offcanvas-end offcanvas-booking`" data-bs-scroll="true" tabindex="-1" id="form-offcanvas"
+      aria-labelledby="offcanvasBookingForm">
       <template v-if="SINLGE_STEP == 'MAIN' && status == 'completed'">
         <InvoiceComponent :booking_id="id"></InvoiceComponent>
       </template>
       <template v-else-if="SINLGE_STEP == 'MAIN' && status != 'checkout'">
         <div class="offcanvas-header">
-          <BookingHeader :currentId="currentId" :editTitle="editTitle" :createTitle="createTitle" :status="status" :is_paid="is_paid" @statusUpdate="updateStatus"></BookingHeader>
+          <BookingHeader :currentId="currentId" :editTitle="editTitle" :createTitle="createTitle" :status="status"
+            :is_paid="is_paid" @statusUpdate="updateStatus"></BookingHeader>
         </div>
-        <BookingStatus v-if="id" :status="status" :booking_id="id" :status-list="statusList" :employee_id="employee_id" @statusUpdate="updateStatus"></BookingStatus>
+        <BookingStatus v-if="id" :status="status" :booking_id="id" :status-list="statusList" :employee_id="employee_id"
+          @statusUpdate="updateStatus"></BookingStatus>
         <div>
           <div class="d-flex text-center date-time d-none">
             <div class="col-6 py-3">
-              <i>On</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{ moment(start_date_time).format('D, MMM YYYY') }}</strong>
+              <i>On</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{
+                moment(start_date_time).format('D, MMM YYYY') }}</strong>
               <strong v-else> {{ moment(current_date).format('D, MMM YYYY') }}</strong>
             </div>
             <div class="col-6 py-3">
-              <i>At</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{ moment(start_date_time).format('HH:mm') }}</strong>
+              <i>At</i> <strong v-if="start_date_time && start_date_time !== 'Invalid date'">{{
+                moment(start_date_time).format('HH:mm') }}</strong>
               <strong v-else>{{ moment().format(' HH:mm') }}</strong>
             </div>
           </div>
@@ -25,66 +30,73 @@
           <div class="form-group">
             <!-- data-bs-toggle="modal" data-bs-target="#exampleModal" -->
             <div class="d-flex justify-content-between align-items-center">
-              <label class="form-label d-block" v-if="!selectedCustomer">{{ $t('booking.lbl_choose_customer') }} <span class="text-danger">*</span> </label>
+              <label class="form-label d-block" v-if="!selectedCustomer">{{ $t('booking.lbl_choose_customer') }} <span
+                  class="text-danger">*</span> </label>
               <span v-if="!selectedCustomer">
-                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#customer-form-offcanvas" class="btn btn-sm text-primary border-0 px-0 float-end"><i class="fa-solid fa-plus"></i> {{ $t('booking.addnew') }}</button>
+                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#customer-form-offcanvas"
+                  class="btn btn-sm text-primary border-0 px-0 float-end"><i class="fa-solid fa-plus"></i> {{
+                    $t('booking.addnew') }}</button>
               </span>
             </div>
             <div class="user-block bg-white p-3 rounded" v-if="selectedCustomer">
               <div class="d-flex align-items-start gap-4 mb-2">
-                <img :src="selectedCustomer.profile_image" alt="avatar" class="img-fluid avatar avatar-60 rounded-pill" />
+                <img :src="selectedCustomer.profile_image" alt="avatar"
+                  class="img-fluid avatar avatar-60 rounded-pill" />
                 <div class="flex-grow-1">
                   <div class="gap-2">
                     <h5>{{ selectedCustomer.full_name }}</h5>
-                    <p class="m-0">{{ $t('booking.lbl_pgroom') }} {{ moment(selectedCustomer.created_at).format('MMMM YYYY') }}</p>
+                    <p class="m-0">{{ $t('booking.lbl_pgroom') }} {{ moment(selectedCustomer.created_at).format('MMMMYYYY') }}</p>
                   </div>
                 </div>
-                <button type="button" v-if="status !== 'check_in' && !is_paid" @click="removeCustomer()" class="text-danger bg-transparent border-0"><i class="fa-regular fa-trash-can"></i></button>
+                <button type="button" v-if="status !== 'check_in' && !is_paid" @click="removeCustomer()"
+                  class="text-danger bg-transparent border-0"><i class="fa-regular fa-trash-can"></i></button>
               </div>
               <div class="row m-0">
-                <label class="col-3 p-0"
-                  ><i
-                    ><span class="fst-normal">{{ $t('booking.lbl_phone') }}</span></i
-                  ></label
-                >
+                <label class="col-3 p-0"><i><span class="fst-normal">{{ $t('booking.lbl_phone') }}</span></i></label>
                 <strong class="col p-0">{{ selectedCustomer.mobile }}</strong>
               </div>
               <div class="row mx-0 mb-3">
-                <label class="col-3 p-0"
-                  ><i
-                    ><span class="fst-normal">{{ $t('booking.lbl_e-mail') }}</span></i
-                  ></label
-                >
+                <label class="col-3 p-0"><i><span class="fst-normal">{{ $t('booking.lbl_e-mail') }}</span></i></label>
                 <strong class="col p-0">{{ selectedCustomer.email }}</strong>
               </div>
             </div>
-            <Multiselect id="user_id" v-else v-model="user_id" :placeholder="$t('messages.select_customer')" :disabled="is_paid || filterStatus(status).is_disabled" :value="user_id" v-bind="singleSelectOption" :options="customer.options" @select="customerSelect" class="form-group"></Multiselect>
+            <Multiselect id="user_id" v-else v-model="user_id" :placeholder="$t('messages.select_customer')"
+              :disabled="is_paid || filterStatus(status).is_disabled" :value="user_id" v-bind="singleSelectOption"
+              :options="customer.options" @select="customerSelect" class="form-group"></Multiselect>
             <span class="text-danger">{{ errors.user_id }}</span>
           </div>
 
           <div v-if="selectedCustomer">
             <div class="col-md-12 form-group">
               <div class="d-flex justify-content-between align-items-center">
-                <label class="form-label d-block">{{ $t('booking.lbl_choose_pet') }} <span class="text-danger">*</span> </label>
-                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#PetFromOffcanvas" class="btn btn-sm text-primary px-0 float-end"><i class="fa-solid fa-plus"></i> {{ $t('booking.addpet') }}</button>
+                <label class="form-label d-block">{{ $t('booking.lbl_choose_pet') }} <span class="text-danger">*</span>
+                </label>
+                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#PetFromOffcanvas"
+                  class="btn btn-sm text-primary px-0 float-end"><i class="fa-solid fa-plus"></i> {{
+                    $t('booking.addpet') }}</button>
               </div>
-              <Multiselect id="pet" v-model="pet" :value="pet" :placeholder="$t('branch.select_pet')" v-bind="SingleSelectOption" :options="pet_list.options" class="form-group"></Multiselect>
+              <Multiselect id="pet" v-model="pet" :value="pet" :placeholder="$t('branch.select_pet')"
+                v-bind="SingleSelectOption" :options="pet_list.options" class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.pet }}</span>
             </div>
 
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label d-block" for="date">{{ $t('booking.lbl_date') }} <span class="text-danger">*</span></label>
-                  <flat-pickr :placeholder="$t('booking.lbl_date')" id="date" class="form-control" v-model="date" :value="date" :config="config"></flat-pickr>
+                  <label class="form-label d-block" for="date">{{ $t('booking.lbl_date') }} <span
+                      class="text-danger">*</span></label>
+                  <flat-pickr :placeholder="$t('booking.lbl_date')" id="date" class="form-control" v-model="date"
+                    :value="date" :config="config"></flat-pickr>
                   <span class="text-danger">{{ errors.date }}</span>
                 </div>
               </div>
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label" for="time">{{ $t('booking.lbl_time') }} <span class="text-danger">*</span></label>
-                  <flat-pickr :placeholder="$t('booking.lbl_time')" id="time" class="form-control" v-model="time" :value="time" :config="config_time"></flat-pickr>
+                  <label class="form-label" for="time">{{ $t('booking.lbl_time') }} <span
+                      class="text-danger">*</span></label>
+                  <flat-pickr :placeholder="$t('booking.lbl_time')" id="time" class="form-control" v-model="time"
+                    :value="time" :config="config_time"></flat-pickr>
                   <span class="text-danger">{{ errors.time }}</span>
                 </div>
               </div>
@@ -92,19 +104,24 @@
 
             <div class="col-md-12 form-group">
               <label class="form-label">{{ $t('booking.lbl_training') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="training" v-model="training" :value="training" :placeholder="$t('booking.lbl_training')" v-bind="SingleSelectOption" :options="training_list.options" class="form-group"></Multiselect>
+              <Multiselect id="training" v-model="training" :value="training" :placeholder="$t('booking.lbl_training')"
+                v-bind="SingleSelectOption" :options="training_list.options" class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.training }}</span>
             </div>
 
             <div class="col-md-12 form-group">
               <label class="form-label">{{ $t('booking.lbl_trainer') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="employee_id" v-model="employee_id" :value="employee_id" :placeholder="$t('booking.lbl_trainer')" v-bind="SingleSelectOption" :options="trainer_list.options" class="form-group"></Multiselect>
+              <Multiselect id="employee_id" v-model="employee_id" :value="employee_id"
+                :placeholder="$t('booking.lbl_trainer')" v-bind="SingleSelectOption" :options="trainer_list.options"
+                class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.employee_id }}</span>
             </div>
 
             <div class="col-md-12 form-group">
               <label class="form-label">{{ $t('booking.lbl_duration') }} <span class="text-danger">*</span> </label>
-              <Multiselect id="duration" v-model="duration" :value="duration" :placeholder="$t('booking.lbl_duration')" @select="checkTotalAmount" v-bind="SingleSelectOption" :options="duration_list.options" :allow-empty="false" class="form-group"></Multiselect>
+              <Multiselect id="duration" v-model="duration" :value="duration" :placeholder="$t('booking.lbl_duration')"
+                @select="checkTotalAmount" v-bind="SingleSelectOption" :options="duration_list.options"
+                :allow-empty="false" class="form-group"></Multiselect>
               <span class="text-danger">{{ errors.duration }}</span>
             </div>
 
@@ -127,11 +144,13 @@
               <h6 class="mb-0 pe-2 me-2 border-end">{{ $t('booking.amount') }}</h6>
             </label>
             <span id="totalAmountSpan" class="fw-bold">{{ formatCurrencyVue(totalAmount) }}</span>
-            <small class="text-body ps-1">({{ $t('booking.included') }} {{ formatCurrencyVue(totalTaxAmount) }} {{ $t('booking.tax') }})</small>
+            <small class="text-body ps-1">({{ $t('booking.included') }} {{ formatCurrencyVue(totalTaxAmount) }} {{
+              $t('booking.tax') }})</small>
           </div>
           <div class="d-grid d-md-flex gap-3 pt-5">
             <div class="d-grid d-md-flex gap-3 p-3">
-              <button class="btn btn-primary d-flex align-items-center gap-2 fw-600" id="save-button" @click="formSubmit" :disabled="totalAmount < 1">
+              <button class="btn btn-primary d-flex align-items-center gap-2 fw-600" id="save-button"
+                @click="formSubmit" :disabled="totalAmount < 1">
                 {{ $t('booking.btn_save') }}
                 <i class="icon-disk"></i>
               </button>
@@ -170,6 +189,7 @@ import CustomeFormOffcanvas from './Forms/CustomeFormOffcanvas.vue'
 import PetFromOffcanvas from './Forms/PetFromOffcanvas.vue'
 import { useSelect } from '@/helpers/hooks/useSelect'
 import moment from 'moment'
+import axios from 'axios';
 let translations = {};
 const defaultTranslations = {
   required: 'Este campo es obligatorio.',
@@ -207,7 +227,7 @@ async function loadTranslations() {
 }
 // Llamar a la función para cargar las traducciones
 loadTranslations();
-function getTranslation(key,default_min = null, default_max = null) {
+function getTranslation(key, default_min = null, default_max = null) {
   // Intenta obtener las traducciones del localStorage
   const storedTranslations = localStorage.getItem('translations');
 
@@ -215,10 +235,10 @@ function getTranslation(key,default_min = null, default_max = null) {
     const translationsFromStorage = JSON.parse(storedTranslations);
     // Devuelve la traducción correspondiente si existe
     if (translationsFromStorage[key]) {
-      if(default_min !== null){
+      if (default_min !== null) {
         translationsFromStorage[key].replace(':min', default_min);
       }
-      if(default_max !== null){
+      if (default_max !== null) {
         translationsFromStorage[key].replace(':max', default_max);
       }
       return translationsFromStorage[key].replace(':attribute', '');
@@ -230,12 +250,51 @@ function getTranslation(key,default_min = null, default_max = null) {
 }
 const { getRequest, storeRequest, updateRequest, listingRequest } = useRequest()
 
+// const formatCurrencyVue = (value) => {
+//   if (window.currencyFormat !== undefined) {
+//     return window.currencyFormat(value)
+//   }
+//   return value
+// }
 const formatCurrencyVue = (value) => {
-  if (window.currencyFormat !== undefined) {
-    return window.currencyFormat(value)
+  // Convertir el valor a número y formatearlo a dos decimales
+  const formattedValue = Number(value).toFixed(2);
+  
+  // Verificar si hay un símbolo almacenado en localStorage
+  const storedSymbol = localStorage.getItem('currencySymbol');
+  
+  // Si existe el símbolo, concatenarlo con el valor formateado
+  if (storedSymbol) {
+    return `${formattedValue} ${storedSymbol}`;
+  } else {
+    // Si no existe el símbolo, retornar solo el valor formateado
+    return `${formattedValue}`;
   }
-  return value
+};
+setCurrencySymbol();
+async function setCurrencySymbol() {
+  // Verificar si el símbolo ya está almacenado en localStorage
+  const storedSymbol = localStorage.getItem('currencySymbol');
+  if (storedSymbol) {
+    return storedSymbol; // Retornar el símbolo almacenado si existe
+  }
+
+  // Si no existe, intentar obtenerlo del API
+  try {
+    const response = await axios.get('/api/get-symbol');
+    const symbol = response.data.symbol;
+
+    // Almacenar el símbolo en localStorage
+    localStorage.setItem('currencySymbol', symbol);
+    
+    return symbol; // Retornar el nuevo símbolo
+  } catch (error) {
+    console.error('Error al obtener el símbolo de la moneda:', error);
+    return null; // Retornar null en caso de error
+  }
 }
+
+
 // Props
 const props = defineProps({
   statusList: { type: Object },
@@ -509,6 +568,7 @@ const updateStatus = (data) => {
 .offcanvas {
   box-shadow: none;
 }
+
 .service-duration {
   position: absolute;
   /* padding: 2px 8px; */
@@ -526,13 +586,16 @@ const updateStatus = (data) => {
 [dir='rtl'] .border-br-radius-0 {
   border-bottom-left-radius: 0;
 }
+
 .date-time {
   border-top: 1px solid var(--bs-border-color);
 }
-.date-time > div:not(:first-child) {
+
+.date-time>div:not(:first-child) {
   border-left: 1px solid var(--bs-border-color);
 }
-.list-group-flush > .list-group-item {
+
+.list-group-flush>.list-group-item {
   color: var(--bs-body-color);
 }
 </style>

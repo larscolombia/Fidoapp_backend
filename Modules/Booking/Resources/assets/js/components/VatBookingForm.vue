@@ -208,7 +208,7 @@ import CustomeFormOffcanvas from './Forms/CustomeFormOffcanvas.vue'
 
 import { useSelect } from '@/helpers/hooks/useSelect'
 import moment from 'moment'
-
+import axios from 'axios';
 const { getRequest, storeRequest, updateRequest, listingRequest } = useRequest()
 
 // File Upload Function
@@ -224,11 +224,49 @@ const fileUpload = async (e) => {
 // Event Emits
 //const emit = defineEmits(['onSubmit'])
 
+// const formatCurrencyVue = (value) => {
+//   if (window.currencyFormat !== undefined) {
+//     return window.currencyFormat(value)
+//   }
+//   return value
+// }
+
 const formatCurrencyVue = (value) => {
-  if (window.currencyFormat !== undefined) {
-    return window.currencyFormat(value)
+  // Convertir el valor a número y formatearlo a dos decimales
+  const formattedValue = Number(value).toFixed(2);
+  
+  // Verificar si hay un símbolo almacenado en localStorage
+  const storedSymbol = localStorage.getItem('currencySymbol');
+  
+  // Si existe el símbolo, concatenarlo con el valor formateado
+  if (storedSymbol) {
+    return `${formattedValue} ${storedSymbol}`;
+  } else {
+    // Si no existe el símbolo, retornar solo el valor formateado
+    return `${formattedValue}`;
   }
-  return value
+};
+setCurrencySymbol();
+async function setCurrencySymbol() {
+  // Verificar si el símbolo ya está almacenado en localStorage
+  const storedSymbol = localStorage.getItem('currencySymbol');
+  if (storedSymbol) {
+    return storedSymbol; // Retornar el símbolo almacenado si existe
+  }
+
+  // Si no existe, intentar obtenerlo del API
+  try {
+    const response = await axios.get('/api/get-symbol');
+    const symbol = response.data.symbol;
+
+    // Almacenar el símbolo en localStorage
+    localStorage.setItem('currencySymbol', symbol);
+    
+    return symbol; // Retornar el nuevo símbolo
+  } catch (error) {
+    console.error('Error al obtener el símbolo de la moneda:', error);
+    return null; // Retornar null en caso de error
+  }
 }
 
 const currentId = useModuleId(() => {

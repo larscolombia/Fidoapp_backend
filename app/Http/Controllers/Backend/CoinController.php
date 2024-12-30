@@ -160,6 +160,12 @@ class CoinController extends Controller
         ]);
     }
 
+    public function getSymbolCoin()
+    {
+        $coin = Coin::first();
+        return response()->json(['symbol' => $coin->symbol]);
+    }
+
     private function deactivatePrice($priceId)
     {
         try {

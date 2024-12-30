@@ -3675,6 +3675,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //fidocoin
     Route::get('coin', [CoinController::class, 'index']);
     Route::post('coin', [CoinController::class, 'store']);
+    Route::get('get-symbol',[CoinController::class,'getSymbolCoin']);
     //rutas stripe
     Route::post('link-to-stripe', [CoinController::class, 'linkToStripe']);
     Route::post('/checkout', [StripeController::class, 'checkout']);
