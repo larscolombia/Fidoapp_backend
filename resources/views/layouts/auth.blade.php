@@ -15,12 +15,12 @@
     <!-- Styles -->
     @stack('before-styles')
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/hope-ui.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/pro.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/dark.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/rtl.css') }}">
-    <link rel="stylesheet" href="{{ asset('custom-css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/customizer.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/hope-ui.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/pro.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/dark.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/rtl.css') }}">
+    <link rel="stylesheet" href="{{ mix('custom-css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/customizer.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
