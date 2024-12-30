@@ -146,7 +146,7 @@
             {
                 data: 'status',
                 name: 'status',
-                title: "{{ __('product.status') }}",
+                title: "{{ __('product.lbl_status') }}", 
                 orderable: false,
                 searchable: false,
             },

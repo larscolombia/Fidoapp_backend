@@ -32,12 +32,12 @@ const { storeRequest } = useRequest()
 
 // Validations
 const validationSchema = yup.object({
-  old_password: yup.string().required('Old Password is required field'),
-  new_password: yup.string().required('New password is required field').min(8, 'New password must be at least 8 characters'),
+  old_password: yup.string().required('Este campo es obligatorio.'),
+  new_password: yup.string().required('Este campo es obligatorio.').min(8,'Este campo debe tener al menos 8 caracteres.'),
   confirm_password: yup
     .string()
-    .oneOf([yup.ref('new_password'), null], 'Passwords must match')
-    .required('Confirm Password is required field')
+    .oneOf([yup.ref('new_password'), null], 'La confirmación no coincide.')
+    .required('Este campo es obligatorio.')
 })
 
 const defaultData = () => {

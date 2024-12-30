@@ -44,11 +44,11 @@ const currentId = useModuleId(() => {}, 'employee_assign')
 
 // Validations
 const validationSchema = yup.object({
-  password: yup.string().required('Password is a required field').min(8, 'Password must be at least 8 characters long'),
+  password: yup.string().required('Este campo es obligatorio.').min(8, 'Este campo debe tener al menos 8 caracteres.'),
   confirm_password: yup
     .string()
-    .required('Confirm password is a required field')
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .required('Este campo es obligatorio.')
+    .oneOf([yup.ref('password'), null], 'La confirmación no coincide.')
 })
 
 const defaultData = () => {

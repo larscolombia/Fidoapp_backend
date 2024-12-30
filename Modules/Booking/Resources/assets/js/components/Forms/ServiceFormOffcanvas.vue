@@ -186,10 +186,10 @@
   const numberRegex = /^\d+$/
   // Validations
   const validationSchema = yup.object({
-    name: yup.string().required('Name is a required field'),
-    duration_min: yup.string().required('Service Duration ( Mins ) is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-    default_price: yup.string().required('Default Price is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-    category_id: yup.string().required('Category is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
+    name: yup.string().required('Este campo es obligatorio.'),
+    duration_min: yup.string().required('Este campo es obligatorio.'),
+    default_price: yup.string().required('Este campo es obligatorio.').matches(/^\d+$/, 'El campo debe contener solo dígitos.'),
+    category_id: yup.string().required('Este campo es obligatorio.').matches(/^\d+$/, 'El campo debe contener solo dígitos.'),
      description:yup.string().test('no-script-tags', 'The Description field cannot contain script tags.', function(value) {
       const scriptTagRegex = /<script\b[^>]*>(.*?)/is;
       return !scriptTagRegex.test(value);

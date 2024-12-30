@@ -175,8 +175,8 @@ let EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 const validationSchema = yup.object({
   first_name: yup
     .string()
-    .required('First Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('Este campo es obligatorio.')
+    .test('is-string', 'Este campo debe ser una cadena.', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
@@ -184,35 +184,35 @@ const validationSchema = yup.object({
 
   last_name: yup
     .string()
-    .required('Last Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('Este campo es obligatorio.')
+    .test('is-string','Este campo debe ser una cadena.', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
-  email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
+  email: yup.string().required('Este campo es obligatorio.').matches(EMAIL_REGX, 'Must be a valid email'),
   mobile: yup
     .string()
-    .required('Phone Number is a required field')
-    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
+    .required('Este campo es obligatorio.')
+    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'El campo debe contener solo dígitos.'),
   password: yup
     .string()
-    .test('password', 'Password is required', function (value) {
+    .test('password', 'Este campo es obligatorio.', function (value) {
       if (currentId === 0 && !value) {
         return false
       }
       return true
     })
-    .min(8, 'Password must be at least 8 characters long'),
+    .min(8, 'Este campo debe tener al menos 8 caracteres.'),
   confirm_password: yup
     .string()
-    .test('confirm_password', 'Confirm password is required', function (value) {
+    .test('confirm_password', 'Este campo es obligatorio.', function (value) {
       if (currentId === 0 && !value) {
         return false
       }
       return true
     })
-    .oneOf([yup.ref('password')], 'Passwords must match')
+    .oneOf([yup.ref('password')], 'La confirmación no coincide.')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

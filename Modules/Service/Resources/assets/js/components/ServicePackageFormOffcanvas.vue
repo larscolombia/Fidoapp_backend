@@ -168,20 +168,20 @@ const numberRegex = /^\d+$/;
 const validationSchema = yup.object({
   name: yup
     .string()
-    .required('Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('Este campo es obligatorio.')
+    .test('is-string', 'Este campo debe ser una cadena.', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/;
       return !specialCharsRegex.test(value) && !numberRegex.test(value);
     }),
   price: yup.string()
-    .required('Price is a required field')
-    .matches(/^\d+$/, 'Only numbers are allowed'),
+    .required('Este campo es obligatorio.')
+    .matches(/^\d+$/, 'El campo debe contener solo dígitos.'),
   employee_id: yup.string()
     .matches(/^\d+$/, 'Select Staff'),
     service_id: yup
     .mixed()
-    .test('is-string-or-array', 'Service is a required field', function(value) {
+    .test('is-string-or-array', 'Este campo es obligatorio.', function(value) {
       if (typeof value === 'string' && value !== '') {
         return true;
       }
@@ -190,7 +190,7 @@ const validationSchema = yup.object({
       }
       return false;
     })
-    .required('Service is a required field')
+    .required('Este campo es obligatorio.')
 })
 
 const formType = { type: 'file' }
