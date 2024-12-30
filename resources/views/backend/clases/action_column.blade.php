@@ -10,10 +10,10 @@
         <i class="fa-solid fa-edit"></i>
     </a>
     <button type="button" class="btn btn-sm btn-icon btn-soft-danger" data-bs-toggle="tooltip"
-        data-bs-placement="top" title="{{ __('clases.Delete') }}" onclick="showDeleteModal({{ $data->id }}, request->route('course'))">
+        data-bs-placement="top" title="{{ __('clases.Delete') }}" onclick="showDeleteModal({{ $data->id }}, {{$data->course_platform_id}})">
         <i class="fa-solid fa-trash"></i>
     </button>
-    <a class="btn btn-primary btn-sm" href="{{ route('backend.clases.ejercicios.index', ['clase' => $data->id]) }}">{{ __('clases.show_exercises') }}</a>
+    {{-- <a class="btn btn-primary btn-sm" href="{{ route('backend.clases.ejercicios.index', ['clase' => $data->id]) }}">{{ __('clases.show_exercises') }}</a> --}}
 </div>
 
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -27,8 +27,8 @@
                 {{ __('clases.Are you sure you want to delete this class?') }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('clases.Cancel') }}</button>
-                <form id="deleteForm" action="" method="POST" class="d-inline">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('clases.cancel') }}</button>
+                <form id="deleteForm" action="{{route('backend.course_platform.clases.destroy',[$data->course_platform_id, $data->id])}}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">{{ __('clases.Delete') }}</button>
@@ -41,7 +41,7 @@
 <script>
     function showDeleteModal(id, cursoId) {
         const form = document.getElementById('deleteForm');
-        form.action = 'curso-plataforma/' + cursoId + '/clases/' + id;
+        form.action = "{{ url('app/curso-plataforma') }}/" + cursoId + "/clases/" + id;
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         deleteModal.show();
     }

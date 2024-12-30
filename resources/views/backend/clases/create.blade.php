@@ -15,16 +15,16 @@
             <form action="{{ route('backend.course_platform.clases.store', ['course' => request()->route('course')]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
-                    <label for="name" class="form-label">{{ __('clases.name') }}</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-                    @error('name')
+                    <label for="title" class="form-label">{{ __('clases.titles') }}</label>
+                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
+                    @error('title')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="description" class="form-label">{{ __('clases.description') }}</label>
-                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
-                    @error('description')
+                    <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
+                    <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" required>
+                    @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -36,12 +36,19 @@
                     @enderror
                 </div>
                 <div class="mb-3">
+                    <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
+                    <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" name="thumbnail" accept="image/*" required>
+                    @error('thumbnail')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                {{-- <div class="mb-3">
                     <label for="price" class="form-label">{{ __('clases.price') }}</label>
                     <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required>
                     @error('price')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> --}}
 
                 <div class="mb-3">
                     <label for="video-preview" class="form-label">{{ __('clases.video_preview') }}</label>
@@ -64,7 +71,7 @@
         document.getElementById('video').addEventListener('change', function(event) {
             const file = event.target.files[0];
             const videoPreview = document.getElementById('video-preview');
-            
+
             videoPreview.innerHTML = ''; // Clear the previous preview
 
             if (file) {
