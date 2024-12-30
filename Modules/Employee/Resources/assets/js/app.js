@@ -16,4 +16,4 @@ app.component('change-password', ChangePassword)
 app.component('send-push-notification', SendPushNotification)
 
 
-app.mount('[data-render="app"]');
+app.mount('[data-render="app_employee"]');

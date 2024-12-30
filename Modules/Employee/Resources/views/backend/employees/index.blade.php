@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div data-render="app">
+    <div data-render="app_employee">
 
         @if ($type != '')
             <employee-offcanvas type="{{ __($type) }}" default-image="https://dummyimage.com/600x300/cfcfcf/000000.png"
@@ -103,7 +103,7 @@
 
 @push('after-scripts')
     <script src="{{ mix('modules/employee/script.js') }}"></script>
-    <script src="{{ asset('js/form-offcanvas/index.js') }}" defer></script>
+    <script src="{{ asset('js/form-offcanvas/index.js') }}" ></script>
 
     <!-- DataTables Core and Extensions -->
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>

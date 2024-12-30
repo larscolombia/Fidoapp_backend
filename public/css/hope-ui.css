@@ -13318,8 +13318,7 @@ thead, tbody, tfoot, tr, td, th {
   left: 0;
   right: 0;
   text-align: center;
-  -webkit-clip-path: inset(100% 0 0 0);
-          clip-path: inset(100% 0 0 0);
+  clip-path: inset(100% 0 0 0);
   border-radius: 0.25rem;
   transition: all 1s ease 0s;
   padding: 0.5rem 0 1.5rem;
@@ -13343,8 +13342,7 @@ thead, tbody, tfoot, tr, td, th {
 }
 .slideouticons:hover .iconswrapper {
   visibility: visible;
-  -webkit-clip-path: inset(0 0 0 0);
-          clip-path: inset(0 0 0 0);
+  clip-path: inset(0 0 0 0);
 }
 
 .noUi-target {
