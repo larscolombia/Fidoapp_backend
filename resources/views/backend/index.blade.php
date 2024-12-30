@@ -557,7 +557,7 @@
                                         </div>
                                     </div>
                                     <div id="booking_loader" style="display: none;">
-                                        processing.....
+                                        Procesando.....
                                     </div>
                                     <div id="chart-04"></div>
                                 </div>
@@ -1105,12 +1105,22 @@
 
         }
 
+        function getTranslation(type) {
+            var translations = {
+                'week': "{{ __('dashboard.week') }}",
+                'year': "{{ __('dashboard.year') }}",
+                'month': "{{ __('dashboard.month') }}",
+                // Agrega más tipos según sea necesario
+            };
+            return translations[type] || type; // Retorna la traducción o el mismo tipo si no se encuentra
+        }
+
         function getBookingChartData(type) {
 
             var Base_url = "{{ url('/') }}";
 
             var url = Base_url + "/app/get_booking_chart_data/" + type;
-
+            var typeTranslatios = getTranslation(type);
             $("#booking_loader").show();
 
             $.ajax({
@@ -1124,7 +1134,7 @@
 
                     $("#booking_loader").hide();
 
-                    $(".monthly_booking").text(type);
+                    $(".monthly_booking").text(typeTranslatios);
 
 
                     if (jQuery("#chart-04").length) {
@@ -1319,7 +1329,7 @@
             var Base_url = "{{ url('/') }}";
 
             var url = Base_url + "/app/get_profit_chart_data/" + type;
-
+            var typeTranslatios = getTranslation(type);
             $("#loader").show();
 
             $.ajax({
@@ -1330,7 +1340,7 @@
 
                     $("#loader").hide();
 
-                    $(".profit_chart").text(type);
+                    $(".profit_chart").text(typeTranslatios);
 
                     if (document.querySelectorAll('#chart-03').length) {
 
