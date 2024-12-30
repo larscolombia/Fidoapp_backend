@@ -780,7 +780,8 @@ class EmployeesController extends Controller
         $employee_id = $data['employee_id'];
         //codigo original
         //$data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($employee_id);
-        $data = User::role(['vet',  'trainer'])->findOrFail($employee_id);
+        $data = User::role(['vet',  'trainer','user','admin'])->findOrFail($employee_id);
+
         $request_data = $request->only('password');
         $request_data['password'] = Hash::make($request_data['password']);
 
