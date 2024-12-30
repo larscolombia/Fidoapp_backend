@@ -40,6 +40,10 @@ RUN a2enmod rewrite headers \
     && chmod +x /usr/local/bin/docker-laravel-entrypoint
 
 COPY . /var/www/laravel
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+ && apt-get install -y nodejs
+
 RUN composer install --optimize-autoloader --no-dev
 
 CMD ["docker-laravel-entrypoint"]
