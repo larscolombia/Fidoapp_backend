@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ mix('css/pro.css') }}">
     <link rel="stylesheet" href="{{ mix('css/dark.css') }}">
     <link rel="stylesheet" href="{{ mix('css/rtl.css') }}">
-    <link rel="stylesheet" href="{{ mix('custom-css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('custom-css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ mix('css/customizer.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
