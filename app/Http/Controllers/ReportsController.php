@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Currency;
 use Carbon\Carbon;
+use App\Models\Coin;
 use App\Models\User;
 use App\Models\EBook;
 use App\Models\Payment;
@@ -564,7 +565,8 @@ class ReportsController extends Controller
 
         // Combinar ambas consultas
         $combinedQuery = $paymentsQuery->union($checkoutsQuery);
-
+        //crear consulta de la configuracion de coin
+        $coin = Coin::first();
         return $datatable->eloquent($combinedQuery)
             ->addIndexColumn()
             ->editColumn('user_id', function ($data) {
@@ -576,22 +578,23 @@ class ReportsController extends Controller
                 }
                 return $data->description; // Para pagos, simplemente devuelve la descripción
             })
-            ->editColumn('amount', function ($data) {
-                return $data->amount;
+            ->editColumn('amount', function ($data) use ($coin){
+
+                return  $data->amount . $coin->symbol;
             })
             ->editColumn('created_at', function ($data) {
                 return \Carbon\Carbon::parse($data->created_at)->format('d-m-Y'); // Formato d-m-Y
             })
-            ->filterColumn('description', function($query, $keyword) {
+            ->filterColumn('description', function ($query, $keyword) {
                 $query->whereRaw("description LIKE ?", ["%{$keyword}%"]);
             })
-            ->filterColumn('user_id', function($query, $keyword) {
-                $query->whereHas('user',function($q) use ($keyword){
+            ->filterColumn('user_id', function ($query, $keyword) {
+                $query->whereHas('user', function ($q) use ($keyword) {
                     return $q->whereRaw("first_name LIKE ?", ["%{$keyword}%"])
-                            ->orWhereRaw("last_name LIKE ?", ["%{$keyword}%"]);
+                        ->orWhereRaw("last_name LIKE ?", ["%{$keyword}%"]);
                 });
             })
-            ->filterColumn('created_at', function($query, $keyword) {
+            ->filterColumn('created_at', function ($query, $keyword) {
                 $query->whereRaw("created_at LIKE ?", ["%{$keyword}%"]);
             })
             ->orderColumns(['id'], '-:column $1')
@@ -603,16 +606,16 @@ class ReportsController extends Controller
     {
         $productDetails = json_decode($checkout->description, true);
 
-        if(isset($productDetails['course_platform_id'])){
+        if (isset($productDetails['course_platform_id'])) {
             return __('course_platform.buy') . ' ' . CursoPlataforma::findOrFail($productDetails['course_platform_id'])->name;
         }
 
-        if(isset($productDetails['booking_id'])){
+        if (isset($productDetails['booking_id'])) {
             $booking = Booking::findOrFail($productDetails['booking_id']);
             return optional($booking->event)->name ?? '';
         }
 
-        if(isset($productDetails['booking_id'])){
+        if (isset($productDetails['booking_id'])) {
             return __('EBooks.buy') . ' ' . EBook::findOrFail($productDetails['booking_id'])->title;
         }
         return null;
