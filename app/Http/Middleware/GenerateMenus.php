@@ -647,6 +647,15 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
+            $this->mainRoute($menu, [
+                'icon' => ' icon-all-booking',
+                'title' => __('sidebar.transactions'),
+                'route' => 'backend.reports.fidocoin-transactions',
+                'active' => ['app/transactions'],
+                'permission' => 'view_order_reports',
+                'order' => 0,
+            ]);
+
             // Historial Médico Static
 
             $permissionsToCheck = ['view_vacunas', 'view_antiparasitantes', 'view_antigarrapatas'];

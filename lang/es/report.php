@@ -41,5 +41,11 @@ return [
     'title_staff_service_report' => 'Informes de Servicios de Profesionales',
     'lbl_commissions_earn' => 'Comisiones Ganadas',
     'lbl_tips_earn' => 'Propinas Ganadas',
-    'lbl_total_earning' => 'Ganancia Total'
+    'lbl_total_earning' => 'Ganancia Total',
+    'transactions_with_fidocoins' => 'Transacciones con FidoCoins',
+    'transactions' => 'Transacciones',
+    'description' => 'Descripción',
+    'client' => 'Cliente',
+    'amount' => 'Monto',
+    'date' => 'Fecha',
 ];

@@ -180,6 +180,11 @@ Route::group(['prefix' => 'app'], function () {
             Route::get('order-report', [ReportsController::class, 'order_report'])->name('reports.order-report');
             Route::get('order-report-index-data', [ReportsController::class, 'order_report_index_data'])->name('reports.order-report.index_data');
         });
+
+        Route::group(['middleware' => 'permission:view_order_reports'], function () {
+            Route::get('transactions', [ReportsController::class, 'fidocoinTransactions'])->name('reports.fidocoin-transactions');
+            Route::get('transactions-fidocoins-data', [ReportsController::class, 'fidocoinTransactionsData'])->name('reports.fidocoin-transactions-data');
+        });
     });
 
 

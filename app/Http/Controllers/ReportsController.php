@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Currency;
 use DB;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Http\Request;
-use Modules\Booking\Models\Booking;
-use Modules\Earning\Models\EmployeeEarning;
-use Yajra\DataTables\DataTables;
+use Currency;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\EBook;
+use App\Models\Payment;
+use App\Models\Checkout;
+use Illuminate\Http\Request;
+use App\Models\CursoPlataforma;
+use Yajra\DataTables\DataTables;
 use Modules\Product\Models\Order;
+use Modules\Booking\Models\Booking;
 use Modules\Product\Models\OrderGroup;
+use Illuminate\Database\Query\Expression;
+use Modules\Earning\Models\EmployeeEarning;
 
 class ReportsController extends Controller
 {
@@ -32,15 +36,15 @@ class ReportsController extends Controller
         ]);
     }
 
-      public function daily_booking_report(Request $request)
-      {
-          $module_title = __('report.title_daily_report');
+    public function daily_booking_report(Request $request)
+    {
+        $module_title = __('report.title_daily_report');
 
-          return view('backend.reports.daily-booking-report', compact('module_title'));
-      }
+        return view('backend.reports.daily-booking-report', compact('module_title'));
+    }
 
-      public function daily_booking_report_index_data(Datatables $datatable, Request $request)
-      {
+    public function daily_booking_report_index_data(Datatables $datatable, Request $request)
+    {
         $data = $request->all();
         // $startDate = Carbon::today();
         // $endDate = Carbon::today();
@@ -97,67 +101,66 @@ class ReportsController extends Controller
             // ->whereDate('bookings.start_date_time',"<=",$endDate)
             ->groupBy('date');
 
-            // dd($query->toSql());
+        // dd($query->toSql());
 
-            // $startDate = Carbon::today();
-            // $endDate = Carbon::today();
+        // $startDate = Carbon::today();
+        // $endDate = Carbon::today();
 
-            if (isset($data['filter']['booking_date'])) {
+        if (isset($data['filter']['booking_date'])) {
 
-                try {
-                    $startDate = explode(' to ', $data['filter']['booking_date'])[0];
-                    $startDate = date('Y-m-d', strtotime($startDate));
-                    $endDate = explode(' to ', $data['filter']['booking_date'])[1];
-                    $endDate = date('Y-m-d', strtotime($endDate));
+            try {
+                $startDate = explode(' to ', $data['filter']['booking_date'])[0];
+                $startDate = date('Y-m-d', strtotime($startDate));
+                $endDate = explode(' to ', $data['filter']['booking_date'])[1];
+                $endDate = date('Y-m-d', strtotime($endDate));
 
 
-                    $query->whereDate('bookings.start_date_time', '>=', $startDate);
+                $query->whereDate('bookings.start_date_time', '>=', $startDate);
 
-                    $query->whereDate('bookings.start_date_time', '<=', $endDate);
-
-                } catch (\Exception $e) {
-                    \Log::error($e->getMessage());
-                }
+                $query->whereDate('bookings.start_date_time', '<=', $endDate);
+            } catch (\Exception $e) {
+                \Log::error($e->getMessage());
             }
+        }
 
 
 
-          return $datatable->eloquent($query)
-              ->editColumn('start_date_time', function ($data) {
-                  return customDate($data->date);
-              })
-              ->editColumn('total_booking', function ($data) {
-                  return $data->total_booking;
-              })
-              ->editColumn('total_service', function ($data) {
-                  return $data->total_service ?? 0;
-              })
-              ->editColumn('total_service_amount', function ($data) {
-                  return Currency::format($data->total_service_amount ?? 0);
-              })
-              ->editColumn('total_tax_amount', function ($data) {
-                  return Currency::format($data->total_amount- $data->total_service_amount?? 0);
-              })
-              ->editColumn('total_tip_amount', function ($data) {
-                  return Currency::format($data->total_tip_amount ?? 0);
-              })
-              ->editColumn('total_amount', function ($data) {
-                  return Currency::format($data->total_amount);
-              })
-              ->addIndexColumn()
-              ->rawColumns([])
-              ->toJson();
-      }
+        return $datatable->eloquent($query)
+            ->editColumn('start_date_time', function ($data) {
+                return customDate($data->date);
+            })
+            ->editColumn('total_booking', function ($data) {
+                return $data->total_booking;
+            })
+            ->editColumn('total_service', function ($data) {
+                return $data->total_service ?? 0;
+            })
+            ->editColumn('total_service_amount', function ($data) {
+                return Currency::format($data->total_service_amount ?? 0);
+            })
+            ->editColumn('total_tax_amount', function ($data) {
+                return Currency::format($data->total_amount - $data->total_service_amount ?? 0);
+            })
+            ->editColumn('total_tip_amount', function ($data) {
+                return Currency::format($data->total_tip_amount ?? 0);
+            })
+            ->editColumn('total_amount', function ($data) {
+                return Currency::format($data->total_amount);
+            })
+            ->addIndexColumn()
+            ->rawColumns([])
+            ->toJson();
+    }
 
-      public function overall_booking_report(Request $request)
-      {
-          $module_title = __('report.title_overall_report');
+    public function overall_booking_report(Request $request)
+    {
+        $module_title = __('report.title_overall_report');
 
-          return view('backend.reports.overall-booking-report', compact('module_title'));
-      }
+        return view('backend.reports.overall-booking-report', compact('module_title'));
+    }
 
-      public function overall_booking_report_index_data(Datatables $datatable, Request $request)
-      {
+    public function overall_booking_report_index_data(Datatables $datatable, Request $request)
+    {
         //   $query = Booking::select(
         //       'bookings.id as id',
         //       'bookings.employee_id as employee_id',
@@ -203,59 +206,58 @@ class ReportsController extends Controller
 
         $query = Booking::with('payment')->where('status', 'completed');
 
-          if (isset($request->booing_id)) {
-              $query = $query->where('bookings.id', $request->booking_id);
-          }
+        if (isset($request->booing_id)) {
+            $query = $query->where('bookings.id', $request->booking_id);
+        }
 
-          if (isset($request->date_range)) {
-              if (isset(explode(' to ', $request->date_range)[1])) {
-                  $startDate = explode(' to ', $request->date_range)[0] ?? date('Y-m-d');
-                  $endDate = explode(' to ', $request->date_range)[1] ?? date('Y-m-d');
-                  $query = $query->whereDate('start_date_time', '>=', $startDate)
-                      ->whereDate('start_date_time', '<=', $endDate);
-              }
-          }
+        if (isset($request->date_range)) {
+            if (isset(explode(' to ', $request->date_range)[1])) {
+                $startDate = explode(' to ', $request->date_range)[0] ?? date('Y-m-d');
+                $endDate = explode(' to ', $request->date_range)[1] ?? date('Y-m-d');
+                $query = $query->whereDate('start_date_time', '>=', $startDate)
+                    ->whereDate('start_date_time', '<=', $endDate);
+            }
+        }
 
-          $filter = $request->filter;
+        $filter = $request->filter;
 
-          if (isset($filter['booking_date'])) {
+        if (isset($filter['booking_date'])) {
 
-              try {
+            try {
 
-                  $startDate = explode(' to ', $filter['booking_date'])[0];
-                  $startDate = date('Y-m-d', strtotime($startDate));
-                  $endDate = explode(' to ', $filter['booking_date'])[1];
-                  $endDate = date('Y-m-d', strtotime($endDate));
-                  $query = $query->whereDate('bookings.start_date_time', '>=', $startDate)
-                  ->whereDate('bookings.start_date_time', '<=', $endDate);
+                $startDate = explode(' to ', $filter['booking_date'])[0];
+                $startDate = date('Y-m-d', strtotime($startDate));
+                $endDate = explode(' to ', $filter['booking_date'])[1];
+                $endDate = date('Y-m-d', strtotime($endDate));
+                $query = $query->whereDate('bookings.start_date_time', '>=', $startDate)
+                    ->whereDate('bookings.start_date_time', '<=', $endDate);
+            } catch (\Exception $e) {
+                \Log::error($e->getMessage());
+            }
+        }
 
-              } catch (\Exception $e) {
-                  \Log::error($e->getMessage());
-              }
-          }
+        if (isset($filter['employee_id'])) {
+            $query->where('bookings.employee_id', $filter['employee_id']);
+        }
 
-          if (isset($filter['employee_id'])) {
-              $query->where('bookings.employee_id', $filter['employee_id']);
-          }
+        return $datatable->eloquent($query)
 
-          return $datatable->eloquent($query)
-
-              ->editColumn('start_date_time', function ($data) {
-                  return customDate($data->start_date_time);
-              })
-              ->editColumn('id', function ($data) {
-                  return setting('booking_invoice_prifix').$data->id;
-              })
-              ->editColumn('employee_id', function ($data) {
-                  return $data->employee->full_name ?? '-';
-              })
-              ->editColumn('total_service', function ($data) {
-                  return $data->total_service;
-              })
-              ->editColumn('total_service_amount', function ($data) {
-                  return Currency::format($data->service_amount ?? 0);
-              })
-              ->editColumn('total_tax_amount', function ($data) {
+            ->editColumn('start_date_time', function ($data) {
+                return customDate($data->start_date_time);
+            })
+            ->editColumn('id', function ($data) {
+                return setting('booking_invoice_prifix') . $data->id;
+            })
+            ->editColumn('employee_id', function ($data) {
+                return $data->employee->full_name ?? '-';
+            })
+            ->editColumn('total_service', function ($data) {
+                return $data->total_service;
+            })
+            ->editColumn('total_service_amount', function ($data) {
+                return Currency::format($data->service_amount ?? 0);
+            })
+            ->editColumn('total_tax_amount', function ($data) {
                 $totalTaxAmount = 0;
                 $taxes = json_decode($data->payment->tax_percentage, true);
 
@@ -270,49 +272,49 @@ class ReportsController extends Controller
 
                 return Currency::format($totalTaxAmount ?? 0);
             })
-              ->editColumn('total_tip_amount', function ($data) {
-                  return Currency::format($data->total_tip_amount);
-              })
-              ->editColumn('total_amount', function ($data) {
-                  return Currency::format($data->total_amount);
-              })
-              ->orderColumn('employee_id', function ($query, $order) {
-                  $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = bookings.employee_id LIMIT 1)'), $order);
-              }, 1)
-              ->addIndexColumn()
-              ->rawColumns([])
-              ->toJson();
-      }
+            ->editColumn('total_tip_amount', function ($data) {
+                return Currency::format($data->total_tip_amount);
+            })
+            ->editColumn('total_amount', function ($data) {
+                return Currency::format($data->total_amount);
+            })
+            ->orderColumn('employee_id', function ($query, $order) {
+                $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = bookings.employee_id LIMIT 1)'), $order);
+            }, 1)
+            ->addIndexColumn()
+            ->rawColumns([])
+            ->toJson();
+    }
 
-      public function payout_report(Request $request)
-      {
-          $module_title = __('report.title_staff_report');
+    public function payout_report(Request $request)
+    {
+        $module_title = __('report.title_staff_report');
 
-          return view('backend.reports.payout-report', compact('module_title'));
-      }
+        return view('backend.reports.payout-report', compact('module_title'));
+    }
 
-      public function payout_report_index_data(Datatables $datatable, Request $request)
-      {
+    public function payout_report_index_data(Datatables $datatable, Request $request)
+    {
 
-          $query = EmployeeEarning::with('employee');
+        $query = EmployeeEarning::with('employee');
 
-          $filter = $request->filter;
+        $filter = $request->filter;
 
-          // if (isset($filter['booking_date'])) {
+        // if (isset($filter['booking_date'])) {
 
-          //     try {
+        //     try {
 
-          //         $startDate = explode(' to ', $filter['booking_date'])[0];
-          //         $endDate = explode(' to ', $filter['booking_date'])[1];
+        //         $startDate = explode(' to ', $filter['booking_date'])[0];
+        //         $endDate = explode(' to ', $filter['booking_date'])[1];
 
-          //         $query->whereBetween('payment_date', [$startDate, $endDate]);
+        //         $query->whereBetween('payment_date', [$startDate, $endDate]);
 
-          //     } catch (\Exception $e) {
-          //         // \Log::error($e->getMessage());
-          //     }
-          // }
+        //     } catch (\Exception $e) {
+        //         // \Log::error($e->getMessage());
+        //     }
+        // }
 
-          if (isset($filter['booking_date'])) {
+        if (isset($filter['booking_date'])) {
             $bookingDates = explode(' to ', $filter['booking_date']);
 
             if (count($bookingDates) >= 2) {
@@ -320,100 +322,100 @@ class ReportsController extends Controller
                 $endDate = date('Y-m-d 23:59:59', strtotime($bookingDates[1]));
 
                 $query->where('payment_date', '>=', $startDate)
-                      ->where('payment_date', '<=', $endDate);
+                    ->where('payment_date', '<=', $endDate);
             }
-          }
+        }
 
-          if (isset($filter['employee_id'])) {
-              $query->whereHas('employee', function ($q) use ($filter) {
-                  $q->where('employee_id', $filter['employee_id']);
-              });
-          }
+        if (isset($filter['employee_id'])) {
+            $query->whereHas('employee', function ($q) use ($filter) {
+                $q->where('employee_id', $filter['employee_id']);
+            });
+        }
 
-          return $datatable->eloquent($query)
-              ->editColumn('payment_date', function ($data) {
-                  return customDate($data->payment_date ?? '-');
-              })
-              ->editColumn('first_name', function ($data) {
-                  return $data->employee->full_name;
-              })
-              ->orderColumn('first_name', function ($query, $order) {
-                    $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = bookings.employee_id LIMIT 1)'), $order);
-              }, 1)
-              ->editColumn('commission_amount', function ($data) {
-                  return Currency::format($data->commission_amount ?? 0);
-              })
-              ->editColumn('tip_amount', function ($data) {
-                  return Currency::format($data->tip_amount ?? 0);
-              })
-              ->editColumn('total_pay', function ($data) {
-                  return Currency::format($data->total_amount ?? 0);
-              })
-              ->addIndexColumn()
-              ->rawColumns([])
-              ->toJson();
-      }
+        return $datatable->eloquent($query)
+            ->editColumn('payment_date', function ($data) {
+                return customDate($data->payment_date ?? '-');
+            })
+            ->editColumn('first_name', function ($data) {
+                return $data->employee->full_name;
+            })
+            ->orderColumn('first_name', function ($query, $order) {
+                $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = bookings.employee_id LIMIT 1)'), $order);
+            }, 1)
+            ->editColumn('commission_amount', function ($data) {
+                return Currency::format($data->commission_amount ?? 0);
+            })
+            ->editColumn('tip_amount', function ($data) {
+                return Currency::format($data->tip_amount ?? 0);
+            })
+            ->editColumn('total_pay', function ($data) {
+                return Currency::format($data->total_amount ?? 0);
+            })
+            ->addIndexColumn()
+            ->rawColumns([])
+            ->toJson();
+    }
 
-      public function staff_report(Request $request)
-      {
-          $module_title = __('report.title_staff_service_report');
+    public function staff_report(Request $request)
+    {
+        $module_title = __('report.title_staff_service_report');
 
-          return view('backend.reports.staff-report', compact('module_title'));
-      }
+        return view('backend.reports.staff-report', compact('module_title'));
+    }
 
-      public function staff_report_index_data(Datatables $datatable, Request $request)
-      {
-          $query = User::role(['vet', 'groomer','walker','boarder','trainer','day_taker'])->select('users.id', 'users.first_name', 'users.last_name', 'users.email', 'users.mobile')
-              ->withCount('employeeBooking')
-              ->withSum('employeeBooking', 'service_price')
-              ->withSum('commission_earning', 'commission_amount')
-              ->withSum('tip_earning', 'tip_amount');
+    public function staff_report_index_data(Datatables $datatable, Request $request)
+    {
+        $query = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker'])->select('users.id', 'users.first_name', 'users.last_name', 'users.email', 'users.mobile')
+            ->withCount('employeeBooking')
+            ->withSum('employeeBooking', 'service_price')
+            ->withSum('commission_earning', 'commission_amount')
+            ->withSum('tip_earning', 'tip_amount');
 
-          $filter = $request->filter;
+        $filter = $request->filter;
 
-          // if(isset($filter['booking_date'])) {
+        // if(isset($filter['booking_date'])) {
 
-          // try {
+        // try {
 
-          //      $startDate = explode(' to ', $filter['booking_date'])[0];
-          //      $endDate = explode(' to ', $filter['booking_date'])[1];
+        //      $startDate = explode(' to ', $filter['booking_date'])[0];
+        //      $endDate = explode(' to ', $filter['booking_date'])[1];
 
-          //       $query->whereBetween('payment_date', [$startDate, $endDate]);
+        //       $query->whereBetween('payment_date', [$startDate, $endDate]);
 
-          //       }catch(\Exception $e) {
-          //        \Log::error($e->getMessage());
-          //       }
-          //   }
+        //       }catch(\Exception $e) {
+        //        \Log::error($e->getMessage());
+        //       }
+        //   }
 
-          if (isset($filter['employee_id'])) {
-              $query->where('id', $filter['employee_id']);
-          }
+        if (isset($filter['employee_id'])) {
+            $query->where('id', $filter['employee_id']);
+        }
 
-          return $datatable->eloquent($query)
-              ->editColumn('first_name', function ($data) {
-                  return $data->full_name;
-              })
-              ->editColumn('total_services', function ($data) {
-                  return $data->employee_booking_count ?? 0;
-              })
-              ->editColumn('total_service_amount', function ($data) {
-                  return Currency::format($data->employee_booking_sum_service_price ?? 0);
-              })
-              ->editColumn('total_commission_earn', function ($data) {
-                  return Currency::format($data->commission_earning_sum_commission_amount ?? 0);
-              })
-              ->editColumn('total_tip_earn', function ($data) {
-                  return Currency::format($data->tip_earning_sum_tip_amount ?? 0);
-              })
-              ->editColumn('total_earning', function ($data) {
-                  return Currency::format($data->employee_booking_sum_service_price + $data->commission_earning_sum_commission_amount + $data->tip_earning_sum_tip_amount);
-              })
-              ->addIndexColumn()
-              ->rawColumns([])
-              ->toJson();
-      }
+        return $datatable->eloquent($query)
+            ->editColumn('first_name', function ($data) {
+                return $data->full_name;
+            })
+            ->editColumn('total_services', function ($data) {
+                return $data->employee_booking_count ?? 0;
+            })
+            ->editColumn('total_service_amount', function ($data) {
+                return Currency::format($data->employee_booking_sum_service_price ?? 0);
+            })
+            ->editColumn('total_commission_earn', function ($data) {
+                return Currency::format($data->commission_earning_sum_commission_amount ?? 0);
+            })
+            ->editColumn('total_tip_earn', function ($data) {
+                return Currency::format($data->tip_earning_sum_tip_amount ?? 0);
+            })
+            ->editColumn('total_earning', function ($data) {
+                return Currency::format($data->employee_booking_sum_service_price + $data->commission_earning_sum_commission_amount + $data->tip_earning_sum_tip_amount);
+            })
+            ->addIndexColumn()
+            ->rawColumns([])
+            ->toJson();
+    }
 
-      public function order_report(Request $request)
+    public function order_report(Request $request)
     {
         $module_title = 'order_report.title';
 
@@ -453,10 +455,11 @@ class ReportsController extends Controller
 
         $totalAdminEarnings = Order::sum('total_admin_earnings');
 
-        return view('backend.reports.order-report', compact('module_title', 'module_name', 'export_import', 'export_columns', 'export_url','totalAdminEarnings'));
+        return view('backend.reports.order-report', compact('module_title', 'module_name', 'export_import', 'export_columns', 'export_url', 'totalAdminEarnings'));
     }
 
-    public function  order_report_index_data(Datatables $datatable, Request $request){
+    public function  order_report_index_data(Datatables $datatable, Request $request)
+    {
 
         $orders = Order::with('orderGroup');
 
@@ -482,14 +485,13 @@ class ReportsController extends Controller
                 $startDate = $filter['order_date'][0];
                 $endDate = $filter['order_date'][1] ?? null;
 
-                if(isset($endDate)) {
+                if (isset($endDate)) {
                     $orders->whereDate('created_at', '>=', date('Y-m-d', strtotime($startDate)));
                     $orders->whereDate('created_at', '<=', date('Y-m-d', strtotime($endDate)));
                 } else {
                     $orders->whereDate('created_at', date('Y-m-d', strtotime($startDate)));
                 }
             }
-
         }
 
         $orders = $orders->where(function ($q) {
@@ -499,49 +501,120 @@ class ReportsController extends Controller
 
         return $datatable->eloquent($orders)
 
-              ->addIndexColumn()
+            ->addIndexColumn()
 
-              ->editColumn('order_code', function ($data) {
-                  return setting('inv_prefix').$data->orderGroup->order_code;
-              })
-              ->editColumn('customer_name', function ($data) {
-                  return view('product::backend.order.columns.customer_column', compact('data'));
-              })
-              ->editColumn('placed_on', function ($data) {
-                  return customDate($data->created_at);
-              })
-              ->editColumn('items', function ($data) {
-                  return $data->orderItems()->count();
-              })
-              ->editColumn('payment', function ($data) {
-                  return view('product::backend.order.columns.payment_column', compact('data'));
-              })
-              ->editColumn('status', function ($data) {
-                  return view('product::backend.order.columns.status_column', compact('data'));
-              })
-              ->editColumn('total_admin_earnings', function ($data) {
+            ->editColumn('order_code', function ($data) {
+                return setting('inv_prefix') . $data->orderGroup->order_code;
+            })
+            ->editColumn('customer_name', function ($data) {
+                return view('product::backend.order.columns.customer_column', compact('data'));
+            })
+            ->editColumn('placed_on', function ($data) {
+                return customDate($data->created_at);
+            })
+            ->editColumn('items', function ($data) {
+                return $data->orderItems()->count();
+            })
+            ->editColumn('payment', function ($data) {
+                return view('product::backend.order.columns.payment_column', compact('data'));
+            })
+            ->editColumn('status', function ($data) {
+                return view('product::backend.order.columns.status_column', compact('data'));
+            })
+            ->editColumn('total_admin_earnings', function ($data) {
                 return Currency::format($data->total_admin_earnings);
             })
 
-              ->filterColumn('customer_name', function ($query, $keyword) {
-                  if (! empty($keyword)) {
-                      $query->whereHas('user', function ($q) use ($keyword) {
-                          $q->where('first_name', 'like', '%'.$keyword.'%');
-                          $q->orWhere('last_name', 'like', '%'.$keyword.'%');
-                      });
-                  }
-              })
-              ->editColumn('created_at', function ($data) {
-                  $diff = Carbon::now()->diffInHours($data->created_at);
-                  if ($diff < 25) {
-                      return $data->created_at->diffForHumans();
-                  } else {
-                      return $data->created_at->isoFormat('llll');
-                  }
-              })
-              ->orderColumns(['id'], '-:column $1')
-              ->toJson();
+            ->filterColumn('customer_name', function ($query, $keyword) {
+                if (! empty($keyword)) {
+                    $query->whereHas('user', function ($q) use ($keyword) {
+                        $q->where('first_name', 'like', '%' . $keyword . '%');
+                        $q->orWhere('last_name', 'like', '%' . $keyword . '%');
+                    });
+                }
+            })
+            ->editColumn('created_at', function ($data) {
+                $diff = Carbon::now()->diffInHours($data->created_at);
+                if ($diff < 25) {
+                    return $data->created_at->diffForHumans();
+                } else {
+                    return $data->created_at->isoFormat('llll');
+                }
+            })
+            ->orderColumns(['id'], '-:column $1')
+            ->toJson();
+    }
+
+    public function fidocoinTransactions()
+    {
+        $module_title = __('report.transactions_with_fidocoins');
+
+        return view('backend.reports.transactions_fidocoins', compact('module_title'));
+    }
+
+    public function fidocoinTransactionsData(Datatables $datatable, Request $request)
+    {
+        // Crear una consulta para pagos
+        $paymentsQuery = Payment::with('user')->select('user_id', 'amount', 'description', 'created_at')
+            ->addSelect(\DB::raw("'payment' as type")); // Agregar tipo como payment
+
+        // Crear una consulta para checkouts
+        $checkoutsQuery = Checkout::with('user')->select('user_id', 'amount', 'product_details as description', 'created_at')
+            ->addSelect(\DB::raw("'checkout' as type")); // Agregar tipo como checkout
+
+        // Combinar ambas consultas
+        $combinedQuery = $paymentsQuery->union($checkoutsQuery);
+
+        return $datatable->eloquent($combinedQuery)
+            ->addIndexColumn()
+            ->editColumn('user_id', function ($data) {
+                return view('product::backend.order.columns.customer_column', compact('data'));
+            })
+            ->editColumn('description', function ($data) {
+                if ($data->type === 'checkout') {
+                    return $this->getCheckoutDescription($data);
+                }
+                return $data->description; // Para pagos, simplemente devuelve la descripción
+            })
+            ->editColumn('amount', function ($data) {
+                return $data->amount;
+            })
+            ->editColumn('created_at', function ($data) {
+                return \Carbon\Carbon::parse($data->created_at)->format('d-m-Y'); // Formato d-m-Y
+            })
+            ->filterColumn('description', function($query, $keyword) {
+                $query->whereRaw("description LIKE ?", ["%{$keyword}%"]);
+            })
+            ->filterColumn('user_id', function($query, $keyword) {
+                $query->whereHas('user',function($q) use ($keyword){
+                    return $q->whereRaw("first_name LIKE ?", ["%{$keyword}%"])
+                            ->orWhereRaw("last_name LIKE ?", ["%{$keyword}%"]);
+                });
+            })
+            ->filterColumn('created_at', function($query, $keyword) {
+                $query->whereRaw("created_at LIKE ?", ["%{$keyword}%"]);
+            })
+            ->orderColumns(['id'], '-:column $1')
+            ->toJson();
+    }
 
 
+    private function getCheckoutDescription($checkout)
+    {
+        $productDetails = json_decode($checkout->description, true);
+
+        if(isset($productDetails['course_platform_id'])){
+            return __('course_platform.buy') . ' ' . CursoPlataforma::findOrFail($productDetails['course_platform_id'])->name;
+        }
+
+        if(isset($productDetails['booking_id'])){
+            $booking = Booking::findOrFail($productDetails['booking_id']);
+            return optional($booking->event)->name ?? '';
+        }
+
+        if(isset($productDetails['booking_id'])){
+            return __('EBooks.buy') . ' ' . EBook::findOrFail($productDetails['booking_id'])->title;
+        }
+        return null;
     }
 }
