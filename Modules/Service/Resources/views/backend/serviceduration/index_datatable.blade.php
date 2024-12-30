@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div data-render="app">
+    <div data-render="app_services">
         <service-duration-offcanvas create-title="{{ __('messages.create') }} {{ __($module_title) }}"
             edit-title="{{ __('messages.edit') }} {{ __($module_title) }}">
         </service-duration-offcanvas>

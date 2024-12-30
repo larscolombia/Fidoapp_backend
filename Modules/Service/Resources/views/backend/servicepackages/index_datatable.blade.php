@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div data-render="app">
+    <div data-render="app_services">
         <service-package-form-offcanvas create-title="{{ __('Create') }} {{ __($module_title) }}"
             edit-title="{{ __('messages.edit') }} {{ __($module_title) }}">
         </service-package-form-offcanvas>
