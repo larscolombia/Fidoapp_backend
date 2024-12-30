@@ -458,7 +458,12 @@ class BookingsController extends Controller
 
         $petcenter_id = get_pet_center_id();
         $branchAddress = Address::where('addressable_id', $petcenter_id)->first();
-        $address = $branchAddress->address_line_1.'<br>'.$branchAddress->country.'<br>'.$branchAddress->state.'<br>'.$branchAddress->city.'-'.$branchAddress->postal_code;
+        if($branchAddress){
+            $address = $branchAddress->address_line_1.'<br>'.$branchAddress->country.'<br>'.$branchAddress->state.'<br>'.$branchAddress->city.'-'.$branchAddress->postal_code;
+        }else{
+            $address = null;
+        }
+        
 
         if($data['type'] == 'boarding'){
             $start_date_time = new DateTime($data['drop_off_date'].''.$data['drop_off_time']);
@@ -578,7 +583,7 @@ class BookingsController extends Controller
                     'price'=> $service_amount['service_amount'],
                     'duration'=> $duration,
 
-                    ];
+                    ]; 
 
                 BookingGroomingMapping::create($booking_mapping);
                 break;

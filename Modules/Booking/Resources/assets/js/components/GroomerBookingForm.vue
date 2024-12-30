@@ -162,7 +162,64 @@ import PetFromOffcanvas from './Forms/PetFromOffcanvas.vue'
 
 import { useSelect } from '@/helpers/hooks/useSelect'
 import moment from 'moment'
+let translations = {};
+const defaultTranslations = {
+  required: 'Este campo es obligatorio.',
+  string: 'Este campo debe ser una cadena.',
+  email: 'Este campo debe ser un correo electrónico válido.',
+  min: 'Este campo debe tener al menos :min caracteres.',
+  confirmed: 'La confirmación no coincide.',
+  not_especial: 'No se permiten caracteres especiales.',
+  only_digits: 'El campo debe contener solo dígitos.',
+  first_strings_are_allowed: 'Se permiten las primeras cadenas.',
+};
+// Función para cargar las traducciones
+async function loadTranslations() {
+  // Intentar cargar desde localStorage
+  const storedTranslations = localStorage.getItem('translations');
 
+  if (storedTranslations) {
+    translations = JSON.parse(storedTranslations);
+    console.log('Cargadas traducciones desde localStorage:', translations);
+    return; // Salir si ya tenemos traducciones
+  }
+
+  try {
+    const response = await axios.get('/api/translations');
+    translations = response.data;
+
+    // Almacenar en localStorage
+    localStorage.setItem('translations', JSON.stringify(translations));
+    console.log('Cargadas traducciones desde el servidor:', translations);
+  } catch (error) {
+    console.error('Error loading translations:', error);
+    // Si hay un error, usar los mensajes por defecto
+    translations = defaultTranslations;
+  }
+}
+// Llamar a la función para cargar las traducciones
+loadTranslations();
+function getTranslation(key,default_min = null, default_max = null) {
+  // Intenta obtener las traducciones del localStorage
+  const storedTranslations = localStorage.getItem('translations');
+
+  if (storedTranslations) {
+    const translationsFromStorage = JSON.parse(storedTranslations);
+    // Devuelve la traducción correspondiente si existe
+    if (translationsFromStorage[key]) {
+      if(default_min !== null){
+        translationsFromStorage[key].replace(':min', default_min);
+      }
+      if(default_max !== null){
+        translationsFromStorage[key].replace(':max', default_max);
+      }
+      return translationsFromStorage[key].replace(':attribute', '');
+    }
+  }
+
+  // Si no se encuentra, devolvemos el mensaje por defecto
+  return defaultTranslations[key] || `Missing translation for ${key}`;
+}
 const { getRequest, storeRequest, updateRequest, listingRequest } = useRequest()
 // Event Emits
 const emit = defineEmits(['onSubmit'])
@@ -249,12 +306,12 @@ const checkTotalAmount = () => {
 
 // Vee-Validation Validations
 const validationSchema = yup.object({
-  pet: yup.string().required('Pet is required'),
-  date: yup.string().required('Date is required'),
-  time: yup.string().required('Time is required'),
-  employee_id: yup.string().required('Groomer is required'),
-  service: yup.string().required('Services is required'),
-  user_id: yup.string().required('User is required')
+  pet: yup.string().required(getTranslation('required')),
+  date: yup.string().required(getTranslation('required')),
+  time: yup.string().required(getTranslation('required')),
+  employee_id: yup.string().required(getTranslation('required')),
+  service: yup.string().required(getTranslation('required')),
+  user_id: yup.string().required(getTranslation('required'))
 })
 
 const { handleSubmit, errors, resetForm } = useForm({ validationSchema })

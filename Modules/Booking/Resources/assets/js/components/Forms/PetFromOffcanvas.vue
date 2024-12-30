@@ -105,7 +105,7 @@
           </div>
         </div>
 
-     
+
 
         <div class="form-group col-md-12">
               <label class="form-label" for="additional_info">{{$t('pet.lbl_additional_info')}}</label>
@@ -147,7 +147,64 @@ import { readFile } from '@/helpers/utilities'
 import FormHeader from '@/vue/components/form-elements/FormHeader.vue'
 import FormFooter from '@/vue/components/form-elements/FormFooter.vue'
 import FormElement from '@/helpers/custom-field/FormElement.vue'
+let translations = {};
+const defaultTranslations = {
+  required: 'Este campo es obligatorio.',
+  string: 'Este campo debe ser una cadena.',
+  email: 'Este campo debe ser un correo electrónico válido.',
+  min: 'Este campo debe tener al menos :min caracteres.',
+  confirmed: 'La confirmación no coincide.',
+  not_especial: 'No se permiten caracteres especiales.',
+  only_digits: 'El campo debe contener solo dígitos.',
+  first_strings_are_allowed: 'Se permiten las primeras cadenas.',
+};
+// Función para cargar las traducciones
+async function loadTranslations() {
+  // Intentar cargar desde localStorage
+  const storedTranslations = localStorage.getItem('translations');
 
+  if (storedTranslations) {
+    translations = JSON.parse(storedTranslations);
+    console.log('Cargadas traducciones desde localStorage:', translations);
+    return; // Salir si ya tenemos traducciones
+  }
+
+  try {
+    const response = await axios.get('/api/translations');
+    translations = response.data;
+
+    // Almacenar en localStorage
+    localStorage.setItem('translations', JSON.stringify(translations));
+    console.log('Cargadas traducciones desde el servidor:', translations);
+  } catch (error) {
+    console.error('Error loading translations:', error);
+    // Si hay un error, usar los mensajes por defecto
+    translations = defaultTranslations;
+  }
+}
+// Llamar a la función para cargar las traducciones
+loadTranslations();
+function getTranslation(key,default_min = null, default_max = null) {
+  // Intenta obtener las traducciones del localStorage
+  const storedTranslations = localStorage.getItem('translations');
+
+  if (storedTranslations) {
+    const translationsFromStorage = JSON.parse(storedTranslations);
+    // Devuelve la traducción correspondiente si existe
+    if (translationsFromStorage[key]) {
+      if(default_min !== null){
+        translationsFromStorage[key].replace(':min', default_min);
+      }
+      if(default_max !== null){
+        translationsFromStorage[key].replace(':max', default_max);
+      }
+      return translationsFromStorage[key].replace(':attribute', '');
+    }
+  }
+
+  // Si no se encuentra, devolvemos el mensaje por defecto
+  return defaultTranslations[key] || `Missing translation for ${key}`;
+}
 // props
 const props = defineProps({
   createTitle: { type: String, default: '' },
@@ -248,11 +305,11 @@ const numberRegex = /^\d+$/
 const decimalRegex = /^\d+(\.\d+)?$/
 // Validations
 const validationSchema = yup.object({
-  name: yup.string().required('Name is a required field'),
-  pettype_id: yup.string().required('Pet type is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-  user_id: yup.string().required('User is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-  weight: yup.string().nullable().matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed'),
-  height: yup.string().nullable().matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed'),
+  name: yup.string().required(getTranslation('required')),
+  pettype_id: yup.string().required(getTranslation('required')).matches(/^\d+$/, getTranslation('only_digits')),
+  user_id: yup.string().required(getTranslation('required')).matches(/^\d+$/, getTranslation('only_digits')),
+  weight: yup.string().nullable().matches(/^\d*(\.\d+)?$/, getTranslation('only_digits')),
+  height: yup.string().nullable().matches(/^\d*(\.\d+)?$/, getTranslation('only_digits')),
 
 })
 

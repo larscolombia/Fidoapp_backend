@@ -722,7 +722,7 @@ Index Of Script
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#858482',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: '¡Sí, Hazlo!!'
               }).then((result) => {
                 return result
               })
