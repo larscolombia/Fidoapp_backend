@@ -565,7 +565,7 @@ class GenerateMenus
                 'icon' => 'icon-pet',
                 'title' => __('menu.lost_pets'),
                 'route' => ['backend.pets.lost'],
-                'active' => ['app/pets'],
+                'active' => ['app/lost-pets '],
                 'permission' => 'view_owners',
                 'order' => 0,
             ]);

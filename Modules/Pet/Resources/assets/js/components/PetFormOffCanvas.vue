@@ -104,9 +104,9 @@
           </div>
         </div>
 
-        <div class="form-group d-none">
+        <div class="form-group ">
           <label class="form-label" for="user_id">{{ $t('pet.lbl_user') }} <span class="text-danger">*</span> </label>
-          <Multiselect v-model="user_id" :value="user_id" v-bind="userlist" id="user_id" @select="changeuser" :disabled="user_id !=''"></Multiselect>
+          <Multiselect v-model="user_id" :value="user_id" v-bind="userlist" id="user_id" @select="changeuser" :disabled="user_id !=''" required></Multiselect>
           <span v-if="errorMessages['user_id']">
             <ul class="text-danger">
               <li v-for="err in errorMessages['user_id']" :key="err">{{ err }}</li>

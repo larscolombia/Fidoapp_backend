@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <div data-render="app">
+    <div data-render="app_pets">
         <breed-offcanvas create-title="{{ __('messages.create') }} {{ __($create_title) }}"
             edit-title="{{ __('messages.edit') }} {{ __($create_title) }}">
         </breed-offcanvas>
