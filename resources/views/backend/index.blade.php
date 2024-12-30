@@ -169,9 +169,12 @@
 
                                                     </div>
 
-                                                    <small>
+                                                    {{-- <small>
                                                         {{ date('F j, Y', strtotime($recent_booking->start_date_time)) }} |
                                                         {{ date('h:i A', strtotime($recent_booking->start_date_time)) }}
+                                                    </small> --}}
+                                                    <small>
+                                                        {{ \Carbon\Carbon::parse($recent_booking->start_date_time)->locale('es')->isoFormat('D [de] MMMM [del] YYYY | h:mm A') }}
                                                     </small>
                                                 </div>
                                             </li>
