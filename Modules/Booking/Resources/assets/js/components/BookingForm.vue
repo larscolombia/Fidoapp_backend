@@ -362,13 +362,13 @@ const config = ref({
 
 // Vee-Validation Validations
 const validationSchema = yup.object({
-  user_id: yup.string().required('User is required field'),
-  pet: yup.string().required('Selecet Pet is a required Field'),
-  drop_off_date: yup.string().required('Drop off Date is required'),
-  drop_off_time: yup.string().required('Drop off Time is required'),
+  user_id: yup.string().required('Este campo es obligatorio.'),
+  pet: yup.string().required('Este campo es obligatorio.'),
+  drop_off_date: yup.string().required('Este campo es obligatorio.'),
+  drop_off_time: yup.string().required('Este campo es obligatorio.'),
   pick_up_date: yup
     .string()
-    .required('Pick Up Date is required')
+    .required('Este campo es obligatorio.')
     .when('drop_off_date', (dropOffDate, schema) => {
       return schema.test({
         name: 'pickUpDate',
@@ -379,10 +379,10 @@ const validationSchema = yup.object({
       })
     }),
   // pick_up_date: yup.string().required('Pick Up Date is required'),
-  pick_up_time: yup.string().required('Pick Up Time is required'),
+  pick_up_time: yup.string().required('Este campo es obligatorio.'),
   // drop_off_address: yup.string().required('Address is required'),
   // pick_up_address: yup.string().required('Pick Up Address is required'),
-  employee_id: yup.string().required('Care Taker is required')
+  employee_id: yup.string().required('Este campo es obligatorio.')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({ validationSchema })

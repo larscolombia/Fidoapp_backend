@@ -2,23 +2,24 @@
 
 namespace Modules\Service\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Models\User;
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\Models\Coin;
+use App\Models\User;
+use App\Authorizable;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
+use Modules\Service\Models\Service;
+use App\Http\Controllers\Controller;
 use Modules\Category\Models\Category;
+use Modules\Service\Models\ServiceGallery;
 use Modules\CustomField\Models\CustomField;
+use Modules\Service\Models\ServiceBranches;
+use Modules\Service\Models\ServiceDuration;
+use Modules\Service\Models\ServiceEmployee;
 use Modules\CustomField\Models\CustomFieldGroup;
 use Modules\Service\Http\Requests\ServiceRequest;
-use Modules\Service\Models\Service;
-use Modules\Service\Models\ServiceBranches;
-use Modules\Service\Models\ServiceEmployee;
-use Modules\Service\Models\ServiceGallery;
-use Modules\Service\Models\ServiceDuration;
-use Yajra\DataTables\DataTables;
 
 class ServiceDurationController extends Controller
 {
@@ -112,7 +113,7 @@ class ServiceDurationController extends Controller
     {
         $type = session('type');
         $query = ServiceDuration::query()->where('type', $type);
-
+        $coin = Coin::first();
         return Datatables::of($query)
                         ->addColumn('check', function ($row) {
                             return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
@@ -135,8 +136,8 @@ class ServiceDurationController extends Controller
                         ->editColumn('duration', function ($data) {
                             return formatTime($data->duration);
                         })
-                        ->editColumn('price', function ($data) {
-                            return \Currency::format($data->price);
+                        ->editColumn('price', function ($data) use ($coin) {
+                            return number_format($data->price,2).$coin->symbol;
                         })
                         // ->editColumn('updated_at', function ($data) {
                         //     $module_name = $this->module_name;

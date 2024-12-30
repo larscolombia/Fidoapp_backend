@@ -150,8 +150,8 @@ const reset_datatable_close_offcanvas = (res) => {
 const numberRegex = /^\d+$/
 // Validations
 const validationSchema = yup.object({
-  name: yup.string().required('Name is a required field'),
-   description:yup.string().test('no-script-tags', 'The Description field cannot contain script tags.', function(value) {
+  name: yup.string().required('Este campo es obligatorio.'),
+   description:yup.string().test('no-script-tags', 'El campo no puede contener etiquetas de script.', function(value) {
     const scriptTagRegex = /<script\b[^>]*>(.*?)/is;
     return !scriptTagRegex.test(value);
   }),

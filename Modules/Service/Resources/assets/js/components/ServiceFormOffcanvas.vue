@@ -194,18 +194,18 @@ const validationSchema = yup.object({
 
   feature_image: yup
   .string()
-  .test('feature_image', 'Service image is required', function (value) {
+  .test('feature_image', 'Este campo es obligatorio.', function (value) {
     if (currentId === 0 && !value) {
       return false;
     }
     return true;
   })
   .label('Service Image'),
-  name: yup.string().required('Name is a required field'),
-  duration_min: yup.string().required('Service Duration ( Mins ) is a required field').matches(/^[1-9]\d*$/, 'Only numbers greater than 0 are allowed'),
-  default_price: yup.string().required('Default Price is a required field').matches(/^[1-9]\d*$/, 'Only numbers greater than 0 are allowed'),
-  category_id: yup.string().required('Category is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-   description:yup.string().nullable().test('no-script-tags', 'The Description field cannot contain script tags.', function(value) {
+  name: yup.string().required('Este campo es obligatorio.'),
+  duration_min: yup.string().required('Este campo es obligatorio.').matches(/^[1-9]\d*$/, 'Sólo se permiten números mayores que 0'),
+  default_price: yup.string().required('Este campo es obligatorio.').matches(/^[1-9]\d*$/, 'Sólo se permiten números mayores que 0'),
+  category_id: yup.string().required('Este campo es obligatorio.').matches(/^\d+$/, 'Sólo se permiten números'),
+   description:yup.string().nullable().test('no-script-tags', 'El campo no puede contener etiquetas de script.', function(value) {
     const scriptTagRegex = /<script\b[^>]*>(.*?)/is;
     return !scriptTagRegex.test(value);
   }),

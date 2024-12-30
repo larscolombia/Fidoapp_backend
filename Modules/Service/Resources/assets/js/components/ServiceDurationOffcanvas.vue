@@ -135,9 +135,9 @@ const config_minutes = ref({
   const decimalRegex = /^\d+(\.\d+)?$/
   // Validations
   const validationSchema = yup.object({
-    hours: yup.string().required('Hours is required'),
-    minutes: yup.string().required('Minutes is required'),
-    price: yup.string().required('Price is a required field').matches(/^[1-9]\d*(\.\d+)?$/, 'Only numbers greater than 0 are allowed'),
+    hours: yup.string().required('Este campo es obligatorio.'),
+    minutes: yup.string().required('Este campo es obligatorio.'),
+    price: yup.string().required('Este campo es obligatorio.').matches(/^[1-9]\d*(\.\d+)?$/, 'Sólo se permiten números mayores que 0'),
   })
   
 

@@ -14,7 +14,7 @@
               <div class="form-group">
                 <Multiselect v-model="assign_ids" placeholder="Select Branch" :canClear="false" :value="assign_ids" v-bind="branches" @select="selectBranch" @deselect="removeBranch" id="branches_ids">
                   <template v-slot:multiplelabel="{ values }">
-                    <div class="multiselect-multiple-label">Select Branch</div>
+                    <div class="multiselect-multiple-label">Seleccionar Sucursal</div>
                   </template>
                 </Multiselect>
               </div>
@@ -37,15 +37,15 @@
       </div>
 
       <div class="offcanvas-footer">
-        <p class="text-center mb-0"><small>Assign Service To Branch</small></p>
+        <p class="text-center mb-0"><small>Asignar servicio a sucursal</small></p>
         <div class="d-grid gap-3 p-3">
           <button class="btn btn-primary d-block">
             <i class="fa-solid fa-floppy-disk"></i>
-            Update
+            Actualizar
           </button>
           <button class="btn btn-outline-primary d-block" type="button" data-bs-dismiss="offcanvas">
             <i class="fa-solid fa-angles-left"></i>
-            Close
+            Cerrar
           </button>
         </div>
       </div>

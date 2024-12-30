@@ -292,7 +292,7 @@ class ServicesController extends Controller
                 return view('service::backend.services.action_column', compact('module_name', 'data'));
             })
             ->editColumn('employee_count', function ($data) {
-                return "<b>$data->employee_count</b>  <button type='button' data-assign-module='".$data->id."' data-assign-target='#service-employee-assign-form' data-assign-event='employee_assign' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2 ' data-bs-toggle='tooltip' title='Assign Staff To Service'><i class='fa-solid fa-plus p-0'></i></button>";
+                return "<b>$data->employee_count</b>  <button type='button' data-assign-module='".$data->id."' data-assign-target='#service-employee-assign-form' data-assign-event='employee_assign' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2 ' data-bs-toggle='tooltip' title='Asignar personal al servicio'><i class='fa-solid fa-plus p-0'></i></button>";
             })
             ->editColumn('default_price', function ($data) {
               return \Currency::format($data->default_price);
@@ -340,7 +340,7 @@ class ServicesController extends Controller
             ->orderColumns(['id'], '-:column $1');
         if (! request()->is_single_branch) {
             $datatable->editColumn('branches_count', function ($data) {
-                return "<b>$data->branches_count</b>  <button type='button' data-assign-module='".$data->id."' data-assign-target='#service-branch-assign-form' data-assign-event='branch_assign' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2' data-bs-toggle='tooltip' title='Assign Branch To Service'><i class='fa-solid fa-plus p-0'></i></button>";
+                return "<b>$data->branches_count</b>  <button type='button' data-assign-module='".$data->id."' data-assign-target='#service-branch-assign-form' data-assign-event='branch_assign' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2' data-bs-toggle='tooltip' title='Asignar sucursal al servicio'><i class='fa-solid fa-plus p-0'></i></button>";
             });
         }
 

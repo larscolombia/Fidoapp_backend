@@ -171,8 +171,8 @@
   // Validations
   const validationSchema = yup.object({
     name: yup.string()
-      .required('Sub Category name is a required field')
-      .test('is-string', 'Only strings are allowed', (value) => {
+      .required('Este campo es obligatorio.')
+      .test('is-string', 'Este campo debe ser una cadena.', (value) => {
         // Regular expressions to disallow special characters and numbers
         const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/;
         return !specialCharsRegex.test(value) && !numberRegex.test(value);
