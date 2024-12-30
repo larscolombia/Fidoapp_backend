@@ -337,7 +337,7 @@ class AllBookingsController extends Controller
                 }
             })
             ->editColumn('service_amount', function ($data) use ($coin) {
-                return '<span class="text-primary">'.number_format($data->total_amount,2) .' '.$coin->symbol.'</span>';
+                return '<span class="text-primary">'.number_format($data->total_amount,2).$coin->symbol.'</span>';
             })
             ->orderColumn('service_amount', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT total_amount FROM booking_transactions WHERE booking_id = bookings.id)'), $order);
