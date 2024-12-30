@@ -2,17 +2,18 @@
 
 namespace Modules\Earning\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Carbon\Carbon;
 use Currency;
+use Carbon\Carbon;
+use App\Models\Coin;
+use App\Models\User;
+use App\Authorizable;
 use Illuminate\Http\Request;
-use Modules\Commission\Models\CommissionEarning;
-use Modules\Earning\Models\EmployeeEarning;
-use Modules\Earning\Trait\EarningTrait;
-use Modules\Tip\Models\TipEarning;
 use Yajra\DataTables\DataTables;
+use Modules\Tip\Models\TipEarning;
+use App\Http\Controllers\Controller;
+use Modules\Earning\Trait\EarningTrait;
+use Modules\Earning\Models\EmployeeEarning;
+use Modules\Commission\Models\CommissionEarning;
 
 class EarningsController extends Controller
 {
@@ -112,7 +113,7 @@ class EarningsController extends Controller
             ->whereHas('commission_earning', function ($q) {
                 $q->where('commission_status', 'unpaid');
             })->orderBy('updated_at', 'desc');
-
+            $coin = Coin::first();
         return $datatable->eloquent($query)
             // ->addColumn('action', function ($data) use ($module_name) {
             //     $commissionAmount = $data->commission_earning->where('commission_status', 'unpaid')->sum('commission_amount');
@@ -150,27 +151,26 @@ class EarningsController extends Controller
                     return "<b><span  data-assign-module='" . $data->id . "'  class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Bookings'>0</span>";
                 }
             })
-            ->editColumn('total_service_amount', function ($data) {
+            ->editColumn('total_service_amount', function ($data) use ($coin) {
                 $totalServiceAmount = $data->employeeBooking->isEmpty() ? 0 : $data->employeeBooking->first()->total_service_amount;
-
-                return Currency::format($totalServiceAmount);
+                $totalServiceAmountFormat = str_replace('$','',$totalServiceAmount);
+                return number_format($totalServiceAmountFormat,2).$coin->symbol;
             })
-            ->editColumn('total_commission_earn', function ($data) {
+            ->editColumn('total_commission_earn', function ($data) use ($coin) {
 
                 //return "<b><span  data-assign-module='".$data->id."' data-assign-target='#view_commission_list' data-assign-event='assign_commssions' class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Commissions'> <i class='fa-regular fa-eye'></i></span>";
 
                 if (!is_null($data->commission) && $data->commission->getCommission->commission_type == 'percentage') {
-
                     return $data->commission->getCommission->commission_value . '' . '%';
                 } else {
                     if(!is_null($data->commission)){
-                        return Currency::format($data->commission->getCommission->commission_value);
+                        return number_format($data->commission->getCommission->commission_value,2).$coin->symbol;
                     }
-                    return Currency::format(0);
+                    return number_format(0,2).$coin->symbol;
                 }
             })
-            ->editColumn('total_pay', function ($data) {
-                return Currency::format($this->getUnpaidAmount($data)->total_pay);
+            ->editColumn('total_pay', function ($data) use ($coin) {
+                return number_format($this->getUnpaidAmount($data)->total_pay,2).$coin->symbol;
             })
             ->orderColumn('total_services', function ($query, $order) {
                 $query->orderBy('booking_servicesdata_count', $order);

@@ -137,10 +137,10 @@ const numberRegex = /^\d+$/
 const validationSchema = yup.object({
   title: yup
     .string()
-    .required('Title is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
-  value: yup.string().required('Value is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-  type: yup.string().required('Type is a required field')
+    .required('Este campo es obligatorio.') 
+    .test('is-string', 'Este campo debe ser una cadena.', (value) => !numberRegex.test(value)),
+  value: yup.string().required('Este campo es obligatorio.').matches(/^\d+$/, 'El campo debe contener solo dígitos.'),
+  type: yup.string().required('Este campo es obligatorio.')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

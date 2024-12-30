@@ -2,13 +2,14 @@
 
 namespace Modules\Tax\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Modules\Tax\Http\Requests\TaxRequest;
+use App\Models\Coin;
+use App\Authorizable;
 use Modules\Tax\Models\Tax;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
+use Modules\Tax\Http\Requests\TaxRequest;
 
 class TaxesController extends Controller
 {
@@ -94,7 +95,7 @@ class TaxesController extends Controller
                 $query->where('status', $filter['column_status']);
             }
         }
-
+        $coin = Coin::first();
         return $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="form-check-input select-table-row "  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
@@ -114,10 +115,10 @@ class TaxesController extends Controller
                     </div>
                 ';
             })
-            ->editColumn('value', function ($data) {
+            ->editColumn('value', function ($data) use ($coin){
                 if ($data->type === 'fixed') {
-                    $value = \Currency::format($data->value ?? 0);
-                    return $value;
+                    $value = $data->value ?? 0;
+                    return number_format($value,2).$coin->symbol;
                 }
                 if ($data->type === 'percentage') {
                     $value = $data->value . '%';
