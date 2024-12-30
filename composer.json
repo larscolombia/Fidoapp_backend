@@ -1,5 +1,6 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "name": "nasirkhan/laravel-starter",
     "description": "A CMS like modular Laravel starter project.",
     "keywords": [
@@ -128,6 +129,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
 =======
+=======
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c
   "name": "nasirkhan/laravel-starter",
   "description": "A CMS like modular Laravel starter project.",
   "keywords": [
@@ -195,7 +198,10 @@
       "Database\\Factories\\": "database/factories/",
       "Database\\Seeders\\": "database/seeders/",
       "Modules\\": "Modules/"
+<<<<<<< HEAD
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6
+=======
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c
     },
     "classmap": [
       "app/Models"

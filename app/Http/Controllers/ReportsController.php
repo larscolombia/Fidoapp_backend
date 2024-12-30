@@ -125,7 +125,7 @@ class ReportsController extends Controller
         }
 
 
-
+        $coin = Coin::first();
         return $datatable->eloquent($query)
             ->editColumn('start_date_time', function ($data) {
                 return customDate($data->date);
@@ -133,20 +133,30 @@ class ReportsController extends Controller
             ->editColumn('total_booking', function ($data) {
                 return $data->total_booking;
             })
-            ->editColumn('total_service', function ($data) {
-                return $data->total_service ?? 0;
+            ->editColumn('total_service', function ($data) use ($coin) {
+                $value = $data->total_service ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return  $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_service_amount', function ($data) {
-                return Currency::format($data->total_service_amount ?? 0);
+            ->editColumn('total_service_amount', function ($data) use ($coin) {
+                $value = $data->total_service_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_tax_amount', function ($data) {
-                return Currency::format($data->total_amount - $data->total_service_amount ?? 0);
+            ->editColumn('total_tax_amount', function ($data) use ($coin) {
+                $value = $data->total_amount - $data->total_service_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_tip_amount', function ($data) {
-                return Currency::format($data->total_tip_amount ?? 0);
+            ->editColumn('total_tip_amount', function ($data) use ($coin) {
+                $value = $data->total_tip_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_amount', function ($data) {
-                return Currency::format($data->total_amount);
+            ->editColumn('total_amount', function ($data) use ($coin) {
+                $value = $data->total_amount;
+                 $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
             ->addIndexColumn()
             ->rawColumns([])
@@ -240,7 +250,7 @@ class ReportsController extends Controller
         if (isset($filter['employee_id'])) {
             $query->where('bookings.employee_id', $filter['employee_id']);
         }
-
+        $coin = Coin::first();
         return $datatable->eloquent($query)
 
             ->editColumn('start_date_time', function ($data) {
@@ -252,13 +262,17 @@ class ReportsController extends Controller
             ->editColumn('employee_id', function ($data) {
                 return $data->employee->full_name ?? '-';
             })
-            ->editColumn('total_service', function ($data) {
-                return $data->total_service;
+            ->editColumn('total_service', function ($data) use ($coin) {
+                $value = $data->total_service;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_service_amount', function ($data) {
-                return Currency::format($data->service_amount ?? 0);
+            ->editColumn('total_service_amount', function ($data) use ($coin) {
+                $value = $data->service_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_tax_amount', function ($data) {
+            ->editColumn('total_tax_amount', function ($data) use ($coin){
                 $totalTaxAmount = 0;
                 $taxes = json_decode($data->payment->tax_percentage, true);
 
@@ -270,14 +284,19 @@ class ReportsController extends Controller
                         $totalTaxAmount += $tax['value'];
                     }
                 }
-
-                return Currency::format($totalTaxAmount ?? 0);
+                $value = $totalTaxAmount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_tip_amount', function ($data) {
-                return Currency::format($data->total_tip_amount);
+            ->editColumn('total_tip_amount', function ($data)  use ($coin) {
+                $value = $data->total_tip_amount;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_amount', function ($data) {
-                return Currency::format($data->total_amount);
+            ->editColumn('total_amount', function ($data) use ($coin) {
+                $value = $data->total_amount;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
             ->orderColumn('employee_id', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = bookings.employee_id LIMIT 1)'), $order);
@@ -332,7 +351,7 @@ class ReportsController extends Controller
                 $q->where('employee_id', $filter['employee_id']);
             });
         }
-
+        $coin = Coin::first();
         return $datatable->eloquent($query)
             ->editColumn('payment_date', function ($data) {
                 return customDate($data->payment_date ?? '-');
@@ -343,14 +362,20 @@ class ReportsController extends Controller
             ->orderColumn('first_name', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = bookings.employee_id LIMIT 1)'), $order);
             }, 1)
-            ->editColumn('commission_amount', function ($data) {
-                return Currency::format($data->commission_amount ?? 0);
+            ->editColumn('commission_amount', function ($data) use ($coin) {
+                $value = $data->commission_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('tip_amount', function ($data) {
-                return Currency::format($data->tip_amount ?? 0);
+            ->editColumn('tip_amount', function ($data) use ($coin) {
+                $value = $data->tip_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_pay', function ($data) {
-                return Currency::format($data->total_amount ?? 0);
+            ->editColumn('total_pay', function ($data) use ($coin) {
+                $value = $data->total_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
             ->addIndexColumn()
             ->rawColumns([])
@@ -391,7 +416,7 @@ class ReportsController extends Controller
         if (isset($filter['employee_id'])) {
             $query->where('id', $filter['employee_id']);
         }
-
+        $coin = Coin::first();
         return $datatable->eloquent($query)
             ->editColumn('first_name', function ($data) {
                 return $data->full_name;
@@ -399,17 +424,25 @@ class ReportsController extends Controller
             ->editColumn('total_services', function ($data) {
                 return $data->employee_booking_count ?? 0;
             })
-            ->editColumn('total_service_amount', function ($data) {
-                return Currency::format($data->employee_booking_sum_service_price ?? 0);
+            ->editColumn('total_service_amount', function ($data) use ($coin) {
+                $value = $data->employee_booking_sum_service_price ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_commission_earn', function ($data) {
-                return Currency::format($data->commission_earning_sum_commission_amount ?? 0);
+            ->editColumn('total_commission_earn', function ($data) use ($coin) {
+                $value = $data->commission_earning_sum_commission_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_tip_earn', function ($data) {
-                return Currency::format($data->tip_earning_sum_tip_amount ?? 0);
+            ->editColumn('total_tip_earn', function ($data) use ($coin) {
+                $value = $data->tip_earning_sum_tip_amount ?? 0;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
-            ->editColumn('total_earning', function ($data) {
-                return Currency::format($data->employee_booking_sum_service_price + $data->commission_earning_sum_commission_amount + $data->tip_earning_sum_tip_amount);
+            ->editColumn('total_earning', function ($data) use ($coin) {
+                $value = $data->employee_booking_sum_service_price + $data->commission_earning_sum_commission_amount + $data->tip_earning_sum_tip_amount;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
             ->addIndexColumn()
             ->rawColumns([])
@@ -499,7 +532,7 @@ class ReportsController extends Controller
             $orderGroup = OrderGroup::pluck('id');
             $q->orWhereIn('order_group_id', $orderGroup);
         });
-
+        $coin = Coin::first();
         return $datatable->eloquent($orders)
 
             ->addIndexColumn()
@@ -522,8 +555,10 @@ class ReportsController extends Controller
             ->editColumn('status', function ($data) {
                 return view('product::backend.order.columns.status_column', compact('data'));
             })
-            ->editColumn('total_admin_earnings', function ($data) {
-                return Currency::format($data->total_admin_earnings);
+            ->editColumn('total_admin_earnings', function ($data) use ($coin) {
+                $value = $data->total_admin_earnings;
+                $valueFormat = str_replace('$','',$value);
+                return $valueFormat.$coin->symbol;
             })
 
             ->filterColumn('customer_name', function ($query, $keyword) {

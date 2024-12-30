@@ -4,11 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
     "content-hash": "244a7a2056b213df0821c868c74e4b69",
 =======
     "content-hash": "cb95c19b096d591ef933af695f696000",
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+<<<<<<< HEAD:composerback.locks
+    "content-hash": "cb95c19b096d591ef933af695f696000",
+=======
+    "content-hash": "244a7a2056b213df0821c868c74e4b69",
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
     "packages": [
         {
             "name": "alexusmai/laravel-file-manager",
@@ -1301,7 +1309,22 @@
         },
         {
             "name": "google/apiclient-services",
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
+=======
+<<<<<<< HEAD:composerback.locks
+            "version": "v0.385.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-api-php-client-services.git",
+                "reference": "d6a89ec1883ecd1de145179d44cb274cf4927da9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/d6a89ec1883ecd1de145179d44cb274cf4927da9",
+                "reference": "d6a89ec1883ecd1de145179d44cb274cf4927da9",
+=======
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
             "version": "v0.386.0",
             "source": {
                 "type": "git",
@@ -1312,6 +1335,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/cd08601dd729977f7198c72cd10d05901833bec0",
                 "reference": "cd08601dd729977f7198c72cd10d05901833bec0",
+<<<<<<< HEAD:composerback.locks
 =======
             "version": "v0.385.0",
             "source": {
@@ -1324,6 +1348,9 @@
                 "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/d6a89ec1883ecd1de145179d44cb274cf4927da9",
                 "reference": "d6a89ec1883ecd1de145179d44cb274cf4927da9",
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
                 "shasum": ""
             },
             "require": {
@@ -1352,6 +1379,7 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
                 "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.386.0"
             },
@@ -1361,6 +1389,17 @@
             },
             "time": "2024-12-09T01:08:31+00:00"
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+<<<<<<< HEAD:composerback.locks
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.385.0"
+            },
+            "time": "2024-12-09T01:08:31+00:00"
+=======
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.386.0"
+            },
+            "time": "2024-12-16T01:04:20+00:00"
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
         },
         {
             "name": "google/auth",
@@ -5124,7 +5163,22 @@
         },
         {
             "name": "phpseclib/phpseclib",
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
+=======
+<<<<<<< HEAD:composerback.locks
+            "version": "3.0.42",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "db92f1b1987b12b13f248fe76c3a52cadb67bb98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/db92f1b1987b12b13f248fe76c3a52cadb67bb98",
+                "reference": "db92f1b1987b12b13f248fe76c3a52cadb67bb98",
+=======
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
             "version": "3.0.43",
             "source": {
                 "type": "git",
@@ -5135,6 +5189,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/709ec107af3cb2f385b9617be72af8cf62441d02",
                 "reference": "709ec107af3cb2f385b9617be72af8cf62441d02",
+<<<<<<< HEAD:composerback.locks
 =======
             "version": "3.0.42",
             "source": {
@@ -5147,6 +5202,9 @@
                 "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/db92f1b1987b12b13f248fe76c3a52cadb67bb98",
                 "reference": "db92f1b1987b12b13f248fe76c3a52cadb67bb98",
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
                 "shasum": ""
             },
             "require": {
@@ -5227,11 +5285,19 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
                 "source": "https://github.com/phpseclib/phpseclib/tree/3.0.43"
 =======
                 "source": "https://github.com/phpseclib/phpseclib/tree/3.0.42"
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+<<<<<<< HEAD:composerback.locks
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.42"
+=======
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.43"
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
             },
             "funding": [
                 {
@@ -5247,11 +5313,19 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
             "time": "2024-12-14T21:12:59+00:00"
 =======
             "time": "2024-09-16T03:06:04+00:00"
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+<<<<<<< HEAD:composerback.locks
+            "time": "2024-09-16T03:06:04+00:00"
+=======
+            "time": "2024-12-14T21:12:59+00:00"
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
         },
         {
             "name": "predis/predis",
@@ -5859,6 +5933,8 @@
 <<<<<<< HEAD:composer.lock
             },
             "time": "2024-12-10T01:58:33+00:00"
+<<<<<<< HEAD:composerback.locks
+=======
         },
         {
             "name": "pusher/pusher-php-server",
@@ -5920,10 +5996,14 @@
                 "source": "https://github.com/pusher/pusher-http-php/tree/7.2.6"
             },
             "time": "2024-10-18T12:04:31+00:00"
+<<<<<<< HEAD:composerback.locks
 =======
             },
             "time": "2024-12-10T01:58:33+00:00"
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
         },
         {
             "name": "ralouphie/getallheaders",
@@ -7227,7 +7307,22 @@
         },
         {
             "name": "spatie/laravel-webhook-server",
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
+=======
+<<<<<<< HEAD:composerback.locks
+            "version": "3.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-webhook-server.git",
+                "reference": "d4cc24141a4d6a148e110df5f36217cc8f40f07e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-webhook-server/zipball/d4cc24141a4d6a148e110df5f36217cc8f40f07e",
+                "reference": "d4cc24141a4d6a148e110df5f36217cc8f40f07e",
+=======
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
             "version": "3.8.2",
             "source": {
                 "type": "git",
@@ -7238,6 +7333,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/spatie/laravel-webhook-server/zipball/020e54e7f50bf80e738600872f8f0f149ce58efb",
                 "reference": "020e54e7f50bf80e738600872f8f0f149ce58efb",
+<<<<<<< HEAD:composerback.locks
 =======
             "version": "3.8.1",
             "source": {
@@ -7250,6 +7346,9 @@
                 "url": "https://api.github.com/repos/spatie/laravel-webhook-server/zipball/d4cc24141a4d6a148e110df5f36217cc8f40f07e",
                 "reference": "d4cc24141a4d6a148e110df5f36217cc8f40f07e",
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
                 "shasum": ""
             },
             "require": {
@@ -7302,11 +7401,19 @@
                 "webhook"
             ],
             "support": {
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
                 "source": "https://github.com/spatie/laravel-webhook-server/tree/3.8.2"
 =======
                 "source": "https://github.com/spatie/laravel-webhook-server/tree/3.8.1"
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+<<<<<<< HEAD:composerback.locks
+                "source": "https://github.com/spatie/laravel-webhook-server/tree/3.8.1"
+=======
+                "source": "https://github.com/spatie/laravel-webhook-server/tree/3.8.2"
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
             },
             "funding": [
                 {
@@ -7314,11 +7421,19 @@
                     "type": "custom"
                 }
             ],
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
             "time": "2024-12-16T12:56:30+00:00"
 =======
             "time": "2024-02-12T08:18:25+00:00"
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+<<<<<<< HEAD:composerback.locks
+            "time": "2024-02-12T08:18:25+00:00"
+=======
+            "time": "2024-12-16T12:56:30+00:00"
+>>>>>>> refs/remotes/origin/developer:composer.lock
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
         },
         {
             "name": "spatie/temporary-directory",
@@ -12550,9 +12665,12 @@
                     "providers": [
                         "LaravelFans\\Docker\\DockerServiceProvider"
                     ]
+<<<<<<< HEAD:composerback.locks
                 },
                 "branch-alias": {
                     "dev-master": "1.x-dev"
+=======
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
                 }
             },
             "autoload": {
@@ -16109,10 +16227,14 @@
     "platform": {
         "php": "^8.0.2"
     },
+<<<<<<< HEAD:composerback.locks
 <<<<<<< HEAD:composer.lock
     "platform-dev": [],
 =======
     "platform-dev": {},
 >>>>>>> 62600d1ca8d46d3ae5b2544801de1c7288cf20f6:composerback.locks
+=======
+    "platform-dev": {},
+>>>>>>> d88a52aeeb3222e9cb38d27269acec9c8314123c:composer.lock
     "plugin-api-version": "2.6.0"
 }
