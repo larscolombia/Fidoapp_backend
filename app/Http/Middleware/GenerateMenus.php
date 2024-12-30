@@ -736,14 +736,14 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
-            $this->mainRoute($menu, [
-                'icon' => 'icon-Daily-Bookings',
-                'title' => __('salud.title'),
-                'route' => 'backend.mascotas.salud',
-                'active' => ['app/salud'],
-                'permission' => 'view_salud',
-                'order' => 0,
-            ]);
+            // $this->mainRoute($menu, [
+            //     'icon' => 'icon-Daily-Bookings',
+            //     'title' => __('salud.title'),
+            //     'route' => 'backend.mascotas.salud',
+            //     'active' => ['app/salud'],
+            //     'permission' => 'view_salud',
+            //     'order' => 0,
+            // ]);
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Setting',
