@@ -37,7 +37,65 @@ import * as yup from 'yup'
 import FormHeader from '@/vue/components/form-elements/FormHeader.vue'
 import FormFooter from '@/vue/components/form-elements/FormFooter.vue'
 import InputField from '@/vue/components/form-elements/InputField.vue'
+let translations = {};
+const defaultTranslations = {
+  required: 'Este campo es obligatorio.',
+  string: 'Este campo debe ser una cadena.',
+  email: 'Este campo debe ser un correo electrónico válido.',
+  min: 'Este campo debe tener al menos :min caracteres.',
+  confirmed: 'La confirmación no coincide.',
+  not_especial: 'No se permiten caracteres especiales.',
+  only_digits: 'El campo debe contener solo dígitos.',
+  first_strings_are_allowed: 'Se permiten las primeras cadenas.',
+  same_password: 'Las contraseñas deben coincidir.',
+};
+// Función para cargar las traducciones
+async function loadTranslations() {
+  // Intentar cargar desde localStorage
+  const storedTranslations = localStorage.getItem('translations');
 
+  if (storedTranslations) {
+    translations = JSON.parse(storedTranslations);
+    console.log('Cargadas traducciones desde localStorage:', translations);
+    return; // Salir si ya tenemos traducciones
+  }
+
+  try {
+    const response = await axios.get('/api/translations');
+    translations = response.data;
+
+    // Almacenar en localStorage
+    localStorage.setItem('translations', JSON.stringify(translations));
+    console.log('Cargadas traducciones desde el servidor:', translations);
+  } catch (error) {
+    console.error('Error loading translations:', error);
+    // Si hay un error, usar los mensajes por defecto
+    translations = defaultTranslations;
+  }
+}
+// Llamar a la función para cargar las traducciones
+loadTranslations();
+function getTranslation(key,default_min = null, default_max = null) {
+  // Intenta obtener las traducciones del localStorage
+  const storedTranslations = localStorage.getItem('translations');
+
+  if (storedTranslations) {
+    const translationsFromStorage = JSON.parse(storedTranslations);
+    // Devuelve la traducción correspondiente si existe
+    if (translationsFromStorage[key]) {
+      if(default_min !== null){
+        translationsFromStorage[key].replace(':min', default_min);
+      }
+      if(default_max !== null){
+        translationsFromStorage[key].replace(':max', default_max);
+      }
+      return translationsFromStorage[key].replace(':attribute', '');
+    }
+  }
+
+  // Si no se encuentra, devolvemos el mensaje por defecto
+  return defaultTranslations[key] || `Missing translation for ${key}`;
+}
 // props
 defineProps({
   createTitle: { type: String, default: '' },
@@ -53,11 +111,11 @@ const currentId = useModuleId(() => {
 // Validations
 const validationSchema = yup.object({
   password: yup.string()
-    .required('Password is required field')
-    .min(6, 'Password must be at least 8 characters'),
+    .required(getTranslation('required'))
+    .min(6,getTranslation('required',6)),
     confirm_password: yup.string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm Password is required field'),
+    .oneOf([yup.ref('password'), null], getTranslation('same_password'))
+    .required(getTranslation('required')),
 })
 
 const defaultData = () => {
