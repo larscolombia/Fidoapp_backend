@@ -5,9 +5,9 @@ import ServicePackageFormOffcanvas from './components/ServicePackageFormOffcanva
 import GalleryFormOffcanvas from './components/GalleryFormOffcanvas.vue'
 import AssignEmployeeFormOffCanvas from './components/assign/AssignEmployeeFormOffCanvas.vue'
 import AssignBranchFormOffCanvas from './components/assign/AssignBranchFormOffCanvas.vue'
-import ServiceDurationOffcanvas from './components/ServiceDurationOffcanvas.vue' 
+import ServiceDurationOffcanvas from './components/ServiceDurationOffcanvas.vue'
 import ServiceFacilityForm from './components/ServiceFacilityForm.vue'
-import ServiceTrainingOffcanvas from './components/ServiceTrainingOffcanvas.vue' 
+import ServiceTrainingOffcanvas from './components/ServiceTrainingOffcanvas.vue'
 import SystemServiceFormOffcanvas from './components/SystemServiceFormOffcanvas.vue'
 
 
@@ -29,4 +29,4 @@ app.component('service-training-offcanvas',ServiceTrainingOffcanvas)
 
 
 
-app.mount('[data-render="app"]');
+app.mount('[data-render="app_services"]');

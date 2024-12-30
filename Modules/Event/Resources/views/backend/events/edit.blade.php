@@ -32,7 +32,7 @@
                 <div class="mb-3">
                     <label for="tipo" class="form-label">{{ __('event.Tipo') }}</label>
                     <select class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
-                        <option value="salud" {{ old('tipo', $event->tipo) == 'salud' ? 'selected' : '' }}>{{ __('Salud') }}</option>
+                        <option value="medico" {{ old('tipo', $event->tipo) == 'medico' ? 'selected' : '' }}>{{ __('Médico') }}</option>
                         <option value="entrenamiento" {{ old('tipo', $event->tipo) == 'entrenamiento' ? 'selected' : '' }}>{{ __('Entrenamiento') }}</option>
                     </select>
                     @error('tipo')
@@ -118,8 +118,8 @@
                     document.getElementById('date').value = info.dateStr;
                 },
                 eventContent: function(info) {
-                    return { 
-                        html: info.event.title + ' ' + 
+                    return {
+                        html: info.event.title + ' ' +
                         info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' +
                         (info.event.end ? info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '')
                     };
@@ -133,9 +133,9 @@
                 var fecha = document.getElementById('date').value;
                 var endDate = document.getElementById('end_date').value;
                 var eventId = "{{ $event->id }}"; // Ensure event ID is available in the view
-                
+
                 var event = calendar.getEventById(eventId); // Get the event by ID
-                
+
                 if (event) {
                     event.setDates(fecha, endDate); // Update the event dates
                 } else {

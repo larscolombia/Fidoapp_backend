@@ -565,7 +565,7 @@ class GenerateMenus
                 'icon' => 'icon-pet',
                 'title' => __('menu.lost_pets'),
                 'route' => ['backend.pets.lost'],
-                'active' => ['app/pets'],
+                'active' => ['app/lost-pets '],
                 'permission' => 'view_owners',
                 'order' => 0,
             ]);
@@ -643,6 +643,15 @@ class GenerateMenus
                 'title' => __('sidebar.orders_report'),
                 'route' => 'backend.reports.order-report',
                 'active' => ['app/order-report'],
+                'permission' => 'view_order_reports',
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
+                'icon' => ' icon-all-booking',
+                'title' => __('sidebar.transactions'),
+                'route' => 'backend.reports.fidocoin-transactions',
+                'active' => ['app/transactions'],
                 'permission' => 'view_order_reports',
                 'order' => 0,
             ]);
@@ -727,14 +736,14 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
-            $this->mainRoute($menu, [
-                'icon' => 'icon-Daily-Bookings',
-                'title' => __('salud.title'),
-                'route' => 'backend.mascotas.salud',
-                'active' => ['app/salud'],
-                'permission' => 'view_salud',
-                'order' => 0,
-            ]);
+            // $this->mainRoute($menu, [
+            //     'icon' => 'icon-Daily-Bookings',
+            //     'title' => __('salud.title'),
+            //     'route' => 'backend.mascotas.salud',
+            //     'active' => ['app/salud'],
+            //     'permission' => 'view_salud',
+            //     'order' => 0,
+            // ]);
 
             $this->mainRoute($menu, [
                 'icon' => 'icon-Setting',

@@ -159,12 +159,14 @@ class EarningsController extends Controller
 
                 //return "<b><span  data-assign-module='".$data->id."' data-assign-target='#view_commission_list' data-assign-event='assign_commssions' class='text-primary text-nowrap px-1' data-bs-toggle='tooltip' title='View Employee Commissions'> <i class='fa-regular fa-eye'></i></span>";
 
-                if ($data->commission->getCommission->commission_type == 'percentage') {
+                if (!is_null($data->commission) && $data->commission->getCommission->commission_type == 'percentage') {
 
                     return $data->commission->getCommission->commission_value . '' . '%';
                 } else {
-
-                    return Currency::format($data->commission->getCommission->commission_value);
+                    if(!is_null($data->commission)){
+                        return Currency::format($data->commission->getCommission->commission_value);
+                    }
+                    return Currency::format(0);
                 }
             })
             ->editColumn('total_pay', function ($data) {

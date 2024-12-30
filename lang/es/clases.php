@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Clases',
+    'titles' => 'Título',
     'create' => 'Crear Clase',
     'edit' => 'Editar Clase',
     'delete' => 'Eliminar Clase',
@@ -21,5 +22,9 @@ return [
     'cancel' => 'Cancelar',
     'video' => 'Video',
     'show_exercises' => 'Mostrar Ejercicios',
+    'visualizations' => 'Visualizaciones',
+    'duration' => 'Duración',
+    'Are you sure you want to delete this class?' => '¿Estás seguro de que deseas eliminar esta clase?',
     'El precio de la clase no puede ser mayor que el del curso al que pertenece.' => 'El precio de la clase no puede ser mayor que el del curso al que pertenece.',
+    'Confirm Deletion' => 'Confirmar eliminación',
 ];

@@ -51,7 +51,7 @@
             </table>
         </div>
     </div>
-    <div data-render="app">
+    <div data-render="app_services">
         <system-service-form-offcanvas create-title="{{ __('messages.create') }} {{ __($craete_title) }}"
             edit-title="{{ __('messages.edit') }} {{ __($craete_title) }}"
             :customefield="{{ json_encode($customefield) }}">

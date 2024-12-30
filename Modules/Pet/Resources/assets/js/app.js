@@ -31,4 +31,4 @@ app.component('pet-offcanvas', PetFormOffCanvas)
 app.component('pet-notes-offcanvas', PetNotesOffcanvas)
 app.component('add-pets-notes', AddPetsNotes)
 app.component('send-push-notification', SendPushNotification)
-app.mount('[data-render="app"]');
+app.mount('[data-render="app_pets"]');

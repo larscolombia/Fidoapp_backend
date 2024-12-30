@@ -13,12 +13,15 @@
         <div class="card-body">
             <div class="mb-3">
                 <label for="name" class="form-label">{{ __('courses.name') }}</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ $clase->name }}" readonly>
+                <input type="text" class="form-control" id="name" name="name" value="{{ $clase->title }}" readonly>
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">{{ __('courses.description') }}</label>
-                <textarea class="form-control" id="description" name="description" rows="3" readonly>{{ $clase->description }}</textarea>
+                <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
+                <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ $clase->duration }}" readonly>
+                @error('duration')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             {{-- <div class="mb-3">
@@ -31,7 +34,7 @@
                 <div id="video-preview" class="border p-3" style="width: 100%; height: auto;">
                     @if($clase->video)
                         <video width="320" height="180" controls>
-                            <source src="{{ asset($clase->video) }}" type="video/mp4">
+                            <source src="{{ asset('videos/cursos_plataforma'.$clase->video) }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     @else
@@ -41,13 +44,17 @@
             </div>
 
             <div class="mb-3">
-                <label for="price" class="form-label">{{ __('courses.Price') }}</label>
-                <input type="text" class="form-control" id="price" name="price" value="{{ $clase->price }}" readonly>
+                <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
+                <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" name="thumbnail" accept="image/*" value="{{$clase->thumbnail}}" readonly>
+                @error('thumbnail')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
+
 
             <div class="mb-3">
                 <label for="course" class="form-label">{{ __('courses.Course') }}</label>
-                <input type="text" class="form-control" id="course" name="course" value="{{ $clase->cursoPlataforma->name }}" readonly>
+                <input type="text" class="form-control" id="course" name="course" value="{{ $clase->coursePlatform->name }}" readonly>
             </div>
 
             <div class="mt-4">

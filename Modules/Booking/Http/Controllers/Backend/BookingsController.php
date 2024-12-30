@@ -73,7 +73,7 @@ class BookingsController extends Controller
         $statusList = $this->statusList();
 
         $booking = Booking::find(request()->booking_id);
-        
+
         $date = $booking->start_date_time ?? date('Y-m-d');
 
         // $columns = CustomFieldGroup::columnJsonValues(new Booking());
@@ -89,7 +89,7 @@ class BookingsController extends Controller
         $checkout_sequence = $booking_status->where('name', 'check_in')->first()->sequence ?? 0;
         $bookingColors = Constant::getAllConstant()->where('type', 'BOOKING_STATUS_COLOR');
 
-      
+
         $statusList = [];
 
         foreach ($booking_status as $key => $value) {
@@ -207,7 +207,7 @@ class BookingsController extends Controller
 
         $booking_status = Constant::getAllConstant()->where('type', 'BOOKING_STATUS');
 
-      
+
         return view('booking::backend.bookings.index_datatable', compact('module_action', 'filter', 'booking_status', 'create_title','type' ));
     }
 
@@ -219,7 +219,7 @@ class BookingsController extends Controller
         ->branch()->with(['user','boarding','pet','employee','payment']);
 
         if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
-           
+
             $query;
 
         } else {
@@ -227,7 +227,7 @@ class BookingsController extends Controller
             $query->where('employee_id', auth()->id());
 
         }
-    
+
         $filter = $request->filter;
 
         if (isset($filter)) {
@@ -249,7 +249,7 @@ class BookingsController extends Controller
             if (isset($filter['employee_id'])) {
 
                 $query->where('employee_id', $filter['employee_id']);
-              
+
             }
             // if (isset($filter['service_id'])) {
             //     $query->whereHas('services', function ($q) use ($filter) {
@@ -266,7 +266,7 @@ class BookingsController extends Controller
         $employee = User::where('user_type', 'boarder')->get();
 
         $payment_status = Constant::getAllConstant()->where('type', 'PAYMENT_STATUS')->where('status', '=', '1');
-        
+
         return $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
@@ -325,7 +325,7 @@ class BookingsController extends Controller
             })
             ->editColumn('pet_name', function ($data) {
                 // return '<span class="text-primary">'.$data->pet->name.'</span>';
-                return '<span class="text-primary">'.($data->pet ? optional($data->pet)->name : '-').'</span>';          
+                return '<span class="text-primary">'.($data->pet ? optional($data->pet)->name : '-').'</span>';
             })
             ->filterColumn('pet_name', function ($query, $keyword) {
                 if (! empty($keyword)) {
@@ -337,7 +337,7 @@ class BookingsController extends Controller
             ->orderColumn('pet_name', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT name FROM pets WHERE id = bookings.pet_id LIMIT 1)'), $order);
             }, 1)
-          
+
             ->editColumn('pettype_id', function ($data) {
                 $value =optional(optional($data->pet)->pettype)->name;
                 if(isset($data->pet)){
@@ -345,7 +345,7 @@ class BookingsController extends Controller
                         $breed = $data->pet->breed->name;
                         $value = $data->pet->pettype->name .' '.' ('. $data->pet->breed->name .')';
                     }
-                }     
+                }
                 return !empty($value) ? $value : '-';
             })
             ->filterColumn('pettype_id', function ($query, $keyword) {
@@ -376,7 +376,7 @@ class BookingsController extends Controller
                 $query->orderByRaw('(SELECT pickup_date_time FROM booking_boarding_mapping WHERE booking_id = bookings.id LIMIT 1) ' . $order);
 
             }, 1)
-           
+
             ->editColumn('drop_date_time', function ($data) {
                 return customDate(optional($data->boarding)->dropoff_date_time);
             })
@@ -483,7 +483,7 @@ class BookingsController extends Controller
             'branch_id'=> $branch_id,
             'system_service_id'=>$system_service->id,
             'status'=> 'confirmed',
-            
+
         ];
 
         $booking = Booking::create($bookingData);
@@ -498,7 +498,7 @@ class BookingsController extends Controller
                 else{
                     $service_facility = '';
                 }
-                
+
 
                 $booking_mapping=[
 
@@ -512,9 +512,9 @@ class BookingsController extends Controller
 
                 if(!empty($data['facility'])){
                     $booking_mapping['additional_facility'] =json_encode($service_facility);
-                } 
+                }
                 BookingBoardingMapping::create($booking_mapping);
-                
+
                 break;
 
             case 'veterinary':
@@ -541,7 +541,7 @@ class BookingsController extends Controller
                    }
                 }
 
-              
+
                 $booking_mapping=[
 
                     'booking_id'=>$booking['id'],
@@ -559,7 +559,7 @@ class BookingsController extends Controller
                 BookingVeterinaryMapping::create($booking_mapping);
 
                 break;
-    
+
             case 'grooming':
 
                 $service_amount=geServiceAmount($data['type'], $data['service']);
@@ -619,32 +619,32 @@ class BookingsController extends Controller
                 case 'daycare':
 
                     $service_amount=geDaycareAmount($data['type']);
-    
+
                     $booking_mapping=[
-    
+
                         'booking_id'=>$booking['id'],
                         'date'=>$data['date'],
                         'dropoff_time'=>$data['drop_off_time'],
                         'pickup_time'=>$data['pick_up_time'],
                         'address'=>$address,
                         'price'=> $service_amount['service_amount'],
-                       
+
                     ];
 
                     if (isset($data['favorite_food'])) {
                         $booking_mapping['food'] = $data['favorite_food'];
                     }
-                
+
                     if (isset($data['favorite_activity'])) {
                         $booking_mapping['activity'] = $data['favorite_activity'];
                     }
-    
+
                     BookingDayCareMapping::create($booking_mapping);
-    
+
                     break;
 
- 
- 
+
+
             default:
                 // Handle the case where the booking type is not recognized
                 // For example:
@@ -661,10 +661,10 @@ class BookingsController extends Controller
             Booking::where('id', $booking['id'])->update(['total_amount' => $service_amount['total_amount'],'service_amount'=>$service_amount['service_amount']]);
         }
 
-    
+
         $tax =Tax::active()->whereNull('module_type')->orWhere('module_type', 'services')->get();
 
-      
+
          $booking_transaction_details=[
 
           'booking_id'=>$booking['id'],
@@ -672,11 +672,11 @@ class BookingsController extends Controller
           'tax_percentage'=>json_encode($tax),
           'payment_status'=>0
 
-         ]; 
+         ];
 
         $this->getpayment_method($booking_transaction_details);
 
-        
+
         $message = __('messages.create_form', ['form' => __('booking.singular_title')]);
 
         try {
@@ -693,7 +693,7 @@ class BookingsController extends Controller
                 'booking_date_and_time' => $booking->start_date_time->format('Y-m-d H:i'),
                 'latitude' =>  null,
                 'longitude' => null,
-                
+
             ];
             $this->sendNotificationOnBookingUpdate('new_booking', $notification_data);
         } catch (\Exception $e) {
@@ -755,19 +755,19 @@ class BookingsController extends Controller
 
                 $dropoff_dateTimeObj = new DateTime($data->boarding->dropoff_date_time);
 
-                $data['dropoff_date']= $dropoff_dateTimeObj->format('Y-m-d'); 
-                $data['dropoff_time'] = $dropoff_dateTimeObj->format('H:i'); 
+                $data['dropoff_date']= $dropoff_dateTimeObj->format('Y-m-d');
+                $data['dropoff_time'] = $dropoff_dateTimeObj->format('H:i');
 
                  $pickup_dateTimeObj = new DateTime($data->boarding->pickup_date_time);
 
-                 $data['pickup_date'] =  $pickup_dateTimeObj->format('Y-m-d'); 
-                 $data['pickup_time']=  $pickup_dateTimeObj->format('H:i'); 
-                 $data['amount']=  $data->boarding->price; 
+                 $data['pickup_date'] =  $pickup_dateTimeObj->format('Y-m-d');
+                 $data['pickup_time']=  $pickup_dateTimeObj->format('H:i');
+                 $data['amount']=  $data->boarding->price;
 
                  $data['dropoff_address']=$data->boarding->dropoff_address;
                  $data['pickup_address']=$data->boarding->pickup_address;
 
-    
+
                 break;
             case 'veterinary':
 
@@ -775,36 +775,36 @@ class BookingsController extends Controller
 
                 $dateTimeObj = new DateTime($data->veterinary->date_time);
 
-                $data['date']= $dateTimeObj->format('Y-m-d'); 
-                $data['time'] = $dateTimeObj->format('H:i'); 
-                $data['veterinary_type']=$data->veterinary->service->category->id;
+                $data['date']= $dateTimeObj->format('Y-m-d');
+                $data['time'] = $dateTimeObj->format('H:i');
+                $data['veterinary_type']=!is_null($data->veterinary->service) ? (!is_null($data->veterinary->service->category) ? $data->veterinary->service->category->id : null) : null;
                 $data['service_id']=$data->veterinary->service_id;
                 $data['reason']=$data->veterinary->reason;
                 $data['medical_report'] = $data->medical_report;
 
                 break;
-    
+
                 case 'grooming':
 
                     $data = Booking::with('grooming', 'user','pet','employee')->findOrFail($id);
 
                     $dateTimeObj = new DateTime($data->grooming->date_time);
-    
-                    $data['date']= $dateTimeObj->format('Y-m-d'); 
-                    $data['time'] = $dateTimeObj->format('H:i'); 
-                         
+
+                    $data['date']= $dateTimeObj->format('Y-m-d');
+                    $data['time'] = $dateTimeObj->format('H:i');
+
                     $data['service_id']=$data->grooming->service_id;
                     $data['price']=$data->grooming->price;
-                 
+
 
                  break;
 
                  case 'training':
-                   
+
                     $data = Booking::with('training', 'user','pet','employee')->findOrFail($id);
 
                     $dateTimeObj = new DateTime($data->training->date_time);
-    
+
                     $updatedData = [
                         'date' => $dateTimeObj->format('Y-m-d'),
                         'time' => $dateTimeObj->format('H:i'),
@@ -813,42 +813,42 @@ class BookingsController extends Controller
                         'duration' => $data->training->duration,
                         // Add other additional data if needed
                     ];
-                    
+
                     // Now, merge the original attributes of the $data object with the additional data array
                     $data = $data->toArray(); // Convert the original $data object to an array
                     $data = array_merge($data, $updatedData);
-                 
+
                  break;
 
-                 case 'walking':   
+                 case 'walking':
 
                     $data = Booking::with('walking', 'user','pet','employee')->findOrFail($id);
 
                     $dateTimeObj = new DateTime($data->walking->date_time);
-                    $data['date']= $dateTimeObj->format('Y-m-d'); 
-                    $data['time'] = $dateTimeObj->format('H:i'); 
-                    $data['address']= $data->walking->address;      
+                    $data['date']= $dateTimeObj->format('Y-m-d');
+                    $data['time'] = $dateTimeObj->format('H:i');
+                    $data['address']= $data->walking->address;
                     $data['duration']=$data->walking->duration;
                     $data['price']=$data->walking->price;
-                 
+
 
                  break;
 
                  case 'daycare':
-                   
+
                     $data = Booking::with('daycare', 'user','pet','employee')->findOrFail($id);
 
                     $dateTimeObj = new DateTime($data->daycare->date_time);
-                    $data['date']= $dateTimeObj->format('Y-m-d'); 
-                    $data['dropoff_time'] = $data->daycare->dropoff_time; 
-                    $data['pickup_time'] = $data->daycare->pickup_time; 
-                    $data['address']= $data->daycare->address;      
+                    $data['date']= $dateTimeObj->format('Y-m-d');
+                    $data['dropoff_time'] = $data->daycare->dropoff_time;
+                    $data['pickup_time'] = $data->daycare->pickup_time;
+                    $data['address']= $data->daycare->address;
                     $data['food']=$data->daycare->food;
                     $data['activity']=$data->daycare->activity;
                     $data['price']=$data->daycare->price;
-                 
+
                  break;
-        
+
             default:
                 // Handle the case where the booking type is not recognized
                 // For example:
@@ -878,11 +878,11 @@ class BookingsController extends Controller
             'user_id'=>$data['user_id'],
             'employee_id'=>$data['employee_id'],
             'pet_id'=>$data['pet'],
-            'booking_extra_info'=>$data['addition_information'], 
+            'booking_extra_info'=>$data['addition_information'],
           ];
 
-        $booking->update($bookingData); 
-        
+        $booking->update($bookingData);
+
         switch ($booking['booking_type']) {
             case 'boarding':
 
@@ -900,10 +900,10 @@ class BookingsController extends Controller
                     'additional_facility'=>json_encode($data['facility'])
                  ];
 
-                $boarding_details->update($booking_mapping); 
- 
+                $boarding_details->update($booking_mapping);
+
                 break;
-    
+
             case 'grooming':
 
                 $grooming_details=BookingGroomingMapping::where('booking_id',$booking['id'])->first();
@@ -923,9 +923,9 @@ class BookingsController extends Controller
                     'price'=> $grooming_total_amount,
                     'duration'=> $duration,
                     ];
-            
-                $grooming_details->update($booking_mapping); 
- 
+
+                $grooming_details->update($booking_mapping);
+
               break;
 
               case 'veterinary':
@@ -965,7 +965,7 @@ class BookingsController extends Controller
                     'price'=> $training_total_amount,
                     ];
 
-                 $training_details->update($booking_mapping); 
+                 $training_details->update($booking_mapping);
                 break;
 
                 case 'walking':
@@ -984,8 +984,8 @@ class BookingsController extends Controller
                     'duration'=>$data['duration'],
                     ];
 
-                $walking_details->update($booking_mapping); 
- 
+                $walking_details->update($booking_mapping);
+
                break;
 
                case 'daycare':
@@ -1006,11 +1006,11 @@ class BookingsController extends Controller
                     'price'=> $daycare_total_amount,
                  ];
 
-                $daycare_details->update($booking_mapping); 
+                $daycare_details->update($booking_mapping);
 
                break;
-    
-        
+
+
             default:
                 // Handle the case where the booking type is not recognized
                 // For example:
@@ -1019,11 +1019,11 @@ class BookingsController extends Controller
         }
 
 
-     
+
 
         $message = __('booking.booking_service_update', ['form' => __('booking.singular_title')]);
 
-  
+
 
         return response()->json(['message' => $message, 'status' => true, 'data' => $data], 200);
     }
@@ -1042,20 +1042,20 @@ class BookingsController extends Controller
             case 'boarding':
 
                 BookingBoardingMapping::where('booking_id',$id)->delete();
- 
+
                 break;
-    
+
             case 'grooming':
 
                 BookingGroomingMapping::where('booking_id',$id)->delete();
 
               break;
 
-            case 'veterinary': 
-                
+            case 'veterinary':
+
                 BookingVeterinaryMapping::where('booking_id',$id)->delete();
-                
-                break;  
+
+                break;
 
             case 'training':
 
@@ -1066,7 +1066,7 @@ class BookingsController extends Controller
                 case 'walking':
 
                 BookingWalkerMapping::where('booking_id',$id)->delete();
- 
+
                break;
 
                case 'daycare':
@@ -1074,8 +1074,8 @@ class BookingsController extends Controller
                 BookingDayCareMapping::where('booking_id',$id)->delete();
 
                 break;
-    
-        
+
+
             default:
                 // Handle the case where the booking type is not recognized
                 // For example:
@@ -1097,7 +1097,7 @@ class BookingsController extends Controller
         $booking = Booking::where('id',$id)->with('user','systemservice','employee')->first();
 
         $status = $request->status;
-   
+
         if (isset($request->action_type) && $request->action_type == 'update-status') {
             $status = $request->value;
         }
@@ -1112,7 +1112,7 @@ class BookingsController extends Controller
                 break;
             case 'rejected':
                 $notify_type = 'reject_booking';
-                break;    
+                break;
             case 'completed':
                 $notify_type = 'complete_booking';
                 break;
@@ -1123,7 +1123,7 @@ class BookingsController extends Controller
 
        // dd($booking->start_date_time);
 
-      
+
 
         $notification_data = [
 
@@ -1139,8 +1139,8 @@ class BookingsController extends Controller
             'booking_date_and_time' => DateTime::createFromFormat('Y-m-d H:i', $booking->start_date_time),
             'latitude' => null,
             'longitude' => null
-    
-            
+
+
         ];
 
         if (isset($notify_type)) {
@@ -1150,7 +1150,7 @@ class BookingsController extends Controller
                 \Log::error($e->getMessage());
             }
         }
-        
+
         $message = __('booking.status_update');
 
         return response()->json(['message' => $message, 'status' => true]);
@@ -1158,7 +1158,7 @@ class BookingsController extends Controller
 
     public function updatePaymentStatus($id, Request $request)
     {
-    
+
         if (isset($request->action_type) && $request->action_type == 'update-payment-status') {
             $status = $request->value;
         }
@@ -1203,7 +1203,7 @@ class BookingsController extends Controller
         return response()->json(['message' => $message, 'status' => true]);
     }
 
-    
+
 
 
     public function bulk_action(Request $request)
@@ -1298,7 +1298,7 @@ class BookingsController extends Controller
             $queryData = Booking::find($responseData['booking']->id);
             $queryData->latitude = null;
             $queryData->longitude = null;
-    
+
             try {
                 $this->sendNotificationOnBookingUpdate('complete_booking', $queryData);
             } catch (\Exception $e) {
@@ -1356,7 +1356,7 @@ class BookingsController extends Controller
             $queryData = Booking::where('id', $booking_id)->first();
             $queryData->latitude = null;
             $queryData->longitude = null;
-    
+
             try {
                 $this->sendNotificationOnBookingUpdate('complete_booking', $queryData);
             } catch (\Exception $e) {
@@ -1373,7 +1373,7 @@ class BookingsController extends Controller
         $booking = Booking::with('user')->findOrFail($id);
         $employee_id = $request->value;
 
-        $booking->update(['employee_id' => $employee_id]);  
+        $booking->update(['employee_id' => $employee_id]);
 
         $payment = BookingTransaction::where('booking_id', $id)->first();
 
@@ -1382,10 +1382,10 @@ class BookingsController extends Controller
             $earning_data = $this->commissionData($payment);
 
             $booking->commission()->save(new CommissionEarning($earning_data['commission_data']));
-    
-    
+
+
         }
-        
+
         $message = __('booking.employee_assign');
 
         return response()->json(['message' => $message, 'status' => true]);
@@ -1393,7 +1393,7 @@ class BookingsController extends Controller
 
     public function bookingShow($id){
         $module_title="Booking".' #'.$id;
- 
+
         $booking = Booking::with('user', 'pet', 'boarding', 'veterinary','grooming', 'training', 'walking', 'daycare', 'payment','systemservice')->findOrFail($id);
 
         $tax = Tax::active()->whereNull('module_type')->orWhere('module_type', 'services')->get();
@@ -1408,5 +1408,5 @@ class BookingsController extends Controller
 
         return response()->json($branchAddress);
     }
-    
+
 }

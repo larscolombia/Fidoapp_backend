@@ -9,21 +9,21 @@
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
-                    <label for="name" class="form-label">{{ __('courses.Name') }}</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $clase->name) }}" required>
-                    @error('name')
+                    <label for="title" class="form-label">{{ __('clases.titles') }}</label>
+                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $clase->title) }}" required>
+                    @error('title')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                
+
                 <div class="mb-3">
-                    <label for="description" class="form-label">{{ __('courses.Description') }}</label>
-                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $clase->description) }}</textarea>
-                    @error('description')
+                    <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
+                    <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration',$clase->duration) }}" required>
+                    @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="video" class="form-label">{{ __('courses.Video') }}</label>
                     <input type="file" class="form-control @error('video') is-invalid @enderror" id="video" name="video" accept="video/*">
@@ -43,9 +43,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="price" class="form-label">{{ __('courses.Price') }}</label>
-                    <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price', $clase->price) }}" required>
-                    @error('price')
+                    <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
+                    <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" name="thumbnail" accept="image/*" value="{{old('thumbnail',$clase->thumbnail)}}">
+                    @error('thumbnail')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

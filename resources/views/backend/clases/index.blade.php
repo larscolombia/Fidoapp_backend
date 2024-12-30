@@ -43,23 +43,25 @@
 
     <script type="text/javascript" defer>
         const columns = [{
-                data: 'name',
-                name: 'name',
+                data: 'title',
+                name: 'title',
                 title: "{{ __('clases.name') }}",
                 orderable: true,
                 searchable: true,
             },
             {
-                data: 'description',
-                name: 'description',
-                title: "{{ __('clases.description') }}",
-                orderable: false,
+                data: 'duration',
+                name: 'duration',
+                title: "{{ __('clases.duration') }}",
+                orderable: true,
                 searchable: true,
-                render: function(data, type, row) {
-                    // Limit the description to 50 characters
-                    const truncated = data && data.length > 50 ? data.substr(0, 50) + '...' : data;
-                    return `<span title="${data}">${truncated}</span>`;
-                }
+            },
+            {
+                data: 'visualizations',
+                name: 'visualizations',
+                title: "{{ __('clases.visualizations') }}",
+                orderable: true,
+                searchable: true,
             },
             // {
             //     data: 'url',
@@ -74,13 +76,13 @@
             //         return `<span title="${data}">${truncated}</span>`;
             //     }
             // },
-            {
-                data: 'price',
-                name: 'price',
-                title: "{{ __('clases.price') }}",
-                orderable: true,
-                searchable: true,
-            }
+            // {
+            //     data: 'price',
+            //     name: 'price',
+            //     title: "{{ __('clases.price') }}",
+            //     orderable: true,
+            //     searchable: true,
+            // }
         ];
 
         const actionColumn = [{

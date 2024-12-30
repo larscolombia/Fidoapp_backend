@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Clase;
-use App\Models\CursoPlataforma;
 use Http;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use Yajra\DataTables\DataTables;
 use Validator;
+use App\Models\Clase;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\CursoPlataforma;
+use Yajra\DataTables\DataTables;
+use App\Models\CoursePlatformVideo;
+use Illuminate\Support\Facades\Log;
 
 
 class ClaseController extends Controller
@@ -39,7 +40,7 @@ class ClaseController extends Controller
 
     public function index_data(DataTables $datatable, $course_id)
     {
-        $clases = Clase::where('course_id', $course_id);
+        $clases = CoursePlatformVideo::where('course_platform_id', $course_id);
 
         return $datatable->eloquent($clases)
             ->addColumn('action', function ($data) {
@@ -48,18 +49,18 @@ class ClaseController extends Controller
             // ->editColumn('url', function ($data) {
             //     return $data->url;
             // })
-            ->editColumn('description', function ($data) {
-                return Str::limit($data->description, 50, '...');
+            ->editColumn('duration', function ($data) {
+                return $data->duration;
             })
-            ->editColumn('name', function ($data) {
-                return $data->name;
-            })  
-            ->editColumn('price', function ($data) {
-                return $data->price;
-            })  
-              ->orderColumns(['id'], '-:column $1')
-              ->rawColumns(['action'])
-              ->toJson();
+            ->editColumn('title', function ($data) {
+                return $data->title;
+            })
+            ->editColumn('visualizations', function ($data) {
+                return $data->visualizations;
+            })
+            ->orderColumns(['id'], '-:column $1')
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
     public function create()
@@ -68,48 +69,63 @@ class ClaseController extends Controller
         return view('backend.clases.create', compact('courses'));
     }
 
-    public function store(Request $request , $course)
+    public function store(Request $request, $course)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'url' => 'sometimes|url',
-            'video' => 'sometimes|file|mimes:mp4,mov,ogg,qt|max:20000', // Validación para el video
-            'price' => 'required|numeric',
+            'title' => 'required|string|max:255',
+            'video' => 'required|file|mimes:mp4,mov,ogg,qt|max:20000',
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'duration' => 'required|integer|min:1',
         ]);
 
         $course = CursoPlataforma::findOrFail($request->route('course'));
-        $price = $request->input('price');
+        // $price = $request->input('price');
 
-        if ($price > $course->price) {
-            return redirect()->back()->withErrors(['price' => __('clases.El precio de la clase no puede ser mayor que el del curso al que pertenece.')])->withInput();
-        }
+        // if ($price > $course->price) {
+        //     return redirect()->back()->withErrors(['price' => __('clases.El precio de la clase no puede ser mayor que el del curso al que pertenece.')])->withInput();
+        // }
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        // Verificar si la URL del video es válida (solo si se proporciona una URL)
-        $url = $request->input('url');
-        if ($url && !$this->isValidVideoUrl($url)) {
-            return redirect()->back()->withErrors(['url' => 'La URL del video no es válida o el video no está disponible.'])->withInput();
-        }
-
+        $videoUrl = null;
         // Manejar la carga del archivo de video
         if ($request->hasFile('video')) {
             $video = $request->file('video');
             $videoName = time() . '.' . $video->getClientOriginalExtension();
-            $video->move(public_path('videos/cursos_plataforma/clases'), $videoName);
+            $video->move(public_path('videos/cursos_plataforma'), $videoName);
+            // Generar la URL del video
+            $videoUrl = url('videos/cursos_plataforma/' . $videoName);
         }
 
-        Clase::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'url' => $url,
-            'video' => $videoName ? 'videos/cursos_plataforma/clases/' . $videoName : null,
-            'price' => $request->price,
-            'course_id' => $course->id,
+        // Manejar la carga de la miniatura si se proporciona
+        $thumbnailName = null;
+        if ($request->hasFile('thumbnail')) {
+            $thumbnail = $request->file('thumbnail');
+            if ($thumbnail) {
+                $thumbnailName = time() . '_' . uniqid() . '.' . $thumbnail->getClientOriginalExtension();
+                $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
+            }
+        }
+
+        // Guardar cada video en la tabla CoursePlatformVideo
+        CoursePlatformVideo::create([
+            'course_platform_id' => $course->id,
+            'url' => $videoUrl,
+            'video' => $videoName,
+            'title' => $request->input('title'),
+            'duration' => $request->input('duration'),
+            'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
         ]);
+
+        // Clase::create([
+        //     'name' => $request->name,
+        //     'description' => $request->description,
+        //     'url' => $url,
+        //     'video' => $videoName ? 'videos/cursos_plataforma/clases/' . $videoName : null,
+        //     'price' => $request->price,
+        //     'course_id' => $course->id,
+        // ]);
 
         return redirect()->route('backend.course_platform.clases.index', ['course' => $request->route('course')])->with('success', __('clases.created_successfully'));
     }
@@ -163,8 +179,8 @@ class ClaseController extends Controller
 
     public function show($id)
     {
-        $clase = Clase::with('cursoPlataforma')->findOrFail($id);
-        
+        $clase = CoursePlatformVideo::with('coursePlatform')->findOrFail($id);
+
         // Extraer el ID del video de la URL
         $videoId = $this->getVideoId($clase->url);
 
@@ -179,7 +195,7 @@ class ClaseController extends Controller
      */
     public function edit($id)
     {
-        $clase = Clase::with('cursoPlataforma')->findOrFail($id);
+        $clase = CoursePlatformVideo::with('coursePlatform')->findOrFail($id);
         return view('backend.clases.edit', compact('clase'));
     }
 
@@ -196,44 +212,56 @@ class ClaseController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'video' => 'sometimes|file|mimes:mp4,mov,ogg,qt|max:20000', // Validación para el video
-            'price' => 'required|numeric',
+            'title' => 'sometimes|string|max:255',
+           'video' => 'sometimes|file|mimes:mp4,mov,ogg,qt|max:20000',
+            'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'duration' => 'sometimes|integer|min:1',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $course_platform = Clase::findOrFail($id);
+        $course_platform = CoursePlatformVideo::findOrFail($id);
 
-        // Inicializar el array de datos a actualizar
-        $data = [
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'price' => $request->input('price'),
-        ];
-
+        $videoUrl = null;
+        $videoName = null;
         // Manejar la carga del archivo de video
         if ($request->hasFile('video')) {
             $video = $request->file('video');
             $videoName = time() . '.' . $video->getClientOriginalExtension();
-            $video->move(public_path('videos/cursos_plataforma/clases'), $videoName);
-            $data['video'] = 'videos/cursos_plataforma/clases/' . $videoName;
+            $video->move(public_path('videos/cursos_plataforma'), $videoName);
+            // Generar la URL del video
+            $videoUrl = url('videos/cursos_plataforma/' . $videoName);
+        }
+
+        // Manejar la carga de la miniatura si se proporciona
+        $thumbnailName = null;
+        if ($request->hasFile('thumbnail')) {
+            $thumbnail = $request->file('thumbnail');
+            if ($thumbnail) {
+                $thumbnailName = time() . '_' . uniqid() . '.' . $thumbnail->getClientOriginalExtension();
+                $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
+            }
         }
 
         // Actualizar el modelo con los datos
-        $course_platform->update($data);
+        $course_platform->update([
+            'title' => $request->input('title',$course_platform->title),
+            'duration' => $request->input('duration',$course_platform->duration),
+            'url' => !is_null($videoUrl) ? $videoUrl : $course_platform->url,
+            'video' => !is_null($videoName) ? $videoName :  $course_platform->video,
+            'thumbnail' => !is_null($thumbnailName) ? $thumbnailName : $course_platform->thumbnail
+        ]);
 
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));
     }
 
     public function destroy($course_id, $id)
     {
-        $clase = Clase::findOrFail($id);
+        $clase = CoursePlatformVideo::findOrFail($id);
         $clase->delete();
 
-        return redirect()->route('backend.clases.index', ['course' => $course_id])->with('success', __('clases.deleted_successfully'));
+        return redirect()->route('backend.course_platform.clases.index', ['course' => $course_id])->with('success', __('clases.deleted_successfully'));
     }
 }

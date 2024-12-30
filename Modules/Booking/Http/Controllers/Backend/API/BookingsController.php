@@ -715,7 +715,7 @@ class BookingsController extends Controller
             $data = $request->validate([
                 'pet_id' => 'required|integer|exists:pets,id'
             ]);
-            $users = User::with(['employeeBooking' => function($query) {
+            $users = User::with(['employeeBooking' => function ($query) {
                 $query->where('status', 'completed');
             }])
                 ->whereHas('employeeBooking', function ($q) use ($data) {
@@ -743,6 +743,29 @@ class BookingsController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Buscar el registro por ID
+            $record = Booking::findOrFail($id);
+
+            // Eliminar el registro
+            $record->delete();
+
+            // Responder con un mensaje de éxito
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro eliminado con éxito.'
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejo de excepciones
+            return response()->json([
+                'success' => false,
+                'error' => 'No se pudo eliminar el registro: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

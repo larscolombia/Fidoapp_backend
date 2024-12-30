@@ -96,7 +96,7 @@
             </table>
         </div>
     </div>
-    <div data-render="app">
+    <div data-render="app_services">
         <service-form-offcanvas create-title="{{ __('messages.create') }} {{ __($create_title) }}"
             edit-title="{{ __('messages.edit') }} {{ __($create_title) }}"
             :customefield="{{ json_encode($customefield) }}">

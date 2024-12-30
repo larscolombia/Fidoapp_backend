@@ -53,4 +53,5 @@ return [
     'shop' => 'Tienda',
     'all_product' => 'Todos los Productos',
     'orders_report' => 'Informe de Órdenes',
+    'transactions' => 'Transacciones',
 ];

@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    <div data-render="app">
+    <div data-render="app_pets">
         <customer-offcanvas default-image="{{ user_avatar() }}"
             create-title="{{ __('messages.create') }} {{ __('pet.lbl_owner') }}"
             edit-title="{{ __('messages.edit') }} {{ __('pet.lbl_owner') }}">

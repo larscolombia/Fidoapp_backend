@@ -31,7 +31,7 @@
                 <div class="mb-3">
                     <label for="tipo" class="form-label">{{ __('event.Tipo') }}</label>
                     <select class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
-                        <option value="salud">{{ __('Salud') }}</option>
+                        <option value="medico">{{ __('Médico') }}</option>
                         <option value="entrenamiento">{{ __('Entrenamiento') }}</option>
                     </select>
                     @error('tipo')

@@ -960,17 +960,18 @@ class UserController extends Controller
             $queryBuilder->role(['trainer'])->active();
         } elseif ($role == 'vet') {
             $queryBuilder->role(['vet'])->active();
-        } elseif ($role == 'groomer') {
-            $queryBuilder->role(['groomer'])->active();
-        } elseif ($role == 'walker') {
-            $queryBuilder->role(['walker'])->active();
-        } elseif ($role == 'boarder') {
-            $queryBuilder->role(['boarder'])->active();
-        } elseif ($role == 'day_taker') {
-            $queryBuilder->role(['day_taker'])->active();
-        } elseif ($role == 'pet_sitter') {
-            $queryBuilder->role(['pet_sitter'])->active();
         }
+        // } elseif ($role == 'groomer') {
+        //     $queryBuilder->role(['groomer'])->active();
+        // } elseif ($role == 'walker') {
+        //     $queryBuilder->role(['walker'])->active();
+        // } elseif ($role == 'boarder') {
+        //     $queryBuilder->role(['boarder'])->active();
+        // } elseif ($role == 'day_taker') {
+        //     $queryBuilder->role(['day_taker'])->active();
+        // } elseif ($role == 'pet_sitter') {
+        //     $queryBuilder->role(['pet_sitter'])->active();
+        // }
 
 
         if (isset($request->service_id)) {

@@ -34,7 +34,7 @@
 
             <div class="mb-3">
                 <label for="user_id" class="form-label">{{ __('event.Nombre del Organizador') }}</label>
-                <input type="text" class="form-control" id="user_id" name="user_id" value="{{ $event->user->first_name }} {{ $event->user->last_name }}" readonly>
+                <input type="text" class="form-control" id="user_id" name="user_id" value="{{ isset($event->user) ? $event->user->first_name: '' }} {{ isset($event->user) ? $event->user->last_name : '' }}" readonly>
             </div>
 
             <div class="mb-3">

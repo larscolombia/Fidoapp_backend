@@ -239,7 +239,15 @@ class EmployeesController extends Controller
         $role = $request->role;
 
         // Need To Add Role Base
-        $query_data = User::role(['vet', 'groomer', 'walker', 'boarder', 'pet_sitter', 'trainer'])->with('media', 'branches')->where(function ($q) use ($term) {
+        //codigo original
+        // $query_data = User::role(['vet', 'groomer', 'walker', 'boarder', 'pet_sitter', 'trainer'])->with('media', 'branches')->where(function ($q) use ($term) {
+        //     if (!empty($term)) {
+        //         $q->orWhere('first_name', 'LIKE', "%$term%");
+        //         $q->orWhere('last_name', 'LIKE', "%$term%");
+        //     }
+        // });
+
+        $query_data = User::role(['vet','trainer'])->with('media', 'branches')->where(function ($q) use ($term) {
             if (!empty($term)) {
                 $q->orWhere('first_name', 'LIKE', "%$term%");
                 $q->orWhere('last_name', 'LIKE', "%$term%");
@@ -562,8 +570,9 @@ class EmployeesController extends Controller
     {
         $module_action = 'Show';
 
-        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'pet_sitter', 'trainer'])->findOrFail($id);
-
+        //codigo original
+        //$data = User::role(['vet', 'groomer', 'walker', 'boarder', 'pet_sitter', 'trainer'])->findOrFail($id);
+        $data = User::role(['vet','trainer'])->findOrFail($id);
         return view('employee::backend.employees.show', compact('module_action', "$data"));
     }
 
@@ -575,9 +584,9 @@ class EmployeesController extends Controller
      */
     public function edit($id)
     {
-
-        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->where('id', $id)->with('branches', 'services', 'commissions_data', 'profile')->first();
-
+        //consulta original
+       // $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->where('id', $id)->with('branches', 'services', 'commissions_data', 'profile')->first();
+       $data = User::role(['vet', 'trainer'])->where('id', $id)->with('branches', 'services', 'commissions_data', 'profile')->first();
 
         if (!is_null($data)) {
             $custom_field_data = $data->withCustomFields();
@@ -619,8 +628,9 @@ class EmployeesController extends Controller
      */
     public function update(EmployeeRequest $request, $id)
     {
-        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
-
+        //codigo original
+        //$data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
+        $data = User::role(['vet', 'trainer'])->findOrFail($id);
         $request_data = $request->except('profile_image');
 
         if ($request_data['password'] != '') {
@@ -745,9 +755,9 @@ class EmployeesController extends Controller
         if (env('IS_DEMO')) {
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
-
-        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
-
+        //codigo original
+        //$data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
+        $data = User::role(['vet', 'trainer'])->findOrFail($id);
         $data->delete();
 
         $message = __('messages.delete_form', ['form' => __('employee.singular_title')]);
@@ -768,9 +778,9 @@ class EmployeesController extends Controller
         $data = $request->all();
 
         $employee_id = $data['employee_id'];
-
-        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($employee_id);
-
+        //codigo original
+        //$data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($employee_id);
+        $data = User::role(['vet',  'trainer'])->findOrFail($employee_id);
         $request_data = $request->only('password');
         $request_data['password'] = Hash::make($request_data['password']);
 
