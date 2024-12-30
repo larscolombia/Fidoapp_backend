@@ -55,7 +55,10 @@ class Pet extends BaseModel
 
     public function getQrCodeAttribute()
     {
-        return asset($this->attributes['qr_code']);
+        if(isset($this->attributes['qr_code'])){
+            return asset($this->attributes['qr_code']);
+        }
+        return null;
     }
 
     public function pettype()

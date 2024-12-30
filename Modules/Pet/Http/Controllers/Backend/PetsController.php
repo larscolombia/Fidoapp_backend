@@ -289,7 +289,7 @@ class PetsController extends Controller
 
         $query = Pet::create($data);
         $data['qr_code'] = $this->generateQrCode($query);
-        Log::info($data['qr_code']);
+        //Log::info($data['qr_code']);
         $query->update([
             'qr_code' => $data['qr_code']
         ]);
@@ -557,10 +557,8 @@ class PetsController extends Controller
         $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/';
         $size = '150x150'; // Tamaño del código QR
         $url = $qrCodeUrl . '?size=' . $size . '&data=' . urlencode($data);
-
         // Realiza la solicitud para obtener el código QR
         $response = Http::get($url);
-
         // Verifica si la solicitud fue exitosa
         if ($response->successful()) {
             // Obtén el contenido de la imagen del QR Code
