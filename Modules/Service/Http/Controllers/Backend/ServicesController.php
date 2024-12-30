@@ -2,22 +2,23 @@
 
 namespace Modules\Service\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Models\User;
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\Models\Coin;
+use App\Models\User;
+use App\Authorizable;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
-use Modules\Category\Models\Category;
-use Modules\CustomField\Models\CustomField;
-use Modules\CustomField\Models\CustomFieldGroup;
-use Modules\Service\Http\Requests\ServiceRequest;
+use Yajra\DataTables\DataTables;
 use Modules\Service\Models\Service;
+use App\Http\Controllers\Controller;
+use Modules\Category\Models\Category;
+use Modules\Service\Models\ServiceGallery;
+use Modules\CustomField\Models\CustomField;
 use Modules\Service\Models\ServiceBranches;
 use Modules\Service\Models\ServiceEmployee;
-use Modules\Service\Models\ServiceGallery;
-use Yajra\DataTables\DataTables;
+use Modules\CustomField\Models\CustomFieldGroup;
+use Modules\Service\Http\Requests\ServiceRequest;
 
 class ServicesController extends Controller
 {
@@ -280,7 +281,7 @@ class ServicesController extends Controller
                 $query->where('sub_category_id', $filter['sub_category_id']);
             }
         }
-
+        $coin = Coin::first();
         $datatable = $datatable->eloquent($query)
             ->addColumn('check', function ($data) {
                 return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$data->id.'"  name="datatable_ids[]" value="'.$data->id.'" onclick="dataTableRowCheck('.$data->id.')">';
@@ -294,8 +295,8 @@ class ServicesController extends Controller
             ->editColumn('employee_count', function ($data) {
                 return "<b>$data->employee_count</b>  <button type='button' data-assign-module='".$data->id."' data-assign-target='#service-employee-assign-form' data-assign-event='employee_assign' class='btn btn-soft-primary btn-sm rounded text-nowrap px-2 ' data-bs-toggle='tooltip' title='Asignar personal al servicio'><i class='fa-solid fa-plus p-0'></i></button>";
             })
-            ->editColumn('default_price', function ($data) {
-              return \Currency::format($data->default_price);
+            ->editColumn('default_price', function ($data) use ($coin) {
+              return number_format($data->default_price,2).$coin->symbol;
             })
             ->editColumn('duration_min', function ($data) {
               return $data->duration_min.' Min';
