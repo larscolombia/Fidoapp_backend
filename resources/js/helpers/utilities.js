@@ -86,7 +86,7 @@ export const confirmSwal = async ({title}) => {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: '¡Sí, Hazlo!'
       }).then((result) => {
         return result
       })
