@@ -31,57 +31,53 @@ class SystemServiceTableSeeder extends Seeder
                 [
                     'slug' => 'boarding',
                     'type' => 'boarding',
-                    'name' => 'Boarding',
-                    'description' => 'Safe and comfortable pet boarding for worry-free vacations',
+                    'name' => 'boarding',
+                    'description' => 'Alojamiento seguro y cómodo para mascotas, para unas vacaciones sin preocupaciones',
                     'status' => 1,
                     'feature_image' => public_path('/dummy-images/system_service/boarding.png'),
                 ],
                 [
                     'slug' => 'veterinary',
                     'type' => 'veterinary',
-                    'name' => 'Veterinary',
-                    'description' => 'Comprehensive veterinary care for happy, healthy pets',
+                    'name' => 'veterinary',
+                    'description' => 'Atención veterinaria integral para mascotas felices y saludables',
                     'status' => 1,
                     'feature_image' => public_path('/dummy-images/system_service/veterinary.png'),
-
                 ],
-                [
+                [ 
                     'slug' => 'grooming',
                     'type' => 'grooming',
-                    'name' => 'Grooming',
-                    'description' => 'Professional pet grooming for a fresh and fabulous look',
+                    'name' => 'grooming',
+                    'description' => 'Acicalamiento profesional para una apariencia fresca y fabulosa',
                     'status' => 1,
                     'feature_image' => public_path('/dummy-images/system_service/grooming.png'),
-
                 ],
                 [
                     'slug' => 'walking',
                     'type' => 'walking',
-                    'name' => 'Walking',
-                    'description' => 'Enriching walks for  happy paws, love, and exercise',
+                    'name' => 'walking',
+                    'description' => 'Paseos enriquecedores para patas felices, amor y ejercicio',
                     'status' => 1,
                     'feature_image' => public_path('/dummy-images/system_service/walking.png'),
-
                 ],
                 [
                     'slug' => 'training',
                     'type' => 'training',
-                    'name' => 'Training',
-                    'description' => "Unleash your pet's potential with expert training and care",
+                    'name' => 'training',
+                    'description' => "Desata el potencial de tu mascota con entrenamiento y cuidado experto",
                     'status' => 1,
                     'feature_image' => public_path('/dummy-images/system_service/training.png'),
-
                 ],
                 [
                     'slug' => 'daycare',
                     'type' => 'daycare',
-                    'name' => 'DayCare',
-                    'description' => 'Loving daycare for happy pets, playtime & pampering assured',
+                    'name' => 'daycare',
+                    'description' => 'Guardería cariñosa para mascotas felices, asegurando tiempo de juego y mimos',
                     'status' => 1,
                     'feature_image' => public_path('/dummy-images/system_service/day_care.png'),
-
                 ],
             ];
+            
             foreach ($data as $key => $value) {
                 $featureImage = $value['feature_image'] ?? null;
                 $service = [

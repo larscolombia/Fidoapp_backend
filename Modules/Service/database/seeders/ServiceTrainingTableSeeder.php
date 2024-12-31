@@ -23,62 +23,61 @@ class ServiceTrainingTableSeeder extends Seeder
         if (env('IS_DUMMY_DATA')) {
             $data = [
                 [
-                    'name' => 'Basic Obedience Training',
+                    'name' => 'Entrenamiento Básico de Obediencia',
                     'slug' => 'Basic Obedience Training',
-                    'description' => "Teaching fundamental commands such as sit, stay, down, come, and heel.",
+                    'description' => "Enseñanza de comandos fundamentales como sentarse, quedarse, acostarse, venir y caminar al lado.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Puppy Training',
+                    'name' => 'Entrenamiento de Cachorros',
                     'slug' => 'Puppy Training',
-                    'description' => "Socialization exercises, housebreaking, and basic commands tailored for young pups.",
+                    'description' => "Ejercicios de socialización, entrenamiento para hacer sus necesidades y comandos básicos adaptados para cachorros jóvenes.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Behavioral Modification',
+                    'name' => 'Modificación de Comportamiento',
                     'slug' => 'Behavioral Modification',
-                    'description' => "Addressing and correcting behavioral issues such as aggression, anxiety, or excessive barking.",
+                    'description' => "Abordar y corregir problemas de comportamiento como agresión, ansiedad o ladridos excesivos.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Service Dog Training',
+                    'name' => 'Entrenamiento para Perros de Servicio',
                     'slug' => 'Service Dog Training',
-                    'description' => "Specialized training for service dogs to perform tasks for individuals with disabilities.",
+                    'description' => "Entrenamiento especializado para perros de servicio para realizar tareas para personas con discapacidades.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Fear and Anxiety Management',
+                    'name' => 'Manejo del Miedo y la Ansiedad',
                     'slug' => 'Fear and Anxiety Management',
-                    'description' => "Techniques to help pets cope with fear or anxiety-inducing situations.",
+                    'description' => "Técnicas para ayudar a las mascotas a afrontar situaciones que provocan miedo o ansiedad.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Recall Training',
+                    'name' => 'Entrenamiento de Llamada',
                     'slug' => 'Recall Training',
-                    'description' => "Focusing on teaching pets to come when called, an essential safety command.",
+                    'description' => "Enfocado en enseñar a las mascotas a venir cuando se les llama, un comando esencial de seguridad.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Trick Training',
+                    'name' => 'Entrenamiento de Trucos',
                     'slug' => 'Trick Training',
-                    'description' => "Teaching fun and entertaining tricks to impress friends and family.",
+                    'description' => "Enseñanza de trucos divertidos y entretenidos para impresionar a amigos y familiares.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Leash Training',
+                    'name' => 'Entrenamiento con Correa',
                     'slug' => 'Leash Training',
-                    'description' => "Teaching pets to walk politely on a leash without pulling.",
+                    'description' => "Enseñar a las mascotas a caminar educadamente con una correa sin tirar.",
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Advanced Obedience Training',
+                    'name' => 'Entrenamiento Avanzado de Obediencia',
                     'slug' => 'Advanced Obedience Training',
-                    'description' => "Building on basic commands, introducing more complex cues and off-leash control.",
+                    'description' => "Construyendo sobre comandos básicos, introduciendo señales más complejas y control sin correa.",
                     'status' => 1,
                 ],
-              
-                
             ];
+            
             foreach ($data as $key => $value) {
                 $servicetraining = [
                     'name' => $value['name'],

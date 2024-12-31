@@ -28,49 +28,49 @@ class ServiceFacilityTableSeeder extends Seeder
         if (env('IS_DUMMY_DATA')) {
             $data = [
                 [
-                    'name' => 'Feeding and Watering',
+                    'name' => 'Alimentación y Agua',
                     'slug' => 'Feeding and Watering',
-                    'description' => 'Ensuring pets are fed according to their dietary needs and have access to fresh water.',
+                    'description' => 'Asegurarse de que las mascotas sean alimentadas de acuerdo a sus necesidades dietéticas y tengan acceso a agua fresca.',
                     'status' => 1,
                 ],
                 [
-                    'name' => '24/7 Supervision',
-                    'slug' => '24/7 Supervision',
-                    'description' => 'Round-the-clock monitoring to ensure the safety and well-being of all pets.',
+                    'name' => 'Supervisión 24/7',
+                    'slug' => '24-7 Supervision',
+                    'description' => 'Monitoreo continuo para garantizar la seguridad y el bienestar de todas las mascotas.',
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Special Care for Seniors and Special Needs Pets',
+                    'name' => 'Cuidado Especial para Mascotas Mayores y con Necesidades Especiales',
                     'slug' => 'Special Care for Seniors and Special Needs Pets',
-                    'description' => 'Catering to the specific requirements of older pets or those with medical conditions.',
+                    'description' => 'Atender los requisitos específicos de mascotas mayores o aquellas con condiciones médicas.',
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Play Areas',
+                    'name' => 'Áreas de Juego',
                     'slug' => 'Play Areas',
-                    'description' => 'Designated areas or play yards where pets can exercise and interact with other compatible animals.',
+                    'description' => 'Áreas designadas o patios de juego donde las mascotas pueden ejercitarse e interactuar con otros animales compatibles.',
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Private Suites',
+                    'name' => 'Suites Privadas',
                     'slug' => 'Private Suites',
-                    'description' => 'Offer private, comfortable rooms or suites for pets who prefer more solitude and a quiet environment.',
+                    'description' => 'Ofrecer habitaciones o suites privadas y cómodas para mascotas que prefieren más soledad y un ambiente tranquilo.',
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Pet Photography',
+                    'name' => 'Fotografía de Mascotas',
                     'slug' => 'Pet Photography',
-                    'description' => 'Offer pet photography sessions and send pictures to owners as a delightful keepsake.',
+                    'description' => 'Ofrecer sesiones de fotografía de mascotas y enviar fotos a los dueños como un recuerdo encantador.',
                     'status' => 1,
                 ],
                 [
-                    'name' => 'Report Cards',
+                    'name' => 'Informes de Actividad',
                     'slug' => 'Report Cards',
-                    'description' => "Provide daily or periodic report cards to pet owners detailing their pet's activities and behaviors.",
+                    'description' => "Proporcionar informes diarios o periódicos a los dueños de mascotas detallando las actividades y comportamientos de sus mascotas.",
                     'status' => 1,
                 ],
-              
             ];
+            
             foreach ($data as $key => $value) {
                 $service = [
                     'slug' => $value['slug'],

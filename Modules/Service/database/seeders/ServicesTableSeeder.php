@@ -25,8 +25,8 @@ class ServicesTableSeeder extends Seeder
             $data = [
                 [
                     'slug' => 'routine-check-ups-and-examinations',
-                    'name' => 'Routine check-ups and examinations',
-                    'description' => 'Routine check-ups and examinations',
+                    'name' => 'Chequeos y exámenes de rutina.',
+                    'description' => 'Chequeos y exámenes de rutina.',
                     'duration_min' => 35,
                     'default_price' => 12.00,
                     'status' => 1,

@@ -36,7 +36,7 @@ class PetTypeSeederTableSeeder extends Seeder
                 //     'image' => public_path('/dummy-images/pet_type/Cat.png'),
                 // ],
                 [
-                    'name' => 'Dog',
+                    'name' => 'Perro',
                     'slug' => 'dog',
                     'status' => 1,
                     'image' => public_path('/dummy-images/pet_type/Dog.png'),
