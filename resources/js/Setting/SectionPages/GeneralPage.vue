@@ -80,26 +80,7 @@
         </div>
       </div>
 
-      <div class="form-group mb-3 col-md-6">
-        <label for="logo" class="form-label">{{ $t('setting_general_page.dark') }} {{ $t('setting_general_page.logo') }}</label>
-        <div class="row align-items-center">
-          <div class="col-lg-4">
-            <div class="card text-center inline-block">
-              <div class="card-body bg-dark">
-                <img :src="darkLogoViewer || DEFAULT_DARK_LOGO" class="img-fluid" alt="dark_logo" />
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-8">
-            <div class="d-flex align-items-center gap-2">
-              <input type="file" ref="darkLogoInputRef" class="form-control d-none" id="dark-logo" name="dark_logo" accept=".jpeg, .jpg, .png, .gif" @change="changeDarkLogo" />
-              <label class="btn btn-primary mb-5" for="dark-logo">{{ $t('setting_general_page.upload') }}</label>
-              <input type="button" class="btn btn-danger mb-5" name="remove" :value="$t('messages.remove')" @click="removeDarkLogo()" v-if="dark_logo" />
-            </div>
-            <span class="text-danger">{{ errors.dark_logo }}</span>
-          </div>
-        </div>
-      </div>
+
 
       <div class="form-group mb-3 col-md-6">
         <label for="logo" class="form-label">{{ $t('setting_general_page.dark') }} {{ $t('setting_general_page.mini') }} {{ $t('setting_general_page.logo') }}</label>
