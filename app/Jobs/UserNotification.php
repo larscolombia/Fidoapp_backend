@@ -34,12 +34,13 @@ class UserNotification implements ShouldQueue
      */
     public function handle()
     {
-        list($title, $eventData, $userIds,$description) = $this->data;
+        list($type,$title, $eventData, $userIds,$description) = $this->data;
 
         foreach ($userIds as $userId) {
            $userNotificationModel = UserNotificationModel::create([
                 'user_id' => $userId,
-                'type' => $title,
+                'type' => $type,
+                'title' => $title,
                 'description' => $description,
                 'is_read' => false,
             ]);

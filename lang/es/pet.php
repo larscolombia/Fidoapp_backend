@@ -42,6 +42,7 @@ return [
     'action' => 'Acción',
     'share' => 'Compartir',
     'close' => 'Cerrar',
+    'lost' => 'Mascota perdida',
     'Select User' => 'Seleccionar Usuario',
     'Pet shared successfully' => 'Mascota compartida satisfactoriamente',
     'pettype_name' => 'Nombre del Tipo de Mascota',

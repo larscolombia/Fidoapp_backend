@@ -6,9 +6,9 @@ use App\Jobs\UserNotification;
 
 trait Notification
 {
-    protected function sendNotification($title, $data,$user,$description)
+    protected function sendNotification($type,$title, $data,$user,$description)
     {
-        $data = [$title,$data,$user,$description];
+        $data = [$type,$title,$data,$user,$description];
 
         UserNotification::dispatch($data);
     }

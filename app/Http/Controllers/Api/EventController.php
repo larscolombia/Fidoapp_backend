@@ -188,9 +188,9 @@ class EventController extends Controller
                 }
             }
 
-            $titleEvent = in_array($request->input('tipo'), ['medico', 'entrenamiento']) ? __('event.event') . ' ' . ($request->input('tipo') == 'medico' ? 'médico' : $request->input('tipo')) : __('event.event');
+            $titleEvent = in_array($request->input('tipo'), ['medico', 'entrenamiento']) ? __('event.event') . ':' . ($request->input('tipo') == 'medico' ? 'médico' : $request->input('tipo')) : __('event.event');
             // Notificación
-            $this->sendNotification($titleEvent, $event, $ownerIds, $event->description);
+            $this->sendNotification('event',$titleEvent, $event, $ownerIds, $event->description);
 
             DB::commit(); // Confirmar la transacción
 
@@ -288,7 +288,7 @@ class EventController extends Controller
             }
 
 
-            $this->sendNotification('event', $event, $request->input('owner_id'), $event->description);
+            $this->sendNotification('event',$event->tipo, $event, $request->input('owner_id'), $event->description);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento actualizado exitosamente',

@@ -16,7 +16,7 @@ class UserNotificationController extends Controller
 
         try {
             $userNotification = UserNotification::where('user_id', $data['user_id'])
-            ->get();
+            ->orderByDesc('id')->get();
 
             return response()->json([
                 'success' => true,
