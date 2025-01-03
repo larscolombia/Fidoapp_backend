@@ -114,7 +114,7 @@ class EventController extends Controller
                 $service = $this->service($request, $bookingType);
                 $checkBalance = $this->checkBalance($request, $service);
                 if (!$checkBalance['success']) {
-                    return response()->json(['success' => false, 'error' => 'Insufficient balance'], 400);
+                    return response()->json(['success' => false, 'error' => 'Insufficient balance','amount_service' => $checkBalance['amount']], 400);
                 }
             }
             try {

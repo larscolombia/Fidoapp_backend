@@ -21,7 +21,7 @@ class CheckoutController extends Controller
         if (!$wallet) {
             return ['success' => false, 'error' => 'Wallet not found'];
         }
-        $errorBalance = $this->checkBalance($wallet,$amount);
+        $errorBalance = $this->checkBalance($wallet, $amount);
         if (!$errorBalance['success']) {
             return $errorBalance; // Retorna el array de error
         }
@@ -55,10 +55,13 @@ class CheckoutController extends Controller
         return ['success' => true, 'message' => 'Purchase successful', 'checkout' => $checkout];
     }
 
-    public function checkBalance($wallet,$amount)
+    public function checkBalance($wallet, $amount)
     {
-        if ($amount > $wallet->balance) {
-            return ['success' => false, 'error' => 'Insufficient balance'];
+        // Convertir ambos valores a float
+        $amountFloat = floatval($amount);
+        $balanceFloat = floatval($wallet->balance);
+        if ($amountFloat > $balanceFloat) {
+            return ['success' => false, 'error' => 'Insufficient balance', 'amount' => $amountFloat];
         }
         return ['success' => true];
     }
