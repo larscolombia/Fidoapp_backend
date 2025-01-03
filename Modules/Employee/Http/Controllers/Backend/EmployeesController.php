@@ -757,7 +757,7 @@ class EmployeesController extends Controller
         }
         //codigo original
         //$data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
-        $data = User::role(['vet', 'trainer'])->findOrFail($id);
+        $data = User::role(['vet', 'trainer','user'])->findOrFail($id);
         $data->delete();
 
         $message = __('messages.delete_form', ['form' => __('employee.singular_title')]);
@@ -810,8 +810,9 @@ class EmployeesController extends Controller
 
     public function verify_employee(Request $request, $id)
     {
-        $data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
-
+        //:Linea original
+        //$data = User::role(['vet', 'groomer', 'walker', 'boarder', 'trainer', 'day_taker', 'pet_sitter'])->findOrFail($id);
+        $data = User::role(['vet', 'trainer', 'user'])->findOrFail($id);
         $current_time = Carbon::now();
 
         $data->update(['email_verified_at' => $current_time]);
