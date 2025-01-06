@@ -132,17 +132,16 @@ class EBookController extends Controller
     {
         // Validar los datos del formulario
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:191',
             'description' => 'nullable|string',
-            'author' => 'nullable|string|max:255',
-            'url' => 'required|url|max:255',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'author' => 'nullable|string|max:191',
+            'url' => 'required|url',
+            'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'number_of_pages' => 'nullable|integer|min:1',
-            'language' => 'nullable|string|max:255',
+            'language' => 'nullable|string|max:191',
             'price' => 'nullable|numeric',
         ]);
 
-        // Manejar la carga de la imagen
         // Manejar la carga de la imagen
         $pathRegister = null;
         if ($request->hasFile('cover_image')) {
@@ -202,13 +201,13 @@ class EBookController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:191',
             'description' => 'nullable|string',
-            'author' => 'nullable|string|max:255',
-            'url' => 'required|url|max:255',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'author' => 'nullable|string|max:191',
+            'url' => 'required|url',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'number_of_pages' => 'nullable|integer|min:1',
-            'language' => 'nullable|string|max:255',
+            'language' => 'nullable|string|max:191',
             'price' => 'nullable|numeric',
         ]);
 

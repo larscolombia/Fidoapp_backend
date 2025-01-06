@@ -164,6 +164,9 @@ return [
         'not_especial' => 'No se permiten caracteres especiales.',
         'only_digits' => 'El campo debe contener solo dígitos.',
         'first_strings_are_allowed' => 'Se permiten las primeras cadenas.',
+        'title' => 'Título',
+        'url' => 'Enlace',
+        'cover_image' => 'Imagen de portada'
     ],
 
 ];

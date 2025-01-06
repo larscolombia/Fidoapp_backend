@@ -2,7 +2,7 @@
 
 return [
   'title' => 'Libros Electrónicos',
-  'title_table' => 'Titulo',
+  'title_table' => 'Título',
   'author' => 'Autor',
   'description' => 'Descripción',
   'enlace' => 'Enlace',
