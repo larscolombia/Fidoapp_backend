@@ -261,8 +261,8 @@ class EventController extends Controller
                 if ($detailEvent) {
                     $detailEvent->delete();
                 }
-                // Crear nuevos detalles del evento
-                $ownerIds = $request->input('owner_id');
+               // Asegurarse de que ownerIds sea un array
+                $ownerIds = $request->input('owner_id', []);
                 foreach ($ownerIds as $ownerId) {
                     EventDetail::create([
                         'event_id' => $event->id,
