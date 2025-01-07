@@ -261,14 +261,17 @@ class EventController extends Controller
                 if ($detailEvent) {
                     $detailEvent->delete();
                 }
-               // Asegurarse de que ownerIds sea un array
+                // Asegurarse de que ownerIds sea un array
                 $ownerIds = $request->input('owner_id', []);
-                foreach ($ownerIds as $ownerId) {
-                    EventDetail::create([
-                        'event_id' => $event->id,
-                        'pet_id'   => $request->input('pet_id', $pet_id),
-                        'owner_id' => $ownerId,
-                    ]);
+                // Verificar si $ownerIds no está vacío
+                if (!empty($ownerIds) && is_array($ownerIds)) {
+                    foreach ($ownerIds as $ownerId) {
+                        EventDetail::create([
+                            'event_id' => $event->id,
+                            'pet_id'   => $request->input('pet_id', $pet_id),
+                            'owner_id' => $ownerId,
+                        ]);
+                    }
                 }
                 //buscamos al profesional en la reserva en base al eventId
                 $existBooking = Booking::where('event_id', $event->id)->first();
