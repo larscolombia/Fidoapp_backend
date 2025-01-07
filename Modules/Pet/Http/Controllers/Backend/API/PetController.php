@@ -450,8 +450,9 @@ class PetController extends Controller
                 // Recargar el modelo para obtener los datos actualizados
                 $pet->load('media');
             }
+            $title = __('Mascota').' ' .$pet->name;
             //notification
-            $this->sendNotification('pets',__('pet.title'), $pet, [$request->input('user_id')], __('pet.pet_updated_successfully'));
+            $this->sendNotification('pets', $title, $pet, [$request->input('user_id')], __('pet.pet_updated_successfully'));
             return response()->json([
                 'success' => true,
                 'message' => __('pet.pet_updated_successfully'),
