@@ -264,7 +264,7 @@ class EventController extends Controller
                 // Asegurarse de que ownerIds sea un array
                 $ownerIds = $request->input('owner_id', []);
                 // Verificar si $ownerIds no está vacío
-                if (!empty($ownerIds) && is_array($ownerIds)) {
+                if (!empty($ownerIds)) {
                     foreach ($ownerIds as $ownerId) {
                         EventDetail::create([
                             'event_id' => $event->id,
