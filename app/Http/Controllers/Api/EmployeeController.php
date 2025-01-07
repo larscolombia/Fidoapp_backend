@@ -112,7 +112,7 @@ class EmployeeController extends Controller
         }
 
         // Ejecutar la consulta
-        $employeeRating = $query->where('status',1)->get();
+        $employeeRating = $query->where('status', 1)->get();
 
         // Manejo de errores: si no se encuentra ninguna calificación
         if ($employeeRating->isEmpty()) {
@@ -121,11 +121,22 @@ class EmployeeController extends Controller
                 'message' => 'No ratings found for the specified user and employee.'
             ], 404);
         }
-
+        $formattedRatings = $employeeRating->map(function ($rating) {
+            return [
+                'id' => $rating->id,
+                'employee_id' => $rating->employee_id,
+                'review_msg' => $rating->review_msg,
+                'rating' => $rating->rating,
+                'user_id' => $rating->user_id,
+                'created_at' => $rating->created_at,
+                'username' => optional($rating->user)->full_name ?? default_user_name(),
+                'profile_image' => optional($rating->user)->media->pluck('original_url')->first(),
+            ];
+        });
         // Respuesta exitosa
         return response()->json([
             'success' => true,
-            'data' => $employeeRating
+            'data' => $formattedRatings
         ]);
     }
 
