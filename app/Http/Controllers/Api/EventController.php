@@ -390,13 +390,13 @@ class EventController extends Controller
                         $payment = Payment::create([
                             'amount' => $booking->total_amount,
                             'description' =>  __('booking.refund_for_event') . $eventDetail->event->name,
-                            'user_id' => $data['user_id'],
+                            'user_id' => $booking->user_id,
                             'payment_method_id' => !is_null($setting) ? $setting->id : 19,
                             'status' => false
                         ]);
                         if ($payment) {
                             //actualizar wallet del usuario
-                            $wallet = Wallet::where('user_id', $data['user_id'])->first();
+                            $wallet = Wallet::where('user_id', $booking->user_id)->first();
                             if ($wallet) {
                                 $wallet->balance = $wallet->balance + $payment->amount;
                                 $wallet->save();
