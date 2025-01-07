@@ -352,7 +352,8 @@ class PetController extends Controller
                 'qr_code' => $validatedData['qr_code']
             ]);
             //notification
-            $this->sendNotification('pets',__('pet.title'),$pet, [$request->input('user_id')], __('pet.pet_created_successfully'));
+            $title = __('Mascota').' ' .$pet->name;
+            $this->sendNotification('pets',$title,$pet, [$request->input('user_id')], __('pet.pet_created_successfully'));
             return response()->json([
                 'message' => __('pet.pet_created_successfully'),
                 'data' => $pet
