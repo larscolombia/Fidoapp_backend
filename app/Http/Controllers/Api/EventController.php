@@ -255,45 +255,47 @@ class EventController extends Controller
                 'location'    => $request->input('location', $event->location),
                 'status'      => $request->input('status', $event->status),
             ]);
-            // if (!is_null($request->input('owner_id'))) {
-            //     // Eliminar detalles existentes
-            //     $pet_id = !is_null($event->detailEvent->first()) ? $event->detailEvent->first()->pet_id : null;
-            //     if ($detailEvent) {
-            //         EventDetail::where('event_id', $event->id)->delete();
-            //     }
-            //     // Asegurarse de que ownerIds sea un array
-            //     $ownerIds = $request->input('owner_id', []);
-            //     // Verificar si $ownerIds no está vacío
-            //     if (isset($ownerIds) && !empty($ownerIds) && is_array($ownerIds)) {
-            //         foreach ($ownerIds as $ownerId) {
-            //             EventDetail::firstOrCreate([
-            //                 'event_id' => $event->id,
-            //                 'pet_id'   => $request->input('pet_id', $pet_id),
-            //                 'owner_id' => $ownerId,
-            //             ]);
-            //         }
-            //     }
-            //     //buscamos al profesional en la reserva en base al eventId
-            //     $existBooking = Booking::where('event_id', $event->id)->first();
-            //     if ($existBooking) {
-            //         //verificamos si esta el profesional en la reserva
-            //         $existProfessional = EventDetail::where('event_id', $event->id)->where('owner_id', $existBooking->employee_id)->first();
-            //         if (!$existProfessional) {
-            //             EventDetail::create([
-            //                 'event_id' => $event->id,
-            //                 'pet_id'   => $request->input('pet_id', $pet_id),
-            //                 'owner_id' => $existBooking->employee_id,
-            //             ]);
-            //         }
-            //     }
-            // } else {
-            //     if ($request->has('pet_id')) {
-            //         EventDetail::where('event_id', $event->id)->update(['pet_id' => $request->input('pet_id')]);
-            //     }
-            // }
+            if (!is_null($request->input('owner_id'))) {
+                // Eliminar detalles existentes
+                $pet_id = !is_null($event->detailEvent->first()) ? $event->detailEvent->first()->pet_id : null;
+                if ($detailEvent) {
+                    EventDetail::where('event_id', $event->id)->delete();
+                }
+                // Asegurarse de que ownerIds sea un array
+                $ownerIds = $request->input('owner_id', []);
+                // Verificar si $ownerIds no está vacío
+                if (isset($ownerIds) && !empty($ownerIds) && is_array($ownerIds)) {
+                    foreach ($ownerIds as $ownerId) {
+                        EventDetail::firstOrCreate([
+                            'event_id' => $event->id,
+                            'pet_id'   => $request->input('pet_id', $pet_id),
+                            'owner_id' => $ownerId,
+                        ]);
+                    }
+                }
+                //buscamos al profesional en la reserva en base al eventId
+                $existBooking = Booking::where('event_id', $event->id)->first();
+                if ($existBooking) {
+                    //verificamos si esta el profesional en la reserva
+                    $existProfessional = EventDetail::where('event_id', $event->id)->where('owner_id', $existBooking->employee_id)->first();
+                    if (!$existProfessional) {
+                        EventDetail::create([
+                            'event_id' => $event->id,
+                            'pet_id'   => $request->input('pet_id', $pet_id),
+                            'owner_id' => $existBooking->employee_id,
+                        ]);
+                    }
+                }
+            } else {
+                if ($request->has('pet_id')) {
+                    EventDetail::where('event_id', $event->id)->update(['pet_id' => $request->input('pet_id')]);
+                }
+            }
 
+            if(!is_null($request->input('owner_id'))){
+                $this->sendNotification('event', $event->name, $event, $request->input('owner_id'), $event->description);
+            }
 
-            //$this->sendNotification('event', $event->tipo, $event, $request->input('owner_id'), $event->description);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento actualizado exitosamente',
