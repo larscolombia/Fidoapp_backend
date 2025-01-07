@@ -151,5 +151,6 @@ return [
     'booking_already_accepted' => 'Reserva ya aceptada',
     'lbl_pending_employee' => 'Profesional Pendiente',
     'unpaid' => 'Sin pagar',
-    'booking_commission' => 'Comisión de reserva'
+    'booking_commission' => 'Comisión de reserva',
+    'refund_for_event' => 'Devolución por cancelación del evento:',
 ];

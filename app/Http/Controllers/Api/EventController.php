@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Models\Payment;
+use App\Models\Setting;
 use App\Models\EventDetail;
 use App\Trait\Notification;
 use Illuminate\Http\Request;
@@ -114,7 +116,7 @@ class EventController extends Controller
                 $service = $this->service($request, $bookingType);
                 $checkBalance = $this->checkBalance($request, $service);
                 if (!$checkBalance['success']) {
-                    return response()->json(['success' => false, 'error' => 'Insufficient balance','amount_service' => $checkBalance['amount']], 400);
+                    return response()->json(['success' => false, 'error' => 'Insufficient balance', 'amount_service' => $checkBalance['amount']], 400);
                 }
             }
             try {
@@ -190,7 +192,7 @@ class EventController extends Controller
 
             $titleEvent = in_array($request->input('tipo'), ['medico', 'entrenamiento']) ? __('event.event') . ':' . ($request->input('tipo') == 'medico' ? 'médico' : $request->input('tipo')) : __('event.event');
             // Notificación
-            $this->sendNotification('event',$titleEvent, $event, $ownerIds, $event->description);
+            $this->sendNotification('event', $titleEvent, $event, $ownerIds, $event->description);
 
             DB::commit(); // Confirmar la transacción
 
@@ -288,7 +290,7 @@ class EventController extends Controller
             }
 
 
-            $this->sendNotification('event',$event->tipo, $event, $request->input('owner_id'), $event->description);
+            $this->sendNotification('event', $event->tipo, $event, $request->input('owner_id'), $event->description);
             return response()->json([
                 'success' => true,
                 'message' => 'Evento actualizado exitosamente',
@@ -377,6 +379,32 @@ class EventController extends Controller
                     'confirm' => $data['confirm'] ? 'A' : 'R'
                 ]);
 
+                //actualizar reserva
+                $booking = Booking::where('event_id', $data['event_id'])->where('employee_id', $data['user_id'])->where('status', 'pending')->first();
+                if ($booking) {
+                    $booking->status = $data['confirm'] ? 'confirmed' : 'rejected';
+                    $booking->save();
+                    if (!$data['confirm']) {
+                        //buscamos la operacion del cliente
+                        $setting = Setting::where('name', 'str_payment_method')->first();
+                        $payment = Payment::create([
+                            'amount' => $booking->total_amount,
+                            'description' =>  __('booking.refund_for_event') . $eventDetail->event->name,
+                            'user_id' => $data['user_id'],
+                            'payment_method_id' => !is_null($setting) ? $setting->id : 19,
+                            'status' => false
+                        ]);
+                        if ($payment) {
+                            //actualizar wallet del usuario
+                            $wallet = Wallet::where('user_id', $data['user_id'])->first();
+                            if ($wallet) {
+                                $wallet->balance = $wallet->balance + $payment->amount;
+                                $wallet->save();
+                            }
+                        }
+                    }
+                }
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Evento actualizado exitosamente',
@@ -386,8 +414,6 @@ class EventController extends Controller
                     ],
                 ]);
             }
-            //actualizar reserva
-            Booking::where('event_id', $data['event_id'])->update(['status' => $data['confirm'] ? 'confirmed' : 'rejected']);
 
             return response()->json([
                 'success' => false,
