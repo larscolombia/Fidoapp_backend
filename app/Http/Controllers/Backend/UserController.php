@@ -1228,4 +1228,17 @@ class UserController extends Controller
             'data' => $users
         ], 200);
     }
+
+    public function getUserFullDetail(Request $request)
+    {
+        $data = $request->validate([
+            'user_id' => ['required','exists:users,id']
+        ]);
+        $user = User::whereNotIn('user_type', ['admin'])->where('id',$data['user_id'])->with('profile')->first();
+
+        return response()->json([
+            'success' => true,
+            'data' => $user
+        ]);
+    }
 }

@@ -503,6 +503,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::get('/users/profiles', [UserController::class, 'getAllUsersWithProfiles']);
 
+    Route::get('user-profile', [UserController::class, 'getUserFullDetail']);
+
     /**
      * Rutas para la gestión de cursos de la plataforma
      */
