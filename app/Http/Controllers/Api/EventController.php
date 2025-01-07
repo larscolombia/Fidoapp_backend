@@ -190,7 +190,7 @@ class EventController extends Controller
                 }
             }
 
-            $titleEvent = in_array($request->input('tipo'), ['medico', 'entrenamiento']) ? __('event.event') . ' ' . ($request->input('tipo') == 'medico' ? 'médico' : $request->input('tipo')) : __('event.event');
+            $titleEvent = $event->name;
             // Notificación
             $this->sendNotification('event', $titleEvent, $event, $ownerIds, $event->description);
 
