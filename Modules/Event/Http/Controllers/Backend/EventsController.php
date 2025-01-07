@@ -124,7 +124,18 @@ class EventsController extends Controller
                         })
                         ->editColumn('user_id', function ($data) {
                             $userType = isset($data->user) ? str_replace('day_taker', 'dayCare_taker', $data->user->user_type) : '';
-                            $user = isset($data->user->first_name) ? $data->user->first_name . ' ' . $data->user->last_name . ($userType ? ' (' . ucwords(str_replace('_', ' ', $userType)) . ')' : '') : '-';
+                            $userDescription = '';
+                            $userTypeFormat = $userType ? ucwords(str_replace('_', ' ', $userType)) : null;
+                            if($userTypeFormat === 'Vet'){
+                                $userDescription = 'Veterinario';
+                            }
+                            if($userTypeFormat === 'Trainer'){
+                                $userDescription = 'Entrenador';
+                            }
+                            if($userTypeFormat === 'Admin'){
+                                $userDescription = 'Administrador';
+                            }
+                            $user = isset($data->user->first_name) ? $data->user->first_name . ' ' . $data->user->last_name . ' ' .$userDescription : '-';
 
                             return $user;
 
