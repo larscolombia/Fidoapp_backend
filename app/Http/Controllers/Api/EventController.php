@@ -255,7 +255,7 @@ class EventController extends Controller
                 'location'    => $request->input('location', $event->location),
                 'status'      => $request->input('status', $event->status),
             ]);
-            if ($request->has('owner_id')) {
+            if (!is_null($request->has('owner_id'))) {
                 // Eliminar detalles existentes
                 $pet_id = !is_null($event->detailEvent->first()) ? $event->detailEvent->first()->pet_id : null;
                 if ($detailEvent) {
