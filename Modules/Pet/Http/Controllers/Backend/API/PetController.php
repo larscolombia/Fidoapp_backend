@@ -424,6 +424,17 @@ class PetController extends Controller
                 $validatedData['date_of_birth'] = null; // Asignar null si la conversión falla
             }
 
+            //buscamos el qr
+            $qrCodeFilename = basename($pet->qr_code); // Extraer solo el nombre del archivo
+
+            // Construir la ruta completa en el sistema de archivos
+            $qrCodePath = public_path('images/qr_codes/' . $qrCodeFilename);
+            if (file_exists($qrCodePath)) {
+                unlink($qrCodePath);
+            }
+            //creando el qr
+            $validatedData['qr_code'] = $this->generateQrCode($pet);
+            //actualizamos
             $pet->update($validatedData);
             // Manejo de la imagen de la mascota
             if ($request->hasFile('pet_image')) {
