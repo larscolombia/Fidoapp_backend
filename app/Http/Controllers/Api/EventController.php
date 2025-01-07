@@ -192,7 +192,7 @@ class EventController extends Controller
 
             $titleEvent = $event->name;
             // Notificación
-            $this->sendNotification('event', $titleEvent, $event, $ownerIds, $event->description);
+            $this->sendNotification($request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description);
 
             DB::commit(); // Confirmar la transacción
 
@@ -293,7 +293,7 @@ class EventController extends Controller
             }
 
             if(!is_null($request->input('owner_id'))){
-                $this->sendNotification('event', $event->name, $event, $request->input('owner_id'), $event->description);
+                $this->sendNotification($event->tipo, $event->name, $event, $request->input('owner_id'), $event->description);
             }
 
             return response()->json([
