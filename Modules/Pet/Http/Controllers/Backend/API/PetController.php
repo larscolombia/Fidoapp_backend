@@ -16,6 +16,7 @@ use Modules\Pet\Models\PetType;
 use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Modules\Pet\Transformers\PetResource;
 use Modules\Pet\Transformers\BreedResource;
 use App\Http\Requests\Api\Pets\StoreRequest;
@@ -24,7 +25,7 @@ use Modules\Pet\Transformers\PetNoteResource;
 use Modules\Pet\Transformers\PetTypeResource;
 use Modules\Pet\Transformers\OwnerPetResource;
 use Modules\Pet\Transformers\PetDetailsResource;
-
+use Illuminate\Support\Facades\File;
 class PetController extends Controller
 {
     use Notification;
@@ -344,6 +345,12 @@ class PetController extends Controller
                 $pet->addMedia($request->file('pet_image'))
                     ->toMediaCollection('pet_image');
             }
+
+            //creando el qr
+            $validatedData['qr_code'] = $this->generateQrCode($pet);
+            $pet->update([
+                'qr_code' => $validatedData['qr_code']
+            ]);
             //notification
             $this->sendNotification('pets',__('pet.title'),$pet, [$request->input('user_id')], __('pet.pet_created_successfully'));
             return response()->json([
@@ -529,5 +536,40 @@ class PetController extends Controller
             'message' => __('pet.pet_deleted_successfully'),
             'data' => $petSelected
         ]);
+    }
+
+    public function generateQrCode($pet)
+    {
+        // Convierte el array $pet a una cadena JSON
+        $data = json_encode($pet);
+
+        // Construye la URL para la API de qrserver.com
+        $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/';
+        $size = '150x150'; // Tamaño del código QR
+        $url = $qrCodeUrl . '?size=' . $size . '&data=' . urlencode($data);
+        // Realiza la solicitud para obtener el código QR
+        $response = Http::get($url);
+        // Verifica si la solicitud fue exitosa
+        if ($response->successful()) {
+            // Obtén el contenido de la imagen del QR Code
+            $qrCodeContent = $response->body();
+
+            // Genera un nombre de archivo basado en el timestamp actual
+            $timestamp = time(); // Obtiene el timestamp actual
+            $filename = 'qr_code_' . $timestamp . '.png'; // Nombre del archivo
+            $path = 'images/qr_codes/' . $filename;
+
+            // Guarda el archivo en el disco público
+            $saved = File::put(public_path($path), $qrCodeContent);
+
+            // Verifica si el archivo se guardó correctamente
+            if ($saved) {
+                return $path;
+            } else {
+                throw new \Exception("No se pudo guardar el archivo QR code.");
+            }
+        } else {
+            throw new \Exception("Error al generar el código QR: " . $response->status());
+        }
     }
 }
