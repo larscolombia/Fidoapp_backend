@@ -259,14 +259,14 @@ class EventController extends Controller
                 // Eliminar detalles existentes
                 $pet_id = !is_null($event->detailEvent->first()) ? $event->detailEvent->first()->pet_id : null;
                 if ($detailEvent) {
-                    $detailEvent->delete();
+                    EventDetail::where('event_id', $event->id)->delete();
                 }
                 // Asegurarse de que ownerIds sea un array
                 $ownerIds = $request->input('owner_id', []);
                 // Verificar si $ownerIds no está vacío
-                if (!empty($ownerIds)) {
+                if (isset($ownerIds) && !empty($ownerIds)) {
                     foreach ($ownerIds as $ownerId) {
-                        EventDetail::create([
+                        EventDetail::firstOrCreate([
                             'event_id' => $event->id,
                             'pet_id'   => $request->input('pet_id', $pet_id),
                             'owner_id' => $ownerId,
