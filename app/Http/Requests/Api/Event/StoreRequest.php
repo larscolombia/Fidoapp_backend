@@ -38,7 +38,7 @@ class StoreRequest extends FormRequest
             'pet_id' => 'required|integer',
             'owner_id' => 'required|array',
             'owner_id.*' => 'required|integer|exists:users,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif',
 
             // Reglas condicionales
             'service_id' => 'nullable|integer|exists:services,id',

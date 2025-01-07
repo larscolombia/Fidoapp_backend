@@ -38,7 +38,7 @@ class UpdateRequest extends FormRequest
             'status' => 'sometimes|boolean',
             'owner_id' => 'sometimes|array',
             'owner_id.*' => 'sometimes|integer|exists:users,id',
-            'image' => 'sometimes|image|mimes:jpg,jpeg,png',
+            'image' => 'sometimes|image|mimes:jpg,jpeg,png,gif',
         ];
     }
 
