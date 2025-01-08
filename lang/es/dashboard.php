@@ -15,7 +15,7 @@ return [
     'overview' => 'Resumen',
     'reports' => 'Informes',
     'bookings' => 'Reservas',
-    'completed_services' => 'Reservas Completados',
+    'completed_services' => 'Reservas Completadas',
     'incomplete_services' => 'Reservas no Completadas',
     'revenue_of_services' => 'Ingresos por Reservas',
     'profit_of_services' => 'Beneficio de Servicios',
