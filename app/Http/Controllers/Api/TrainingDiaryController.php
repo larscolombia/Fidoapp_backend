@@ -10,6 +10,39 @@ use App\Http\Controllers\Controller;
 
 class TrainingDiaryController extends Controller
 {
+    public function index(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'pet_id' => 'required|exists:pets,id',
+            ]);
+            $trainingDiaries = Diario::where('pet_id', $data['pet_id'])->get();
+            $formattedDiaries = $trainingDiaries->map(function ($trainingDiary) {
+                $formattedDate = date("d-m-Y", strtotime($trainingDiary->date));
+                return [
+                    'id' => $trainingDiary->id,
+                    'category_id' => $trainingDiary->category_id,
+                    'category_name' => $trainingDiary->category->name,
+                    'date' => $formattedDate,
+                    'actividad' => $trainingDiary->actividad,
+                    'notas' => $trainingDiary->notas,
+                    'pet_id' => $trainingDiary->pet_id,
+                    'image' => $trainingDiary->image,
+                    'created_at' => $trainingDiary->created_at,
+                    'updated_at' => $trainingDiary->updated_at
+                ];
+            });
+            return response()->json([
+                'success' => true,
+                'data' => $formattedDiaries
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
     public function store(Request $request)
     {
         try {
