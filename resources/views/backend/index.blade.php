@@ -80,9 +80,11 @@
                                                     fill="#25D9AB" />
                                             </svg>
                                             <p class="mt-5 mb-2">{{ __('dashboard.revenue_of_services') }}</p>
-                                            <h3 class="mb-0">{{ Currency::format($data['total_amount']) }}</h3>
+                                            {{-- <h3 class="mb-0">{{ Currency::format($data['total_amount']) }}</h3> --}}
+                                            <h3 class="mb-0">{{ $data['total_amount'] . $data['symbol'] }}</h3>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="symbol" id="symbol" value="{{ $data['symbol'] }}">
                                 </div>
                                 <div class="col-sm-6 col-xxl-3 col-xl-6">
                                     <div class="card">
@@ -96,14 +98,15 @@
                                                     d="M7.09612 18.0712C7.09019 18.0537 7.08544 18.0293 7.0911 17.99C7.48433 15.256 8.751 12.7031 10.727 10.727C12.7031 8.751 15.256 7.48433 17.99 7.0911C18.0293 7.08544 18.0537 7.09019 18.0712 7.09612C18.0914 7.10295 18.1195 7.11751 18.1508 7.14744C18.2167 7.21047 18.2779 7.32499 18.2779 7.47457L18.2779 17.7634C18.2779 18.0475 18.0475 18.2779 17.7634 18.2779H7.47457C7.32499 18.2779 7.21047 18.2167 7.14744 18.1508C7.11751 18.1195 7.10295 18.0914 7.09612 18.0712ZM4.03588 17.5506C3.71875 19.7555 5.5562 21.3645 7.47457 21.3645H17.7634C19.7523 21.3645 21.3645 19.7523 21.3645 17.7634V7.47457C21.3645 5.5562 19.7555 3.71875 17.5506 4.03588C14.1605 4.52349 10.9948 6.09406 8.54445 8.54445C6.09406 10.9948 4.52349 14.1605 4.03588 17.5506Z"
                                                     fill="#FFA905" />
                                             </svg>
-                                            <p class="mt-5 mb-2">{{ __('dashboard.profit_of_services') }}</p>
-                                            <h3 class="mb-0">{{ Currency::format($data['profit']) }}</h3>
+                                            <p class="mt-5 mb-2">{{ __('dashboard.amount_booking_completed') }}</p>
+                                            {{-- <h3 class="mb-0">{{ Currency::format($data['profit']) }}</h3> --}}
+                                            <h3 class="mb-0">{{ $data['profit'] . $data['symbol'] }}</h3>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12">
-                                <div class="card card-block card-stretch card-height">
+                                <div class="card card-block card-stretch card-height" id="monthly_revenue">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
                                             <h5 class="card-title mb-0">{{ __('dashboard.monthly_revenue') }}</h5>
@@ -126,7 +129,7 @@
                                         </div>
 
                                         <div id="loader" style="display: none;">
-                                            processing.....
+                                            Procesando...
                                         </div>
                                         <div id="chart-01"></div>
                                     </div>
@@ -184,7 +187,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        {{-- <div class="col-lg-6">
                             <div class="card card-block card-stretch card-height">
                                 <div class=" card-header">
                                     <h5 class="card-title mb-0">{{ __('dashboard.top_products') }} </h5>
@@ -231,8 +234,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
+                        </div> --}}
+                        <div class="col-lg-12">
                             <div class="card card-block card-stretch card-height">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">{{ __('dashboard.popular_employees') }} </h5>
@@ -267,7 +270,7 @@
                             <div class="card card-block card-stretch card-height">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-                                        <h5 class="card-title mb-0">{{ __('dashboard.profit_graph') }}</h5>
+                                        <h5 class="card-title mb-0">{{ __('dashboard.booking_graph') }}</h5>
                                         <div class="d-flex align-items-center mt-md-0 mt-3">
 
                                             <div class="dropdown">
@@ -474,7 +477,7 @@
                                                 <div class="ms-3">
                                                     <h6 class="mb-0">{{ $customer->full_name }}</h6>
                                                     <small>{{ $customer->booking_count }}
-                                                        {{ __('dashboard.visit_time') }}</small>
+                                                        {{ __('dashboard.booking_completed') }}</small>
                                                 </div>
                                             </li>
                                         @endforeach
@@ -908,7 +911,7 @@
                 chart.render();
             }
 
-            //////////////////////////////// chart-3 //////////////////////////////////////////   
+            //////////////////////////////// chart-3 //////////////////////////////////////////
 
 
             getprofitChartData('year');
@@ -923,7 +926,7 @@
 
             getBookingstatusData('year')
 
-            ///////////////////////////// chart-6 ///////////////////////////////////////////////   
+            ///////////////////////////// chart-6 ///////////////////////////////////////////////
 
 
             if (document.querySelectorAll('#chart-06').length) {
@@ -1008,7 +1011,7 @@
 
                         const monthlyTotals = response.data.chartData;
                         const category = response.data.category;
-
+                        const symbol = document.getElementById('symbol');
 
                         const options = {
                             series: [{
@@ -1041,7 +1044,8 @@
                             yaxis: {
                                 labels: {
                                     formatter: function(value) {
-                                        return formatCurrencyVue(value);
+                                        // return formatCurrencyVue(value);
+                                        return value + symbol.value;
                                     }
                                 }
                             },
@@ -1348,10 +1352,10 @@
                         const colors = [variableColors.secondary, variableColors.primary];
                         const monthlyTotals = response.data.chartData;
                         const category = response.data.category;
-
+                        const symbol = document.getElementById('symbol');
                         var options = {
                             series: [{
-                                name: 'Profit By Service',
+                                name: 'Reservas por Servicios',
                                 data: monthlyTotals
                             }],
                             chart: {
@@ -1398,7 +1402,8 @@
                             tooltip: {
                                 y: {
                                     formatter: function(value) {
-                                        return formatCurrencyVue(value);
+                                        // return formatCurrencyVue(value);
+                                        return value + symbol.value;
                                     }
                                 }
                             },

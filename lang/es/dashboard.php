@@ -19,6 +19,7 @@ return [
     'incomplete_services' => 'Servicios Incompletos',
     'revenue_of_services' => 'Ingresos de Servicios',
     'profit_of_services' => 'Beneficio de Servicios',
+    'amount_booking_completed' => 'Monto de reservas completadas',
     'monthly_revenue' => 'Ingresos Mensuales',
     'recently_booking' => 'Reservas Recientes',
     'top_products' => 'Productos Principales',
@@ -37,6 +38,7 @@ return [
     'month' => 'Mes',
     'week' => 'Semana',
     'profit_graph' => 'Gráfico de Beneficios',
+    'booking_graph' => 'Gráfico de Reservas Completadas',
     'customers_review' => 'Reseñas de Clientes',
     'customers' => 'Clientes',
     'overall_rating' => 'Calificación General De',
@@ -49,5 +51,6 @@ return [
     'visit_time' => 'Visitas hasta el Momento',
     'total_bookings' => 'Reservas Totales',
     'best_doctors' => 'Mejores Médicos',
-    'services' => 'Servicios'
+    'services' => 'Servicios',
+    'booking_completed' => 'Reservas completadas',
 ];

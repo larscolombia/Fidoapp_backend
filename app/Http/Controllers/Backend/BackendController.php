@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Modules\Booking\Models\Booking;
-use Modules\Booking\Models\BookingService;
-use Modules\Booking\Models\BookingTransaction;
-use Modules\Employee\Models\EmployeeRating;
-use Modules\Product\Models\ProductCategory;
-use Modules\Booking\Models\BookingGroomingMapping;
-use Modules\Booking\Models\BookingVeterinaryMapping;
 use DB;
 use DateTimeZone;
+use Carbon\Carbon;
+use App\Models\Coin;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Modules\Booking\Models\Booking;
+use App\Http\Controllers\Controller;
+use Modules\Booking\Models\BookingService;
+use Modules\Employee\Models\EmployeeRating;
+use Modules\Product\Models\ProductCategory;
+use Modules\Booking\Models\BookingTransaction;
+use Modules\Booking\Models\BookingGroomingMapping;
+use Modules\Booking\Models\BookingVeterinaryMapping;
 
 class BackendController extends Controller
 {
@@ -78,7 +79,7 @@ class BackendController extends Controller
         $totalservice = $vetgroom->count();
         $topservice = $vetgroom->orderByDesc('count')->take(4)->get();
 
-
+        $coin= Coin::first();
         $data = [
             'recent_booking' => $recent_booking,
             'completeBookingsCount' => $completeBookingsCount,
@@ -96,6 +97,7 @@ class BackendController extends Controller
             'total_sale_product' => ($totalsale == 0) ? 1 : $totalsale,
             'topservice' => $topservice,
             'totalservice' => ($totalservice == 0) ? 1 : $totalservice,
+            'symbol'=>$coin->symbol,
             // 'monthlyData'=>$monthlyData,
 
         ];
@@ -135,18 +137,18 @@ class BackendController extends Controller
             };
 
             $category = [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec"
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
             ];
         } else if ($type == 'month') {
 
@@ -180,7 +182,7 @@ class BackendController extends Controller
                 }
             }
 
-            $category = ["Week 1", "Week 2", "Week 3", "Week 4", 'Week 5'];
+            $category = ["Semana 1", "Semana 2", "Semana 3", "Semana 4", 'Semana 5'];
         } else {
 
             $currentWeekStartDate = Carbon::now()->startOfWeek();
@@ -214,7 +216,7 @@ class BackendController extends Controller
                 }
             };
 
-            $category = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            $category = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
         }
 
         $data = [
@@ -258,18 +260,18 @@ class BackendController extends Controller
             };
 
             $category = [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec"
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
             ];
         } else if ($type == 'month') {
 
@@ -303,7 +305,7 @@ class BackendController extends Controller
                 }
             }
 
-            $category = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"];
+            $category = ["Semana 1", "Semana 2", "Semana 3", "Semana 4", "Semana 5"];
         } else {
 
             $currentWeekStartDate = Carbon::now()->startOfWeek();
@@ -337,7 +339,7 @@ class BackendController extends Controller
                 }
             };
 
-            $category = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            $category = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
         }
 
         $data = [
@@ -380,18 +382,18 @@ class BackendController extends Controller
             };
 
             $category = [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec"
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
             ];
         } else if ($type == 'month') {
 
@@ -424,7 +426,7 @@ class BackendController extends Controller
                 }
             }
 
-            $category = ["Week 1", "Week 2", "Week 3", "Week 4", 'Week5'];
+            $category = ["Semana 1", "Semana 2", "Semana 3", "Semana 4", 'Semana5'];
         } else {
 
             $currentWeekStartDate = Carbon::now()->startOfWeek();
@@ -457,7 +459,7 @@ class BackendController extends Controller
                 }
             };
 
-            $category = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            $category = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
         }
 
 
