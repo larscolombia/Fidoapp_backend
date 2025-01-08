@@ -1208,26 +1208,35 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'search' => 'nullable|string',
-            'user_type' => 'required|string'
+            'user_type' => 'nullable|string' // Cambiar a nullable
         ]);
 
-        // Start the query
-        $query = User::where('user_type', $data['user_type']);
+        // Iniciar la consulta
+        $query = User::query();
 
-        // If 'search' is provided, add a where clause for email
+        // Si 'user_type' está presente y no está vacío, agregar una cláusula where
+        if (isset($data['user_type']) && !empty($data['user_type'])) {
+            $query->where('user_type', $data['user_type']);
+        } else {
+            // Excluir 'admin' si 'user_type' no se pasa
+            $query->where('user_type', '!=', 'admin');
+        }
+
+        // Si 'search' está presente, agregar una cláusula where para el email
         if (isset($data['search']) && !empty($data['search'])) {
             $query->where('email', 'like', '%' . $data['search'] . '%');
         }
 
-        // Execute the query
+        // Ejecutar la consulta
         $users = $query->get();
 
-        // Return response
+        // Retornar respuesta
         return response()->json([
             'success' => true,
             'data' => $users
         ], 200);
     }
+
 
     public function getUserFullDetail(Request $request)
     {
