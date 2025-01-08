@@ -105,37 +105,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="card card-block card-stretch card-height" id="monthly_revenue">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-                                            <h5 class="card-title mb-0">{{ __('dashboard.monthly_revenue') }}</h5>
-                                            {{-- <div class="dropdown">
-                                                <a href="#" class="btn btn-primary dropdown-toggle monthly_revenue"
-                                                    id="dropdownMenuButton3" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    Year
-                                                </a>
-                                                <ul class="dropdown-menu dropdown-menu-end"
-                                                    aria-labelledby="dropdownMenuButton3" style="">
-                                                    <li><a class="dropdown-item" onclick="revanue_chart('week')">This
-                                                            Week</a></li>
-                                                    <li><a class="dropdown-item" onclick="revanue_chart('month')">This
-                                                            Month</a></li>
-                                                    <li><a class="dropdown-item" onclick="revanue_chart('year')">This
-                                                            Year</a></li>
-                                                </ul>
-                                            </div> --}}
-                                        </div>
 
-                                        <div id="loader" style="display: none;">
-                                            Procesando...
-                                        </div>
-                                        <div id="chart-01"></div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+
                         <div class="col-xl-4">
                             <div class="card">
                                 <div class="card-body ">
@@ -184,6 +156,36 @@
                                         @endforeach
 
                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card card-block card-stretch card-height" id="monthly_revenue">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+                                        <h5 class="card-title mb-0">{{ __('dashboard.monthly_revenue') }}</h5>
+                                        {{-- <div class="dropdown">
+                                            <a href="#" class="btn btn-primary dropdown-toggle monthly_revenue"
+                                                id="dropdownMenuButton3" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Year
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end"
+                                                aria-labelledby="dropdownMenuButton3" style="">
+                                                <li><a class="dropdown-item" onclick="revanue_chart('week')">This
+                                                        Week</a></li>
+                                                <li><a class="dropdown-item" onclick="revanue_chart('month')">This
+                                                        Month</a></li>
+                                                <li><a class="dropdown-item" onclick="revanue_chart('year')">This
+                                                        Year</a></li>
+                                            </ul>
+                                        </div> --}}
+                                    </div>
+
+                                    <div id="loader" style="display: none;">
+                                        Procesando...
+                                    </div>
+                                    <div id="chart-01"></div>
                                 </div>
                             </div>
                         </div>
@@ -1146,7 +1148,7 @@
                         const colors = [variableColors.primary, variableColors.primary];
                         const options = {
                             series: [{
-                                name: 'Bookings',
+                                name: 'Reservas',
                                 data: monthlyBookings
                             }],
                             chart: {
@@ -1263,7 +1265,7 @@
             var Base_url = "{{ url('/') }}";
 
             var url = Base_url + "/app/get_booking_status_chart_data/" + type;
-
+            var typeTranslatios = getTranslation(type);
             //  $("#loader").show();
 
             $.ajax({
@@ -1272,7 +1274,7 @@
                 method: "GET",
                 success: function(response) {
 
-                    $(".booking_status").text(type);
+                    $(".booking_status").text(typeTranslatios);
 
 
                     if (document.querySelectorAll('#chart-05').length) {
@@ -1403,7 +1405,7 @@
                                 y: {
                                     formatter: function(value) {
                                         // return formatCurrencyVue(value);
-                                        return value + symbol.value;
+                                        return value.toFixed(2) + symbol.value;
                                     }
                                 }
                             },
