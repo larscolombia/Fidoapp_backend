@@ -190,7 +190,9 @@ class EventController extends Controller
                     $chekcoutController->store($request, $service['total_amount']);
                 }
             }
-
+            if (!in_array($request->input('user_id'), $ownerIds)) {
+                $ownerIds[] = $request->input('user_id');
+            }
             $titleEvent = $event->name;
             // Notificación
             $this->sendNotification($request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description, $bookingId);
@@ -256,6 +258,7 @@ class EventController extends Controller
                 'location'    => $request->input('location', $event->location),
                 'status'      => $request->input('status', $event->status),
             ]);
+            $bookingId = null;
             if (!is_null($request->input('owner_id'))) {
                 // Eliminar detalles existentes
                 $pet_id = !is_null($event->detailEvent->first()) ? $event->detailEvent->first()->pet_id : null;
@@ -275,7 +278,6 @@ class EventController extends Controller
                     }
                 }
                 //buscamos al profesional en la reserva en base al eventId
-                $bookingId = null;
                 $existBooking = Booking::where('event_id', $event->id)->first();
                 if ($existBooking) {
                     //verificamos si esta el profesional en la reserva
@@ -294,10 +296,16 @@ class EventController extends Controller
                     EventDetail::where('event_id', $event->id)->update(['pet_id' => $request->input('pet_id')]);
                 }
             }
-
+            $ownerIds = [];
             if (!is_null($request->input('owner_id'))) {
-                $this->sendNotification($event->tipo, $event->name, $event, $request->input('owner_id'), $event->description, $bookingId);
+                $ownerIds = $request->input('owner_id');
             }
+             // Agregar el user_id a la lista de ownerIds
+             if (!in_array($event->user_id, $ownerIds)) {
+                $ownerIds[] = $event->user_id;
+            }
+
+            $this->sendNotification($event->tipo, $event->name, $event, $ownerIds, __('messages.event_update'), $bookingId);
 
             return response()->json([
                 'success' => true,
@@ -440,6 +448,9 @@ class EventController extends Controller
                 // Agregar el user_id a la lista de ownerIds
                 if (!in_array($data['user_id'], $ownerIds)) {
                     $ownerIds[] = $data['user_id'];
+                }
+                if (!in_array($event->user_id, $ownerIds)) {
+                    $ownerIds[] = $event->user_id;
                 }
 
                 //enviando notificacion

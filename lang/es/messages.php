@@ -258,5 +258,6 @@ return [
     'question_found_pet' => '¿Está seguro de que desea marcar estas mascotas como encontradas?',
     'accept_event' => 'El :profesional :nombre ha aceptado el evento :evento',
     'reject_event' => 'El :profesional :nombre ha rechazado el evento :evento',
-
+    'event_update' => 'Se ha actualizado la información del evento',
+    'success_buy_fidocoins' => 'Recarga de FidoCoins realizada exitosamente',
 ];

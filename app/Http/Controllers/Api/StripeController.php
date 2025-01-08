@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use App\Trait\Notification;
 
 class StripeController extends Controller
 {
+    use Notification;
     private $sk_key, $product;
     private $coin;
     public function __construct()
@@ -118,6 +120,9 @@ class StripeController extends Controller
                         $wallet->balance = $wallet->balance + $metadata['amount'];
                         $wallet->save();
                     }
+                    $message = __('messages.success_buy_fidocoins');
+                    //enviamos la notificacion
+                    $this->sendNotification('fidocoin', __('coin.buy_fidocoin'), $payment, [$metadata['id_user']], $message);
                     return view('backend.payment.success', [
                         'session' => $session,
                         'payment' => $payment,

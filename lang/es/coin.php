@@ -12,4 +12,5 @@ return [
     'link_update_stripe' => 'Actualizar vinculación con Stripe',
     'error' => 'Ha ocurrido un error:',
     'link_success_stripe' => 'Vinculación con stripe creada exitosamente',
+    'buy_fidocoin' => 'Recarga de FidoCoin',
 ];
