@@ -97,7 +97,7 @@ class CursoPlataformaController extends Controller
             'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
-            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
+            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
             'title.*' => 'required|string|max:255', // Validación para el título del video
             'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
             'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la miniatura
@@ -229,8 +229,8 @@ class CursoPlataformaController extends Controller
             'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
-            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
-            'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg|max:20000',
+            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
+            'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
             'title.*' => 'required|string|max:255', // Validación para el título del video
             'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
             'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la miniatura
