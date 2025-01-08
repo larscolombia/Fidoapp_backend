@@ -29,6 +29,7 @@ class UserNotificationController extends Controller
                     'created_at' => $notification->created_at,
                     'updated_at' => $notification->updated_at,
                     'status' => optional($notification->bookings) ? optional($notification->bookings)->status : null,
+                    'event_id' => optional($notification->bookings) ? (!is_null($notification->bookings) ? optional($notification->bookings)->event->id : null ) : null,
                 ];
             });
             return response()->json([
