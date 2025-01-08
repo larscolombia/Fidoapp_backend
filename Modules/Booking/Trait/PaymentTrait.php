@@ -30,7 +30,7 @@ trait PaymentTrait
 
         $booking = Booking::where('id', $data['booking_id'])->first();
 
-      
+
 
         $booking->commission()->save(new CommissionEarning($earning_data['commission_data']));
 
@@ -120,8 +120,13 @@ trait PaymentTrait
     public function getcashpayments($data, $booking_transaction_id)
     {
 
-        BookingTransaction::where('id', $booking_transaction_id)->update(['external_transaction_id' => '', 'payment_status' => 0]);
-        Booking::where('id', $data['booking_id'])->update(['status' => 'confirmed']);
+        if(!isset($data['event_id'])){
+            BookingTransaction::where('id', $booking_transaction_id)->update(['external_transaction_id' => '', 'payment_status' => 0]);
+            Booking::where('id', $data['booking_id'])->update(['status' => 'confirmed']);
+        }else{
+            BookingTransaction::where('id', $booking_transaction_id)->update(['external_transaction_id' => '', 'payment_status' => 1]);
+        }
+
         // $queryData = Booking::with('user')->findOrFail($data['booking_id']);
         // $this->sendNotificationOnBookingUpdate('complete_booking', $queryData);
         $responseData = [
@@ -294,7 +299,7 @@ trait PaymentTrait
 
     public function commissionData($data)
     {
-        
+
         $booking_id = $data['booking_id'];
 
         $tip_amount = $data['tip_amount'];
@@ -316,19 +321,19 @@ trait PaymentTrait
 
                 foreach($employee['commissions_data'] as $commission){
 
-                 
+
 
                     if($commission['getCommission']['commission_type'] == 'fixed'){
- 
+
                          $commission_amount +=$commission['getCommission']['commission_value'];
- 
+
                     }else{
 
                         $commission_amount  += $commission['getCommission']['commission_value']* $total_service_amount / 100;
- 
+
                      }
- 
-                   }  
+
+                   }
 
                 }else{
 
@@ -341,11 +346,11 @@ trait PaymentTrait
                     if ($commission_type == 'fixed') {
 
                         $commission_amount = $commission_value;
-    
+
                       } else {
-    
+
                          $commission_amount = $commission_value * $total_service_amount / 100;
-    
+
                     }
                  }
 
@@ -356,29 +361,29 @@ trait PaymentTrait
                     'commission_status' => 'pending',
                     'payment_date' => null,
                 ];
-    
+
                 $tip_data = [
-    
+
                     'employee_id' => $employee_id,
                     'tip_amount' => $tip_amount,
                     'tip_status' => 'pending',
                     'payment_date' => null,
-    
+
                 ];
 
                 $data = [
 
                     'commission_data' => $commission_data,
                     'tip_data' => $tip_data,
-        
+
                 ];
-        
+
                 return  $data;
 
                 }
 
 
             }
- 
+
        }
 }

@@ -23,6 +23,11 @@
 
     @endif
 @else
-    <span class="text-capitalize badge bg-soft-danger p-3">Failed</span>
-
+    @if ($data->checkouts())
+        <span class="text-capitalize badge bg-soft-info p-3">
+            {{ __('messages.Paid') }}
+        </span>
+    @else
+        <span class="text-capitalize badge bg-soft-danger p-3">Fallido</span>
+    @endif
 @endif

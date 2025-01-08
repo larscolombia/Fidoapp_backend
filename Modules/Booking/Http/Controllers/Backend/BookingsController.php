@@ -463,7 +463,7 @@ class BookingsController extends Controller
         }else{
             $address = null;
         }
-        
+
 
         if($data['type'] == 'boarding'){
             $start_date_time = new DateTime($data['drop_off_date'].''.$data['drop_off_time']);
@@ -583,7 +583,7 @@ class BookingsController extends Controller
                     'price'=> $service_amount['service_amount'],
                     'duration'=> $duration,
 
-                    ]; 
+                    ];
 
                 BookingGroomingMapping::create($booking_mapping);
                 break;

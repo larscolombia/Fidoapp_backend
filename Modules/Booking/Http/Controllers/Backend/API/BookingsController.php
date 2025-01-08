@@ -162,6 +162,19 @@ class BookingsController extends Controller
                 # code...
                 break;
         }
+        if(!is_null($booking->event_id)){
+            $booking_transaction_details=[
+
+                'booking_id'=>$booking->id,
+                'total_amount'=> $booking->total_amount,
+                'tax_percentage'=>0,
+                'payment_status'=>1,
+                'event_id' => $booking->event_id
+               ];
+
+              $this->getpayment_method($booking_transaction_details);
+        }
+
         // $this->updateBookingService($req, $booking->id);
 
         $message = __('messages.new_booking_updated');

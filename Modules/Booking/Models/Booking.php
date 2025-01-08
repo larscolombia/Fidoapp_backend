@@ -4,6 +4,7 @@ namespace Modules\Booking\Models;
 
 use App\Models\User;
 use App\Models\Branch;
+use App\Models\Checkout;
 use App\Models\BaseModel;
 use Modules\Pet\Models\Pet;
 use Modules\Event\Models\Event;
@@ -152,5 +153,12 @@ class Booking extends BaseModel
     public function event()
     {
         return $this->belongsTo(Event::class,'event_id','id');
+    }
+
+    public function checkouts()
+    {
+        return Checkout::where('product_type', 'booking')
+        ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(product_details, '$.booking_id')) = ?", [$this->id])
+        ->first();
     }
 }
