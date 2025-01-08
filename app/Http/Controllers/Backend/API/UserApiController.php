@@ -152,7 +152,7 @@ class UserApiController extends Controller
     {
         // Validación de la solicitud
         $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
         ]);
 
         try {

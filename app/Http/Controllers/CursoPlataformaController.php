@@ -93,14 +93,14 @@ class CursoPlataformaController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
             'title.*' => 'required|string|max:255', // Validación para el título del video
             'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
-            'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la miniatura
+            'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp', // Validación para la miniatura
         ]);
 
         // Manejar la carga de la imagen
@@ -225,7 +225,7 @@ class CursoPlataformaController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
@@ -233,7 +233,7 @@ class CursoPlataformaController extends Controller
             'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
             'title.*' => 'required|string|max:255', // Validación para el título del video
             'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
-            'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la miniatura
+            'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp', // Validación para la miniatura
             'course_platform_id.*' => 'nullable|integer',
         ]);
 

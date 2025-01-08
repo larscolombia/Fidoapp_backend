@@ -285,7 +285,7 @@ class PetController extends Controller
                 'user_id' => 'sometimes|exists:users,id',
                 'additional_info' => 'sometimes|string',
                 'status' => 'sometimes|boolean',
-                'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+                'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
                 'qr_code' => 'sometimes',
                 'passport' => 'nullable|string',
                 'pet_fur' => 'nullable|string|max:255'
@@ -396,7 +396,7 @@ class PetController extends Controller
                 'user_id' => 'sometimes|exists:users,id',
                 'additional_info' => 'sometimes|string',
                 'status' => 'sometimes|boolean',
-                'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+                'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
                 'qr_code' => 'sometimes',
                 'passport' => 'nullable|string',
                 'pet_fur' => 'nullable|string|max:255'

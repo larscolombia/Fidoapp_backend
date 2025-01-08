@@ -256,4 +256,7 @@ return [
     'pets_success' => 'Mascotas actualizadas',
     'pet_success' => 'Mascota actualizada',
     'question_found_pet' => '¿Está seguro de que desea marcar estas mascotas como encontradas?',
+    'accept_event' => 'El :profesional :nombre ha aceptado el evento :evento',
+    'reject_event' => 'El :profesional :nombre ha rechazado el evento :evento',
+
 ];

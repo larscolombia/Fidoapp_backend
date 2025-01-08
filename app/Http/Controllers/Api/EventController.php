@@ -193,7 +193,7 @@ class EventController extends Controller
 
             $titleEvent = $event->name;
             // Notificación
-            $this->sendNotification($request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description,$bookingId);
+            $this->sendNotification($request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description, $bookingId);
 
             DB::commit(); // Confirmar la transacción
 
@@ -295,8 +295,8 @@ class EventController extends Controller
                 }
             }
 
-            if(!is_null($request->input('owner_id'))){
-                $this->sendNotification($event->tipo, $event->name, $event, $request->input('owner_id'), $event->description,$bookingId);
+            if (!is_null($request->input('owner_id'))) {
+                $this->sendNotification($event->tipo, $event->name, $event, $request->input('owner_id'), $event->description, $bookingId);
             }
 
             return response()->json([
@@ -386,7 +386,9 @@ class EventController extends Controller
                 $eventDetail->update([
                     'confirm' => $data['confirm'] ? 'A' : 'R'
                 ]);
-
+                $user = User::find($data['user_id']);
+                //mensaje para la notificacion
+                $message = null;
                 //actualizar reserva
                 $booking = Booking::where('event_id', $data['event_id'])->where('employee_id', $data['user_id'])->where('status', 'pending')->first();
                 if ($booking) {
@@ -410,9 +412,38 @@ class EventController extends Controller
                                 $wallet->save();
                             }
                         }
+                        $message = __('messages.reject_event');
+                    } else {
+                        $message = __('messages.accept_event');
                     }
+
+                    //reemplazando campos dinamicos
+                    $message = str_replace(':profesional', __('event.employee'), $message);
+                    $message = str_replace(':nombre', $user->full_name, $message);
+                    $message = str_replace(':evento', $eventDetail->event->name, $message);
+                } else {
+                    if (!$data['confirm']) {
+                        $message = __('messages.reject_event');
+                    } else {
+                        $message = __('messages.accept_event');
+                    }
+
+                    //reemplazando campos dinamicos
+                    $message = str_replace(':profesional', __('event.user'), $message);
+                    $message = str_replace(':nombre', $user->full_name, $message);
+                    $message = str_replace(':evento', $eventDetail->event->name, $message);
+                }
+                $event = Event::find($data['event_id']);
+                // Obtener todos los owner_id relacionados con el evento
+                $ownerIds = EventDetail::where('event_id', $data['event_id'])->pluck('owner_id')->toArray();
+
+                // Agregar el user_id a la lista de ownerIds
+                if (!in_array($data['user_id'], $ownerIds)) {
+                    $ownerIds[] = $data['user_id'];
                 }
 
+                //enviando notificacion
+                $this->sendNotification($event->tipo, $event->name, $event, $ownerIds, $message);
                 return response()->json([
                     'success' => true,
                     'message' => 'Evento actualizado exitosamente',

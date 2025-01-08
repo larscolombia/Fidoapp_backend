@@ -44,4 +44,6 @@ return [
     'A new event has been created.'  => 'Se ha creado un nuevo evento.',
     'event_updated' => "El evento ':event_name' ha sido actualizado.",
     'event' => 'Evento',
+    'user' => 'usuario',
+    'employee' => 'profesional',
 ];
