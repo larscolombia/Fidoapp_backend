@@ -159,7 +159,7 @@ class EventController extends Controller
                 'status'      => $request->input('status'),
                 'image'       => $data['image']
             ]);
-
+            $bookingId = null;
             // Crear los detalles del evento
             $ownerIds = $request->input('owner_id');
             $professionalId = ['employee_id' => null];
@@ -185,6 +185,7 @@ class EventController extends Controller
                 if ($dataArray['status'] === true && $bookingData->getStatusCode() === 200) {
                     $chekcoutController = new CheckoutController();
                     $booking = ['booking_id' => $dataArray['data']['id']];
+                    $bookingId = $dataArray['data']['id'];
                     $request->merge($booking);
                     $chekcoutController->store($request, $service['total_amount']);
                 }
@@ -192,7 +193,7 @@ class EventController extends Controller
 
             $titleEvent = $event->name;
             // Notificación
-            $this->sendNotification($request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description);
+            $this->sendNotification($request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description,$bookingId);
 
             DB::commit(); // Confirmar la transacción
 
@@ -274,6 +275,7 @@ class EventController extends Controller
                     }
                 }
                 //buscamos al profesional en la reserva en base al eventId
+                $bookingId = null;
                 $existBooking = Booking::where('event_id', $event->id)->first();
                 if ($existBooking) {
                     //verificamos si esta el profesional en la reserva
@@ -285,6 +287,7 @@ class EventController extends Controller
                             'owner_id' => $existBooking->employee_id,
                         ]);
                     }
+                    $bookingId = $existBooking->id;
                 }
             } else {
                 if ($request->has('pet_id')) {
@@ -293,7 +296,7 @@ class EventController extends Controller
             }
 
             if(!is_null($request->input('owner_id'))){
-                $this->sendNotification($event->tipo, $event->name, $event, $request->input('owner_id'), $event->description);
+                $this->sendNotification($event->tipo, $event->name, $event, $request->input('owner_id'), $event->description,$bookingId);
             }
 
             return response()->json([

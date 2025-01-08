@@ -34,7 +34,7 @@ class UserNotification implements ShouldQueue
      */
     public function handle()
     {
-        list($type,$title, $eventData, $userIds,$description) = $this->data;
+        list($type,$title, $eventData, $userIds,$description,$bookingId) = $this->data;
 
         foreach ($userIds as $userId) {
            $userNotificationModel = UserNotificationModel::create([
@@ -43,6 +43,7 @@ class UserNotification implements ShouldQueue
                 'title' => $title,
                 'description' => $description,
                 'is_read' => false,
+                'booking_id' => $bookingId
             ]);
 
             event(new UserEventNotification($userNotificationModel));
