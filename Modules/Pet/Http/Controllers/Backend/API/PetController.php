@@ -554,12 +554,16 @@ class PetController extends Controller
     public function generateQrCode($pet)
     {
         // Convierte el array $pet a una cadena JSON
-        $data = json_encode($pet);
+        //$data = json_encode($pet);
+        // Obtiene el slug de la mascota
+        $slug = $pet['slug']; // Asumiendo que $pet es un array y contiene el slug
 
+        // Construye la URL para la API de qrserver.com usando el slug
+        $url = route('pet_detail.profile_public', ['slug' => $slug]);
         // Construye la URL para la API de qrserver.com
         $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/';
         $size = '150x150'; // Tamaño del código QR
-        $url = $qrCodeUrl . '?size=' . $size . '&data=' . urlencode($data);
+        $url = $qrCodeUrl . '?size=' . $size . '&data=' . urlencode($url);
         // Realiza la solicitud para obtener el código QR
         $response = Http::get($url);
         // Verifica si la solicitud fue exitosa

@@ -21,6 +21,7 @@ use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\GarrapataController;
 use App\Http\Controllers\FabricanteController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\Backend\PetController;
 use App\Http\Controllers\HerramientaController;
 use App\Http\Controllers\Backend\CoinController;
 use App\Http\Controllers\Backend\UserController;
@@ -437,4 +438,6 @@ Route::group(['prefix' => 'app'], function () {
         Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('antigarrapata.destroy');
 
     });
+
+    Route::get('pet-detail/{slug}',[PetController::class,'profilePublic'])->name('pet_detail.profile_public');
 });

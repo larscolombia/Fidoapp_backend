@@ -219,7 +219,7 @@ class PetTableSeeder extends Seeder
 
                 // //4
 
-                
+
                 // [
                 //     'name' => 'Bella',
                 //     'slug' => 'Bella',
@@ -750,7 +750,7 @@ class PetTableSeeder extends Seeder
                 //     'image' => public_path('/dummy-images/pets/11/4.dale_bird_m.png'),
                 // ],
 
-                 
+
             ];
             foreach ($data as $key => $value) {
                 $pettype = PetType::where('slug',$value['pettype_id'])->first();
@@ -775,7 +775,7 @@ class PetTableSeeder extends Seeder
                 $pet = Pet::create($pet);
                 if (isset($image)) {
                     $this->attachFeatureImage($pet, $image);
-                    
+
                 }
             }
         }
@@ -808,12 +808,14 @@ class PetTableSeeder extends Seeder
     public function generateQrCode($pet)
     {
         // Convierte el array $pet a una cadena JSON
-        $data = json_encode($pet);
-
+        //$data = json_encode($pet);
+        $slug = $pet['slug'];
+         // Construye la URL para la API de qrserver.com usando el slug
+         $url = route('pet_detail.profile_public', ['slug' => $slug]);
         // Construye la URL para la API de qrserver.com
         $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/';
         $size = '150x150'; // Tamaño del código QR
-        $url = $qrCodeUrl . '?size=' . $size . '&data=' . urlencode($data);
+        $url = $qrCodeUrl . '?size=' . $size . '&data=' . urlencode($url);
 
         // Realiza la solicitud para obtener el código QR
         $response = Http::get($url);

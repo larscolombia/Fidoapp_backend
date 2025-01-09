@@ -70,4 +70,9 @@ return [
     'age' => 'Edad',
     'report_date' => 'Fecha del reporte',
     'owner' => 'Dueño',
+    'species' => 'Especie',
+    'coat_color' => 'Color del pelaje',
+    'pet_chip' => 'Chip de la mascota',
+    'unassigned' => 'No asignado',
+    'unspecified' => 'No especificado',
 ];
