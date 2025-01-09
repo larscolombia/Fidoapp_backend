@@ -164,7 +164,7 @@
                     </p>
                 </div>
 
-                <div class="form-group p-3 border-bottom">
+                <div class="form-group p-3 ">
                     <label for="owner" class="form-label">{{ __('pet.lbl_owner') }}</label>
                     <p class="descriptions">{{ !is_null($pet->user) ? $pet->user->full_name : __('pet.unspecified') }}
                     </p>
@@ -173,8 +173,8 @@
                 <h4 class="text-center mb-3">Datos de vacunación y tratamiento</h4>
                 @if (count($pet->histories) > 0)
                     @foreach ($pet->histories->sortByDesc('created_at') as $history)
-                        <div class="border rounded mb-3">
-                            <div class=" form-group p-3 border-bottom">
+                        <div class=" mb-3">
+                            {{-- <div class=" form-group p-3 border-bottom">
                                 <label for="date" class="form-label">{{ __('pet.date') }}</label>
                                 <p class="descriptions">
                                     {{ !is_null($history->application_date) ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : __('pet.unspecified') }}
@@ -186,15 +186,15 @@
                                     {{ !is_null($history->name) ? $history->name : __('pet.unspecified') }}
                                 </p>
                             </div>
-                            <div class=" form-group p-3 border-bottom">
+                            <div class=" form-group p-3  mb-3">
                                 <label for="condition_history"
                                     class="form-label">{{ __('pet.medical_condition') }}</label>
                                 <p class="descriptions">
                                     {{ !is_null($history->medical_conditions) ? $history->medical_conditions : __('pet.unspecified') }}
                                 </p>
-                            </div>
+                            </div> --}}
                             @if (!is_null($history->vacuna))
-                            <h6 class="text-center mb-3">Vacunas</h6>
+                                <h6 class="text-center mb-3 mt-3">Vacuna</h6>
                                 <div class=" form-group p-3 border-bottom">
                                     <label for="condition_history"
                                         class="form-label">{{ __('pet.lbl_name') }}</label>
@@ -208,10 +208,59 @@
                                         {{ !is_null($history->vacuna->fecha_aplicacion) ? \Carbon\Carbon::parse($history->vacuna->fecha_aplicacion)->format('d-m-Y') : __('pet.unspecified') }}
                                     </p>
                                 </div>
-                                <div class=" form-group p-3 border-bottom">
-                                    <label for="date" class="form-label">{{ __('pet.reinforcement_date') }}</label>
+                                <div class=" form-group p-3 ">
+                                    <label for="date"
+                                        class="form-label">{{ __('pet.reinforcement_date') }}</label>
                                     <p class="descriptions">
                                         {{ !is_null($history->vacuna->fecha_refuerzo_vacuna) ? \Carbon\Carbon::parse($history->vacuna->fecha_refuerzo_vacuna)->format('d-m-Y') : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            @if (!is_null($history->antigarrapata))
+                                <h6 class="text-center mb-3 mt-3">Antigarrapata</h6>
+                                <div class=" form-group p-3 border-bottom">
+                                    <label for="condition_history"
+                                        class="form-label">{{ __('pet.lbl_name') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->antigarrapata->antigarrapata_name) ? $history->antigarrapata->antigarrapata_name : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                                <div class=" form-group p-3 border-bottom">
+                                    <label for="date" class="form-label">{{ __('pet.application_date') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->antigarrapata->fecha_aplicacion) ? \Carbon\Carbon::parse($history->antigarrapata->fecha_aplicacion)->format('d-m-Y') : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                                <div class=" form-group p-3 ">
+                                    <label for="date"
+                                        class="form-label">{{ __('pet.reinforcement_date') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->antigarrapata->fecha_refuerzo_antigarrapata) ? \Carbon\Carbon::parse($history->antigarrapata->fecha_refuerzo_antigarrapata)->format('d-m-Y') : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            @if (!is_null($history->antiparasitante))
+                                <h6 class="text-center mb-3 mt-3">Antiparasitante</h6>
+                                <div class=" form-group p-3 border-bottom">
+                                    <label for="condition_history"
+                                        class="form-label">{{ __('pet.lbl_name') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->antiparasitante->antidesparasitante_name) ? $history->antiparasitante->antidesparasitante_name : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                                <div class=" form-group p-3 border-bottom">
+                                    <label for="date" class="form-label">{{ __('pet.application_date') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->antiparasitante->fecha_aplicacion) ? \Carbon\Carbon::parse($history->antiparasitante->fecha_aplicacion)->format('d-m-Y') : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                                <div class=" form-group p-3 ">
+                                    <label for="date"
+                                        class="form-label">{{ __('pet.reinforcement_date') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->antiparasitante->fecha_refuerzo_antidesparasitante) ? \Carbon\Carbon::parse($history->antiparasitante->fecha_refuerzo_antidesparasitante)->format('d-m-Y') : __('pet.unspecified') }}
                                     </p>
                                 </div>
                             @endif
