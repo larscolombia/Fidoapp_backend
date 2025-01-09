@@ -170,9 +170,53 @@
                     </p>
                 </div>
 
-                <h4 class="text-center">Datos de vacunación y tratamiento</h4>
+                <h4 class="text-center mb-3">Datos de vacunación y tratamiento</h4>
                 @if (count($pet->histories) > 0)
-                    <p>Hay</p>
+                    @foreach ($pet->histories->sortByDesc('created_at') as $history)
+                        <div class="border rounded mb-3">
+                            <div class=" form-group p-3 border-bottom">
+                                <label for="date" class="form-label">{{ __('pet.date') }}</label>
+                                <p class="descriptions">
+                                    {{ !is_null($history->application_date) ? \Carbon\Carbon::parse($history->application_date)->format('d-m-Y') : __('pet.unspecified') }}
+                                </p>
+                            </div>
+                            <div class=" form-group p-3 border-bottom">
+                                <label for="name_history" class="form-label">{{ __('pet.lbl_description') }}</label>
+                                <p class="descriptions">
+                                    {{ !is_null($history->name) ? $history->name : __('pet.unspecified') }}
+                                </p>
+                            </div>
+                            <div class=" form-group p-3 border-bottom">
+                                <label for="condition_history"
+                                    class="form-label">{{ __('pet.medical_condition') }}</label>
+                                <p class="descriptions">
+                                    {{ !is_null($history->medical_conditions) ? $history->medical_conditions : __('pet.unspecified') }}
+                                </p>
+                            </div>
+                            @if (!is_null($history->vacuna))
+                            <h6 class="text-center mb-3">Vacunas</h6>
+                                <div class=" form-group p-3 border-bottom">
+                                    <label for="condition_history"
+                                        class="form-label">{{ __('pet.lbl_name') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->vacuna->vacuna_name) ? $history->vacuna->vacuna_name : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                                <div class=" form-group p-3 border-bottom">
+                                    <label for="date" class="form-label">{{ __('pet.application_date') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->vacuna->fecha_aplicacion) ? \Carbon\Carbon::parse($history->vacuna->fecha_aplicacion)->format('d-m-Y') : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                                <div class=" form-group p-3 border-bottom">
+                                    <label for="date" class="form-label">{{ __('pet.reinforcement_date') }}</label>
+                                    <p class="descriptions">
+                                        {{ !is_null($history->vacuna->fecha_refuerzo_vacuna) ? \Carbon\Carbon::parse($history->vacuna->fecha_refuerzo_vacuna)->format('d-m-Y') : __('pet.unspecified') }}
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
                 @else
                     <p class="descriptions">No posee ninguna vacuna ni tratamiento</p>
                 @endif
@@ -183,7 +227,7 @@
                             <div class=" form-group p-3 border-bottom">
                                 <label for="date" class="form-label">{{ __('pet.date') }}</label>
                                 <p class="descriptions">
-                                    {{!is_null($diario->date) ? \Carbon\Carbon::parse($diario->date)->format('d-m-Y') : __('pet.unspecified') }}
+                                    {{ !is_null($diario->date) ? \Carbon\Carbon::parse($diario->date)->format('d-m-Y') : __('pet.unspecified') }}
                                 </p>
                             </div>
                             <div class=" form-group p-3 border-bottom">
@@ -194,11 +238,13 @@
                             </div>
                             <div class="col-12 form-group p-3 border-bottom">
                                 <label for="activity" class="form-label">{{ __('pet.activity') }}</label>
-                                <p class="descriptions">{{ !is_null($diario->actividad) ? $diario->actividad : __('pet.unspecified') }}</p>
+                                <p class="descriptions">
+                                    {{ !is_null($diario->actividad) ? $diario->actividad : __('pet.unspecified') }}</p>
                             </div>
                             <div class="col-12 form-group p-3">
                                 <label for="note" class="form-label">{{ __('pet.note') }}</label>
-                                <p class="descriptions">{{ !is_null($diario->notas) ? $diario->notas : __('pet.unspecified')  }}</p>
+                                <p class="descriptions">
+                                    {{ !is_null($diario->notas) ? $diario->notas : __('pet.unspecified') }}</p>
                             </div>
                         </div>
                     @endforeach

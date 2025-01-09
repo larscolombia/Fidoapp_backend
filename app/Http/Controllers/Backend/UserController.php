@@ -1247,6 +1247,7 @@ class UserController extends Controller
                 'gender' => $user->gender,
                 'date_of_birth' => $user->date_of_birth,
                 'user_type' => $user->user_type,
+                'profile' => $user->profile,
                 'rating' => !is_null($averageRating) ? $averageRating : 0,
             ];
         });
