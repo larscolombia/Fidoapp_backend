@@ -2,37 +2,38 @@
 
 namespace Modules\Booking\Http\Controllers\Backend;
 
-use App\Authorizable;
-use App\Http\Controllers\Controller;
-use App\Models\User;
+use DateTime;
 use Carbon\Carbon;
-use Illuminate\Database\Query\Expression;
+use App\Models\Coin;
+use App\Models\User;
+use App\Authorizable;
+use App\Models\Address;
+use Modules\Tax\Models\Tax;
 use Illuminate\Http\Request;
-use Modules\Booking\Http\Requests\BookingRequest;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
-use Modules\Booking\Models\BookingService;
-use Modules\Booking\Models\BookingTransaction;
+use Modules\Service\Models\Service;
+use App\Http\Controllers\Controller;
+use Modules\Constant\Models\Constant;
 use Modules\Booking\Trait\BookingTrait;
 use Modules\Booking\Trait\PaymentTrait;
-use Modules\Booking\Transformers\BookingResource;
-use Modules\Constant\Models\Constant;
-use Modules\Service\Models\Service;
-use Modules\Tax\Models\Tax;
-use Yajra\DataTables\DataTables;
-use Modules\Booking\Models\BookingBoardingMapping;
-use Modules\Booking\Models\BookingVeterinaryMapping;
-use Modules\Booking\Models\BookingGroomingMapping;
-use Modules\Booking\Models\BookingTrainerMapping;
-use Modules\Booking\Models\BookingWalkerMapping;
-use Modules\Booking\Models\BookingDayCareMapping;
+use Illuminate\Database\Query\Expression;
 use Modules\Service\Models\SystemService;
-use  Modules\Service\Models\ServiceDuration;
+use Modules\Booking\Models\BookingService;
 use Modules\Service\Models\ServiceFacility;
+use  Modules\Service\Models\ServiceDuration;
+use Modules\Booking\Models\BookingTransaction;
+use Modules\Booking\Models\BookingWalkerMapping;
 use Modules\Commission\Models\CommissionEarning;
-use App\Models\Address;
+use Modules\Booking\Http\Requests\BookingRequest;
+use Modules\Booking\Models\BookingDayCareMapping;
+use Modules\Booking\Models\BookingTrainerMapping;
+use Modules\Booking\Transformers\BookingResource;
 
-use DateTime;
-use Illuminate\Support\Facades\Log;
+use Modules\Booking\Models\BookingBoardingMapping;
+use Modules\Booking\Models\BookingGroomingMapping;
+use Modules\Booking\Models\BookingVeterinaryMapping;
 
 // use Modules\CustomField\Models\CustomField;
 // use Modules\CustomField\Models\CustomFieldGroup;
@@ -1397,13 +1398,13 @@ class BookingsController extends Controller
     }
 
     public function bookingShow($id){
-        $module_title="Booking".' #'.$id;
-
+        $module_title="Reserva".' #'.$id;
+        $coin = Coin::first();
         $booking = Booking::with('user', 'pet', 'boarding', 'veterinary','grooming', 'training', 'walking', 'daycare', 'payment','systemservice')->findOrFail($id);
 
         $tax = Tax::active()->whereNull('module_type')->orWhere('module_type', 'services')->get();
 
-        return view('booking::backend.bookings.booking', compact('booking','tax', 'module_title'));
+        return view('booking::backend.bookings.booking', compact('booking','tax', 'module_title','coin'));
     }
 
     public function getAddress(){

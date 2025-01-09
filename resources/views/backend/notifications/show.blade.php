@@ -19,7 +19,7 @@
                 <x-slot name="toolbar">
                     <a href="{{ route("backend.$module_name.index") }}" class="btn btn-secondary mt-1 btn-sm"
                         data-bs-toggle="tooltip" title="{{ __(ucwords($module_name)) }} List"><i class="fas fa-list"></i>
-                        List</a>
+                        Lista</a>
                 </x-slot>
             </x-backend.section-header>
 
@@ -30,17 +30,17 @@
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <?php $data = json_decode($$module_name_singular->data);
-                            
+
                             ?>
                             <tbody>
                                 <tr>
-                                    <th>Title</th>
+                                    <th>Título</th>
                                     <th>
                                         {{ $data->subject }}
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>Text</th>
+                                    <th>Texto</th>
                                     <td>
                                         {!! $data->text !!}
                                     </td>
@@ -72,8 +72,8 @@
             <div class="row">
                 <div class="col">
                     <small class="float-end text-muted">
-                        Updated: {{ $$module_name_singular->updated_at->diffForHumans() }},
-                        Created at: {{ $$module_name_singular->created_at->isoFormat('LLLL') }}
+                        Actualizado: {{ $$module_name_singular->updated_at->diffForHumans() }},
+                        Creado: {{ $$module_name_singular->created_at->isoFormat('LLLL') }}
                     </small>
                 </div>
             </div>

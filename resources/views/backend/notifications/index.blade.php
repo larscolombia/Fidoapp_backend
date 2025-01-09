@@ -12,7 +12,7 @@
 
         <div class="row mt-4">
             <div class="col">
- 
+
                 <table id="datatable" class="table table-striped border table-responsive notification-table">
                     <thead>
                         <tr>
@@ -59,8 +59,14 @@
                                     <a href="{{ route('backend.orders.show', ['id' => $module_name_singular->data['data']['id']]) }}">#{{ $module_name_singular->data['data']['id'] }}</a>
                                 @endif
                             </td>
+                            @php
+                                $notificationGroupText = ucfirst($module_name_singular->data['data']['notification_group']);
+                                if($notificationGroupText === 'Booking'){
+                                    $notificationGroupText = 'Reserva';
+                                }
+                            @endphp
                             <td>
-                                <span class="{{$span_class}}">{{ ucfirst($module_name_singular->data['data']['notification_group']) }}</span>
+                                <span class="{{$span_class}}">{{ $notificationGroupText }}</span>
                             </td>
                             @php
                                 $notification = \Modules\NotificationTemplate\Models\NotificationTemplateContentMapping::where('subject', $module_name_singular->data['subject'])->first();
@@ -83,7 +89,7 @@
                             @php
                                 $user = \App\Models\User::find($module_name_singular->data['data']['user_id']);
                             @endphp
-                             
+
                             <td>
                                 <div class="d-flex gap-3 align-items-center">
                                     <img src="{{ $user->profile_image ?? default_user_avatar() }}" alt="avatar" class="avatar avatar-40 rounded-pill">
@@ -106,7 +112,7 @@
                             <td colspan="3" class="text-center">{{ __('No data found') }}</td>
                         </tr>
                         @endforelse
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -139,7 +145,7 @@
             var id = document.getElementById('idData').value;
             var url = "{{ route('notification.remove', ['id' => ':id']) }}";
             url = url.replace(':id', id);
-            
+
             var message = '¿Estás seguro de que quieres eliminarlo?';
             confirmSwal(message).then((result) => {
                 if(!result.isConfirmed) return
@@ -165,7 +171,7 @@
                 });
             })
 
-           
+
         }
     </script>
 

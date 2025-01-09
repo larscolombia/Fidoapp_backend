@@ -201,13 +201,13 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["admin","demo_admin","employee", "user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => '¡Gracias por elegir nuestros servicios! Su reserva ha sido confirmada exitosamente. Esperamos poder servirle y brindarle una experiencia excepcional. Estén atentos para más actualizaciones.',
             'status' => 1,
             'subject' => '¡Nueva Reserva!',
             'template_detail' => '
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Asunto: Confirmación de cita - ¡Gracias!</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Subject: Confirmación de cita - ¡Gracias!</span></p>
             <p><strong id="docs-internal-guid-7d6bdcce-7fff-5035-731b-386f9021a5db" style="font-weight: normal;">&nbsp;</strong></p>
             <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Estimado [[ user_name ]],</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
@@ -246,7 +246,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => 'Bienvenido a su alojamiento reservado. ¡Esperamos que tengas una estancia agradable!',
             'status' => 1,
@@ -262,7 +262,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => 'Gracias por elegir nuestros servicios. Por favor recuerde revisar por [check-out time]. ¡Esperamos que hayas tenido una experiencia maravillosa!',
             'status' => 1,
@@ -278,7 +278,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => '¡Felicidades! Su reserva se ha completado con éxito. Apreciamos su negocio y esperamos poder servirle nuevamente.',
             'status' => 1,
@@ -319,7 +319,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => 'Lamentamos informarle de que su reserva ha sido cancelada. Si tiene alguna pregunta o necesita más ayuda, póngase en contacto con nuestro equipo de asistencia.',
             'status' => 1,
@@ -336,7 +336,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["admin","demo_admin","employee","user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => 'Bienvenido a su alojamiento reservado. ¡Esperamos que tengas una estancia agradable!',
             'status' => 1,
@@ -352,13 +352,13 @@ class NotificationTemplateSeeder extends Seeder
             'status' => 1,
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => '',
             'status' => 1,
             'subject' => 'Cambio de contraseña',
             'template_detail' => '
-            <p>Asunto: Confirmación de cambio de contraseña</p>
+            <p>Subject: Confirmación de cambio de contraseña</p>
             <p>Dear [[ user_name ]],</p>
             <p>&nbsp;</p>
             <p>Queríamos informarle de que recientemente se ha realizado un cambio de contraseña en su cuenta. Si usted no inició este cambio, por favor tome medidas inmediatas para asegurar su cuenta.</p>
@@ -386,13 +386,13 @@ class NotificationTemplateSeeder extends Seeder
             'status' => 1,
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => '',
             'status' => 1,
             'subject' => 'Olvido de correo electrónico/contraseña',
             'template_detail' => '
-            <p>Asunto: Instrucciones para restablecer la contraseña</p>
+            <p>Subject: Instrucciones para restablecer la contraseña</p>
             <p>&nbsp;</p>
             <p>Dear [[ user_name ]],</p>
             <p>Se ha iniciado una solicitud de restablecimiento de contraseña para su cuenta. Para restablecer su contraseña:</p>
@@ -420,7 +420,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => 'Gracias por elegirnos para su reciente pedido. Nos complace confirmarle que su pedido se ha realizado correctamente.',
             'status' => 1,
@@ -438,7 +438,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => "Nos complace informarle de que su pedido se está preparando y pronto estará en camino para satisfacer sus papilas gustativas.",
             'status' => 1,
@@ -455,7 +455,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => "Nos complace informarle de que su pedido ha sido entregado correctamente en la puerta de su casa.",
             'status' => 1,
@@ -471,7 +471,7 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'es',
+            'language' => 'en',
             'notification_link' => '',
             'notification_message' => "Lamentamos informarle de que su reciente pedido ha sido cancelado.",
             'status' => 1,
