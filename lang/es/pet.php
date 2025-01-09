@@ -72,7 +72,7 @@ return [
     'owner' => 'Dueño',
     'species' => 'Especie',
     'coat_color' => 'Color del pelaje',
-    'pet_chip' => 'Chip de la mascota',
+    'pet_chip' => 'Id del Chip',
     'unassigned' => 'No asignado',
     'unspecified' => 'No especificado',
     'date' => 'Fecha',
