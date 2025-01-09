@@ -3,7 +3,7 @@
     <div class="offcanvas offcanvas-end offcanvas-booking" tabindex="-1" id="pet-form-offcanvas" aria-labelledby="form-offcanvasLabel">
       <div class="offcanvas-header border-bottom">
         <h5 class="offcanvas-title" id="form-offcanvasLabel">
-          <span>Edit Pet</span>
+          <span>Editar mascota</span>
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -295,17 +295,17 @@ const numberRegex = /^\d+$/
 const decimalRegex = /^\d+(\.\d+)?$/
 // Validations
 const validationSchema = yup.object({
-  name: yup.string().required('Name is a required field'),
-  pettype_id: yup.string().required('Pet type is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
-  user_id: yup.string().required('User is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
+  name: yup.string().required('El nombre es un campo obligatorio'),
+  pettype_id: yup.string().required('El tipo de mascota es un campo obligatorio').matches(/^\d+$/, 'Sólo se permiten números'),
+  user_id: yup.string().required('El usuario es un campo obligatorio').matches(/^\d+$/, 'Sólo se permiten números'),
   weight: yup
     .string()
     .nullable()
-    .matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed'),
+    .matches(/^\d*(\.\d+)?$/, 'Sólo se permiten números'),
   height: yup
     .string()
     .nullable()
-    .matches(/^\d*(\.\d+)?$/, 'Only numbers are allowed')
+    .matches(/^\d*(\.\d+)?$/, 'Sólo se permiten números')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

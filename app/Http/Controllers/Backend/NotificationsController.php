@@ -120,7 +120,7 @@ class NotificationsController extends Controller
 
         $user->notifications()->delete();
 
-        Flash::success("<i class='fas fa-check'></i> All Notifications Deleted")->important();
+        Flash::success("<i class='fas fa-check'></i> Todas las notificaciones eliminadas")->important();
 
         Log::info(label_case($module_title.' '.$module_action).' | User:'.Auth::user()->name.'(ID:'.Auth::user()->id.')');
 

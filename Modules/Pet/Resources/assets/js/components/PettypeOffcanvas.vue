@@ -134,10 +134,10 @@ const numberRegex = /^\d+$/;
 // Validations
 const validationSchema = yup.object({
   pettype_image: yup.string()
-    .required('Pettype Image is required'),
+    .required('Se requiere imagen tipo mascota'),
   name: yup.string()
-    .required('Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
+    .required('El nombre es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => !numberRegex.test(value)),
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

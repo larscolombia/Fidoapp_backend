@@ -186,8 +186,8 @@ let EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 const validationSchema = yup.object({
   first_name: yup
     .string()
-    .required('First Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('El nombre es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
@@ -195,35 +195,35 @@ const validationSchema = yup.object({
 
   last_name: yup
     .string()
-    .required('Last Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('El apellido es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
-  email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
+  email: yup.string().required('El correo electrónico es un campo obligatorio').matches(EMAIL_REGX, 'Debe ser un correo electrónico válido'),
   mobile: yup
     .string()
-    .required('Phone Number is a required field')
-    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
+    .required('El número de teléfono es un campo obligatorio')
+    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'El número de teléfono debe contener solo dígitos'),
   password: yup
     .string()
-    .test('password', 'Password is required', function (value) {
+    .test('password', 'Se requiere contraseña', function (value) {
       if (currentId === 0 && !value) {
         return false
       }
       return true
     })
-    .min(8, 'Password must be at least 8 characters long'),
+    .min(8, 'La contraseña debe tener al menos 8 caracteres'),
   confirm_password: yup
     .string()
-    .test('confirm_password', 'Confirm password is required', function (value) {
+    .test('confirm_password', 'Se requiere confirmar la contraseña', function (value) {
       if (currentId === 0 && !value) {
         return false
       }
       return true
     })
-    .oneOf([yup.ref('password')], 'Passwords must match')
+    .oneOf([yup.ref('password')], 'Las contraseñas deben coincidir')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

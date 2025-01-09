@@ -168,7 +168,7 @@ class NotificationTemplateSeeder extends Seeder
                 'value' => 'employee',
                 'name' => 'Employee',
             ],
-            
+
             [
                 'type' => 'notification_to',
                 'value' => 'demo_admin',
@@ -201,33 +201,33 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["admin","demo_admin","employee", "user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => 'Thank you for choosing our services! Your booking has been successfully confirmed. We look forward to serving you and providing an exceptional experience. Stay tuned for further updates.',
+            'notification_message' => '¡Gracias por elegir nuestros servicios! Su reserva ha sido confirmada exitosamente. Esperamos poder servirle y brindarle una experiencia excepcional. Estén atentos para más actualizaciones.',
             'status' => 1,
-            'subject' => 'New Booking!',
+            'subject' => '¡Nueva Reserva!',
             'template_detail' => '
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Subject: Appointment Confirm - Thank You!</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Asunto: Confirmación de cita - ¡Gracias!</span></p>
             <p><strong id="docs-internal-guid-7d6bdcce-7fff-5035-731b-386f9021a5db" style="font-weight: normal;">&nbsp;</strong></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Dear [[ user_name ]],</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Estimado [[ user_name ]],</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">We are delighted to inform you that your appointment has been successfully confirmed! Thank you for choosing our services. We are excited to have you as our valued customer and are committed to providing you with a wonderful experience.</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">¡Estamos encantados de informarle que su cita ha sido confirmada con éxito! Gracias por elegir nuestros servicios. Estamos entusiasmados de tenerlo como nuestro valioso cliente y estamos comprometidos a brindarle una experiencia maravillosa.</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
             <h4>Appointment Details</h4>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Appointment ID: [[ id ]]</span></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Appointment Date: [[ booking_date ]]</span></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Service/Event: [[ booking_services_names ]]</span></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Date: [[ booking_date ]]</span></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Time: [[ booking_time ]]</span></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Location: [[ venue_address ]]</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">ID de cita: [[ id ]]</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Fecha de cita: [[ booking_date ]]</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Servicio/Evento: [[ booking_services_names ]]</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Fecha: [[ booking_date ]]</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Hora: [[ booking_time ]]</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Ubicación: [[ venue_address ]]</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">We want to assure you that we have received your appointment details and everything is in order. Our team is eagerly preparing to make this a memorable experience for you. If you have any specific requirements or questions regarding your appointment, please feel free to reach out to us.</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Queremos asegurarle que hemos recibido los detalles de su cita y que todo está en orden. Nuestro equipo se está preparando ansiosamente para hacer de esta una experiencia memorable para usted. Si tiene algún requisito específico o pregunta con respecto a su cita, no dude en comunicarse con nosotros.</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">We recommend marking your calendar and setting a reminder for the date and time of the event to ensure you don\'t miss your appointment. Should there be any updates or changes to your appointment, we will promptly notify you.</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Le recomendamos marcar su calendario y configurar un recordatorio de la fecha y hora del evento para asegurarse de no perder su cita. Si hay alguna actualización o cambio en su cita, se lo notificaremos de inmediato.</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Once again, thank you for choosing our services. We look forward to providing you with exceptional service and creating lasting memories. If you have any further queries, please do not hesitate to contact our friendly customer support team.</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Una vez más, gracias por elegir nuestros servicios. Esperamos brindarle un servicio excepcional y crear recuerdos duraderos. Si tiene más consultas, no dude en ponerse en contacto con nuestro amable equipo de atención al cliente.</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
-            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Best regards,</span></p>
+            <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">Atentamente,</span></p>
             <p><strong style="font-weight: normal;">&nbsp;</strong></p>
             <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">[[ logged_in_user_fullname ]],</span></p>
             <p dir="ltr" style="line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size: 11pt; font-family: Arial; color: #000000; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;">[[ logged_in_user_role ]],</span></p>
@@ -246,12 +246,12 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => 'Welcome to your booked accommodation. We hope you have a pleasant stay!',
+            'notification_message' => 'Bienvenido a su alojamiento reservado. ¡Esperamos que tengas una estancia agradable!',
             'status' => 1,
-            'subject' => 'Booking Accepted!',
-            'template_detail' => '<p>Welcome to your booked accommodation. We hope you have a pleasant stay!</p>',
+            'subject' => '¡Reserva aceptada!',
+            'template_detail' => '<p>Bienvenido a su alojamiento reservado. ¡Esperamos que tengas una estancia agradable!</p>',
         ]);
 
         $template = NotificationTemplate::create([
@@ -262,12 +262,12 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => 'Thank you for choosing our services. Please remember to check out by [check-out time]. We hope you had a wonderful experience!',
+            'notification_message' => 'Gracias por elegir nuestros servicios. Por favor recuerde revisar por [check-out time]. ¡Esperamos que hayas tenido una experiencia maravillosa!',
             'status' => 1,
-            'subject' => 'Booking Rejected',
-            'template_detail' => '<p>Thank you for choosing our services. Please remember to check out by [check-out time]. We hope you had a wonderful experience!</p>',
+            'subject' => 'Reserva rechazada',
+            'template_detail' => '<p>Gracias por elegir nuestros servicios. Por favor recuerde revisar por [check-out time]. ¡Esperamos que hayas tenido una experiencia maravillosa!</p>',
         ]);
 
         $template = NotificationTemplate::create([
@@ -278,33 +278,33 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => 'Congratulations! Your booking has been successfully completed. We appreciate your business and look forward to serving you again.',
+            'notification_message' => '¡Felicidades! Su reserva se ha completado con éxito. Apreciamos su negocio y esperamos poder servirle nuevamente.',
             'status' => 1,
-            'subject' => 'Appointment complete email with invoice',
+            'subject' => 'Cita completa por correo electrónico con factura',
             'template_detail' => '
-            <p>Subject: Appointment Completion and Invoice</p>
+            <p>Subject: Finalización y facturación de citas</p>
             <p>&nbsp;</p>
             <p>Dear [[ user_name ]],</p>
             <p>&nbsp;</p>
-            <p>We are writing to inform you that your recent appointment with us has been successfully completed. We sincerely appreciate your trust in our services and the opportunity to serve you.</p>
+            <p>Le escribimos para informarle de que su reciente cita con nosotros ha concluido con éxito. Agradecemos sinceramente su confianza en nuestros servicios y la oportunidad de atenderle.</p>
             <p>&nbsp;</p>
-            <h4>Appointment Details:</h4>
+            <h4>Detalles de la cita:</h4>
             <p>&nbsp;</p>
-            <p>Appointment Date: [[ booking_date ]]</p>
-            <p>Appointment Time: [[ booking_time ]]</p>
-            <p>Service Provided: [[ booking_services_names ]]</p>
-            <p>Service Duration: [[ booking_duration ]]</p>
-            <p>Service Provider: [[ employee_name ]]</p>
+            <p>Fecha de cita: [[ booking_date ]]</p>
+            <p>Hora de la cita: [[ booking_time ]]</p>
+            <p>Servicio prestado: [[ booking_services_names ]]</p>
+            <p>Duración del servicio: [[ booking_duration ]]</p>
+            <p>Proveedor de servicios: [[ employee_name ]]</p>
             <p>&nbsp;</p>
-            <p>We are pleased to inform you that the appointment was carried out smoothly, and we hope it met or exceeded your expectations. Our dedicated team worked diligently to ensure your satisfaction throughout the process.</p>
+            <p>Nos complace informarle de que la cita se llevó a cabo sin contratiempos, y esperamos que cumpliera o superara sus expectativas. Nuestro entregado equipo trabajó con diligencia para garantizar su satisfacción durante todo el proceso.</p>
             <p>&nbsp;</p>
-            <p>To ensure transparency in our billing procedures, we have attached the invoice for the services rendered during your appointment. The invoice provides a detailed breakdown of the services availed, any applicable taxes, and the total amount due. Please find the invoice attached to this email [or provide instructions on how to access the invoice if it is hosted online].</p>
+            <p>Para garantizar la transparencia de nuestros procedimientos de facturación, adjuntamos la factura de los servicios prestados durante su cita. La factura incluye un desglose detallado de los servicios prestados, los impuestos aplicables y el importe total adeudado. Adjuntamos la factura a este correo electrónico (o le proporcionamos instrucciones sobre cómo acceder a la factura si está alojada en línea).</p>
             <p>&nbsp;</p>
-            <p>Thank you once again for choosing our services. We appreciate your trust and support.</p>
+            <p>Gracias una vez más por elegir nuestros servicios. Apreciamos su confianza y apoyo.</p>
             <p>&nbsp;</p>
-            <p>Best regards,</p>
+            <p>Saludos cordiales,</p>
             <p>&nbsp;</p>
             <p>[[ logged_in_user_fullname ]]<br />[[ logged_in_user_role ]]<br />[[ company_name ]]</p>
             <p>[[ company_contact_info ]]</p>
@@ -319,12 +319,12 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => 'We regret to inform you that your booking has been cancelled. If you have any questions or need further assistance, please contact our support team.',
+            'notification_message' => 'Lamentamos informarle de que su reserva ha sido cancelada. Si tiene alguna pregunta o necesita más ayuda, póngase en contacto con nuestro equipo de asistencia.',
             'status' => 1,
-            'subject' => 'Booking Cancellation',
-            'template_detail' => '<p><span id="docs-internal-guid-b1e18659-7fff-e334-ed58-8ced003b3621"><span style="font-size: 11pt; font-family: Arial; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; vertical-align: baseline; white-space-collapse: preserve;">We regret to inform you that your booking has been cancelled. If you have any questions or need further assistance, please contact our support team.</span></span></p>',
+            'subject' => 'Cancelación de reservas',
+            'template_detail' => '<p><span id="docs-internal-guid-b1e18659-7fff-e334-ed58-8ced003b3621"><span style="font-size: 11pt; font-family: Arial; background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; vertical-align: baseline; white-space-collapse: preserve;">Lamentamos informarle de que su reserva ha sido cancelada. Si tiene alguna pregunta o necesita más ayuda, póngase en contacto con nuestro equipo de asistencia.</span></span></p>',
         ]);
 
 
@@ -336,12 +336,12 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["admin","demo_admin","employee","user"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => 'Welcome to your booked accommodation. We hope you have a pleasant stay!',
+            'notification_message' => 'Bienvenido a su alojamiento reservado. ¡Esperamos que tengas una estancia agradable!',
             'status' => 1,
-            'subject' => 'Booking Request has been Accepted!',
-            'template_detail' => '<p>Welcome to your booked accommodation. We hope you have a pleasant stay!</p>',
+            'subject' => 'Solicitud de reserva aceptada',
+            'template_detail' => '<p>Bienvenido a su alojamiento reservado. ¡Esperamos que tengas una estancia agradable!</p>',
         ]);
 
 
@@ -352,28 +352,28 @@ class NotificationTemplateSeeder extends Seeder
             'status' => 1,
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
             'notification_message' => '',
             'status' => 1,
-            'subject' => 'Change Password',
+            'subject' => 'Cambio de contraseña',
             'template_detail' => '
-            <p>Subject: Password Change Confirmation</p>
+            <p>Asunto: Confirmación de cambio de contraseña</p>
             <p>Dear [[ user_name ]],</p>
             <p>&nbsp;</p>
-            <p>We wanted to inform you that a recent password change has been made for your account. If you did not initiate this change, please take immediate action to secure your account.</p>
+            <p>Queríamos informarle de que recientemente se ha realizado un cambio de contraseña en su cuenta. Si usted no inició este cambio, por favor tome medidas inmediatas para asegurar su cuenta.</p>
             <p>&nbsp;</p>
-            <p>To regain control and secure your account:</p>
+            <p>Para recuperar el control y asegurar tu cuenta:</p>
             <p>&nbsp;</p>
-            <p>Visit [[ link ]].</p>
-            <p>Follow the instructions to verify your identity.</p>
-            <p>Create a strong and unique password.</p>
-            <p>Update passwords for any other accounts using similar credentials.</p>
-            <p>If you have any concerns or need assistance, please contact our customer support team.</p>
+            <p>Visita [[ link ]].</p>
+            <p>Siga las instrucciones para verificar su identidad.</p>
+            <p>Crea una contraseña fuerte y única.</p>
+            <p>Actualice las contraseñas de cualquier otra cuenta que utilice credenciales similares.</p>
+            <p>Si tiene alguna duda o necesita ayuda, póngase en contacto con nuestro equipo de atención al cliente.</p>
             <p>&nbsp;</p>
-            <p>Thank you for your attention to this matter.</p>
+            <p>Gracias por prestar atención a este asunto.</p>
             <p>&nbsp;</p>
-            <p>Best regards,</p>
+            <p>Saludos cordiales,</p>
             <p>[[ logged_in_user_fullname ]]<br />[[ logged_in_user_role ]]<br />[[ company_name ]]</p>
             <p>[[ company_contact_info ]]</p>
           ',
@@ -386,25 +386,25 @@ class NotificationTemplateSeeder extends Seeder
             'status' => 1,
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
             'notification_message' => '',
             'status' => 1,
-            'subject' => 'Forget Email/Password',
+            'subject' => 'Olvido de correo electrónico/contraseña',
             'template_detail' => '
-            <p>Subject: Password Reset Instructions</p>
+            <p>Asunto: Instrucciones para restablecer la contraseña</p>
             <p>&nbsp;</p>
             <p>Dear [[ user_name ]],</p>
-            <p>A password reset request has been initiated for your account. To reset your password:</p>
+            <p>Se ha iniciado una solicitud de restablecimiento de contraseña para su cuenta. Para restablecer su contraseña:</p>
             <p>&nbsp;</p>
-            <p>Visit [[ link ]].</p>
-            <p>Enter your email address.</p>
-            <p>Follow the instructions provided to complete the reset process.</p>
-            <p>If you did not request this reset or need assistance, please contact our support team.</p>
+            <p>Visitar [[ link ]].</p>
+            <p>Introduzca su dirección de correo electrónico.</p>
+            <p>Siga las instrucciones proporcionadas para completar el proceso de restablecimiento.</p>
+            <p>Si no has solicitado este restablecimiento o necesitas ayuda, ponte en contacto con nuestro equipo de asistencia.</p>
             <p>&nbsp;</p>
-            <p>Thank you.</p>
+            <p>Muchas gracias.</p>
             <p>&nbsp;</p>
-            <p>Best regards,</p>
+            <p>Saludos Cordiales,</p>
             <p>[[ logged_in_user_fullname ]]<br />[[ logged_in_user_role ]]<br />[[ company_name ]]</p>
             <p>[[ company_contact_info ]]</p>
             <p>&nbsp;</p>
@@ -420,15 +420,15 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => 'Thank you for choosing Us for your recent order. We are delighted to confirm that your order has been successfully placed.!',
+            'notification_message' => 'Gracias por elegirnos para su reciente pedido. Nos complace confirmarle que su pedido se ha realizado correctamente.',
             'status' => 1,
-            'subject' => 'Order Placed!',
-            'template_detail' => '<p>Thank you for choosing Us for your recent order. We are delighted to confirm that your order has been successfully placed.!</p>',
+            'subject' => 'Pedido realizado',
+            'template_detail' => '<p>Gracias por elegirnos para su reciente pedido. Nos complace confirmarle que su pedido se ha realizado correctamente.</p>',
         ]);
 
-     
+
 
         $template = NotificationTemplate::create([
             'type' => 'order_proccessing',
@@ -438,12 +438,12 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => "We're excited to let you know that your order is now being prepared and will soon be on its way to satisfy your taste buds!",
+            'notification_message' => "Nos complace informarle de que su pedido se está preparando y pronto estará en camino para satisfacer sus papilas gustativas.",
             'status' => 1,
-            'subject' => 'Order Processing!',
-            'template_detail' => "<p>We're excited to let you know that your order is now being prepared and will soon be on its way to satisfy your taste buds!</p>",
+            'subject' => 'Orden Procesada',
+            'template_detail' => "<p>Nos complace informarle de que su pedido se está preparando y pronto estará en camino para satisfacer sus papilas gustativas.</p>",
         ]);
 
 
@@ -455,12 +455,12 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => "We're delighted to inform you that your order has been successfully delivered to your doorstep.",
+            'notification_message' => "Nos complace informarle de que su pedido ha sido entregado correctamente en la puerta de su casa.",
             'status' => 1,
-            'subject' => 'Order Delivered!',
-            'template_detail' => "<p>We're delighted to inform you that your order has been successfully delivered to your doorstep.</p>",
+            'subject' => 'Entrega del pedido',
+            'template_detail' => "<p>Nos complace informarle de que su pedido ha sido entregado correctamente en la puerta de su casa.</p>",
         ]);
 
         $template = NotificationTemplate::create([
@@ -471,12 +471,12 @@ class NotificationTemplateSeeder extends Seeder
             'to' => '["user","admin","demo_admin"]',
         ]);
         $template->defaultNotificationTemplateMap()->create([
-            'language' => 'en',
+            'language' => 'es',
             'notification_link' => '',
-            'notification_message' => "We regret to inform you that your recent order has been cancelled.",
+            'notification_message' => "Lamentamos informarle de que su reciente pedido ha sido cancelado.",
             'status' => 1,
-            'subject' => 'Order Cancelled!',
-            'template_detail' => "<p>We regret to inform you that your recent order has been cancelled.</p>",
+            'subject' => 'Pedido cancelado',
+            'template_detail' => "<p>Lamentamos informarle de que su reciente pedido ha sido cancelado.</p>",
         ]);
 
     }

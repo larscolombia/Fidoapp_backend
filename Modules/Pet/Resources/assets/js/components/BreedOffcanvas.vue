@@ -129,8 +129,8 @@ const numberRegex = /^\d+$/
 const decimalRegex = /^\d+(\.\d+)?$/
 // Validations
 const validationSchema = yup.object({
-  name: yup.string().required('Name is a required field'),
-  pettype_id: yup.string().required('pet type is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
+  name: yup.string().required('El nombre es un campo obligatorio'),
+  pettype_id: yup.string().required('El tipo de mascota es un campo obligatorio').matches(/^\d+$/, 'Sólo se permiten números'),
 })
 
 

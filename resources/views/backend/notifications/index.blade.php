@@ -140,7 +140,7 @@
             var url = "{{ route('notification.remove', ['id' => ':id']) }}";
             url = url.replace(':id', id);
             
-            var message = 'Are you certain you want to delete it?';
+            var message = '¿Estás seguro de que quieres eliminarlo?';
             confirmSwal(message).then((result) => {
                 if(!result.isConfirmed) return
                     $.ajax({

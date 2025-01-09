@@ -28,7 +28,7 @@
             <th class="text-capitalize">{{ item.commission_type }}</th>
             <th>
               <button type="button" class="fs-4 text-primary border-0 bg-transparent me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="changeId(item.id)" aria-controls="form-offcanvas"><i class="icon-Edit"></i></button>
-              <button type="button" class="fs-4 text-danger border-0 bg-transparent" @click="destroyData(item.id, 'Are you certain you want to delete it?')" data-bs-toggle="tooltip"><i class="icon-delete"></i></button>
+              <button type="button" class="fs-4 text-danger border-0 bg-transparent" @click="destroyData(item.id, '¿Estás seguro de que quieres eliminarlo?')" data-bs-toggle="tooltip"><i class="icon-delete"></i></button>
             </th>
           </tr>
         </tbody>

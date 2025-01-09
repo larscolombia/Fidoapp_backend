@@ -2,12 +2,12 @@
   <form @submit.prevent="formSubmit">
     <div class="offcanvas offcanvas-end offcanvas-booking" tabindex="-1" id="pet-assign-form" aria-labelledby="form-offcanvasLabel">
       <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title" id="form-offcanvasLabel">  
-           
+        <h5 class="offcanvas-title" id="form-offcanvasLabel">
 
-         
+
+
             <span>{{Username}}</span>
-       
+
         </h5>
         <button type="button" class="btn-close" @click="reset_datatable_close_offcanvas()" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -29,8 +29,8 @@
                 </div>
                 <button  type="button" class="fs-4 text-info border-0 bg-transparent" data-bs-toggle="offcanvas" data-bs-target="#pet-notes-form"    @click="changeId(item.id)"  aria-controls="form-offcanvas" ><i class="icon-page"></i></button>
                 <button v-if="role() === 'admin' || role() === 'demo_admin'" type="button" class="fs-4 text-primary border-0 bg-transparent" data-bs-toggle="offcanvas" data-bs-target="#pet-form-offcanvas"    @click="changeId(item.id)"  aria-controls="form-offcanvas" ><i class="icon-Edit"></i></button>
-                <button v-if="role() === 'admin' || role() === 'demo_admin'" class="fs-4 text-danger border-0 bg-transparent" @click="removePet(item.id, 'Are you certain you want to delete it?')"  data-bs-toggle="tooltip"> <i class="icon-delete"></i></button>
-                <a v-if="role() === 'admin' || role() === 'demo_admin'" class="fs-4 text-danger border-0 bg-transparent" :href="'/' + item.qr_code.replace('app/', '')" target="_blank"> 
+                <button v-if="role() === 'admin' || role() === 'demo_admin'" class="fs-4 text-danger border-0 bg-transparent" @click="removePet(item.id, '¿Estás seguro de que quieres eliminarlo?')"  data-bs-toggle="tooltip"> <i class="icon-delete"></i></button>
+                <a v-if="role() === 'admin' || role() === 'demo_admin'" class="fs-4 text-danger border-0 bg-transparent" :href="'/' + item.qr_code.replace('app/', '')" target="_blank">
                   <i class="fas fa-qrcode"></i>
                 </a>
                 <button class="btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#shareModal" :data-owner-id="item.id">
@@ -40,18 +40,18 @@
               </div>
             </div>
             <div v-else class="text-center">
-              <p>Pet are not available</p>
+              <p>Las mascotas no están disponibles.</p>
           </div>
           </div>
         </div>
-        <div v-else class="text-center"> Proccessing.... </div>
+        <div v-else class="text-center"> Procesando.... </div>
       </div>
     </div>
   </form>
   <PetsOffcanvas :id="petId"></PetsOffcanvas>
   <PetNotesOffcanvas :id="petId"></PetNotesOffcanvas>
 
-  
+
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -112,7 +112,7 @@ const UserId = useModuleId(() => {
       selectedpets.value = res.data.user_pet
       assign_ids.value = res.data.user_pet.map((item) => item.id)
       pets.value = res.data.all_pet
-      Username.value = res.data.user_name + "'s pet list"
+      Username.value = res.data.user_name + " lista de mascotas"
       IsLoading.value=false;
       petId.value = 0
     }
@@ -135,7 +135,7 @@ const removePet = (value, message) => {
             selectedpets.value = res.data
             assign_ids.value = res.data.map((item) => item.id)
             renderedDataTable.ajax.reload(null, false)
-           
+
           }
         })
       })
@@ -146,7 +146,7 @@ const reset_datatable_close_offcanvas = () => {
       selectedpets.value = []
       Username.value = ''
       petId.value = 0
-  
+
 }
 
 

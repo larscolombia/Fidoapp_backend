@@ -34,7 +34,7 @@
 
             <th>
               <button type="button" class="btn btn-soft-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="changeId(item.id)" aria-controls="exampleModal"><i class="icon-Edit"></i></button>
-              <button type="button" class="btn btn-soft-danger btn-sm ms-2" @click="destroyData(item.id, 'Are you certain you want to delete it?')" data-bs-toggle="tooltip"><i class="icon-delete"></i></button>
+              <button type="button" class="btn btn-soft-danger btn-sm ms-2" @click="destroyData(item.id, '¿Estás seguro de que quieres eliminarlo?')" data-bs-toggle="tooltip"><i class="icon-delete"></i></button>
             </th>
           </tr>
         </tbody>
