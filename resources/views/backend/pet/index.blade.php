@@ -87,7 +87,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: {{$color}};
+            background-color: {{ $color }};
             z-index: 10;
         }
 
@@ -176,9 +176,32 @@
                 @else
                     <p class="descriptions">No posee ninguna vacuna ni tratamiento</p>
                 @endif
-                <h4 class="text-center">Entrenamientos</h4>
+                <h4 class="text-center mb-3">Entrenamientos</h4>
                 @if (count($pet->diario) > 0)
-                    <p>Hay</p>
+                    @foreach ($pet->diario->sortByDesc('date') as $diario)
+                        <div class="border rounded mb-3">
+                            <div class=" form-group p-3 border-bottom">
+                                <label for="date" class="form-label">{{ __('pet.date') }}</label>
+                                <p class="descriptions">
+                                    {{!is_null($diario->date) ? \Carbon\Carbon::parse($diario->date)->format('d-m-Y') : __('pet.unspecified') }}
+                                </p>
+                            </div>
+                            <div class=" form-group p-3 border-bottom">
+                                <label for="date" class="form-label">{{ __('pet.category') }}</label>
+                                <p class="descriptions">
+                                    {{ !is_null($diario->category) ? $diario->category->name : __('pet.unspecified') }}
+                                </p>
+                            </div>
+                            <div class="col-12 form-group p-3 border-bottom">
+                                <label for="activity" class="form-label">{{ __('pet.activity') }}</label>
+                                <p class="descriptions">{{ !is_null($diario->actividad) ? $diario->actividad : __('pet.unspecified') }}</p>
+                            </div>
+                            <div class="col-12 form-group p-3">
+                                <label for="note" class="form-label">{{ __('pet.note') }}</label>
+                                <p class="descriptions">{{ !is_null($diario->notas) ? $diario->notas : __('pet.unspecified')  }}</p>
+                            </div>
+                        </div>
+                    @endforeach
                 @else
                     <p class="descriptions">No posee ninguna entrenamiento</p>
                 @endif

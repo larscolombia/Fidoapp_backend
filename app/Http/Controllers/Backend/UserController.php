@@ -1212,7 +1212,7 @@ class UserController extends Controller
         ]);
 
         // Iniciar la consulta
-        $query = User::query();
+        $query = User::with('rating'); // Cargar la relación 'rating'
 
         // Si 'user_type' está presente y no está vacío, agregar una cláusula where
         if (isset($data['user_type']) && !empty($data['user_type'])) {
@@ -1230,20 +1230,42 @@ class UserController extends Controller
         // Ejecutar la consulta
         $users = $query->get();
 
+        // Mapear los usuarios para obtener solo los campos deseados y calcular el promedio de calificaciones
+        $filteredUsers = $users->map(function ($user) {
+            // Calcular el promedio de calificaciones
+            $averageRating = !is_null($user->rating) ? $user->rating->avg('rating') : 0;
+
+            return [
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'full_name' => "{$user->first_name} {$user->last_name}",
+                'address' => $user->address,
+                'email' => $user->email,
+                'mobile' => $user->mobile,
+                'avatar' => $user->avatar,
+                'profile_image' => $user->profile_image,
+                'gender' => $user->gender,
+                'date_of_birth' => $user->date_of_birth,
+                'user_type' => $user->user_type,
+                'rating' => !is_null($averageRating) ? $averageRating : 0,
+            ];
+        });
+
         // Retornar respuesta
         return response()->json([
             'success' => true,
-            'data' => $users
+            'data' => $filteredUsers
         ], 200);
     }
+
 
 
     public function getUserFullDetail(Request $request)
     {
         $data = $request->validate([
-            'user_id' => ['required','exists:users,id']
+            'user_id' => ['required', 'exists:users,id']
         ]);
-        $user = User::whereNotIn('user_type', ['admin'])->where('id',$data['user_id'])->with('profile')->first();
+        $user = User::whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile')->first();
 
         return response()->json([
             'success' => true,

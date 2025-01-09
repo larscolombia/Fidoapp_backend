@@ -75,4 +75,8 @@ return [
     'pet_chip' => 'Chip de la mascota',
     'unassigned' => 'No asignado',
     'unspecified' => 'No especificado',
+    'date' => 'Fecha',
+    'category' => 'Categoría',
+    'activity' => 'Actividad',
+    'note' => 'Notas',
 ];
