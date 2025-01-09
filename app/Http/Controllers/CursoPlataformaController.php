@@ -97,7 +97,7 @@ class CursoPlataformaController extends Controller
             'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
-            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
+            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
             'title.*' => 'required|string|max:255', // Validación para el título del video
             'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
             'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp', // Validación para la miniatura
@@ -229,8 +229,8 @@ class CursoPlataformaController extends Controller
             'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
-            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
-            'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg',
+            'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
+            'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
             'title.*' => 'required|string|max:255', // Validación para el título del video
             'duration_video.*' => 'required|integer|min:1', // Validación para la duración del video
             'thumbnail.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp', // Validación para la miniatura

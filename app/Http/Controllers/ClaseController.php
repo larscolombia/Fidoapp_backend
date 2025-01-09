@@ -73,7 +73,7 @@ class ClaseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'video' => 'required|file|mimes:mp4,mov,ogg,qt',
+            'video' => 'required|file|mimes:mp4,mov,ogg,avi,wmv,flv,mkv,webm,f4v,3gp,qt',
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'duration' => 'required|integer|min:1',
         ]);
@@ -213,7 +213,7 @@ class ClaseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|string|max:255',
-           'video' => 'sometimes|file|mimes:mp4,mov,ogg,qt',
+           'video' => 'sometimes|file|mimes:mp4,mov,ogg,avi,wmv,flv,mkv,webm,f4v,3gp,qt',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'duration' => 'sometimes|integer|min:1',
         ]);
