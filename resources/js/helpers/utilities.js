@@ -86,7 +86,8 @@ export const confirmSwal = async ({title}) => {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: '¡Sí, Hazlo!'
+        confirmButtonText: '¡Sí, Hazlo!',
+        cancelButtonText: 'Cancelar'
       }).then((result) => {
         return result
       })
@@ -99,7 +100,8 @@ export const confirmcancleSwal = async ({title}) => {
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#858482',
-        confirmButtonText: 'Yes, do it!'
+        confirmButtonText: '¡Sí, Hazlo!',
+        cancelButtonText: 'Cancelar'
       }).then((result) => {
         return result
       })

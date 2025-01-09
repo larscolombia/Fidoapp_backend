@@ -667,12 +667,12 @@ Index Of Script
             e.preventDefault();
             var link = $(this);
             var httpMethod = link.data('method').toUpperCase();
-               
+
             var form;
 
             // If the data-method attribute is not PUT, PATCH or DELETE,
             // Then we don't know what to do. Just ignore.
-          
+
 
             if ($.inArray(httpMethod, ['PUT', 'DELETE', 'PATCH','GET']) === - 1) {
               return;
@@ -710,7 +710,7 @@ Index Of Script
                       return false;
                   }
                 })
-               }      
+               }
             }
         },
 
@@ -722,7 +722,8 @@ Index Of Script
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#858482',
-                confirmButtonText: '¡Sí, Hazlo!!'
+                confirmButtonText: '¡Sí, Hazlo!',
+                cancelButtonText: 'Cancelar'
               }).then((result) => {
                 return result
               })
@@ -736,13 +737,14 @@ Index Of Script
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#858482',
-            confirmButtonText: 'Yes'
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'Cancelar'
           }).then((result) => {
             return result
           })
     },
 
-        
+
 
         createForm: function (link, formID) {
             var form =
