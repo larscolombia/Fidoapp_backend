@@ -91,25 +91,25 @@ let EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 const validationSchema = yup.object({
   first_name: yup
     .string()
-    .required('First Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('El nombre es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
   last_name: yup
     .string()
-    .required('Last Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('El apellido es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>\-_;'\/+=\[\]\\]/
       return !specialCharsRegex.test(value) && !numberRegex.test(value)
     }),
-  email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
+  email: yup.string().required('El correo electrónico es un campo obligatorio').matches(EMAIL_REGX, 'Debe ser un correo electrónico válido'),
   mobile: yup
     .string()
-    .required('Phone No is a required field')
-    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits')
+    .required('El número de teléfono es un campo obligatorio')
+    .matches(/^(\+?\d+)?(\s?\d+)*$/, 'El número de teléfono debe contener solo dígitos')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({
@@ -151,7 +151,7 @@ const formSubmit = handleSubmit((values) => {
       emit('add_user', res.data)
 
     }
- 
+
   })
 })
 </script>

@@ -5,9 +5,9 @@
         <div class="offcanvas-body">
           <div class="row">
             <div class="col-12">
-  
+
               <InputField class="col-md-12" :is-required="true" :label="$t('page.lbl_name')"  placeholder="" v-model="name" :error-message="errors.name" :error-messages="errorMessages['name']"></InputField>
-             
+
 
               <div class="col-md-12">
                  <label class="form-label">{{ $t('page.lbl_more_permission') }}</label>
@@ -25,7 +25,7 @@
                   </ul>
                 </span>
                 <span class="text-danger">{{ errors.description }}</span>
-                 
+
                 </div>
               </div>
 
@@ -44,7 +44,7 @@
       </div>
     </form>
   </template>
-  
+
   <script setup>
   import { ref, onMounted } from 'vue'
   import { EDIT_URL, STORE_URL, UPDATE_URL,GET_PERMISSION_MODULE} from '../../constants/module'
@@ -55,20 +55,20 @@
   import FormFooter from '@/vue/components/form-elements/FormFooter.vue'
   import InputField from '@/vue/components/form-elements/InputField.vue'
   import { buildMultiSelectObject } from '@/helpers/utilities'
-  
+
   // props
   defineProps({
     createTitle: { type: String, default: '' },
     editTitle: { type: String, default: '' }
   })
-  
+
   const { getRequest, storeRequest, updateRequest,listingRequest } = useRequest()
-  
+
   onMounted(() => {
     getPermissionList()
     setFormData(defaultData())
   })
-  
+
   // Edit Form Or Create Form
   const currentId = useModuleId(() => {
     if (currentId.value > 0) {
@@ -77,7 +77,7 @@
       setFormData(defaultData())
     }
   })
-  
+
   /*
    * Form Data & Validation & Handeling
    */
@@ -113,7 +113,7 @@ const getPermissionList = () => {
     })
   })
 }
-  
+
   //  Reset Form
   const setFormData = (data) => {
     resetForm({
@@ -122,11 +122,11 @@ const getPermissionList = () => {
         description: data.description,
         more_permission: data.more_permission,
         status: data.status
-      
+
       }
     })
   }
-  
+
   // Reload Datatable, SnackBar Message, Alert, Offcanvas Close
   const reset_datatable_close_offcanvas = (res) => {
     if (res.status) {
@@ -139,13 +139,13 @@ const getPermissionList = () => {
       errorMessages.value = res.all_message
     }
   }
-  
+
   const validationSchema = yup.object({
     name: yup.string()
-      .required('Name is a required field') ,
-  
+      .required('El nombre es un campo obligatorio') ,
+
   })
-  
+
   const { handleSubmit, errors, resetForm } = useForm({
     validationSchema
   })
@@ -154,8 +154,8 @@ const getPermissionList = () => {
   const { value: more_permission } = useField('more_permission')
   const { value: status } = useField('status')
   const errorMessages = ref({})
-  
-  
+
+
   // Form Submit
   const formSubmit = handleSubmit((values) => {
     if (currentId.value > 0) {
@@ -164,8 +164,7 @@ const getPermissionList = () => {
       storeRequest({ url: STORE_URL, body: values }).then((res) => reset_datatable_close_offcanvas(res))
     }
   })
-  
+
   useOnOffcanvasHide('form-offcanvas', () => setFormData(defaultData()))
-  
+
   </script>
-  

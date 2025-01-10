@@ -115,11 +115,11 @@ const numberRegex = /^\d+$/;
 // Validations
 const validationSchema = yup.object({
   name: yup.string()
-    .required('Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
+    .required('El nombre es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => !numberRegex.test(value)),
   limit: yup.string()
-    .required('Set Limit is a required field')
-    .matches(/^\d+$/, 'Only numbers are allowed')
+    .required('Establecer límite es un campo obligatorio')
+    .matches(/^\d+$/, 'Sólo se permiten números')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

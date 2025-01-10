@@ -102,12 +102,12 @@ const numberRegex = /^\d+$/;
 // Vee-Validation Validations
 const validationSchema = yup.object({
   name: yup.string()
-    .required('Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
+    .required('El nombre es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => !numberRegex.test(value)),
   type: yup.string()
-    .required('Type is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
-  value: yup.string().required('Value is a required field'),
+    .required('El tipo es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => !numberRegex.test(value)),
+  value: yup.string().required('El valor es un campo obligatorio.'),
   status: yup.boolean()
 })
 
@@ -166,7 +166,7 @@ const reset_datatable_close_offcanvas = (res) => {
 // Form Submit
 const formSubmit = handleSubmit(async (values) => {
   const saveButton = document.getElementById('save-button');
-  saveButton.disabled = true; 
+  saveButton.disabled = true;
 
   try {
     if (currentId.value > 0) {
@@ -177,8 +177,8 @@ const formSubmit = handleSubmit(async (values) => {
   } catch (error) {
     console.error('Error:', error);
   } finally {
-    saveButton.disabled = false;  
+    saveButton.disabled = false;
   }
 });
- 
+
 </script>

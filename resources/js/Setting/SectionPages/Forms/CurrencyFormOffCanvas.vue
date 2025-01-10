@@ -168,13 +168,13 @@ const numberRegex = /^\d+$/;
 // Validations
 const validationSchema = yup.object({
   currency_name: yup.string()
-    .required("Currency Name is a required field")
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
+    .required("El nombre de la moneda es un campo obligatorio")
+    .test('is-string', 'Sólo se permiten cadenas', (value) => !numberRegex.test(value)),
     currency_symbol:  yup.string().required(),
-    currency_code: yup.string().required("Currency Code is a required field"),
-    no_of_decimal: yup.string().required("No. Of Decimal is a required field"),
-    thousand_separator: yup.string().required("Thousand Separator is a required field"),
-    decimal_separator: yup.string().required("Decimal Separator is a required field")
+    currency_code: yup.string().required("El código de moneda es un campo obligatorio"),
+    no_of_decimal: yup.string().required("No. De decimal es un campo obligatorio"),
+    thousand_separator: yup.string().required("El Separador de Mil es un campo obligatorio"),
+    decimal_separator: yup.string().required("El separador decimal es un campo obligatorio")
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

@@ -323,8 +323,8 @@ const reset_datatable_close_offcanvas = (res) => {
 
 // Validations
 const validationSchema = yup.object({
-  name: yup.string().required(' Product Name is a required field'),
-  category_ids: yup.array().test('category_ids', 'Category is a required field', function (value) {
+  name: yup.string().required('El nombre es un campo obligatorio'),
+  category_ids: yup.array().test('category_ids', 'La categoría es un campo obligatorio.', function (value) {
     if (value.length == 0) {
       return false
     }

@@ -5,6 +5,6 @@ const app = InitApp()
 
 app.component('page-offcanvas', PageOffcanvas)
 
-app.mount('[data-render="app"]');
+app.mount('[data-render="app_pages"]');
 
 

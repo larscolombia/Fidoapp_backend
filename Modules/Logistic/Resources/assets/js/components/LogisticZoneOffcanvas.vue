@@ -137,20 +137,20 @@
 
   // Validations
   const validationSchema = yup.object({
-    name: yup.string().required('Name is a required field'),
-    logistic_id: yup.string().required('Logistic is a required field'),
-    country_id: yup.string().required('Country is a required field'),
-    state_id: yup.string().required('State is a required field'),
-    city_id: yup.array().test('city_id', 'City is a required field', function (value) {
+    name: yup.string().required('El nombre es un campo obligatorio'),
+    logistic_id: yup.string().required('La logística es un campo obligatorio'),
+    country_id: yup.string().required('El país es un campo obligatorio.'),
+    state_id: yup.string().required('El estado es un campo obligatorio.'),
+    city_id: yup.array().test('city_id', 'La ciudad es un campo obligatorio.', function (value) {
     if (value.length == 0) {
       return false
     }
     return true
     }),
     standard_delivery_charge: yup.number().min(0),
-    standard_delivery_time: yup.string().nullable().test('standard_delivery_time', 'Standard Delivery Time must be a positive number', function (value) {
+    standard_delivery_time: yup.string().nullable().test('standard_delivery_time', 'El tiempo de entrega estándar debe ser un número positivo', function (value) {
       if (value === null || value === '') {
-        return true;  
+        return true;
       }
       const numericValue = parseFloat(value);
       if (isNaN(numericValue) || numericValue < 0) {

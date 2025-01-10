@@ -98,8 +98,8 @@ const reset_datatable_close_offcanvas = (res) => {
 
 // Validations
 const validationSchema = yup.object({
-  name: yup.string().required('Name is a required field'),
-  country_id: yup.string().required('country is a required field'),
+  name: yup.string().required('El nombre es un campo obligatorio'),
+  country_id: yup.string().required('El país es un campo obligatorio.'),
 })
 
 

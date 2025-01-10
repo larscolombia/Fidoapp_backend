@@ -76,7 +76,7 @@
     </div>
   </form>
 </template>
-  
+
   <script setup>
 import { ref, onMounted } from 'vue'
 import { EDIT_URL, STORE_URL, UPDATE_URL, USER_LIST } from '../constant/event'
@@ -192,13 +192,13 @@ const numberRegex = /^\d+$/
 const decimalRegex = /^\d+(\.\d+)?$/
 // Validations
 const validationSchema = yup.object({
-  name: yup.string().required('Name is a required field'),
-  user_id: yup.string().required('Organizer Name is required field'),
-  date: yup.string().required('Date is required'),
+  name: yup.string().required('El nombre es un campo obligatorio'),
+  user_id: yup.string().required('El nombre del organizador es un campo obligatorio'),
+  date: yup.string().required('Se requiere fecha'),
   description: yup
     .string()
     .nullable()
-    .test('no-script-tags', 'The Description field cannot contain script tags.', function (value) {
+    .test('no-script-tags', 'El campo Descripción no puede contener etiquetas de script.', function (value) {
       const scriptTagRegex = /<script\b[^>]*>(.*?)/is
       return !scriptTagRegex.test(value)
     })
@@ -275,7 +275,7 @@ useOnOffcanvasHide('form-offcanvas', () => setFormData(defaultData()))
   width: 100% !important;
   display: block;
 }
-</style> 
+</style>
   <style scoped>
 @media only screen and (min-width: 768px) {
   .offcanvas {

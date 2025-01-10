@@ -160,10 +160,10 @@ const numberRegex = /^\d+$/
 const validationSchema = yup.object({
   name: yup
     .string()
-    .required('Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
-  type: yup.string().required('Type is a required field'),
-  link_id: yup.string().required("Link Id is a required field")
+    .required('El nombre es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => !numberRegex.test(value)),
+  type: yup.string().required('El tipo es un campo obligatorio'),
+  link_id: yup.string().required("El ID del enlace es un campo obligatorio")
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

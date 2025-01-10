@@ -98,8 +98,8 @@
 
   // Validations
   const validationSchema = yup.object({
-    name: yup.string().required('Name is a required field'),
-    state_id: yup.string().required('State is a required field'),
+    name: yup.string().required('El nombre es un campo obligatorio'),
+    state_id: yup.string().required('El estado es un campo obligatorio.'),
   })
 
 

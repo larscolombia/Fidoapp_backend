@@ -140,22 +140,22 @@ const EMAIL_REGX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
 const validationSchema = yup.object({
   name: yup.string()
-    .required('Branch Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => {
+    .required('El nombre de la sucursal es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => {
       // Regular expressions to disallow special characters and numbers
       const specialCharsRegex = /[!@#$%^&*,.?":{}|<>\-_;'\/+=\[\]\\]/;
       return !specialCharsRegex.test(value) && !numberRegex.test(value);
     }),
-  contact_number: yup.string().required('Contact Number is a required field').matches(/^(\+?\d+)?(\s?\d+)*$/, 'Phone Number must contain only digits'),
-  contact_email: yup.string().required('Email is a required field').matches(EMAIL_REGX, 'Must be a valid email'),
+  contact_number: yup.string().required('El número de contacto es un campo obligatorio').matches(/^(\+?\d+)?(\s?\d+)*$/, 'El número de teléfono debe contener solo dígitos'),
+  contact_email: yup.string().required('El correo electrónico es un campo obligatorio').matches(EMAIL_REGX, 'Debe ser un correo electrónico válido'),
   address: yup.object({
-    address_line_1: yup.string().required('Address is a required field'),
-    postal_code: yup.string().required('Postal Code is a required field'),
-    city: yup.string().required('City is a required field'),
-    latitude: yup.string().required('Latitude is a required field'),
+    address_line_1: yup.string().required('La dirección es un campo obligatorio.'),
+    postal_code: yup.string().required('El código postal es un campo obligatorio'),
+    city: yup.string().required('La ciudad es un campo obligatorio.'),
+    latitude: yup.string().required('La latitud es un campo obligatorio'),
     longitude: yup.string().required('Longitude is a required field'),
-    state: yup.string().required('State is a required field'),
-    country: yup.string().required('Country is a required field'),
+    state: yup.string().required('La longitud es un campo obligatorio.'),
+    country: yup.string().required('El país es un campo obligatorio.'),
   })
 })
 

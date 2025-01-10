@@ -200,14 +200,14 @@ const numberRegex = /^\d+$/;
 // Validations
 const validationSchema = yup.object({
   name: yup.string()
-    .required('Name is a required field')
-    .test('is-string', 'Only strings are allowed', (value) => !numberRegex.test(value)),
-  type: yup.string().required('Type is a required field'),
+    .required('El nombre es un campo obligatorio')
+    .test('is-string', 'Sólo se permiten cadenas', (value) => !numberRegex.test(value)),
+  type: yup.string().required('El tipo es un campo obligatorio'),
   amount: yup.string()
-    .required('Amount is a required field')
-    .matches(/^\d+$/, 'Only numbers are allowed')
+    .required('El importe es un campo obligatorio')
+    .matches(/^\d+$/, 'Sólo se permiten números')
     .min(0),
-  planlimitation: yup.string().required('Plan Limitation is a required field')
+  planlimitation: yup.string().required('La limitación del plan es un campo obligatorio')
 })
 
 const { handleSubmit, errors, resetForm } = useForm({

@@ -204,8 +204,8 @@ const videoUpload = async(e) => {
   const decimalRegex = /^\d+(\.\d+)?$/
   // Validations
   const validationSchema = yup.object({
-    name: yup.string().required('Name is a required field'),
-        description:yup.string().nullable().test('no-script-tags', 'The Description field cannot contain script tags.', function(value) {
+    name: yup.string().required('El nombre es un campo obligatorio'),
+        description:yup.string().nullable().test('no-script-tags', 'El campo Descripción no puede contener etiquetas de script.', function(value) {
         const scriptTagRegex = /<script\b[^>]*>(.*?)/is;
         return !scriptTagRegex.test(value);
     }),

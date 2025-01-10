@@ -5,7 +5,7 @@
 
           <div class="row">
             <InputField class="col-md-6" type="text" :is-required="true" :label="$t('quick_booking.name')" placeholder="" v-model="name" :error-message="errors['name']" :error-messages="errorMessages['name']"></InputField>
-        
+
           <div class="form-group col-md-6">
             <label class="form-label" for="pettype_id">{{$t('quick_booking.pet_type')}}<span class="text-danger">*</span> </label>
             <Multiselect v-model="pettype_id" :value="pettype_id" v-bind="pettype" id="pettype_id" @select="changePettype"></Multiselect>
@@ -16,7 +16,7 @@
             </span>
             <span class="text-danger">{{ errors.pettype_id }}</span>
           </div>
-  
+
           <div class="form-group col-md-6">
             <label class="form-label" for="breed">{{$t('quick_booking.breed')}}</label>
             <Multiselect v-model="breed" :value="breed" v-bind="breed_list" id="breed"></Multiselect>
@@ -29,7 +29,7 @@
           </div>
 
           <InputField class="col-md-6" type="text" :label="$t('quick_booking.age')" placeholder="" v-model="age" :error-message="errors['age']" :error-messages="errorMessages['age']"></InputField>
-  
+
         </div>
         </div>
         <div class="card-footer">
@@ -39,7 +39,7 @@
       </form>
     </div>
   </template>
-  
+
   <script setup>
   import { ref, onMounted } from 'vue'
   import { useField, useForm } from 'vee-validate'
@@ -50,10 +50,10 @@
   import { buildMultiSelectObject } from '@/helpers/utilities'
 
   const props = defineProps({
-  
+
   user_id: { type: Number, default: 0 }
 })
-  
+
   const { getRequest, storeRequest, updateRequest, listingRequest } = useRequest()
   const emit = defineEmits(['add_pet'])
 
@@ -61,7 +61,7 @@
     getPettypeList()
     setFormData(defaultData())
   })
-  
+
   const defaultData = () => {
     errorMessages.value = {}
     return {
@@ -69,10 +69,10 @@
       pettype_id: '',
       breed: '',
       age: '',
-     
+
     }
   }
-  
+
   const setFormData = (data) => {
     resetForm({
       values: {
@@ -121,9 +121,9 @@ listingRequest({ url: BREED_LIST, data: { id: pet_id} }).then((res) => {
 
 // Validations
 const validationSchema = yup.object({
-  
-  name: yup.string().required('Name is a required field'),
-  pettype_id: yup.string().required('Pet type is a required field').matches(/^\d+$/, 'Only numbers are allowed'),
+
+  name: yup.string().required('El nombre es un campo obligatorio'),
+  pettype_id: yup.string().required('El tipo de mascota es un campo obligatorio').matches(/^\d+$/, 'Sólo se permiten números'),
 
 })
 
@@ -137,22 +137,21 @@ const { value: age } = useField('age')
 
 const errorMessages = ref({})
 
-  
+
   // Form Submit
   const formSubmit = handleSubmit((values) => {
    values.user_id=props.user_id
     storeRequest({ url: STORE_PET, body: values }).then((res) => {
       if(res.errors){
-    
+
           alert(res.message)
-  
+
       }else{
-  
+
         emit('add_pet', res.data)
-  
+
       }
-   
+
     })
   })
   </script>
-  

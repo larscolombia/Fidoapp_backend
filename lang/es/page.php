@@ -11,5 +11,8 @@ return [
     'lbl_role' => 'Rol',
     'lbl_import' => 'Importar del Rol',
     'lbl_page' => 'Página',
+    "lbl_squence" => 'Secuencia',
     'lbl_page_url' => 'Copiar URL de la Página',
+    'edit' => 'Editar',
+    'delete' => 'Eliminar',
 ];
