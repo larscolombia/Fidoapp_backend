@@ -60,7 +60,7 @@
           <div class="d-flex mt-2">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male" />
-              <label class="form-check-label" for="male"> Male </label>
+              <label class="form-check-label" for="male"> {{ $('customer.lbl_male') }} </label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" />
@@ -395,4 +395,4 @@ useOnOffcanvasHide('form-offcanvas', () => setFormData(defaultData()))
   width: 100% !important;
   display: block;
 }
-</style>  
+</style>
