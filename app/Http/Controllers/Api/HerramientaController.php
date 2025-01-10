@@ -116,9 +116,17 @@ class HerramientaController extends Controller
 
     public function index()
     {
-        $herramientas = Herramienta::with('type')->get();
+        $orden = ['Silbato', 'Diarios', 'Clicker']; // Define el orden deseado
+
+        $herramientas = Herramienta::with('type')
+            ->join('herramientas_entrenamiento_type', 'herramientas_entrenamiento.type_id', '=', 'herramientas_entrenamiento_type.id') // Asegúrate de que el nombre de la tabla y columna sean correctos
+            ->orderByRaw("FIELD(herramientas_entrenamiento_type.type, '" . implode("', '", $orden) . "')") // Ordena según el orden definido
+            ->select('herramientas_entrenamiento.*') // Selecciona solo las columnas de herramientas
+            ->get();
+
         return response()->json(['data' => $herramientas]);
     }
+
 
     public function destroy($id)
     {
