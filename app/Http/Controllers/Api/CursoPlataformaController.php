@@ -30,8 +30,7 @@ class CursoPlataformaController extends Controller
                         'description' => $course->description,
                         'image' => asset($course->image),
                         'duration' => $course->duration,
-                        'price' => $course->price,
-                        'price_fidocoin' => $course->price.$coin->symbol,
+                        'price' => $course->price.$coin->symbol,
                         'difficulty' => $course->difficulty,
                         'videos' => $course->videos,
                     ];
@@ -120,8 +119,7 @@ class CursoPlataformaController extends Controller
             'description' => $course->description,
             'image' => asset($course->image),
             'duration' => $course->duration,
-            'price' => $course->price,
-            'price_fidocoin' => $course->price.$coin->symbol,
+            'price' => $course->price.$coin->symbol,
             'difficulty' => $course->difficulty,
             'videos' => $course->videos,
         ];

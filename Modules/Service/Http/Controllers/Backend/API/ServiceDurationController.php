@@ -2,6 +2,7 @@
 
 namespace Modules\Service\Http\Controllers\Backend\API;
 
+use App\Models\Coin;
 use App\Helpers\Functions;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -66,7 +67,7 @@ class ServiceDurationController extends Controller
 
             // Obtener el servicio de duración
             $serviceDuration = ServiceDuration::findOrFail($data['duration_id']); // Utilizar findOrFail para manejar errores
-
+            $coin = Coin::first();
             // Calcular el precio total con impuestos
             $durationPrice = round(Functions::calculateTotalWithTax($serviceDuration->price), 2);
             $tax = round(($durationPrice - $serviceDuration->price), 2);
@@ -74,9 +75,9 @@ class ServiceDurationController extends Controller
             // Retornar la respuesta JSON
             return response()->json([
                 'data' => [
-                    'amount' => round($serviceDuration->price, 2),
-                    'tax' => $tax,
-                    'total_amount' => $durationPrice
+                    'amount' => round($serviceDuration->price, 2).$coin->symbol,
+                    'tax' => $tax.$coin->symbol,
+                    'total_amount' => $durationPrice.$coin->symbol
                 ],
                 'status' => true
             ]);

@@ -2,6 +2,7 @@
 
 namespace Modules\Service\Http\Controllers\Backend\API;
 
+use App\Models\Coin;
 use App\Helpers\Functions;
 use Modules\Tax\Models\Tax;
 use Illuminate\Http\Request;
@@ -389,7 +390,7 @@ class ServiceController extends Controller
             $data = $request->validate([
                 'service_id' => ['required', 'exists:services,id']
             ]);
-
+            $coin = Coin::first();
             // Recuperar el servicio basado en el ID
             $service = Service::findOrFail($data['service_id']);
 
@@ -405,9 +406,9 @@ class ServiceController extends Controller
             // Retornar la respuesta JSON
             return response()->json([
                 'data' => [
-                    'amount' => $price,
-                    'tax' => $tax,
-                    'total_amount' => $servicePrice
+                    'amount' => $price.$coin->symbol,
+                    'tax' => $tax.$coin->symbol,
+                    'total_amount' => $servicePrice.$coin->symbol
                 ],
                 'status' => true
             ]);

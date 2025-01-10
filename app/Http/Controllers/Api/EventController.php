@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use App\Models\Coin;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Payment;
@@ -544,7 +545,7 @@ class EventController extends Controller
     private function bookingCreate($request, $validatedData, $event)
     {
         $bookingController = new BookingsController();
-
+        $coin = Coin::first();
         // Asignar el tipo de reserva basado en el enum
         $bookingType = match ($request->input('tipo')) {
             'medico' => 'veterinary',
@@ -565,9 +566,9 @@ class EventController extends Controller
             $response = $serviceController->servicePrice($request);
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($responseData['data']['amount'], 2);
-                $serviceAmount['tax'] = round($responseData['data']['tax'], 2);
-                $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
             }
         }
         if ($request->input('duration_id') && $bookingType == 'training') {
@@ -577,9 +578,9 @@ class EventController extends Controller
             // Asegurarse de que la respuesta sea válida y extraer los datos
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($responseData['data']['amount'], 2);
-                $serviceAmount['tax'] = round($responseData['data']['tax'], 2);
-                $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
             }
         }
         if ($request->input('training_id') && $bookingType == 'training') {
@@ -612,6 +613,11 @@ class EventController extends Controller
         return $bookingController->store($request);
     }
 
+    private function amountWithoutSymbol($amount,$symbol){
+        $amountFormat = str_replace($symbol,'',$amount);
+        return $amountFormat;
+    }
+
     private function checkBalance($request, $service)
     {
         $amount = $service['total_amount'];
@@ -629,15 +635,16 @@ class EventController extends Controller
             'tax' => 0,
             'total_amount' => 0
         ];
+        $coin = Coin::first();
         if ($request->input('service_id') && $bookingType == 'veterinary') {
             $service = Service::find($request->input('service_id'));
             $serviceController = new ServiceController();
             $response = $serviceController->servicePrice($request);
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($responseData['data']['amount'], 2);
-                $serviceAmount['tax'] = round($responseData['data']['tax'], 2);
-                $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
             }
         }
         if ($request->input('duration_id') && $bookingType == 'training') {
@@ -647,9 +654,9 @@ class EventController extends Controller
             // Asegurarse de que la respuesta sea válida y extraer los datos
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($responseData['data']['amount'], 2);
-                $serviceAmount['tax'] = round($responseData['data']['tax'], 2);
-                $serviceAmount['total_amount'] = round($responseData['data']['total_amount'], 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
             }
         }
 
