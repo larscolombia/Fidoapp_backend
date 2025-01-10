@@ -135,28 +135,28 @@ class ReportsController extends Controller
             })
             ->editColumn('total_service', function ($data) use ($coin) {
                 $value = $data->total_service ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return  $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return  $valueFormat . $coin->symbol;
             })
             ->editColumn('total_service_amount', function ($data) use ($coin) {
                 $value = $data->total_service_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_tax_amount', function ($data) use ($coin) {
                 $value = $data->total_amount - $data->total_service_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_tip_amount', function ($data) use ($coin) {
                 $value = $data->total_tip_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_amount', function ($data) use ($coin) {
                 $value = $data->total_amount;
-                 $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->addIndexColumn()
             ->rawColumns([])
@@ -264,39 +264,40 @@ class ReportsController extends Controller
             })
             ->editColumn('total_service', function ($data) use ($coin) {
                 $value = $data->total_service;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_service_amount', function ($data) use ($coin) {
                 $value = $data->service_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
-            ->editColumn('total_tax_amount', function ($data) use ($coin){
+            ->editColumn('total_tax_amount', function ($data) use ($coin) {
                 $totalTaxAmount = 0;
                 $taxes = json_decode($data->payment->tax_percentage, true);
-
-                foreach ($taxes as $tax) {
-                    if ($tax['type'] === 'percentage') {
-                        $percentageAmount = ($tax['value'] / 100) * $data->service_amount; // Make sure $amount is defined
-                        $totalTaxAmount += $percentageAmount;
-                    } elseif ($tax['type'] === 'fixed') {
-                        $totalTaxAmount += $tax['value'];
+                if (is_array($taxes) || is_object($taxes)) {
+                    foreach ($taxes as $tax) {
+                        if ($tax['type'] === 'percentage') {
+                            $percentageAmount = ($tax['value'] / 100) * $data->service_amount; // Make sure $amount is defined
+                            $totalTaxAmount += $percentageAmount;
+                        } elseif ($tax['type'] === 'fixed') {
+                            $totalTaxAmount += $tax['value'];
+                        }
                     }
                 }
                 $value = $totalTaxAmount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_tip_amount', function ($data)  use ($coin) {
                 $value = $data->total_tip_amount;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_amount', function ($data) use ($coin) {
                 $value = $data->total_amount;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->orderColumn('employee_id', function ($query, $order) {
                 $query->orderBy(new Expression('(SELECT first_name FROM users WHERE id = bookings.employee_id LIMIT 1)'), $order);
@@ -364,18 +365,18 @@ class ReportsController extends Controller
             }, 1)
             ->editColumn('commission_amount', function ($data) use ($coin) {
                 $value = $data->commission_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('tip_amount', function ($data) use ($coin) {
                 $value = $data->tip_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_pay', function ($data) use ($coin) {
                 $value = $data->total_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->addIndexColumn()
             ->rawColumns([])
@@ -426,23 +427,23 @@ class ReportsController extends Controller
             })
             ->editColumn('total_service_amount', function ($data) use ($coin) {
                 $value = $data->employee_booking_sum_service_price ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_commission_earn', function ($data) use ($coin) {
                 $value = $data->commission_earning_sum_commission_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_tip_earn', function ($data) use ($coin) {
                 $value = $data->tip_earning_sum_tip_amount ?? 0;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->editColumn('total_earning', function ($data) use ($coin) {
                 $value = $data->employee_booking_sum_service_price + $data->commission_earning_sum_commission_amount + $data->tip_earning_sum_tip_amount;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
             ->addIndexColumn()
             ->rawColumns([])
@@ -557,8 +558,8 @@ class ReportsController extends Controller
             })
             ->editColumn('total_admin_earnings', function ($data) use ($coin) {
                 $value = $data->total_admin_earnings;
-                $valueFormat = str_replace('$','',$value);
-                return $valueFormat.$coin->symbol;
+                $valueFormat = str_replace('$', '', $value);
+                return $valueFormat . $coin->symbol;
             })
 
             ->filterColumn('customer_name', function ($query, $keyword) {
@@ -613,7 +614,7 @@ class ReportsController extends Controller
                 }
                 return $data->description; // Para pagos, simplemente devuelve la descripción
             })
-            ->editColumn('amount', function ($data) use ($coin){
+            ->editColumn('amount', function ($data) use ($coin) {
 
                 return  $data->amount . $coin->symbol;
             })
@@ -646,13 +647,16 @@ class ReportsController extends Controller
         }
 
         if (isset($productDetails['booking_id'])) {
-            $booking = Booking::findOrFail($productDetails['booking_id']);
-            return optional($booking->event)->name ?? '';
+            $booking = Booking::find($productDetails['booking_id']);
+            if($booking){
+                return optional($booking->event)->name ?? '-';
+            }
+            return '-';
         }
 
-        if (isset($productDetails['booking_id'])) {
-            return __('EBooks.buy') . ' ' . EBook::findOrFail($productDetails['booking_id'])->title;
-        }
+        // if (isset($productDetails['booking_id'])) {
+        //     return __('EBooks.buy') . ' ' . EBook::findOrFail($productDetails['booking_id'])->title;
+        // }
         return null;
     }
 }
