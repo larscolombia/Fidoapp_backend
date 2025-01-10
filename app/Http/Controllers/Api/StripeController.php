@@ -114,13 +114,15 @@ class StripeController extends Controller
                         'payment_method_id' => !is_null($setting) ? $setting->id : 19,
                         'stripe_session_id' =>  $sessionId
                     ]);
+                    $amountFidocoin = $metadata['amount']/$this->coin->conversion_rate;
                     //actualizar wallet del usuario
                     $wallet = Wallet::where('user_id', $metadata['id_user'])->first();
                     if ($wallet) {
-                        $wallet->balance = $wallet->balance + $metadata['amount'];
+                        $wallet->balance = $wallet->balance + $amountFidocoin;
                         $wallet->save();
                     }
-                    $message = __('messages.success_buy_fidocoins');
+                    $message = __('messages.success_buy_fidocoins').$this->coin->symbol;
+                    $message = str_replace(':amount', $amountFidocoin,$message);
                     //enviamos la notificacion
                     $this->sendNotification($metadata['id_user'],'fidocoin', __('coin.buy_fidocoin'), $payment, [$metadata['id_user']], $message);
                     return view('backend.payment.success', [

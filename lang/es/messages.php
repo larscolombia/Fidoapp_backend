@@ -259,5 +259,5 @@ return [
     'accept_event' => 'El :profesional :nombre ha aceptado el evento :evento',
     'reject_event' => 'El :profesional :nombre ha rechazado el evento :evento',
     'event_update' => 'Se ha actualizado la información del evento',
-    'success_buy_fidocoins' => 'Recarga de FidoCoins realizada exitosamente',
+    'success_buy_fidocoins' => 'Has realizado una compra de :amount',
 ];
