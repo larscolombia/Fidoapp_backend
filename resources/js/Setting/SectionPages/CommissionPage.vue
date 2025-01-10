@@ -82,7 +82,7 @@ const destroyData = (id, message) => {
     deleteRequest({ url: DELETE_URL, id }).then((res) => {
       if (res.status) {
         Swal.fire({
-          title: 'Deleted',
+          title: 'Eliminar',
           text: res.message,
           icon: 'success'
         })

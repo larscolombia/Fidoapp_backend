@@ -2,10 +2,10 @@
   <form @submit.prevent="formSubmit">
     <div class="offcanvas offcanvas-end offcanvas-booking" tabindex="-1" id="view_commission_list" aria-labelledby="form-offcanvasLabel">
       <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title" id="form-offcanvasLabel">  
-        
+        <h5 class="offcanvas-title" id="form-offcanvasLabel">
+
         <span>{{Username}}</span>
-       
+
         </h5>
 
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -16,26 +16,26 @@
         <div class="list-group list-group-flush">
           <div v-for="(item, index) in commissions" :key="item" class="list-group-item d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center flex-grow-1 gap-2 my-2">
-        
+
               <div class="flex-grow-1"> {{ item.get_commission.title}} </div>
 
               <div class="flex-grow-1" v-if="item.get_commission.commission_type=='percentage'"> {{ item.get_commission.commission_value}}%</div>
 
               <div class="flex-grow-1" v-else> {{formatCurrencyVue(item.get_commission.commission_value)}}</div>
-      
+
             </div>
-            
+
           </div>
           </div>
 
-    
-       
-      
+
+
+
     </div>
   </form>
 
 
-  
+
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -79,14 +79,14 @@ const removePet = (value, message) => {
         deleteRequest({ url: DELETE_PET, id: value }).then((res) => {
           if(res.status) {
             Swal.fire({
-              title: 'Deleted',
+              title: 'Eliminar',
               text: res.message,
               icon: "success"
             })
             selectedpets.value = res.data
             assign_ids.value = res.data.map((item) => item.id)
             renderedDataTable.ajax.reload(null, false)
-           
+
           }
         })
       })

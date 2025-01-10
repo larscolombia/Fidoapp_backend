@@ -128,7 +128,7 @@ const removePetNotes = (value, message) => {
     deleteRequest({ url: DELETE_PET_NOTE, id: value }).then((res) => {
       if(res.status) {
         Swal.fire({
-          title: 'Deleted',
+          title: 'Eliminar',
           text: res.message,
           icon: "success"
         })

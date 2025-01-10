@@ -128,7 +128,7 @@ const removePet = (value, message) => {
         deleteRequest({ url: DELETE_PET, id: value }).then((res) => {
           if(res.status) {
             Swal.fire({
-              title: 'Deleted',
+              title: 'Eliminar',
               text: res.message,
               icon: "success"
             })

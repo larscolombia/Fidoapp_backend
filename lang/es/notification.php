@@ -19,5 +19,6 @@ return [
     'type' => 'Tipo',
     'template' => 'Plantilla',
     'notification_deleted' => 'Notificación Eliminada Exitosamente',
+    'delete' => 'Eliminar',
 ];
 

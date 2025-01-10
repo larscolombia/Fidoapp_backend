@@ -589,7 +589,7 @@ Index Of Script
                     if(res.status) {
                         // window.successSnackbar(res.message)
                         Swal.fire({
-                            title: 'Deleted',
+                            title: 'Eliminar',
                             text: res.message,
                             icon: "success"
                         })
@@ -633,7 +633,7 @@ Index Of Script
                   if(res.status) {
                       // window.successSnackbar(res.message)
                       Swal.fire({
-                          title: 'Done',
+                          title: 'Hecho',
                           text: res.message,
                           icon: "success"
                       })

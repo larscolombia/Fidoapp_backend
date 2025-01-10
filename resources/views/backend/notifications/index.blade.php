@@ -104,7 +104,7 @@
                             </td>
 
                             <td>
-                                <a onclick="remove_notification()" id="delete-{{$module_name}}-{{$module_name_singular->id}}" class="fs-4 text-danger" data-type="ajax" data-method="DELETE" data-token="{{csrf_token()}}" data-bs-toggle="tooltip" title="{{__('Delete')}}" data-confirm="{{ __('messages.are_you_sure?') }}"> <i class="icon-delete"></i></a>
+                                <a onclick="remove_notification()" id="delete-{{$module_name}}-{{$module_name_singular->id}}" class="fs-4 text-danger cursor-pointer" data-type="ajax" data-method="DELETE" data-token="{{csrf_token()}}" data-bs-toggle="tooltip" title="{{__('notification.delete')}}" data-confirm="{{ __('messages.are_you_sure?') }}"> <i class="icon-delete"></i></a>
                             </td>
                         </tr>
                         @empty
@@ -158,7 +158,7 @@
                     },
                     success: function(response) {
                         Swal.fire({
-                            title: 'Deleted',
+                            title: 'Eliminar',
                             text: response.message,
                             icon: 'success'
                         })
