@@ -138,6 +138,10 @@
             height: 24px;
         }
 
+        .pet-image{
+            max-height: 300px;
+        }
+
         .services {
             border-top-left-radius: 30px;
             border-top-right-radius: 30px;
@@ -151,7 +155,7 @@
 
                 <div class="form-group">
                     <div class="text-center">
-                        <img src="{{ $pet->pet_image }}" alt="pet-image" class="img-fluid w-100" />
+                        <img src="{{ $pet->pet_image }}" alt="pet-image" class="img-fluid w-100 pet-image" />
                     </div>
                 </div>
                 <div class="circle"></div> <!-- Aquí está el círculo -->

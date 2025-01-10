@@ -22,6 +22,8 @@ class UserNotificationController extends Controller
                 return [
                     'id' => $notification->id,
                     'user_id' => $notification->user_id,
+                    'user_full_name' => optional($notification->user)->full_name ?? default_user_name(),
+                    'user_avatar' => optional($notification->user)->media->pluck('original_url')->first(),
                     'type' => $notification->type,
                     'title' => $notification->title,
                     'description' => $notification->description,
