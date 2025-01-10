@@ -21,8 +21,8 @@ class EmployeeReviewResource extends JsonResource
             'rating' => $this->rating,
             'user_id' => $this->user_id,
             'created_at' => $this->created_at,
-            'username' => optional($this->user)->full_name ?? default_user_name(),
-            'profile_image' => optional($this->user)->media->pluck('original_url')->first(),
+            'user_full_name' => optional($this->user)->full_name ?? default_user_name(),
+            'user_avatar' => optional($this->user)->media->pluck('original_url')->first(),
         ];
     }
 }

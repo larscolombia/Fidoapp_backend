@@ -433,10 +433,14 @@ class PetController extends Controller
             if (file_exists($qrCodePath)) {
                 unlink($qrCodePath);
             }
-            //creando el qr
-            $validatedData['qr_code'] = $this->generateQrCode($pet);
             //actualizamos
             $pet->update($validatedData);
+            //creando el qr
+            $validatedData['qr_code'] = $this->generateQrCode($pet);
+            //actualizamos el qr
+            $pet->update([
+                'qr_code' => $validatedData['qr_code']
+            ]);
             // Manejo de la imagen de la mascota
             if ($request->hasFile('pet_image')) {
                 // Eliminar la imagen anterior si existe
