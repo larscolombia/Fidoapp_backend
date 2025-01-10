@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Http;
+use App\Models\Coin;
 use Illuminate\Http\Request;
 use App\Models\CursoPlataforma;
 use App\Models\CoursePlatformVideo;
@@ -17,11 +18,12 @@ class CursoPlataformaController extends Controller
     public function index()
     {
         $courses = CursoPlataforma::all();
+        $coin = Coin::first();
         return response()->json([
             'success' => true,
             'message' => 'Cursos de la plataforma recuperados exitosamente',
             'data' => [
-                'courses' => $courses->map(function ($course) {
+                'courses' => $courses->map(function ($course) use ($coin) {
                     return [
                         'id' => $course->id,
                         'name' => $course->name,
@@ -29,6 +31,7 @@ class CursoPlataformaController extends Controller
                         'image' => asset($course->image),
                         'duration' => $course->duration,
                         'price' => $course->price,
+                        'price_fidocoin' => $course->price.$coin->symbol,
                         'difficulty' => $course->difficulty,
                         'videos' => $course->videos,
                     ];
@@ -110,6 +113,7 @@ class CursoPlataformaController extends Controller
     public function show($id)
     {
         $course = CursoPlataforma::findOrFail($id);
+        $coin = Coin::first();
         $data =   [
             'id' => $course->id,
             'name' => $course->name,
@@ -117,6 +121,7 @@ class CursoPlataformaController extends Controller
             'image' => asset($course->image),
             'duration' => $course->duration,
             'price' => $course->price,
+            'price_fidocoin' => $course->price.$coin->symbol,
             'difficulty' => $course->difficulty,
             'videos' => $course->videos,
         ];

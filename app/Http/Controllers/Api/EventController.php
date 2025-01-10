@@ -195,7 +195,7 @@ class EventController extends Controller
             }
             $titleEvent = $event->name;
             // Notificación
-            $this->sendNotification($request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description, $bookingId);
+            $this->sendNotification($request->input('user_id'),$request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description, $bookingId);
 
             DB::commit(); // Confirmar la transacción
 
@@ -305,7 +305,7 @@ class EventController extends Controller
                 $ownerIds[] = $event->user_id;
             }
 
-            $this->sendNotification($event->tipo, $event->name, $event, $ownerIds, __('messages.event_update'), $bookingId);
+            $this->sendNotification($event->user_id,$event->tipo, $event->name, $event, $ownerIds, __('messages.event_update'), $bookingId);
 
             return response()->json([
                 'success' => true,
@@ -454,7 +454,7 @@ class EventController extends Controller
                 }
 
                 //enviando notificacion
-                $this->sendNotification($event->tipo, $event->name, $event, $ownerIds, $message);
+                $this->sendNotification($data['user_id'],$event->tipo, $event->name, $event, $ownerIds, $message);
                 return response()->json([
                     'success' => true,
                     'message' => 'Evento actualizado exitosamente',

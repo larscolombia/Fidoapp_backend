@@ -282,7 +282,7 @@ class PetController extends Controller
                 'height' => 'sometimes|numeric',
                 'weight_unit' => 'sometimes|string|max:10',
                 'height_unit' => 'sometimes|string|max:10',
-                'user_id' => 'sometimes|exists:users,id',
+                'user_id' => 'required|exists:users,id',
                 'additional_info' => 'sometimes|string',
                 'status' => 'sometimes|boolean',
                 'pet_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
@@ -353,7 +353,7 @@ class PetController extends Controller
             ]);
             //notification
             $title = __('Mascota').' ' .$pet->name;
-            $this->sendNotification('pets',$title,$pet, [$request->input('user_id')], __('pet.pet_created_successfully'));
+            $this->sendNotification($pet->user_id,'pets',$title,$pet, [$pet->user_id], __('pet.pet_created_successfully'));
             return response()->json([
                 'message' => __('pet.pet_created_successfully'),
                 'data' => $pet
@@ -455,8 +455,9 @@ class PetController extends Controller
                 $pet->load('media');
             }
             $title = __('Mascota').' ' .$pet->name;
+            $userId = !is_null($request->input('user_id')) ? $request->input('user_id') : $pet->user_id;
             //notification
-            $this->sendNotification('pets', $title, $pet, [$request->input('user_id')], __('pet.pet_updated_successfully'));
+            $this->sendNotification($userId,'pets', $title, $pet, [$pet->user_id], __('pet.pet_updated_successfully'));
             return response()->json([
                 'success' => true,
                 'message' => __('pet.pet_updated_successfully'),
@@ -534,7 +535,7 @@ class PetController extends Controller
             'pet_name' => $pet->name,
             'owner_name' => $pet->owner->full_name,
         ]);
-        $this->sendNotification('pets',__('pet.lost'), $pet, $userIds, $message);
+        $this->sendNotification($pet->user_id,'pets',__('pet.lost'), $pet, $userIds, $message);
 
         return response()->json([
             'data' => $pet,
@@ -546,8 +547,9 @@ class PetController extends Controller
     public function destroy($id)
     {
         $petSelected = Pet::find($id);
+        $userId = $petSelected->user_id;
         $petSelected->delete();
-        $this->sendNotification('pets',__('pet.title'), $petSelected, [$petSelected->user_id], __('pet.pet_deleted_successfully'));
+        $this->sendNotification($userId,'pets',__('pet.title'), $petSelected, [$petSelected->user_id], __('pet.pet_deleted_successfully'));
         return response()->json([
             'success' => true,
             'message' => __('pet.pet_deleted_successfully'),

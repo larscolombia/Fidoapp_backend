@@ -26,13 +26,14 @@ class SharedOwnerController extends Controller
         ]);
 
         $pet = Pet::findOrFail($petId);
+        $owner = $pet->user_id;
         $userId = $request->input('user_id');
 
         // Verifica si el usuario ya es un dueño compartido de esta mascota
         if (!$pet->sharedOwners->contains($userId)) {
             // Agrega el dueño compartido con la fecha de creación
             $pet->sharedOwners()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
-            $this->sendNotification('shared-owner',__('shared_owner.shared_owner'),$pet,[$request->input('user_id')],__('shared_owner.shared_owner_added_successfully'));
+            $this->sendNotification($owner,'shared-owner',__('shared_owner.shared_owner'),$pet,[$request->input('user_id')],__('shared_owner.shared_owner_added_successfully'));
         }
 
         return response()->json(['message' => __('shared_owner.shared_owner_added_successfully')]);
@@ -54,10 +55,10 @@ class SharedOwnerController extends Controller
 
         $pet = Pet::findOrFail($petId);
         $userId = $request->input('user_id');
-
+        $owner = $pet->user_id;
         // Eliminar el dueño compartido
         $pet->sharedOwners()->detach($userId);
-        $this->sendNotification('shared-owner',__('shared_owner.shared_owner'),$pet,[$userId], __('shared_owner.shared_owner_removed_successfully'));
+        $this->sendNotification($owner,'shared-owner',__('shared_owner.shared_owner'),$pet,[$userId], __('shared_owner.shared_owner_removed_successfully'));
         return response()->json(['message' => __('shared_owner.shared_owner_removed_successfully')]);
     }
 
@@ -94,6 +95,7 @@ class SharedOwnerController extends Controller
         ]);
 
         $pet = Pet::findOrFail($petId);
+        $owner = $pet->user_id;
         $email = $request->input('email');
         $user = User::where('email',$email)->select('id')->first();
         $userId = $user->id;
@@ -101,7 +103,7 @@ class SharedOwnerController extends Controller
         if (!$pet->sharedOwners->contains($userId)) {
             // Agrega el dueño compartido con la fecha de creación
             $pet->sharedOwners()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
-            $this->sendNotification('shared-owner',__('shared_owner.shared_owner'),$pet,[$userId],__('shared_owner.shared_owner_added_successfully'));
+            $this->sendNotification($owner,'shared-owner',__('shared_owner.shared_owner'),$pet,[$userId],__('shared_owner.shared_owner_added_successfully'));
         }
 
         return response()->json(['message' => __('shared_owner.shared_owner_added_successfully')]);

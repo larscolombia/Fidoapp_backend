@@ -122,7 +122,7 @@ class StripeController extends Controller
                     }
                     $message = __('messages.success_buy_fidocoins');
                     //enviamos la notificacion
-                    $this->sendNotification('fidocoin', __('coin.buy_fidocoin'), $payment, [$metadata['id_user']], $message);
+                    $this->sendNotification($metadata['id_user'],'fidocoin', __('coin.buy_fidocoin'), $payment, [$metadata['id_user']], $message);
                     return view('backend.payment.success', [
                         'session' => $session,
                         'payment' => $payment,
