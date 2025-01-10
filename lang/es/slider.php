@@ -10,4 +10,5 @@ return [
     'lbl_status' => 'Estado',
     'lbl_feature_image' => 'Imagen Destacada',
     'lbl_action' => 'Acción',
+    'lbl_category' => 'Categoría',
 ];

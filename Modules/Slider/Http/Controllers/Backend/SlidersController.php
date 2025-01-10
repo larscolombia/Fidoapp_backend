@@ -114,6 +114,12 @@ class SlidersController extends Controller
                 } else {
                     return $data->updated_at->isoFormat('llll');
                 }
+            })->editColumn('type',function($data){
+                $category = $data->type;
+                if($category === 'category'){
+                    return __('slider.lbl_category');
+                }
+                return $category;
             })
 
             ->orderColumns(['id'], '-:column $1');
