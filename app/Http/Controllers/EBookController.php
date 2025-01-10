@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Coin;
 use App\Models\EBook;
 use App\Models\EBookUser;
 use App\Models\BookRating;
@@ -252,10 +253,12 @@ class EBookController extends Controller
 
     public function get()
     {
+        $coin = Coin::first();
         $ebooks = EBook::with('book_ratings')
             ->get()
-            ->transform(function ($ebook) {
+            ->transform(function ($ebook) use ($coin){
                 $ebook->cover_image = !is_null($ebook->cover_image) ? asset($ebook->cover_image) : asset('images/default/default.jpg');
+                $ebook->price = $ebook->price.$coin->symbol;
                 return $ebook;
             });
         return response()->json([
