@@ -395,8 +395,10 @@ class PetsController extends Controller
         $data = $request->except('pet_image');
         $data['breed_id'] = $request->breed;
         $query->update($data);
-
-
+        $data['qr_code'] = $this->generateQrCode($query);
+        $query->update([
+            'qr_code' => $data['qr_code']
+        ]);
         storeMediaFile($query, $request->file('pet_image'), 'pet_image');
         $this->module_title = 'pet.title';
         $message = __('messages.update_form', ['form' => __($this->module_title)]);
