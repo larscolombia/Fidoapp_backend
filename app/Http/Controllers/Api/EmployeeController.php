@@ -129,8 +129,8 @@ class EmployeeController extends Controller
                 'rating' => $rating->rating,
                 'user_id' => $rating->user_id,
                 'created_at' => $rating->created_at,
-                'username' => optional($rating->user)->full_name ?? default_user_name(),
-                'profile_image' => optional($rating->user)->media->pluck('original_url')->first(),
+                'user_full_name' => optional($rating->user)->full_name ?? default_user_name(),
+                'user_avatar' => optional($rating->user)->media->pluck('original_url')->first(),
             ];
         });
         // Respuesta exitosa
