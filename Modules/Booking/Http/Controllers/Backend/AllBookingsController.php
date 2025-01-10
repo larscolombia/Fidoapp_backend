@@ -420,17 +420,17 @@ class AllBookingsController extends Controller
     }
     private function translateService($serviceName) {
         switch ($serviceName) {
-            case 'Training':
+            case 'training':
                 return 'Entrenador';
-            case 'Boarding':
+            case 'boarding':
                 return 'Pensión';
-            case 'DayCare':
+            case 'dayCare':
                 return 'Guardería';
-            case 'Veterinary':
+            case 'veterinary':
                 return 'Veterinario';
-            case 'Grooming':
+            case 'grooming':
                 return 'Estética';
-            case 'Walking':
+            case 'walking':
                 return 'Paseador';
             default:
                 return 'Servicio no disponible';

@@ -162,17 +162,17 @@ class BookingsController extends Controller
                 # code...
                 break;
         }
-        if(!is_null($booking->event_id)){
-            $booking_transaction_details=[
+        if (!is_null($booking->event_id)) {
+            $booking_transaction_details = [
 
-                'booking_id'=>$booking->id,
-                'total_amount'=> $booking->total_amount,
-                'tax_percentage'=>0,
-                'payment_status'=>1,
+                'booking_id' => $booking->id,
+                'total_amount' => $booking->total_amount,
+                'tax_percentage' => 0,
+                'payment_status' => 1,
                 'event_id' => $booking->event_id
-               ];
+            ];
 
-              $this->getpayment_method($booking_transaction_details);
+            $this->getpayment_method($booking_transaction_details);
         }
 
         // $this->updateBookingService($req, $booking->id);
@@ -761,22 +761,70 @@ class BookingsController extends Controller
 
     public function destroy($id)
     {
-        try {
-            // Buscar el registro por ID
-            $record = Booking::findOrFail($id);
 
-            // Eliminar el registro
-            $record->delete();
+        try {
+            $booking = Booking::findOrFail($id);
+            Log::info($booking->booking_type);
+            switch ($booking->booking_type) {
+                case 'boarding':
+
+                    BookingBoardingMapping::where('booking_id', $id)->delete();
+
+                    break;
+
+                case 'grooming':
+
+                    BookingGroomingMapping::where('booking_id', $id)->delete();
+
+                    break;
+
+                case 'veterinary':
+
+                    BookingVeterinaryMapping::where('booking_id', $id)->delete();
+
+                    break;
+
+                case 'training':
+
+                    BookingTrainerMapping::where('booking_id', $id)->delete();
+
+                    break;
+
+                case 'walking':
+
+                    BookingWalkerMapping::where('booking_id', $id)->delete();
+
+                    break;
+
+                case 'daycare':
+
+                    BookingDayCareMapping::where('booking_id', $id)->delete();
+
+                    break;
+
+
+                default:
+                    // Handle the case where the booking type is not recognized
+                    // For example:
+                    echo "Unknown booking type.";
+                    break;
+            }
+
+            BookingTransaction::where('booking_id', $id)->delete();
+
+            $booking->delete();
 
             // Responder con un mensaje de éxito
             return response()->json([
                 'success' => true,
+                'status' => true,
                 'message' => 'Registro eliminado con éxito.'
             ], 200);
         } catch (\Exception $e) {
             // Manejo de excepciones
             return response()->json([
                 'success' => false,
+                'status' => false,
                 'error' => 'No se pudo eliminar el registro: ' . $e->getMessage()
             ], 500);
         }
