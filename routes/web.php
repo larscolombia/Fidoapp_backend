@@ -440,4 +440,7 @@ Route::group(['prefix' => 'app'], function () {
     });
 
     Route::get('pet-detail/{slug}',[PetController::class,'profilePublic'])->name('pet_detail.profile_public');
+    route::get('pusher_dev',function(){
+        return view('backend.pusher_dev');
+    })->name('puser_dev');
 });
