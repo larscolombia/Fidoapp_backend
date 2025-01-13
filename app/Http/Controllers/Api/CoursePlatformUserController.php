@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 use App\Models\CursoPlataforma;
 use App\Models\CoursePlatformVideo;
 use App\Http\Controllers\Controller;
+use Kreait\Firebase\Contract\Messaging;
 use App\Models\CoursePlatformUserProgress;
 use App\Http\Controllers\CheckoutController;
 use App\Models\CoursePlatformUserSubscription;
+use App\Http\Controllers\Api\NotificationPushController;
 
 class CoursePlatformUserController extends Controller
 {
@@ -105,6 +107,8 @@ class CoursePlatformUserController extends Controller
             $subscription = CoursePlatformUserSubscription::create($data);
 
             //notify
+            $message = __('course_platform.buy_course'). $coursePlatform->name;
+            $this->generateNotification(__('course_platform.buy_title'),$message ,$data['user_id']);
             $this->sendNotification($data['user_id'],__('course_platform.buy_title'),__('course_platform.buy'), $subscription, [$data['user_id']], __('course_platform.buy_course'). $coursePlatform->name );
             //$this->sendNotification('subscribe',$subscription,'suscription');
             return response()->json([
@@ -163,5 +167,14 @@ class CoursePlatformUserController extends Controller
         $checkBalance = $chekcoutController->checkBalance($wallet, $amount);
         return $checkBalance;
     }
+
+    private function generateNotification($title,$description,$userId){
+        // Obtén el token del dispositivo del usuario específico
+        $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+        if ($user) {
+           $pushNotificationController = new NotificationPushController(app(Messaging::class));
+           $pushNotificationController->sendNotification($title, $description, $user->device_token);
+       }
+   }
 
 }

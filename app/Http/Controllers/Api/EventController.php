@@ -17,10 +17,12 @@ use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
 use Modules\Service\Models\Service;
 use App\Http\Controllers\Controller;
+use Kreait\Firebase\Contract\Messaging;
 use Modules\Service\Models\ServiceDuration;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Requests\Api\Event\StoreRequest;
 use App\Http\Requests\Api\Event\UpdateRequest;
+use App\Http\Controllers\Api\NotificationPushController;
 use Modules\Service\Http\Controllers\Backend\API\ServiceController;
 use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
 use Modules\Service\Http\Controllers\Backend\API\ServiceDurationController;
@@ -196,6 +198,9 @@ class EventController extends Controller
             }
             $titleEvent = $event->name;
             // Notificación
+            foreach($ownerIds as $ownerId){
+                $this->generateNotification($titleEvent,$event->description,$ownerId);
+            }
             $this->sendNotification($request->input('user_id'),$request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description, $bookingId);
 
             DB::commit(); // Confirmar la transacción
@@ -305,7 +310,9 @@ class EventController extends Controller
              if (!in_array($event->user_id, $ownerIds)) {
                 $ownerIds[] = $event->user_id;
             }
-
+            foreach($ownerIds as $ownerId){
+                $this->generateNotification($event->name,__('messages.event_update'),$ownerId);
+            }
             $this->sendNotification($event->user_id,$event->tipo, $event->name, $event, $ownerIds, __('messages.event_update'), $bookingId);
 
             return response()->json([
@@ -662,4 +669,13 @@ class EventController extends Controller
 
         return $serviceAmount;
     }
+
+    private function generateNotification($title,$description,$userId){
+        // Obtén el token del dispositivo del usuario específico
+        $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+        if ($user) {
+           $pushNotificationController = new NotificationPushController(app(Messaging::class));
+           $pushNotificationController->sendNotification($title, $description, $user->device_token);
+       }
+   }
 }
