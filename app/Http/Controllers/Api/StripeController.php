@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use Exception;
 use Stripe\Stripe;
 use App\Models\Coin;
+use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Payment;
 use App\Models\Setting;
+use App\Trait\Notification;
 use Illuminate\Support\Str;
 use App\Models\CachePayment;
 use Illuminate\Http\Request;
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
-use App\Trait\Notification;
+use Kreait\Firebase\Contract\Messaging;
 
 class StripeController extends Controller
 {
@@ -124,6 +126,7 @@ class StripeController extends Controller
                     $message = __('messages.success_buy_fidocoins').$this->coin->symbol;
                     $message = str_replace(':amount', $amountFidocoin,$message);
                     //enviamos la notificacion
+                    $this->generateNotification(__('coin.buy_fidecoin_success'),$message,$metadata['id_user']);
                     $this->sendNotification($metadata['id_user'],'fidocoin', __('coin.buy_fidecoin_success'), $payment, [$metadata['id_user']], $message);
                     return view('backend.payment.success', [
                         'session' => $session,
@@ -162,5 +165,14 @@ class StripeController extends Controller
     private function setStripeApiKey($secretKey)
     {
         Stripe::setApiKey($secretKey);
+    }
+
+    private function generateNotification($title,$description,$userId){
+         // Obtén el token del dispositivo del usuario específico
+         $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+         if ($user) {
+            $pushNotificationController = new NotificationPushController(app(Messaging::class));
+            $pushNotificationController->sendNotification($title, $description, $user->device_token);
+        }
     }
 }

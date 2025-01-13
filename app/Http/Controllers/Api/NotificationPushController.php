@@ -27,6 +27,17 @@ class NotificationPushController extends Controller
         $this->messaging->send($message);
     }
 
+    public function sendNotificationStatic($title, $body, $deviceToken)
+    {
+        $message = CloudMessage::withTarget('token', $deviceToken)
+            ->withNotification([
+                'title' => $title,
+                'body' => $body,
+            ]);
+
+        $this->messaging->send($message);
+    }
+
     public function sendNotificationDev()
     {
         $message = CloudMessage::withTarget('token', 'cDlseZnmQE6VGOs0PzNIxp:APA91bGBWYYM80VN53cTwIRpLrEmJ8YGGWVm9DBIPAKVsF4QB8LyzIlDKpqVn0AHUVQ5Sf6vrYqF4RmlszYa3byqXza4DsSoVaW-WHf-cdpZ6IowOAhdQ1E')
