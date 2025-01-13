@@ -183,8 +183,8 @@ class AuthController extends Controller
                 $input['player_id'] = request('player_id');
             }
             // Almacenar el device_token
-            if (!is_null($request->input('device_token'))) {
-                $input['device_token'] = $request->input('device_token'); // Guarda el token del dispositivo
+            if (!is_null(request('device_token'))) {
+                $input['device_token'] = request('device_token'); // Guarda el token del dispositivo
             }
             $user = User::create($input);
 
