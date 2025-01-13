@@ -553,4 +553,24 @@ class AuthController extends Controller
             'balance' => 0, // Puedes establecer un saldo inicial si lo deseas
         ]);
     }
+
+    public function updateDeviceToken(Request $request)
+    {
+        // Validar los datos de entrada
+        $data = $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+            'device_token' => ['required', 'string']
+        ]);
+
+        // Actualizar el token del dispositivo
+        $userUpdated = User::where('id', $data['user_id'])->update(['device_token' => $data['device_token']]);
+
+        // Verificar si la actualización fue exitosa
+        if ($userUpdated) {
+            return response()->json(['success' => true, 'data' => $data], 200);
+        }
+
+        // Manejo de errores si no se actualizó el usuario
+        return response()->json(['success' => false, 'message' => 'No se pudo actualizar el token del dispositivo'], 500);
+    }
 }

@@ -99,7 +99,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('gallery-list', [DashboardController::class, 'globalGallery']);
     Route::get('search-list', [DashboardController::class, 'searchList']);
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
-
+    Route::post('update-device-token',[AuthController::class, 'updateDeviceToken']);
     Route::post('change-password', [AuthController::class, 'changePassword']);
     Route::post('delete-account', [AuthController::class, 'deleteAccount']);
 
