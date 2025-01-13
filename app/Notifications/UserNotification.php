@@ -58,33 +58,14 @@ class UserNotification extends Notification
     public function toFcm($notifiable): FcmMessage
     {
         // Acceso a los valores del array
-
-        return (new FcmMessage(notification: new FcmNotification(
-            title: $this->title,
-            body: $this->body,
-            image: $this->image
-        )))
-            ->data(['data1' => 'value', 'data2' => 'value2'])
-            ->custom([
-                'android' => [
-                    'notification' => [
-                        'color' => '#0A0A0A',
-                        'sound' => 'default',
-                    ],
-                    'fcm_options' => [
-                        'analytics_label' => 'analytics',
-                    ],
-                ],
-                'apns' => [
-                    'payload' => [
-                        'aps' => [
-                            'sound' => 'default'
-                        ],
-                    ],
-                    'fcm_options' => [
-                        'analytics_label' => 'analytics',
-                    ],
-                ],
-            ]);
+        $title = $this->title;
+        $body = $this->body;
+        $image = $this->image;
+        $FcmMessage = (new FcmMessage(new FcmNotification(
+            $title,
+            $body,
+            null
+        )));
+        return $FcmMessage;
     }
 }

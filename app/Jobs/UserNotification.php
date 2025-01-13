@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-use App\Notifications\UserNotification as UserNotificationEvent;
+use Kreait\Firebase\Contract\Messaging;
 use Illuminate\Queue\InteractsWithQueue;
 use NotificationChannels\FCM\FCMChannel;
 use NotificationChannels\FCM\FCMMessage;
@@ -13,7 +13,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Events\Backend\UserEventNotification;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Http\Controllers\Api\NotificationPushController;
 use App\Models\UserNotification as UserNotificationModel;
+use App\Notifications\UserNotification as UserNotificationEvent;
 
 class UserNotification implements ShouldQueue
 {
@@ -52,6 +54,7 @@ class UserNotification implements ShouldQueue
             ]);
 
            // event(new UserEventNotification($userNotificationModel));
+
            $this->sendNotification($userId,$title,$description);
         }
     }
@@ -64,6 +67,7 @@ class UserNotification implements ShouldQueue
         if (!$user) {
             return response()->json(['success'=> false,'message' => 'No se encontró el token del dispositivo para este usuario.'], 404);
         }
-        $user->notify(new UserNotificationEvent($title,$description,null));
+        $pushNotificationController = new NotificationPushController(app(Messaging::class));
+        $pushNotificationController->sendNotification($title, $description, $user->device_token);
     }
 }

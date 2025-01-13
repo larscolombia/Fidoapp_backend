@@ -303,6 +303,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
 
     public function routeNotificationForFcm()
     {
-        return $this->fcm_token;
+        return $this->device_token;
     }
 }
