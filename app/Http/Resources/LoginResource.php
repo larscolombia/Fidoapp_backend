@@ -16,7 +16,7 @@ class LoginResource extends JsonResource
     public function toArray($request)
     {
 
-       
+
         return [
             'id' => $this->id,
             'first_name' => $this->first_name,
@@ -32,7 +32,7 @@ class LoginResource extends JsonResource
             'address' => $this->address,
             'player_id' => $this->player_id,
             'profile_image' => $this->media->pluck('original_url')->first(),
-
+            'device_token' => $this->device_token,
         ];
     }
 }

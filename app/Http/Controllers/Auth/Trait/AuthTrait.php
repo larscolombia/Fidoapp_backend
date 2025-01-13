@@ -24,7 +24,7 @@ trait AuthTrait
         $password = $request->password;
         $remember = $request->remember_me;
 
-    
+
            if (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1], $remember)) {
                event(new UserLoginSuccess($request, auth()->user()));
 
@@ -54,41 +54,41 @@ trait AuthTrait
 
              $service=SystemService::active()->where('type','veterinary')->get();
              $islogin = $service->isNotEmpty() ? 1 : 0;
-                 
+
                 break;
             case 'groomer':
 
                 $service=SystemService::active()->where('type','grooming')->get();
                 $islogin = $service->isNotEmpty() ? 1 : 0;
-             
+
                 break;
             case 'walker':
 
                 $service=SystemService::active()->where('type','walking')->get();
                 $islogin = $service->isNotEmpty() ? 1 : 0;
-              
+
                 break;
             case 'boarder':
 
                 $service=SystemService::active()->where('type','boarding')->get();
                 $islogin = $service->isNotEmpty() ? 1 : 0;
-               
+
                 break;
             case 'trainer':
 
                 $service=SystemService::active()->where('type','training')->get();
                 $islogin = $service->isNotEmpty() ? 1 : 0;
-               
+
                 break;
             case 'day_taker':
 
                 $service=SystemService::active()->where('type','daycare')->get();
                 $islogin = $service->isNotEmpty() ? 1 : 0;
-               
+
             default:
 
               $islogin=1;
-              
+
                 break;
           }
 
@@ -96,7 +96,7 @@ trait AuthTrait
 
     }
 
-   
+
     protected function registerTrait($request, $model = null)
     {
         $request->validate([
@@ -104,6 +104,7 @@ trait AuthTrait
             'last_name' => ['required', 'string', 'max:191'],
             'email' => ['required', 'string', 'email', 'max:191', 'unique:users'],
             'password' => ['required', Rules\Password::defaults()],
+            'device_token' => ['nullable','string'],
         ]);
 
         $arr = [
@@ -114,7 +115,8 @@ trait AuthTrait
             'mobile' => $request->mobile,
             'address' => $request->address,
             'password' => Hash::make($request->password),
-            'user_type' => $request->user_type
+            'user_type' => $request->user_type,
+            'device_token' => $request->device_token
         ];
 
         if (isset($model)) {
@@ -144,7 +146,7 @@ trait AuthTrait
 
         }
 
-          
+
         \Illuminate\Support\Facades\Artisan::call('view:clear');
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
         \Illuminate\Support\Facades\Artisan::call('route:clear');

@@ -38,6 +38,7 @@ class SocialLoginResource extends JsonResource
             'full_name' => $this->full_name,
             'profile_image' => $this->media->pluck('original_url')->first(),
             'media' => $this->media,
+            'device_token' => $this->device_token,
         ];
     }
 }

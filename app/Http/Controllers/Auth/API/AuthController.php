@@ -44,7 +44,6 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-
         $user = User::where('email', request('email'))->first();
         if ($user == null) {
             return response()->json(['status' => false, 'message' => __('messages.register_before_login')]);
@@ -71,6 +70,11 @@ class AuthController extends Controller
             }
 
             $user->player_id = $request->input('player_id'); // Store the player_id
+            // Almacenar el device_token
+            if (!is_null($request->input('device_token'))) {
+                $user->device_token = $request->input('device_token'); // Guarda el token del dispositivo
+            }
+
             // Save the user
             $user->save();
 
@@ -178,6 +182,10 @@ class AuthController extends Controller
             if (request('player_id') != null) {
                 $input['player_id'] = request('player_id');
             }
+            // Almacenar el device_token
+            if (!is_null($request->input('device_token'))) {
+                $input['device_token'] = $request->input('device_token'); // Guarda el token del dispositivo
+            }
             $user = User::create($input);
 
             $usertype = $user->user_type;
@@ -231,6 +239,11 @@ class AuthController extends Controller
 
         if (request('player_id') != null) {
             $user_data->player_id = request('player_id');
+            $user_data->save();
+        }
+
+        if (request('device_token') != null) {
+            $user_data->device_token = request('device_token');
             $user_data->save();
         }
 
