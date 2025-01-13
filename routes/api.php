@@ -3719,4 +3719,4 @@ Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 Route::get('/translations', [TranslationController::class, 'index']);
 Route::get('/checkout/success', [StripeController::class, 'success'])->name('checkout.success');
     Route::get('/checkout/cancel', [StripeController::class, 'cancel'])->name('checkout.cancel');
-Route::post('demo-push',[NotificationPushController::class,'sendNotification']);
+Route::post('demo-push',[NotificationPushController::class,'sendNotificationDev']);
