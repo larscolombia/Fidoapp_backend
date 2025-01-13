@@ -67,6 +67,7 @@ class UserNotification implements ShouldQueue
         if (!$user) {
             return response()->json(['success'=> false,'message' => 'No se encontró el token del dispositivo para este usuario.'], 404);
         }
+        \Log::info('ejecucion del job');
         $pushNotificationController = new NotificationPushController(app(Messaging::class));
         $pushNotificationController->sendNotification($title, $description, $user->device_token);
     }
