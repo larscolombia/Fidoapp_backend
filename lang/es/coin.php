@@ -13,4 +13,5 @@ return [
     'error' => 'Ha ocurrido un error:',
     'link_success_stripe' => 'Vinculación con stripe creada exitosamente',
     'buy_fidocoin' => 'Recarga de FidoCoin',
+    'buy_fidecoin_success' => 'Recarga exitosa',
 ];
