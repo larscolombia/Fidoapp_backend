@@ -47,7 +47,7 @@
                                         @if ($role->is_fixed == 0)
                                             <button class="btn btn-danger" type="button"
                                                 onclick="delete_role({{ $role->id }})">
-                                                Delete
+                                                Eliminar
                                             </button>
                                         @endif
                                         <button class="btn btn-gray ms-2" type="button"
@@ -79,8 +79,126 @@
 
                                             <tbody>
                                                 @foreach ($modules as $module)
+                                                @php
+                                                    $moduleName = ucwords($module->module_name);
+                                                    if($moduleName == 'Booking'){
+                                                        $moduleName = 'Reservas';
+                                                    }
+                                                    if($moduleName == 'Boarding'){
+                                                        $moduleName = 'Alojamiento';
+                                                    }
+                                                    if($moduleName == 'Veterinary'){
+                                                        $moduleName = 'Veterinario';
+                                                    }
+                                                    if($moduleName == 'Grooming'){
+                                                        $moduleName = 'Cuidador';
+                                                    }
+                                                    if($moduleName == 'Traning'){
+                                                        $moduleName = 'Entrenamiento';
+                                                    }
+                                                    if($moduleName == 'Walking'){
+                                                        $moduleName = 'Paseador';
+                                                    }
+                                                    if($moduleName == 'DayCare'){
+                                                        $moduleName = 'Guardería';
+                                                    }
+                                                    if($moduleName == 'PetSitter'){
+                                                        $moduleName = 'Cuidador de mascotas';
+                                                    }
+                                                    if($moduleName == 'Service'){
+                                                        $moduleName = 'Servicio';
+                                                    }
+                                                    if($moduleName == 'Category'){
+                                                        $moduleName = 'Categoría';
+                                                    }
+                                                    if($moduleName == 'Subcategory'){
+                                                        $moduleName = 'Subcategoría';
+                                                    }
+                                                    if($moduleName == 'Product'){
+                                                        $moduleName = 'Producto';
+                                                    }
+                                                    if($moduleName == 'Product Variation'){
+                                                        $moduleName = 'Variación de productos';
+                                                    }
+
+                                                    if($moduleName == 'Order'){
+                                                        $moduleName = 'Orden';
+                                                    }
+                                                    if($moduleName == 'Supply'){
+                                                        $moduleName = 'Suministro';
+                                                    }
+                                                    if($moduleName == 'Location'){
+                                                        $moduleName = 'Ubicación';
+                                                    }
+                                                    if($moduleName == 'Employees'){
+                                                        $moduleName = 'Profesionales';
+                                                    }
+                                                    if($moduleName == 'Owners'){
+                                                        $moduleName = 'Propietarios';
+                                                    }
+                                                    if($moduleName == 'Review'){
+                                                        $moduleName = 'Reseñas';
+                                                    }
+                                                    if($moduleName == 'Tax'){
+                                                        $moduleName = 'Impuesto';
+                                                    }
+                                                    if($moduleName == 'Events'){
+                                                        $moduleName = 'Eventos';
+                                                    }
+                                                    if($moduleName == 'Syetem Service'){
+                                                        $moduleName = 'Sistema de servicios';
+                                                    }
+                                                    if($moduleName == 'Pet'){
+                                                        $moduleName = 'Mascotas';
+                                                    }
+                                                    if($moduleName == 'Reports'){
+                                                        $moduleName = 'Reportes';
+                                                    }
+                                                    if($moduleName == 'Constant'){
+                                                        $moduleName = 'Constante';
+                                                    }
+                                                    if($moduleName == 'Page'){
+                                                        $moduleName = 'Páginas';
+                                                    }
+                                                    if($moduleName == 'Notification'){
+                                                        $moduleName = 'Notificación';
+                                                    }
+                                                    if($moduleName == 'App Banner'){
+                                                        $moduleName = 'Aplicación Banner';
+                                                    }
+                                                    if($moduleName == 'Notification Template'){
+                                                        $moduleName = 'Plantilla de notificación';
+                                                    }
+                                                    if($moduleName == 'Permission'){
+                                                        $moduleName = 'Permisos';
+                                                    }
+                                                    if($moduleName == 'Modules'){
+                                                        $moduleName = 'Módulos';
+                                                    }
+                                                    if($moduleName == 'Daily Bookings '){
+                                                        $moduleName = 'Reservas diarias ';
+                                                    }
+                                                    if($moduleName == 'Overall Bookings'){
+                                                        $moduleName = 'Reservas totales';
+                                                    }
+                                                    if($moduleName == 'Order Reports '){
+                                                        $moduleName = 'Informes de órdenes';
+                                                    }
+                                                    if($moduleName == 'Pet Type '){
+                                                        $moduleName = 'Tipo de mascotas';
+                                                    }
+                                                    if($moduleName == 'Breed'){
+                                                        $moduleName = 'Raza';
+                                                    }
+                                                    if($moduleName == "Owner's Pet"){
+                                                        $moduleName = 'Propietario de mascota';
+                                                    }
+                                                    if($moduleName == 'User Password'){
+                                                        $moduleName = 'Contraseña de usuario';
+                                                    }
+                                                @endphp
                                                     <tr>
-                                                        <td>{{ ucwords($module->module_name) }}</td>
+                                                        <td>{{ $moduleName }}</td>
                                                         <td>
                                                             <span><input type="checkbox"
                                                                     id="role-{{ $role->name }}-permission-view_{{ strtolower(str_replace(' ', '_', $module->module_name)) }}"
@@ -143,10 +261,147 @@
                                                                         @if ($decodedData != '')
                                                                             @foreach ($decodedData as $permission_data)
                                                                                 <tr>
-
+                                                                                    @php
+                                                                                        $roleName = ucwords(str_replace('_', ' ', $permission_data));
+                                                                                        if($roleName == 'Daily Bookings'){
+                                                                                            $roleName = 'Reservas diarias';
+                                                                                        }
+                                                                                        if($roleName == 'Overall Bookings'){
+                                                                                            $roleName = 'Reservas totales';
+                                                                                        }
+                                                                                        if($roleName == 'Order Reports'){
+                                                                                            $roleName = 'Informes de órdenes';
+                                                                                        }
+                                                                                        if($roleName == 'Pet Type'){
+                                                                                            $roleName = 'Tipo de mascota';
+                                                                                        }
+                                                                                        if($roleName == 'Breed'){
+                                                                                            $roleName = 'Raza';
+                                                                                        }
+                                                                                        if($roleName == "Owner's Pet"){
+                                                                                            $roleName = 'Propietario de mascota';
+                                                                                        }
+                                                                                        if($roleName == 'User Password'){
+                                                                                            $roleName = 'Contraseña de usuario ';
+                                                                                        }
+                                                                                        if($roleName == 'Employee Password'){
+                                                                                            $roleName = 'Contraseña de profesional';
+                                                                                        }
+                                                                                        if($roleName == 'Employee Earning'){
+                                                                                            $roleName = 'Ganancias de los profesionales';
+                                                                                        }
+                                                                                        if($roleName == 'Employee Payout'){
+                                                                                            $roleName = 'Pago a los profesionales';
+                                                                                        }
+                                                                                        if($roleName == 'Pending Employees'){
+                                                                                            $roleName = 'Profesionales pendientes';
+                                                                                        }
+                                                                                        if($roleName == 'Pending Employees'){
+                                                                                            $roleName = 'Profesionales pendientes';
+                                                                                        }
+                                                                                        if($roleName == 'City'){
+                                                                                            $roleName = 'Ciudad';
+                                                                                        }
+                                                                                        if($roleName == 'State'){
+                                                                                            $roleName = 'Estado';
+                                                                                        }
+                                                                                        if($roleName == 'Country'){
+                                                                                            $roleName = 'País';
+                                                                                        }
+                                                                                        if($roleName == 'Logistics'){
+                                                                                            $roleName = 'Logística';
+                                                                                        }
+                                                                                        if($roleName == 'Shipping Zones'){
+                                                                                            $roleName = 'Zonas de expedición';
+                                                                                        }
+                                                                                        if($roleName == 'Brand'){
+                                                                                            $roleName = 'Marca';
+                                                                                        }
+                                                                                        if($roleName == 'Product Category'){
+                                                                                            $roleName = 'Categoría de productos';
+                                                                                        }
+                                                                                        if($roleName == 'Product Subcategory'){
+                                                                                            $roleName = 'Subcategoría de productos';
+                                                                                        }
+                                                                                        if($roleName == 'Unit'){
+                                                                                            $roleName = 'Unidad';
+                                                                                        }
+                                                                                        if($roleName == 'Tag'){
+                                                                                            $roleName = 'Etiqueta';
+                                                                                        }
+                                                                                        if($roleName == 'Assign Service'){
+                                                                                            $roleName = 'Asignar servicio';
+                                                                                        }
+                                                                                        if($roleName == 'Daycare Booking'){
+                                                                                            $roleName = 'Reserva de guardería';
+                                                                                        }
+                                                                                        if($roleName == 'Care Taker'){
+                                                                                            $roleName = 'Cuidador';
+                                                                                        }
+                                                                                        if($roleName == 'Walking Booking'){
+                                                                                            $roleName = 'Reserva a paseador';
+                                                                                        }
+                                                                                        if($roleName == 'Walker'){
+                                                                                            $roleName = 'Paseador';
+                                                                                        }
+                                                                                        if($roleName == 'Walking Duration'){
+                                                                                            $roleName = 'Duración de la caminata';
+                                                                                        }
+                                                                                        if($roleName == 'Booking Request'){
+                                                                                            $roleName = 'Solicitud de reserva';
+                                                                                        }
+                                                                                        if($roleName == 'Training Booking'){
+                                                                                            $roleName = 'Reserva de entrenamiento';
+                                                                                        }
+                                                                                        if($roleName == 'Training Booking'){
+                                                                                            $roleName = 'Reserva de entrenamiento';
+                                                                                        }
+                                                                                        if($roleName == 'Trainer'){
+                                                                                            $roleName = 'Entrenamiento';
+                                                                                        }
+                                                                                        if($roleName == 'Training Type'){
+                                                                                            $roleName = 'Tipo de entrenamiento';
+                                                                                        }
+                                                                                        if($roleName == 'Training Duration'){
+                                                                                            $roleName = 'Duración del entrenamiento';
+                                                                                        }
+                                                                                        if($roleName == 'Grooming Booking'){
+                                                                                            $roleName = 'Reserva de peluquería';
+                                                                                        }
+                                                                                        if($roleName == 'Groomer'){
+                                                                                            $roleName = 'Peluquería';
+                                                                                        }
+                                                                                        if($roleName == 'Grooming Category'){
+                                                                                            $roleName = 'Categoría de peluquería';
+                                                                                        }
+                                                                                        if($roleName == 'Grooming Service'){
+                                                                                            $roleName = 'Servicio de peluquería';
+                                                                                        }
+                                                                                        if($roleName == 'Veterinary Booking'){
+                                                                                            $roleName = 'Reservas veterinarias';
+                                                                                        }
+                                                                                        if($roleName == 'Veterinarian'){
+                                                                                            $roleName = 'Veterinarios';
+                                                                                        }
+                                                                                        if($roleName == 'Veterinary Category'){
+                                                                                            $roleName = 'Categoría Veterinaria';
+                                                                                        }
+                                                                                        if($roleName == 'Veterinary Service'){
+                                                                                            $roleName = 'Servicio de veterinarios';
+                                                                                        }
+                                                                                        if($roleName == 'Boarding Booking'){
+                                                                                            $roleName = 'Reserva de Alojamiento';
+                                                                                        }
+                                                                                        if($roleName == 'Boarder'){
+                                                                                            $roleName = 'Alojamiento';
+                                                                                        }
+                                                                                        if($roleName == 'Facility'){
+                                                                                            $roleName = 'Instalación';
+                                                                                        }
+                                                                                    @endphp
                                                                                     <td class="">
 
-                                                                                        {{ ucwords(str_replace('_', ' ', $permission_data)) }}
+                                                                                        {{$roleName }}
 
                                                                                     </td>
 
