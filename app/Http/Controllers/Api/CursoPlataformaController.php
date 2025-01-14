@@ -10,6 +10,7 @@ use App\Models\CoursePlatformVideo;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\CoursePlatformVideoRating;
+use App\Models\CoursePlatformUserProgress;
 use App\Http\Requests\Api\CursoPlataformaStoreRequest;
 use App\Http\Requests\Api\CursoPlataformaUpdateRequest;
 
@@ -442,6 +443,8 @@ class CursoPlataformaController extends Controller
         }
 
         $mappedRatings = $coursePlatformVideoRatings->map(function ($rating) {
+            $coursePlatformUserProgress = CoursePlatformUserProgress::where('user_id',$rating->user->id)
+            ->where('course_platform_video_id',$rating->course_platform_video_id)->first();
             return [
                 'id' => $rating->id,
                 'user_id' => $rating->user_id,
@@ -451,6 +454,7 @@ class CursoPlataformaController extends Controller
                 'status' => $rating->status,
                 'user_full_name' => $rating->user->full_name,
                 'user_avatar' => !is_null($rating->user->avatar) ? asset($rating->user->avatar) : asset('images/default/default.jpg'),
+                'watched' => !is_null( $coursePlatformUserProgress) ? $coursePlatformUserProgress->watched : null,
                 'created_at' => $rating->created_at,
                 'updated_at' => $rating->updated_at
             ];

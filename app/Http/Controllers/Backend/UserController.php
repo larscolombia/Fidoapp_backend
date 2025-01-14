@@ -1274,4 +1274,8 @@ class UserController extends Controller
             'data' => $user
         ]);
     }
+
+    // public function verifyToken(Request $request){
+
+    // }
 }
