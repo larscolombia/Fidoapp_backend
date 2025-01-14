@@ -199,7 +199,7 @@ class EventController extends Controller
             $titleEvent = $event->name;
             // Notificación
             foreach($ownerIds as $ownerId){
-                $this->generateNotification($titleEvent,$event->description,$ownerId);
+                $this->generateNotification('notificacion',$event->description,$ownerId);
             }
             $this->sendNotification($request->input('user_id'),$request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description, $bookingId);
 
@@ -311,7 +311,7 @@ class EventController extends Controller
                 $ownerIds[] = $event->user_id;
             }
             foreach($ownerIds as $ownerId){
-                $this->generateNotification($event->name,__('messages.event_update'),$ownerId);
+                $this->generateNotification('notificacion',__('messages.event_update'),$ownerId);
             }
             $this->sendNotification($event->user_id,$event->tipo, $event->name, $event, $ownerIds, __('messages.event_update'), $bookingId);
 

@@ -108,7 +108,7 @@ class CoursePlatformUserController extends Controller
 
             //notify
             $message = __('course_platform.buy_course'). $coursePlatform->name;
-            $this->generateNotification(__('course_platform.buy_title'),$message ,$data['user_id']);
+            $this->generateNotification('notificacion',$message ,$data['user_id']);
             $this->sendNotification($data['user_id'],__('course_platform.buy_title'),__('course_platform.buy'), $subscription, [$data['user_id']], __('course_platform.buy_course'). $coursePlatform->name );
             //$this->sendNotification('subscribe',$subscription,'suscription');
             return response()->json([
