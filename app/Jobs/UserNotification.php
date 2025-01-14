@@ -55,7 +55,7 @@ class UserNotification implements ShouldQueue
             ]);
 
             // event(new UserEventNotification($userNotificationModel));
-            if ($type == 'Mascota perdida') {
+            if ($title == 'Mascota perdida') {
                 $this->sendNotification($userId, $title, $description);
             }
             //
