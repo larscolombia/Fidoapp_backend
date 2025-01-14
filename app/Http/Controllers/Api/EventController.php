@@ -55,6 +55,9 @@ class EventController extends Controller
         // Obtener eventos filtrando por user_id y el rango de fechas
         $events = Event::where('user_id', $user_id)
             ->whereBetween('updated_at', [$today, $fiveDaysLater])
+            ->whereHas('booking',function($q){
+                return $q->where('status','pending');
+            })
             ->get();
         $data = $events->map(function ($event) {
             $owners = [];
