@@ -1275,7 +1275,31 @@ class UserController extends Controller
         ]);
     }
 
-    // public function verifyToken(Request $request){
+    public function verifyToken(Request $request)
+    {
+        // Validar la entrada
+        $data = $request->validate([
+            'user_id' => ['required', 'exists:users,id']
+        ]);
 
-    // }
+        // Buscar el usuario con el token de dispositivo
+        $user = User::where('id', $data['user_id'])
+            ->whereNotNull('device_token')
+            ->first();
+
+        // Verificar si se encontró el usuario
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El token del dispositivo es nulo ',
+                'data' => null
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'El token del dispositivo tiene valor.',
+            'data' => $user
+        ], 200); // Código de estado 200 para éxito
+    }
 }

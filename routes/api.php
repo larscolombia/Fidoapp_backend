@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('update-device-token',[AuthController::class, 'updateDeviceToken']);
     Route::post('change-password', [AuthController::class, 'changePassword']);
     Route::post('delete-account', [AuthController::class, 'deleteAccount']);
-
+    Route::get('verifi-device-token-user', [UserController::class,'verifyToken']);
     Route::post('add-address', [AddressController::class, 'store']);
     Route::get('address-list', [AddressController::class, 'AddressList']);
     Route::get('remove-address', [AddressController::class, 'RemoveAddress']);
