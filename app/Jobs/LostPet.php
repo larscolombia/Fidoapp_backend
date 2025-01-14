@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Kreait\Firebase\Contract\Messaging;
 use Illuminate\Queue\InteractsWithQueue;
@@ -45,7 +46,9 @@ class LostPet implements ShouldQueue
     private function generateNotification($title,$description,$userId){
         // Obtén el token del dispositivo del usuario específico
         $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+
         if ($user) {
+            Log::info($user);
            $pushNotificationController = new NotificationPushController(app(Messaging::class));
            $pushNotificationController->sendNotification($title, $description, $user->device_token);
        }
