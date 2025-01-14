@@ -6,6 +6,7 @@ use DB;
 use Auth;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Jobs\LostPet;
 use App\Trait\Notification;
 use Illuminate\Support\Str;
 use Modules\Pet\Models\Pet;
@@ -16,6 +17,7 @@ use Modules\Pet\Models\PetType;
 use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Modules\Pet\Transformers\PetResource;
 use Modules\Pet\Transformers\BreedResource;
@@ -25,7 +27,7 @@ use Modules\Pet\Transformers\PetNoteResource;
 use Modules\Pet\Transformers\PetTypeResource;
 use Modules\Pet\Transformers\OwnerPetResource;
 use Modules\Pet\Transformers\PetDetailsResource;
-use Illuminate\Support\Facades\File;
+
 class PetController extends Controller
 {
     use Notification;
@@ -535,8 +537,10 @@ class PetController extends Controller
             'pet_name' => $pet->name,
             'owner_name' => $pet->owner->full_name,
         ]);
+        //notificacion
         $this->sendNotification($pet->user_id,'pets',__('pet.lost'), $pet, $userIds, $message);
-
+        //notificacion push
+        dispatch(new LostPet(__('pet.lost'),$message,$userIds));
         return response()->json([
             'data' => $pet,
             'message' => __('messages.pet_lost'),
