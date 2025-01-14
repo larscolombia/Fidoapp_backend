@@ -56,7 +56,8 @@ class EventController extends Controller
         $events = Event::where('user_id', $user_id)
             ->whereBetween('updated_at', [$today, $fiveDaysLater])
             ->whereHas('booking',function($q){
-                return $q->where('status','!=','rejected');
+                return $q->where('status', '!=', 'rejected')
+                ->where('status', '!=', 'cancelled');
             })
             ->get();
         $data = $events->map(function ($event) {
