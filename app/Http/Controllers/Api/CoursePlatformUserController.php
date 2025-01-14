@@ -141,7 +141,7 @@ class CoursePlatformUserController extends Controller
             'data' => [
                 'courses' => $coursesPlatformUser->map(function ($coursePlatformUser) {
                     return [
-                        'id' => $coursePlatformUser->id,
+                        'id' => $coursePlatformUser->course_platform->id,
                         'progress' => $coursePlatformUser->progress,
                         'name' => $coursePlatformUser->course_platform->name,
                         'description' => $coursePlatformUser->course_platform->description,
