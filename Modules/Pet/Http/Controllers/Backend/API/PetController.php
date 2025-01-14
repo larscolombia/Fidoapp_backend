@@ -540,7 +540,7 @@ class PetController extends Controller
         //notificacion
         $this->sendNotification($pet->user_id,'pets',__('pet.lost'), $pet, $userIds, $message);
         //notificacion push
-        dispatch(new LostPet(__('pet.lost'),$message,$userIds));
+        dispatch(new LostPet($userIds,__('pet.lost'),$message));
         return response()->json([
             'data' => $pet,
             'message' => __('messages.pet_lost'),
