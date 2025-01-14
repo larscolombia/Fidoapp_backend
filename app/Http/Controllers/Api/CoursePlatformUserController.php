@@ -8,6 +8,7 @@ use App\Trait\Notification;
 use Illuminate\Http\Request;
 use App\Models\CursoPlataforma;
 use App\Models\CoursePlatformVideo;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Kreait\Firebase\Contract\Messaging;
 use App\Models\CoursePlatformUserProgress;
@@ -104,14 +105,14 @@ class CoursePlatformUserController extends Controller
                 ], 400);
             }
             $chekcoutController = new CheckoutController();
-            $chekcoutController->store($request,$coursePlatform->price);
+            $chekcoutController->store($request, $coursePlatform->price);
             $subscription = CoursePlatformUserSubscription::create($data);
 
             //notify
-            $message = __('course_platform.buy_course'). $coursePlatform->name;
+            $message = __('course_platform.buy_course') . $coursePlatform->name;
             $titleNotification = 'Compra de un nuevo curso';
-            $this->generateNotification($titleNotification,$message ,$data['user_id']);
-            $this->sendNotification($data['user_id'],__('course_platform.buy_title'),__('course_platform.buy'), $subscription, [$data['user_id']], __('course_platform.buy_course'). $coursePlatform->name );
+            $this->generateNotification($titleNotification, $message, $data['user_id']);
+            $this->sendNotification($data['user_id'], __('course_platform.buy_title'), __('course_platform.buy'), $subscription, [$data['user_id']], __('course_platform.buy_course') . $coursePlatform->name);
             //$this->sendNotification('subscribe',$subscription,'suscription');
             return response()->json([
                 'success' => true,
@@ -171,13 +172,17 @@ class CoursePlatformUserController extends Controller
         return $checkBalance;
     }
 
-    private function generateNotification($title,$description,$userId){
+    private function generateNotification($title, $description, $userId)
+    {
         // Obtén el token del dispositivo del usuario específico
-        $user = User::where('id', $userId)->whereNotNull('device_token')->first();
-        if ($user) {
-           $pushNotificationController = new NotificationPushController(app(Messaging::class));
-           $pushNotificationController->sendNotification($title, $description, $user->device_token);
-       }
-   }
-
+        try {
+            $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+            if ($user) {
+                $pushNotificationController = new NotificationPushController(app(Messaging::class));
+                $pushNotificationController->sendNotification($title, $description, $user->device_token);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error:'.$e->getMessage());
+        }
+    }
 }

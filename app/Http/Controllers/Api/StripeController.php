@@ -173,10 +173,14 @@ class StripeController extends Controller
 
     private function generateNotification($title,$description,$userId){
          // Obtén el token del dispositivo del usuario específico
-         $user = User::where('id', $userId)->whereNotNull('device_token')->first();
-         if ($user) {
-            $pushNotificationController = new NotificationPushController(app(Messaging::class));
-            $pushNotificationController->sendNotification($title, $description, $user->device_token);
+        try{
+            $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+            if ($user) {
+               $pushNotificationController = new NotificationPushController(app(Messaging::class));
+               $pushNotificationController->sendNotification($title, $description, $user->device_token);
+           }
+        }catch(\Exception $e){
+            Log::info('Error:'.$e->getMessage());
         }
     }
 }

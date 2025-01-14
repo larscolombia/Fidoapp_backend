@@ -476,7 +476,10 @@ class EventController extends Controller
                 }
 
                 //enviando notificacion
-                $this->generateNotification($event->name,$message,$data['user_id']);
+                foreach($ownerIds as $id){
+                    $this->generateNotification($event->name,$message,$id);
+                }
+
                 $this->sendNotification($data['user_id'],$event->tipo, $event->name, $event, $ownerIds, $message);
                 return response()->json([
                     'success' => true,
@@ -687,10 +690,14 @@ class EventController extends Controller
 
     private function generateNotification($title,$description,$userId){
         // Obtén el token del dispositivo del usuario específico
+      try{
         $user = User::where('id', $userId)->whereNotNull('device_token')->first();
         if ($user) {
            $pushNotificationController = new NotificationPushController(app(Messaging::class));
            $pushNotificationController->sendNotification($title, $description, $user->device_token);
        }
+      }catch(\Exception $e){
+        Log::error('Error:'.$e->getMessage());
+      }
    }
 }
