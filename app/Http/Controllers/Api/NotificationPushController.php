@@ -22,6 +22,7 @@ class NotificationPushController extends Controller
             ->withNotification([
                 'title' => $title,
                 'body' => $body,
+                'image' => asset('img/logo/mini_logo.png')
             ]);
 
         $this->messaging->send($message);
