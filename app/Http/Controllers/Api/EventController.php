@@ -196,12 +196,19 @@ class EventController extends Controller
             if (!in_array($request->input('user_id'), $ownerIds)) {
                 $ownerIds[] = $request->input('user_id');
             }
-            $titleEvent = $event->name;
+           // $titleEvent = $event->name;
+            $titleNotificationEvent = 'Nuevo Evento';
+            if($request->input('tipo') === 'medico'){
+                $titleNotificationEvent = 'Nuevo Evento Médico';
+            }
+            if($request->input('tipo') === 'entrenamiento'){
+                $titleNotificationEvent = 'Nuevo Evento Entrenamiento';
+            }
             // Notificación
             foreach($ownerIds as $ownerId){
-                $this->generateNotification('notificacion',$event->description,$ownerId);
+                $this->generateNotification($titleNotificationEvent,$event->description,$ownerId);
             }
-            $this->sendNotification($request->input('user_id'),$request->input('tipo'), $titleEvent, $event, $ownerIds, $event->description, $bookingId);
+            $this->sendNotification($request->input('user_id'),$request->input('tipo'), $titleNotificationEvent, $event, $ownerIds, $event->description, $bookingId);
 
             DB::commit(); // Confirmar la transacción
 
@@ -310,10 +317,17 @@ class EventController extends Controller
              if (!in_array($event->user_id, $ownerIds)) {
                 $ownerIds[] = $event->user_id;
             }
-            foreach($ownerIds as $ownerId){
-                $this->generateNotification('notificacion',__('messages.event_update'),$ownerId);
+            $titleNotificationEvent = 'Actualización del Evento';
+            if($request->input('tipo') === 'medico'){
+                $titleNotificationEvent = 'Actualización del Evento Médico';
             }
-            $this->sendNotification($event->user_id,$event->tipo, $event->name, $event, $ownerIds, __('messages.event_update'), $bookingId);
+            if($request->input('tipo') === 'entrenamiento'){
+                $titleNotificationEvent = 'Actualización del Evento Entrenamiento';
+            }
+            foreach($ownerIds as $ownerId){
+                $this->generateNotification($titleNotificationEvent,__('messages.event_update'),$ownerId);
+            }
+            $this->sendNotification($event->user_id,$event->tipo, $titleNotificationEvent, $event, $ownerIds, __('messages.event_update'), $bookingId);
 
             return response()->json([
                 'success' => true,
