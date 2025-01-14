@@ -476,6 +476,7 @@ class EventController extends Controller
                 }
 
                 //enviando notificacion
+                $this->generateNotification($event->name,$message,$data['user_id']);
                 $this->sendNotification($data['user_id'],$event->tipo, $event->name, $event, $ownerIds, $message);
                 return response()->json([
                     'success' => true,
