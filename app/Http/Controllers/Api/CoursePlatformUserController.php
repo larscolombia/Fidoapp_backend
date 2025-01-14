@@ -43,12 +43,12 @@ class CoursePlatformUserController extends Controller
             );
 
             // Calcular el nuevo progreso total
-            $totalVideos = CoursePlatformVideo::where('course_platform_id', $data['course_platform_id'])->count();
+            $totalVideos = CoursePlatformVideo::where('course_platform_id', $coursePlatformVideo->course_platform_id)->count();
 
             // Contar videos vistos utilizando whereIn
             $watchedVideos = CoursePlatformUserProgress::whereIn(
                 'course_platform_video_id',
-                CoursePlatformVideo::where('course_platform_id', $data['course_platform_id'])->pluck('id')
+                CoursePlatformVideo::where('course_platform_id', $coursePlatformVideo->course_platform_id)->pluck('id')
             )
                 ->where('user_id', $data['user_id'])
                 ->where('watched', true)
