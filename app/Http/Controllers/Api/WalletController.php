@@ -96,7 +96,7 @@ class WalletController extends Controller
                         'amount' => $payment->amount,
                         'description' => $payment->description,
                         'type' => 'payment',
-                        'created_at' => \Carbon\Carbon::parse($payment->created_at)->format('d-m-Y'), // Formato d-m-Y
+                        'created_at' => \Carbon\Carbon::parse($payment->created_at)->format('d-m-Y H:i'), // Formato d-m-Y H:i
                     ];
                 }));
             }
