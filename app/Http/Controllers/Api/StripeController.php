@@ -149,6 +149,7 @@ class StripeController extends Controller
                 'message' => 'El pago no se completó.',
             ], 400);
         } catch (\Exception $e) {
+            Log::error('Error:'.$e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Error al recuperar la sesión: ' . $e->getMessage(),
