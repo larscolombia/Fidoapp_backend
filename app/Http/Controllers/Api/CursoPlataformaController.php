@@ -454,7 +454,7 @@ class CursoPlataformaController extends Controller
                 'status' => $rating->status,
                 'user_full_name' => $rating->user->full_name,
                 'user_avatar' => !is_null($rating->user->avatar) ? asset($rating->user->avatar) : asset('images/default/default.jpg'),
-                'watched' => !is_null( $coursePlatformUserProgress) ? $coursePlatformUserProgress->watched : null,
+                'watched' => !is_null( $coursePlatformUserProgress) ? $coursePlatformUserProgress->watched : false,
                 'created_at' => $rating->created_at,
                 'updated_at' => $rating->updated_at
             ];
