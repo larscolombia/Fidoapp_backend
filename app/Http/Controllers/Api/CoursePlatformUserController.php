@@ -133,6 +133,7 @@ class CoursePlatformUserController extends Controller
         // Usar paginate en lugar de get
         $coursesPlatformUser = CoursePlatformUserSubscription::where('user_id', $data['user_id'])
             ->with(['course_platform', 'user']) // Cargar relaciones para evitar N+1
+            ->orderByDesc('id')
             ->get();
 
         return response()->json([
