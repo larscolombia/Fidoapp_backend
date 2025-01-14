@@ -108,7 +108,7 @@ class WalletController extends Controller
                         'amount' => $checkout->amount,
                         'description' => $this->getCheckoutDescription($checkout),
                         'type' => 'checkout',
-                        'created_at' => \Carbon\Carbon::parse($checkout->created_at)->format('d-m-Y'), // Formato d-m-Y
+                        'created_at' => \Carbon\Carbon::parse($checkout->created_at)->format('d-m-Y H:i'), // Formato d-m-Y
                     ];
                 }));
             }
