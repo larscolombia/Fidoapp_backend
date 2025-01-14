@@ -97,7 +97,7 @@ class StripeController extends Controller
         $this->setStripeApiKey($this->sk_key);
         // Aquí puedes manejar la lógica después del pago exitoso
         $sessionId = $request->get('session_id');
-
+        Log::info($request);
         try {
             // Recuperar la sesión de Stripe para verificar el estado del pago
             $session = \Stripe\Checkout\Session::retrieve($sessionId);
