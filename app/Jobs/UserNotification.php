@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Kreait\Firebase\Contract\Messaging;
 use Illuminate\Queue\InteractsWithQueue;
@@ -53,21 +54,27 @@ class UserNotification implements ShouldQueue
                 'sender_id' => $senderId
             ]);
 
-           // event(new UserEventNotification($userNotificationModel));
-
-           //$this->sendNotification($userId,$title,$description);
+            // event(new UserEventNotification($userNotificationModel));
+            if ($type == 'Mascota perdida') {
+                $this->sendNotification($userId, $title, $description);
+            }
+            //
         }
     }
 
     private function sendNotification($userId, $title, $description)
     {
         // Obtén el token del dispositivo del usuario específico
-        $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+        try {
+            $user = User::where('id', $userId)->whereNotNull('device_token')->first();
 
-        if (!$user) {
-            return response()->json(['success'=> false,'message' => 'No se encontró el token del dispositivo para este usuario.'], 404);
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'No se encontró el token del dispositivo para este usuario.'], 404);
+            }
+            $pushNotificationController = new NotificationPushController(app(Messaging::class));
+            $pushNotificationController->sendNotification($title, $description, $user->device_token);
+        } catch (\Exception $e) {
+            Log::error('Error:' . $e->getMessage());
         }
-        $pushNotificationController = new NotificationPushController(app(Messaging::class));
-        $pushNotificationController->sendNotification($title, $description, $user->device_token);
     }
 }
