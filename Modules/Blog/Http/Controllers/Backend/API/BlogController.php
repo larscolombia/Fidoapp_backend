@@ -114,7 +114,7 @@ class BlogController extends Controller
                 'review_msg' => $rating->review_msg,
                 'status' => $rating->status,
                 'user_full_name' => $rating->user->full_name,
-                'user_avatar' => asset($rating->user->avatar),
+                'user_avatar' => asset($rating->user->profile_image),
                 'blog_name' => $rating->blog->name,
                 'blog_description' => strip_tags($rating->blog->description),
                 'blog_tags' => $rating->blog->tags,
