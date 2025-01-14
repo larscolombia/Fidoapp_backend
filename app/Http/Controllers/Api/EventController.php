@@ -56,7 +56,7 @@ class EventController extends Controller
         $events = Event::where('user_id', $user_id)
             ->whereBetween('updated_at', [$today, $fiveDaysLater])
             ->whereHas('booking',function($q){
-                return $q->where('status','pending');
+                return $q->where('status','!=','rejected');
             })
             ->get();
         $data = $events->map(function ($event) {
@@ -86,6 +86,7 @@ class EventController extends Controller
                 'description' => $event->description,
                 'location' => $event->location,
                 'status' => $event->status,
+                'booking_status' => !is_null($event->booking) ? $event->booking->status : null,
                 'pet_id' => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,
                 'owners' => $owners,
                 //valores complementarios
