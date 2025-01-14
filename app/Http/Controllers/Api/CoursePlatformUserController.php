@@ -23,13 +23,14 @@ class CoursePlatformUserController extends Controller
         try {
             $data = $request->validate([
                 'user_id' => 'required|exists:users,id',
-                'course_platform_id' => 'required|exists:courses_platform,id',
                 'course_platform_video_id' => 'required|exists:course_platform_videos,id',
                 'watched' => 'required|boolean'
             ]);
+            //buscamos el curso
+            $coursePlatformVideo = CoursePlatformVideo::find($data['course_platform_video_id']);
             // Verificar si el usuario está suscrito al curso
             $subscription = CoursePlatformUserSubscription::where('user_id', $data['user_id'])
-                ->where('course_platform_id', $data['course_platform_id'])
+                ->where('course_platform_id', $coursePlatformVideo->course_platform_id)
                 ->firstOrFail();
 
             // Marcar el video como visto
