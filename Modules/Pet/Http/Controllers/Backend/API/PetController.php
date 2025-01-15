@@ -324,7 +324,12 @@ class PetController extends Controller
             }
 
             $validatedData['breed_id'] = $breed->id;
-
+            if (!isset($validatedData['age'])) {
+                // Calcular la edad de la mascota
+                if (isset($validatedData['date_of_birth'])) {
+                    $validatedData['age'] = $this->calculateAge($validatedData['date_of_birth']);
+                }
+            }
             // Generar el slug automáticamente si no está presente
             $slug = Str::slug($validatedData['name']);
             $slugCount = Pet::where('slug', 'LIKE', "{$slug}%")->count();
@@ -354,8 +359,8 @@ class PetController extends Controller
                 'qr_code' => $validatedData['qr_code']
             ]);
             //notification
-            $title = __('Mascota').' ' .$pet->name;
-            $this->sendNotification($pet->user_id,'pets',$title,$pet, [$pet->user_id], __('pet.pet_created_successfully'));
+            $title = __('Mascota') . ' ' . $pet->name;
+            $this->sendNotification($pet->user_id, 'pets', $title, $pet, [$pet->user_id], __('pet.pet_created_successfully'));
             return response()->json([
                 'message' => __('pet.pet_created_successfully'),
                 'data' => $pet
@@ -422,8 +427,8 @@ class PetController extends Controller
             }
 
             try {
-                if(!is_null($validatedData['date_of_birth'])){
-                    $validatedData['date_of_birth'] = str_replace('/','-',$validatedData['date_of_birth']);
+                if (!is_null($validatedData['date_of_birth'])) {
+                    $validatedData['date_of_birth'] = str_replace('/', '-', $validatedData['date_of_birth']);
                 }
 
                 $validatedData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $validatedData['date_of_birth'])->format('Y-m-d');
@@ -460,10 +465,10 @@ class PetController extends Controller
                 // Recargar el modelo para obtener los datos actualizados
                 $pet->load('media');
             }
-            $title = __('Mascota').' ' .$pet->name;
+            $title = __('Mascota') . ' ' . $pet->name;
             $userId = !is_null($request->input('user_id')) ? $request->input('user_id') : $pet->user_id;
             //notification
-            $this->sendNotification($userId,'pets', $title, $pet, [$pet->user_id], __('pet.pet_updated_successfully'));
+            $this->sendNotification($userId, 'pets', $title, $pet, [$pet->user_id], __('pet.pet_updated_successfully'));
             return response()->json([
                 'success' => true,
                 'message' => __('pet.pet_updated_successfully'),
@@ -482,6 +487,30 @@ class PetController extends Controller
                 'success' => false
             ]);
         }
+    }
+
+    public function calculateAge($birthdate)
+    {
+        $birthdate = Carbon::parse($birthdate);
+        $now = Carbon::now();
+
+        $years = $now->diffInYears($birthdate);
+        $months = $now->diffInMonths($birthdate->copy()->addYears($years));
+        $days = $now->diffInDays($birthdate->copy()->addYears($years)->addMonths($months));
+
+        $ageString = '';
+
+        if ($years > 0) {
+            $ageString .= trans_choice('pet.years', $years, ['count' => $years]) . ', ';
+        }
+
+        if ($months > 0) {
+            $ageString .= trans_choice('pet.months', $months, ['count' => $months]) . ', ';
+        }
+
+        $ageString .= trans_choice('pet.days', $days, ['count' => $days]);
+
+        return $ageString;
     }
 
     public function show($id)
@@ -527,8 +556,8 @@ class PetController extends Controller
 
     public function updateLost(Request $request)
     {
-        $data= $request->validate([
-            'pet_id' => ['required','exists:pets,id'],
+        $data = $request->validate([
+            'pet_id' => ['required', 'exists:pets,id'],
         ]);
 
         $pet = Pet::findOrFail($data['pet_id']);
@@ -542,14 +571,13 @@ class PetController extends Controller
             'owner_name' => $pet->owner->full_name,
         ]);
         //notificacion
-        $this->sendNotification($pet->user_id,'pets',__('pet.lost'), $pet, $userIds, $message);
+        $this->sendNotification($pet->user_id, 'pets', __('pet.lost'), $pet, $userIds, $message);
         //notificacion push
         // dispatch(new LostPet($userIds,__('pet.lost'),$message));
         return response()->json([
             'data' => $pet,
             'message' => __('messages.pet_lost'),
-        ],200);
-
+        ], 200);
     }
 
     public function destroy($id)
@@ -557,7 +585,7 @@ class PetController extends Controller
         $petSelected = Pet::find($id);
         $userId = $petSelected->user_id;
         $petSelected->delete();
-        $this->sendNotification($userId,'pets',__('pet.title'), $petSelected, [$petSelected->user_id], __('pet.pet_deleted_successfully'));
+        $this->sendNotification($userId, 'pets', __('pet.title'), $petSelected, [$petSelected->user_id], __('pet.pet_deleted_successfully'));
         return response()->json([
             'success' => true,
             'message' => __('pet.pet_deleted_successfully'),
@@ -603,5 +631,4 @@ class PetController extends Controller
             throw new \Exception("Error al generar el código QR: " . $response->status());
         }
     }
-
 }
