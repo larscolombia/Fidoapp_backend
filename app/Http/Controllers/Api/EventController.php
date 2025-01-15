@@ -55,9 +55,12 @@ class EventController extends Controller
         // Obtener eventos filtrando por user_id y el rango de fechas
         $events = Event::where('user_id', $user_id)
             ->whereBetween('updated_at', [$today, $fiveDaysLater])
-            ->whereHas('booking',function($q){
-                return $q->where('status', '!=', 'rejected')
-                ->where('status', '!=', 'cancelled');
+            ->where(function ($query) {
+                $query->whereHas('booking', function ($q) {
+                    $q->where('status', '!=', 'rejected')
+                        ->where('status', '!=', 'cancelled');
+                })
+                    ->orWhereDoesntHave('booking');
             })
             ->get();
         $data = $events->map(function ($event) {
@@ -201,19 +204,19 @@ class EventController extends Controller
             if (!in_array($request->input('user_id'), $ownerIds)) {
                 $ownerIds[] = $request->input('user_id');
             }
-           // $titleEvent = $event->name;
+            // $titleEvent = $event->name;
             $titleNotificationEvent = 'Nuevo Evento';
-            if($request->input('tipo') === 'medico'){
+            if ($request->input('tipo') === 'medico') {
                 $titleNotificationEvent = 'Nuevo Evento Médico';
             }
-            if($request->input('tipo') === 'entrenamiento'){
+            if ($request->input('tipo') === 'entrenamiento') {
                 $titleNotificationEvent = 'Nuevo Evento Entrenamiento';
             }
             // Notificación
-            foreach($ownerIds as $ownerId){
-                $this->generateNotification($titleNotificationEvent,$event->description,$ownerId);
+            foreach ($ownerIds as $ownerId) {
+                $this->generateNotification($titleNotificationEvent, $event->description, $ownerId);
             }
-            $this->sendNotification($request->input('user_id'),$request->input('tipo'), $titleNotificationEvent, $event, $ownerIds, $event->description, $bookingId);
+            $this->sendNotification($request->input('user_id'), $request->input('tipo'), $titleNotificationEvent, $event, $ownerIds, $event->description, $bookingId);
 
             DB::commit(); // Confirmar la transacción
 
@@ -318,21 +321,21 @@ class EventController extends Controller
             if (!is_null($request->input('owner_id'))) {
                 $ownerIds = $request->input('owner_id');
             }
-             // Agregar el user_id a la lista de ownerIds
-             if (!in_array($event->user_id, $ownerIds)) {
+            // Agregar el user_id a la lista de ownerIds
+            if (!in_array($event->user_id, $ownerIds)) {
                 $ownerIds[] = $event->user_id;
             }
             $titleNotificationEvent = 'Actualización del Evento';
-            if($request->input('tipo') === 'medico'){
+            if ($request->input('tipo') === 'medico') {
                 $titleNotificationEvent = 'Actualización del Evento Médico';
             }
-            if($request->input('tipo') === 'entrenamiento'){
+            if ($request->input('tipo') === 'entrenamiento') {
                 $titleNotificationEvent = 'Actualización del Evento Entrenamiento';
             }
-            foreach($ownerIds as $ownerId){
-                $this->generateNotification($titleNotificationEvent,__('messages.event_update'),$ownerId);
+            foreach ($ownerIds as $ownerId) {
+                $this->generateNotification($titleNotificationEvent, __('messages.event_update'), $ownerId);
             }
-            $this->sendNotification($event->user_id,$event->tipo, $titleNotificationEvent, $event, $ownerIds, __('messages.event_update'), $bookingId);
+            $this->sendNotification($event->user_id, $event->tipo, $titleNotificationEvent, $event, $ownerIds, __('messages.event_update'), $bookingId);
 
             return response()->json([
                 'success' => true,
@@ -481,11 +484,11 @@ class EventController extends Controller
                 }
 
                 //enviando notificacion
-                foreach($ownerIds as $id){
-                    $this->generateNotification($event->name,$message,$id);
+                foreach ($ownerIds as $id) {
+                    $this->generateNotification($event->name, $message, $id);
                 }
 
-                $this->sendNotification($data['user_id'],$event->tipo, $event->name, $event, $ownerIds, $message);
+                $this->sendNotification($data['user_id'], $event->tipo, $event->name, $event, $ownerIds, $message);
                 return response()->json([
                     'success' => true,
                     'message' => 'Evento actualizado exitosamente',
@@ -596,9 +599,9 @@ class EventController extends Controller
             $response = $serviceController->servicePrice($request);
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
-                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
-                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'], $coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'], $coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'], $coin->symbol), 2);
             }
         }
         if ($request->input('duration_id') && $bookingType == 'training') {
@@ -608,9 +611,9 @@ class EventController extends Controller
             // Asegurarse de que la respuesta sea válida y extraer los datos
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
-                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
-                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'], $coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'], $coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'], $coin->symbol), 2);
             }
         }
         if ($request->input('training_id') && $bookingType == 'training') {
@@ -643,8 +646,9 @@ class EventController extends Controller
         return $bookingController->store($request);
     }
 
-    private function amountWithoutSymbol($amount,$symbol){
-        $amountFormat = str_replace($symbol,'',$amount);
+    private function amountWithoutSymbol($amount, $symbol)
+    {
+        $amountFormat = str_replace($symbol, '', $amount);
         return $amountFormat;
     }
 
@@ -672,9 +676,9 @@ class EventController extends Controller
             $response = $serviceController->servicePrice($request);
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
-                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
-                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'], $coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'], $coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'], $coin->symbol), 2);
             }
         }
         if ($request->input('duration_id') && $bookingType == 'training') {
@@ -684,25 +688,26 @@ class EventController extends Controller
             // Asegurarse de que la respuesta sea válida y extraer los datos
             $responseData = json_decode($response->getContent(), true);
             if ($responseData['status']) {
-                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'],$coin->symbol), 2);
-                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'],$coin->symbol), 2);
-                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'],$coin->symbol), 2);
+                $serviceAmount['amount'] = round($this->amountWithoutSymbol($responseData['data']['amount'], $coin->symbol), 2);
+                $serviceAmount['tax'] = round($this->amountWithoutSymbol($responseData['data']['tax'], $coin->symbol), 2);
+                $serviceAmount['total_amount'] = round($this->amountWithoutSymbol($responseData['data']['total_amount'], $coin->symbol), 2);
             }
         }
 
         return $serviceAmount;
     }
 
-    private function generateNotification($title,$description,$userId){
+    private function generateNotification($title, $description, $userId)
+    {
         // Obtén el token del dispositivo del usuario específico
-      try{
-        $user = User::where('id', $userId)->whereNotNull('device_token')->first();
-        if ($user) {
-           $pushNotificationController = new NotificationPushController(app(Messaging::class));
-           $pushNotificationController->sendNotification($title, $description, $user->device_token);
-       }
-      }catch(\Exception $e){
-        Log::error('Error:'.$e->getMessage());
-      }
-   }
+        try {
+            $user = User::where('id', $userId)->whereNotNull('device_token')->first();
+            if ($user) {
+                $pushNotificationController = new NotificationPushController(app(Messaging::class));
+                $pushNotificationController->sendNotification($title, $description, $user->device_token);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error:' . $e->getMessage());
+        }
+    }
 }
