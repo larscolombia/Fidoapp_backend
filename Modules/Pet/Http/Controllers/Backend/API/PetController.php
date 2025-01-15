@@ -422,6 +422,10 @@ class PetController extends Controller
             }
 
             try {
+                if(!is_null($validatedData['date_of_birth'])){
+                    $validatedData['date_of_birth'] = str_replace('/','-',$validatedData['date_of_birth']);
+                }
+
                 $validatedData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $validatedData['date_of_birth'])->format('Y-m-d');
             } catch (\Exception $e) {
                 $validatedData['date_of_birth'] = null; // Asignar null si la conversión falla
