@@ -216,6 +216,12 @@
                     </div>
 
                     <div class="form-group p-3 border-bottom">
+                        <label for="age" class="form-label">{{ __('Edad') }}</label>
+                        <p class="descriptions">
+                            {{ !is_null($pet->age) ? $pet->age : __('pet.unspecified') }}</p>
+                    </div>
+
+                    <div class="form-group p-3 border-bottom">
                         <label for="pet_fur" class="form-label">{{ __('pet.coat_color') }}</label>
                         <p class="descriptions">{{ !is_null($pet->pet_fur) ? $pet->pet_fur : __('pet.unspecified') }}
                         </p>
