@@ -447,10 +447,10 @@ class AuthController extends Controller
         $user_data['instagram_link'] = $user->profile->instagram_link ?? null;
         $user_data['twitter_link'] = $user->profile->twitter_link ?? null;
         $user_data['dribbble_link'] = $user->profile->dribbble_link ?? null;
-        $user_data['tags'] = $user->profile->tags ?? null;
+        $user_data['tags'] = !is_null($user->profile) && !is_null($user->profile->tags)  ? explode(',', $user->profile->tags) : [];
         $user_data['professional_title'] = $user->profile->professional_title ?? null;
         $user_data['validation_number'] = $user->profile->validation_number ?? null;
-        $user_data['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null ;
+        $user_data['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : [] ;
 
         unset($user_data['roles']);
         unset($user_data['media']);
@@ -473,7 +473,7 @@ class AuthController extends Controller
         $user['twitter_link'] = $user->profile->twitter_link ?? null;
         $user['dribbble_link'] = $user->profile->dribbble_link ?? null;
         $user['raiting'] = $user->raiting ?? null;
-        $user['tags'] = !is_null($user->profile) && !is_null($user->profile->tags)  ? explode(',', $user->profile->tags) : null;
+        $user['tags'] = !is_null($user->profile) && !is_null($user->profile->tags)  ? explode(',', $user->profile->tags) : [];
         $user['professional_title'] = $user->profile->professional_title ?? null;
         $user['validation_number'] = $user->profile->validation_number ?? null;
         $user['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null ;

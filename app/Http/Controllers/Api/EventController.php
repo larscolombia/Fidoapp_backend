@@ -635,6 +635,7 @@ class EventController extends Controller
             'duration' => $bookingType == 'training' ? $serviceDuration->id : 0,
             'start_video_link' => null,
             'join_video_link' => null,
+            'employee_id' => $request->employee_id,
             'training_id' => !is_null($training) ? $training->id : null,
             'status' => 'pending'
         ];

@@ -38,7 +38,7 @@ $notifications_latest = optional($notifications)->take(5);
                 if ($hour >= 1 && $hour <= 12) { $message="Good Morning" ; } else if ($hour> 12 && $hour <= 16) {
                         $message="Good Afternoon" ; } else if ($hour> 16 && $hour <= 21) { $message="Good Evening" ; } else
                             { $message="Good Night" ; } @endphp
-                            
+
                 <small class="d-none d-xl-block m-0">
                     {{ \Carbon\Carbon::now()->format('j F') }}</small>
 
@@ -194,9 +194,14 @@ $notifications_latest = optional($notifications)->take(5);
                                     <span class="btn-inner">
                                         <i class="icon-Notification"></i>
                                     </span>
-                                    @if ($notifications_count)
-                                        <span class="notification-alert">{{ $notifications_count }}</span>
-                                    @endif
+
+                                    <div id="notification-alert-count">
+                                        @if ($notifications_count)
+                                            <span class="notification-alert">{{ $notifications_count }}</span>
+                                        @endif
+                                    </div>
+
+
                                 </div>
                             </div>
                         </a>
@@ -284,11 +289,11 @@ $notifications_latest = optional($notifications)->take(5);
                                     </div>
                                 </div>
                             </div>
-                            
+
                             @role('admin')
-                            
+
                             @endrole
-                            
+
                         </ul> --}}
                     </li>
 
@@ -299,6 +304,40 @@ $notifications_latest = optional($notifications)->take(5);
 </nav>
 
 @push('after-scripts')
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+        var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+            cluster: 'us2'
+        });
+        const channel = pusher.subscribe('user-event-notification');
+
+        // Inicializa el contador de notificaciones
+        let notificationCount = {{ $notifications_count ?? 0 }};
+
+        channel.bind('user-event-notification', function(data) {
+            console.log('Received notification:', data);
+
+            // Incrementa el contador de notificaciones
+            notificationCount++;
+
+            // Verifica si el span ya existe
+            let notificationAlert = document.querySelector('.notification-alert');
+
+            if (notificationAlert) {
+                // Actualiza el contenido del span existente
+                notificationAlert.textContent = notificationCount;
+            } else {
+                // Crea un nuevo span si no existe
+                const newSpan = document.createElement('span');
+                newSpan.className = 'notification-alert';
+                newSpan.textContent = notificationCount;
+                document.getElementById('notification-alert-count').appendChild(newSpan);
+            }
+
+            // Llama a la función para manejar la notificación recibida (si es necesario)
+            notificationList();
+        });
+    </script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('.change-mode').on('click', function() {

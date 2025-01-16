@@ -3,10 +3,11 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Events\Backend\UserEventNotification;
 
 class BulkNotification implements ShouldQueue
 {
@@ -32,5 +33,6 @@ class BulkNotification implements ShouldQueue
     public function handle()
     {
         sendNotification($this->data);
+        event(new UserEventNotification($this->data));
     }
 }
