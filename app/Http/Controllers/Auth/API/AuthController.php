@@ -351,6 +351,12 @@ class AuthController extends Controller
 
     public function updateProfile(Request $request)
     {
+        $request->validate([
+            'tags' => 'nullable|array',  // Validación para que sea un JSON
+            'pdf' => 'nullable|file|mimes:pdf',  // Validación para que sea un PDF
+            'professional_title' => 'nullable|string|max:255',
+            'validation_number' => 'nullable|string|max:255',
+        ]);
         $user = \Auth::user();
         if ($request->has('id') && !empty($request->id)) {
             $user = User::where('id', $request->id)->first();
@@ -402,6 +408,27 @@ class AuthController extends Controller
         if ($request->has('dribbble_link')) {
             $user_profile->dribbble_link = $request->dribbble_link;
         }
+        if($request->has('tags')){
+            $user_profile->tags = implode(',', $request->tags);
+        }
+        if($request->has('professional_title')){
+            $user_profile->professional_title = $request->professional_title;
+        }
+        if($request->has('validation_number')){
+            $user_profile->validation_number = $request->validation_number;
+        }
+        if (!file_exists(public_path('files/user_profiles'))) {
+            mkdir(public_path('files/user_profiles'), 0755, true);
+        }
+        if ($request->hasFile('pdf')) {
+            $file = $request->file('pdf');
+            $fileName = time() . '.' . $file->getClientOriginalName();
+            $fileName = str_replace(' ','-',$fileName);
+            $fileName = str_replace('%','-',$fileName);
+            $file->move(public_path('files/user_profiles'), $fileName);
+            $filePath = 'files/user_profiles/' . $fileName;
+            $user_profile->pdf =$filePath;
+        }
 
         if ($user_profile != '') {
 
@@ -420,6 +447,10 @@ class AuthController extends Controller
         $user_data['instagram_link'] = $user->profile->instagram_link ?? null;
         $user_data['twitter_link'] = $user->profile->twitter_link ?? null;
         $user_data['dribbble_link'] = $user->profile->dribbble_link ?? null;
+        $user_data['tags'] = $user->profile->tags ?? null;
+        $user_data['professional_title'] = $user->profile->professional_title ?? null;
+        $user_data['validation_number'] = $user->profile->validation_number ?? null;
+        $user_data['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null ;
 
         unset($user_data['roles']);
         unset($user_data['media']);
@@ -441,7 +472,12 @@ class AuthController extends Controller
         $user['instagram_link'] = $user->profile->instagram_link ?? null;
         $user['twitter_link'] = $user->profile->twitter_link ?? null;
         $user['dribbble_link'] = $user->profile->dribbble_link ?? null;
-        $user['raiting'] = $user->raiting;
+        $user['raiting'] = $user->raiting ?? null;
+        $user['tags'] = !is_null($user->profile) && !is_null($user->profile->tags)  ? explode(',', $user->profile->tags) : null;
+        $user['professional_title'] = $user->profile->professional_title ?? null;
+        $user['validation_number'] = $user->profile->validation_number ?? null;
+        $user['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null ;
+
         if (!$user) {
             return response()->json(['status' => false, 'message' => __('messages.user_notfound')], 404);
         }
