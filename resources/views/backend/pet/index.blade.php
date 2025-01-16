@@ -138,7 +138,7 @@
             height: 24px;
         }
 
-        .pet-image{
+        .pet-image {
             max-height: 300px;
         }
 
@@ -212,8 +212,10 @@
                     <div class="form-group p-3 border-bottom">
                         <label for="date_of_birth" class="form-label">{{ __('pet.lbl_date_of_birth') }}</label>
                         <p class="descriptions">
-                            {{ !is_null($pet->date_of_birth) ? $pet->date_of_birth : __('pet.unspecified') }}</p>
+                            {{ !is_null($pet->date_of_birth) ? \Carbon\Carbon::parse($pet->date_of_birth)->format('d-m-Y') : __('pet.unspecified') }}
+                        </p>
                     </div>
+
 
                     <div class="form-group p-3 border-bottom">
                         <label for="age" class="form-label">{{ __('Edad') }}</label>
@@ -273,8 +275,7 @@
                                     </div> --}}
 
                                 @if (!is_null($history->vacuna))
-                                    <div
-                                        class="border services mb-3 col-5 me-auto">
+                                    <div class="border services mb-3 col-5 me-auto">
                                         <h6 class="text-center mb-3 mt-3">Vacuna</h6>
                                         <div class=" form-group p-2 ">
                                             <label for="condition_history"
@@ -301,8 +302,7 @@
                                 @endif
 
                                 @if (!is_null($history->antigarrapata))
-                                    <div
-                                        class="border services mb-3 col-5 me-auto">
+                                    <div class="border services mb-3 col-5 me-auto">
                                         <h6 class="text-center mb-3 mt-3">Antigarrapata</h6>
                                         <div class=" form-group p-2 ">
                                             <label for="condition_history"
@@ -329,8 +329,7 @@
                                 @endif
 
                                 @if (!is_null($history->antiparasitante))
-                                    <div
-                                        class="border services mb-3 col-5 me-auto">
+                                    <div class="border services mb-3 col-5 me-auto">
                                         <h6 class="text-center mb-3 mt-3">Antiparasitante</h6>
                                         <div class=" form-group p-2 ">
                                             <label for="condition_history"
@@ -364,9 +363,7 @@
                         <h4 class="text-center mb-3">Entrenamientos</h4>
                         @if (count($pet->diario) > 0)
                             @foreach ($pet->diario->sortByDesc('date') as $index => $diario)
-
-                                <div
-                                    class="border services mb-3 col-5 me-auto">
+                                <div class="border services mb-3 col-5 me-auto">
                                     <div class=" form-group p-2 ">
                                         <label for="date" class="form-label">{{ __('pet.date') }}</label>
                                         <p class="descriptions">
