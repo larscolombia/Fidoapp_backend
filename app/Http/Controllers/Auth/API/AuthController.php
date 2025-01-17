@@ -351,115 +351,116 @@ class AuthController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $request->validate([
-            'tags' => 'nullable|array',  // Validación para que sea un JSON
-            'pdf' => 'nullable|file|mimes:pdf',  // Validación para que sea un PDF
-            'professional_title' => 'nullable|string|max:255',
-            'validation_number' => 'nullable|string|max:255',
-        ]);
-        $user = \Auth::user();
-        if ($request->has('id') && !empty($request->id)) {
-            $user = User::where('id', $request->id)->first();
-        }
-        if ($user == null) {
+        try {
+            $request->validate([
+                'tags' => 'nullable|array',  // Validación para que sea un JSON
+                'pdf' => 'nullable|file|mimes:pdf',  // Validación para que sea un PDF
+                'professional_title' => 'nullable|string|max:255',
+                'validation_number' => 'nullable|string|max:255',
+            ]);
 
+            $user = \Auth::user();
+            if ($request->has('id') && !empty($request->id)) {
+                $user = User::where('id', $request->id)->first();
+            }
+
+            if ($user == null) {
+                return response()->json([
+                    'message' => __('messages.no_record'),
+                ], 400);
+            }
+
+            $user->fill($request->all())->update();
+
+            $user_data = User::find($user->id);
+            if ($request->has('profile_image')) {
+                storeMediaFile($user_data, $request->file('profile_image'), 'profile_image');
+            }
+
+            $user_profile = UserProfile::where('user_id', $user->id)->first();
+            if (!$user_profile) {
+                $user_profile = new UserProfile();
+                $user_profile->user_id = $user->id;
+            }
+
+            if ($request->has('expert')) {
+                $user_profile->expert = $request->expert;
+            }
+            if ($request->has('description')) {
+                $user_profile->description = $request->description;
+            }
+            if ($request->has('about_self')) {
+                $user_profile->about_self = $request->about_self;
+            }
+            if ($request->has('facebook_link')) {
+                $user_profile->facebook_link = $request->facebook_link;
+            }
+            if ($request->has('instagram_link')) {
+                $user_profile->instagram_link = $request->instagram_link;
+            }
+            if ($request->has('twitter_link')) {
+                $user_profile->twitter_link = $request->twitter_link;
+            }
+            if ($request->has('dribbble_link')) {
+                $user_profile->dribbble_link = $request->dribbble_link;
+            }
+
+            if ($request->has('tags')) {
+                $user_profile->tags = implode(',', $request->tags);
+            }
+
+            if ($request->has('professional_title')) {
+                $user_profile->professional_title = $request->professional_title;
+            }
+
+            if ($request->has('validation_number')) {
+                $user_profile->validation_number = $request->validation_number;
+            }
+
+            if (!file_exists(public_path('files/user_profiles'))) {
+                mkdir(public_path('files/user_profiles'), 0755, true);
+            }
+
+            if ($request->hasFile('pdf')) {
+                $file = $request->file('pdf');
+                $fileName = time() . '.' . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                // Sanitización del nombre del archivo
+                $fileName = str_replace([' ', '%'], '-', $fileName);
+
+                // Movimiento del archivo
+                $filePath = public_path('files/user_profiles/' . $fileName);
+                $file->move(public_path('files/user_profiles'), $fileName);
+
+                // Asignación de la ruta al perfil del usuario
+                $user_profile->pdf = 'files/user_profiles/' . $fileName;
+            }
+
+            if ($user_profile != '') {
+                $user_profile->save();
+            }
+
+            // Guardar los datos del usuario
+            $user_data = User::find($user->id);
+            if ($user_data) {
+                $user_data['user_role'] = $user->getRoleNames();
+                // Otros campos de datos del perfil
+                // ...
+
+                unset($user_data['roles']);
+                unset($user_data['media']);
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $user_data,
+                    'message' => __('messages.profile_update'),
+                ], 200);
+            }
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => __('messages.no_record'),
-            ], 400);
+                'status' => false,
+                'message' => __('Error') . ': ' . $e->getMessage(),
+            ], 500);
         }
-        $user->fill($request->all())->update();
-
-        $user_data = User::find($user->id);
-        if ($request->has('profile_image')) {
-
-            $request->file('profile_image');
-
-            storeMediaFile($user_data, $request->file('profile_image'), 'profile_image');
-        }
-
-        $user_profile = UserProfile::where('user_id', $user->id)->first();
-
-
-        if (!$user_profile) {
-
-            $user_profile = new UserProfile();
-            $user_profile->user_id = $user->id;
-        }
-
-
-        if ($request->has('expert')) {
-            $user_profile->expert = $request->expert;
-        }
-        if ($request->has('description')) {
-            $user_profile->description = $request->description;
-        }
-        if ($request->has('about_self')) {
-            $user_profile->about_self = $request->about_self;
-        }
-        if ($request->has('facebook_link')) {
-            $user_profile->facebook_link = $request->facebook_link;
-        }
-        if ($request->has('instagram_link')) {
-            $user_profile->instagram_link = $request->instagram_link;
-        }
-        if ($request->has('twitter_link')) {
-            $user_profile->twitter_link = $request->twitter_link;
-        }
-        if ($request->has('dribbble_link')) {
-            $user_profile->dribbble_link = $request->dribbble_link;
-        }
-        if($request->has('tags')){
-            $user_profile->tags = implode(',', $request->tags);
-        }
-        if($request->has('professional_title')){
-            $user_profile->professional_title = $request->professional_title;
-        }
-        if($request->has('validation_number')){
-            $user_profile->validation_number = $request->validation_number;
-        }
-        if (!file_exists(public_path('files/user_profiles'))) {
-            mkdir(public_path('files/user_profiles'), 0755, true);
-        }
-        if ($request->hasFile('pdf')) {
-            $file = $request->file('pdf');
-            $fileName = time() . '.' . $file->getClientOriginalName();
-            $fileName = str_replace(' ','-',$fileName);
-            $fileName = str_replace('%','-',$fileName);
-            $file->move(public_path('files/user_profiles'), $fileName);
-            $filePath = 'files/user_profiles/' . $fileName;
-            $user_profile->pdf =$filePath;
-        }
-
-        if ($user_profile != '') {
-
-            $user_profile->save();
-        }
-
-        $user_data->save();
-
-        $message = __('messages.profile_update');
-        $user_data['user_role'] = $user->getRoleNames();
-        $user_data['profile_image'] = $user->profile_image;
-
-        $user_data['about_self'] = $user->profile->about_self ?? null;
-        $user_data['expert'] = $user->profile->expert ?? null;
-        $user_data['facebook_link'] = $user->profile->facebook_link ?? null;
-        $user_data['instagram_link'] = $user->profile->instagram_link ?? null;
-        $user_data['twitter_link'] = $user->profile->twitter_link ?? null;
-        $user_data['dribbble_link'] = $user->profile->dribbble_link ?? null;
-        $user_data['tags'] = !is_null($user->profile) && !is_null($user->profile->tags)  ? explode(',', $user->profile->tags) : [];
-        $user_data['professional_title'] = $user->profile->professional_title ?? null;
-        $user_data['validation_number'] = $user->profile->validation_number ?? null;
-        $user_data['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : [] ;
-
-        unset($user_data['roles']);
-        unset($user_data['media']);
-
-        return response()->json([
-            'status' => true,
-            'data' => $user_data,
-            'message' => $message,
-        ], 200);
     }
 
     public function userDetails(Request $request)
@@ -476,7 +477,7 @@ class AuthController extends Controller
         $user['tags'] = !is_null($user->profile) && !is_null($user->profile->tags)  ? explode(',', $user->profile->tags) : [];
         $user['professional_title'] = $user->profile->professional_title ?? null;
         $user['validation_number'] = $user->profile->validation_number ?? null;
-        $user['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null ;
+        $user['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null;
 
         if (!$user) {
             return response()->json(['status' => false, 'message' => __('messages.user_notfound')], 404);
