@@ -443,6 +443,18 @@ class AuthController extends Controller
             $user_data = User::find($user->id);
             if ($user_data) {
                 $user_data['user_role'] = $user->getRoleNames();
+                $user_data['profile_image'] = $user->profile_image;
+                $user_data['about_self'] = $user->profile->about_self ?? null;
+                $user_data['expert'] = $user->profile->expert ?? null;
+                $user_data['facebook_link'] = $user->profile->facebook_link ?? null;
+                $user_data['instagram_link'] = $user->profile->instagram_link ?? null;
+                $user_data['twitter_link'] = $user->profile->twitter_link ?? null;
+                $user_data['dribbble_link'] = $user->profile->dribbble_link ?? null;
+                $user_data['raiting'] = $user->raiting ?? null;
+                $user_data['tags'] = !is_null($user->profile) && !is_null($user->profile->tags)  ? explode(',', $user->profile->tags) : [];
+                $user_data['professional_title'] = $user->profile->professional_title ?? null;
+                $user_data['validation_number'] = $user->profile->validation_number ?? null;
+                $user_data['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null;
                 // Otros campos de datos del perfil
                 // ...
 
