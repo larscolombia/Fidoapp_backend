@@ -353,11 +353,13 @@ class AuthController extends Controller
     {
         try {
             $request->validate([
-                'tags' => 'nullable|array',  // Validación para que sea un JSON
+                'tags' => 'nullable',  // Validación para que sea un JSON
                 'pdf' => 'nullable|file|mimes:pdf',  // Validación para que sea un PDF
                 'professional_title' => 'nullable|string|max:255',
                 'validation_number' => 'nullable|string|max:255',
             ]);
+
+            Log::info($request->all());
 
             $user = \Auth::user();
             if ($request->has('id') && !empty($request->id)) {
