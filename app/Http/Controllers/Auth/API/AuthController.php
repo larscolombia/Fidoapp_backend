@@ -359,8 +359,6 @@ class AuthController extends Controller
                 'validation_number' => 'nullable|string|max:255',
             ]);
 
-            Log::info($request->all());
-
             $user = \Auth::user();
             if ($request->has('id') && !empty($request->id)) {
                 $user = User::where('id', $request->id)->first();
@@ -408,7 +406,15 @@ class AuthController extends Controller
             }
 
             if ($request->has('tags')) {
-                $user_profile->tags = implode(',', $request->tags);
+                // Limpiar la cadena de tags
+
+                $tagsString = $request->tags;
+                $cleanedTagsString = str_replace('\"', '', $tagsString);
+                $cleanedTagsString = str_replace('\\', '', $cleanedTagsString);
+                $cleanedTagsString = str_replace('[','',$cleanedTagsString);
+                $cleanedTagsString = str_replace(']','',$cleanedTagsString);
+                $cleanedTagsString = str_replace("\"", '', $cleanedTagsString);
+                $user_profile->tags =$cleanedTagsString;
             }
 
             if ($request->has('professional_title')) {
