@@ -1268,7 +1268,9 @@ class UserController extends Controller
             'user_id' => ['required', 'exists:users,id']
         ]);
         $user = User::whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile')->first();
-
+        if ($user && $user->profile) {
+            $user->profile->tags = !is_null($user->profile->tags) ? explode(',', $user->profile->tags) : [];
+        }
         return response()->json([
             'success' => true,
             'data' => $user
