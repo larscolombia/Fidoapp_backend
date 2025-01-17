@@ -304,7 +304,7 @@ $notifications_latest = optional($notifications)->take(5);
 </nav>
 
 @push('after-scripts')
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="{{asset('js/pusher.js')}}"></script>
     <script>
         var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
             cluster: 'us2'
