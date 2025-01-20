@@ -1181,7 +1181,7 @@ class UserController extends Controller
 
     public function getAllUsersWithProfiles()
     {
-        $users = User::whereNotIn('user_type', ['admin', 'user'])->with('profile')->get();
+        $users = User::whereNotIn('user_type', ['admin', 'user'])->with('profile','profile.speciality')->get();
 
         $result = $users->map(function ($user) {
             return [
@@ -1267,10 +1267,11 @@ class UserController extends Controller
         $data = $request->validate([
             'user_id' => ['required', 'exists:users,id']
         ]);
-        $user = User::whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile')->first();
+        $user = User::whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile','profile.speciality')->first();
         if ($user && $user->profile) {
             $user->profile->tags = !is_null($user->profile->tags) ? explode(',', $user->profile->tags) : [];
         }
+
         return response()->json([
             'success' => true,
             'data' => $user

@@ -357,6 +357,7 @@ class AuthController extends Controller
                 'pdf' => 'nullable|file|mimes:pdf',  // Validación para que sea un PDF
                 'professional_title' => 'nullable|string|max:255',
                 'validation_number' => 'nullable|string|max:255',
+                'speciality_id' => 'nullable|exists:specialities,id',
             ]);
 
             $user = \Auth::user();
@@ -403,6 +404,10 @@ class AuthController extends Controller
             }
             if ($request->has('dribbble_link')) {
                 $user_profile->dribbble_link = $request->dribbble_link;
+            }
+
+            if($request->has('speciality_id')){
+                $user_profile->speciality_id = $request->speciality_id;
             }
 
             if ($request->has('tags')) {
@@ -463,6 +468,7 @@ class AuthController extends Controller
                 $user_data['professional_title'] = $user->profile->professional_title ?? null;
                 $user_data['validation_number'] = $user->profile->validation_number ?? null;
                 $user_data['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null;
+                $user_data['speciality_id'] = !is_null($user->profile) && !is_null($user->profile->speciality) ? $user->profile->speciality->description :  null;
                 // Otros campos de datos del perfil
                 // ...
 
@@ -498,7 +504,7 @@ class AuthController extends Controller
         $user['professional_title'] = $user->profile->professional_title ?? null;
         $user['validation_number'] = $user->profile->validation_number ?? null;
         $user['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null;
-
+        $user['speciality_id'] =  !is_null($user->profile) && !is_null($user->profile->speciality) ? $user->profile->speciality->description :  null;
         if (!$user) {
             return response()->json(['status' => false, 'message' => __('messages.user_notfound')], 404);
         }

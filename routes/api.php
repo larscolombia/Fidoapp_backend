@@ -20,11 +20,11 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Api\PetHistoryController;
+use App\Http\Controllers\Api\SpecialityController;
 use App\Http\Controllers\Api\VeterinaryController;
 use App\Http\Controllers\Api\AntiWormersController;
 use App\Http\Controllers\Api\HerramientaController;
 use App\Http\Controllers\Api\SharedOwnerController;
-use App\Http\Controllers\Api\ActivityLevelController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\ActivityLevelController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\Api\ActivityLevelController;
 use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
@@ -505,7 +506,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/users/profiles', [UserController::class, 'getAllUsersWithProfiles']);
 
     Route::get('user-profile', [UserController::class, 'getUserFullDetail']);
-
+    //ruta de especialidades
+    Route::get('specialities',[SpecialityController::class,'index']);
     /**
      * Rutas para la gestión de cursos de la plataforma
      */
