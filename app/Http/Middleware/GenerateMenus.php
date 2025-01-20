@@ -886,6 +886,17 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
+            //especializacion
+            $this->mainRoute($menu, [
+                'icon' => ' icon-page',
+                'title' => __('page.specialities'),
+                'route' => ['backend.specialities.index'],
+                'active' => ['app/specialities'],
+                'permission' => 'view_page',
+                'order' => 0,
+            ]);
+
+
             $notification = $this->parentMenu($menu, [
                 'icon' => 'icon-Notification',
                 'title' => __('notification.title'),

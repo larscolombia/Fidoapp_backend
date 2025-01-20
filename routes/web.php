@@ -34,6 +34,7 @@ use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\CursoPlataformaController;
 use App\Http\Controllers\Backend\CustomerController;
+use App\Http\Controllers\Backend\SpecialityController;
 use Modules\Pet\Http\Controllers\Backend\PetsController;
 use App\Http\Controllers\Backend\NotificationsController;
 use Modules\Booking\Http\Controllers\Backend\TrainingController;
@@ -438,6 +439,15 @@ Route::group(['prefix' => 'app'], function () {
         Route::delete('/destroy/{antigarrapata}', [GarrapataController::class, 'destroy'])->name('antigarrapata.destroy');
 
     });
+    //rutas de especialidades
+    Route::get('specialities',[SpecialityController::class, 'index'])->name('backend.specialities.index');
+    Route::get('specialities/datatable',[SpecialityController::class, 'indexDatatable'])->name('backend.specialities.index_datatable');
+    Route::get('specialities/create',[SpecialityController::class,'create'])->name('backend.specialities.create');
+    Route::post('specialities',[SpecialityController::class,'store'])->name('backend.specialities.store');
+    Route::get('specialities/{speciality}/edit',[SpecialityController::class,'edit'])->name('backend.specialities.edit');
+    Route::put('specialities/{speciality}',[SpecialityController::class,'update'])->name('backend.specialities.update');
+    Route::delete('specialities/{speciality}',[SpecialityController::class,'destroy'])->name('backend.specialities.destroy');
+
 
     Route::get('pet-detail/{slug}',[PetController::class,'profilePublic'])->name('pet_detail.profile_public');
     route::get('pusher_dev',function(){

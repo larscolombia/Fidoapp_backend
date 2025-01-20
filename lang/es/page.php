@@ -15,4 +15,5 @@ return [
     'lbl_page_url' => 'Copiar URL de la Página',
     'edit' => 'Editar',
     'delete' => 'Eliminar',
+    'specialities' => 'Especialidades',
 ];
