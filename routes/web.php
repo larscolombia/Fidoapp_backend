@@ -447,7 +447,7 @@ Route::group(['prefix' => 'app'], function () {
     Route::get('specialities/{speciality}/edit',[SpecialityController::class,'edit'])->name('backend.specialities.edit');
     Route::put('specialities/{speciality}',[SpecialityController::class,'update'])->name('backend.specialities.update');
     Route::delete('specialities/{speciality}',[SpecialityController::class,'destroy'])->name('backend.specialities.destroy');
-
+    Route::post('specialities-bulk-action',[SpecialityController::class,'bulk_action'])->name('backend.specialities.title.bulk_action');
 
     Route::get('pet-detail/{slug}',[PetController::class,'profilePublic'])->name('pet_detail.profile_public');
     route::get('pusher_dev',function(){

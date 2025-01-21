@@ -35,7 +35,7 @@
 <script>
     function showDeleteModal(id) {
         const form = document.getElementById('deleteForm');
-        form.action = 'e-books/' + id;
+        form.action = 'specialities/' + id;
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         deleteModal.show();
     }

@@ -12,9 +12,20 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
     <div class="card">
         <div class="card-body">
             <x-backend.section-header>
+
+                <x-backend.quick-action url='{{ route("backend.$module_name.bulk_action") }}'>
+                    <div class="">
+                        <select name="action_type" class="form-control select2 col-12" id="quick-action-type"
+                            style="width:100%">
+                            <option value="">{{ __('messages.no_action') }}</option>
+                            <option value="delete">{{ __('messages.delete') }}</option>
+                        </select>
+                    </div>
+                </x-backend.quick-action>
                 <x-slot name="toolbar">
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i
@@ -23,12 +34,15 @@
                             placeholder="{{ __('activity_levels.search_placeholder') }}">
                     </div>
                 </x-slot>
-                    <a class="btn btn-primary" href="{{ route('backend.specialities.create') }}">{{ __('EBooks.create') }}</a>
+
                 {{-- @hasPermission('add_e-books')
                     <x-buttons.offcanvas :href="route('backend.e-books.create')" title="{{ __('messages.create') }} {{ __('EBooks.title') }}">
                     {{ __('messages.create') }} {{ __('EBooks.title') }}</x-buttons.offcanvas>
                 @endhasPermission --}}
             </x-backend.section-header>
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-primary mt-3 text-end" href="{{ route('backend.specialities.create') }}">{{ __('EBooks.create') }}</a>
+            </div>
             <table id="datatable" class="table table-striped border table-responsive">
             </table>
         </div>
@@ -66,7 +80,6 @@
                 data: 'description',
                 name: 'description',
                 title: "{{ __('specialities.description') }}",
-                width: '60%',
                 orderable: false,
                 searchable: true,
 
@@ -74,16 +87,16 @@
             {
                 data: 'created_at',
                 name: 'created_at',
-                title: "{{ __('product.lbl_created_at') }}",
+                title: "{{ __('specialities.created_at') }}",
                 orderable: true,
-                visible: false,
+
             },
             {
                 data: 'updated_at',
                 name: 'updated_at',
-                title: "{{ __('product.lbl_update_at') }}",
+                title: "{{ __('specialities.updated_at') }}",
                 orderable: true,
-                visible: false,
+
             },
 
         ]

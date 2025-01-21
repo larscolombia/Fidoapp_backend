@@ -58,10 +58,10 @@ class SpecialityController extends Controller
             })
 
             ->editColumn('updated_at', function ($data) {
-                return $data->updated_at;
+                return $data->updated_at ? $data->updated_at->format('d-m-Y') : 'N/A';
             })
             ->editColumn('created_at', function ($data) {
-                return $data->created_at;
+                return $data->created_at ? $data->created_at->format('d-m-Y') : 'N/A';
             })
             ->orderColumns(['id'], '-:column $1')
             ->rawColumns(['action', 'check'])
@@ -107,18 +107,35 @@ class SpecialityController extends Controller
         return redirect()->route('backend.specialities.index')->with('error', __('specialities.failed'));
     }
 
-    public function destroy($id){
+    public function bulk_action(Request $request)
+    {
+        $ids = explode(',', $request->rowIds);
+        $actionType = $request->action_type;
+
+        $message = __('messages.bulk_update');
+
+        switch ($actionType) {
+            case 'delete':
+                Speciality::whereIn('id', $ids)->delete();
+                $message = __('specialities.deleted_successfully_specialities');
+                break;
+
+            default:
+                return response()->json(['status' => false, 'message' => __('branch.invalid_action')]);
+                break;
+        }
+
+        return response()->json(['status' => true, 'message' => $message]);
+    }
+
+    public function destroy($id)
+    {
         $speciality = Speciality::find($id);
         if ($speciality) {
             $speciality->delete();
 
-            return response()->json([
-                'success' =>true,
-            ]);
+            return redirect()->route('backend.specialities.index')->with('success', __('specialities.deleted_successfully'));
         }
-        return response()->json([
-            'success' =>false,
-            'message' => __('specialities.failed')
-        ]);
+        return redirect()->route('backend.specialities.index')->with('error', __('specialities.failed'));
     }
 }
