@@ -1,18 +1,26 @@
 <template>
   <form @submit="formSubmit">
-    <div class="offcanvas offcanvas-end offcanvas-booking" tabindex="-1" id="form-offcanvas" aria-labelledby="form-offcanvasLabel">
+    <div class="offcanvas offcanvas-end offcanvas-booking" tabindex="-1" id="form-offcanvas"
+      aria-labelledby="form-offcanvasLabel">
       <FormHeader :currentId="currentId" :editTitle="editTitle" :createTitle="createTitle"></FormHeader>
       <div class="offcanvas-body">
         <div class="row">
           <div class="col-md-8">
             <div class="row">
-              <InputField class="col-md-6" :is-required="true" :label="$t('employee.lbl_first_name')" placeholder="" v-model="first_name" :error-message="errors['first_name']" :error-messages="errorMessages['first_name']"></InputField>
-              <InputField class="col-md-6" :is-required="true" :label="$t('employee.lbl_last_name')" placeholder="" v-model="last_name" :error-message="errors['last_name']" :error-messages="errorMessages['last_name']"> </InputField>
+              <InputField class="col-md-6" :is-required="true" :label="$t('employee.lbl_first_name')" placeholder=""
+                v-model="first_name" :error-message="errors['first_name']"
+                :error-messages="errorMessages['first_name']"></InputField>
+              <InputField class="col-md-6" :is-required="true" :label="$t('employee.lbl_last_name')" placeholder=""
+                v-model="last_name" :error-message="errors['last_name']" :error-messages="errorMessages['last_name']">
+              </InputField>
 
-              <InputField class="col-md-6" :is-required="true" :label="$t('employee.lbl_Email')" placeholder="" v-model="email" :error-message="errors['email']" :error-messages="errorMessages['email']"></InputField>
+              <InputField class="col-md-6" :is-required="true" :label="$t('employee.lbl_Email')" placeholder=""
+                v-model="email" :error-message="errors['email']" :error-messages="errorMessages['email']"></InputField>
               <div class="form-group col-md-6">
-                <label class="form-label">{{ $t('employee.lbl_phone_number') }}<span class="text-danger">*</span> </label>
-                <vue-tel-input :value="mobile" @input="handleInput" v-bind="{ mode: 'international', maxLen: 15 }" class="form-control"></vue-tel-input>
+                <label class="form-label">{{ $t('employee.lbl_phone_number') }}<span class="text-danger">*</span>
+                </label>
+                <vue-tel-input :value="mobile" @input="handleInput" v-bind="{ mode: 'international', maxLen: 15 }"
+                  class="form-control"></vue-tel-input>
                 <span class="text-danger">{{ errors['mobile'] }}</span>
               </div>
             </div>
@@ -20,31 +28,41 @@
           <div class="col-md-4 text-center">
             <img :src="ImageViewer || defaultImage" class="img-fluid avatar avatar-120 avatar-rounded mb-2" />
             <div class="d-flex align-items-center justify-content-center gap-2">
-              <input type="file" ref="logoInputRef" class="form-control d-none" id="logo" name="profile_image" accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
+              <input type="file" ref="logoInputRef" class="form-control d-none" id="logo" name="profile_image"
+                accept=".jpeg, .jpg, .png, .gif" @change="changeLogo" />
               <label class="btn btn-soft-primary" for="logo">{{ $t('employee.upload') }}</label>
-              <input type="button" class="btn btn-soft-danger" name="remove" :value="$t('messages.remove')" @click="removeLogo()" v-if="ImageViewer" />
+              <input type="button" class="btn btn-soft-danger" name="remove" :value="$t('messages.remove')"
+                @click="removeLogo()" v-if="ImageViewer" />
             </div>
             <span class="text-danger">{{ errors.profile_image }}</span>
           </div>
           <div class="row m-0 p-0" v-if="currentId === 0">
-            <InputField type="password" class="col-md-6" :is-required="true" :label="$t('employee.lbl_password')" placeholder="" v-model="password" :error-message="errors['password']" :error-messages="errorMessages['password']"></InputField>
+            <InputField type="password" class="col-md-6" :is-required="true" :label="$t('employee.lbl_password')"
+              placeholder="" v-model="password" :error-message="errors['password']"
+              :error-messages="errorMessages['password']"></InputField>
 
-            <InputField type="password" class="col-md-6" :is-required="true" :label="$t('employee.lbl_confirm_password')" placeholder="" v-model="confirm_password" :error-message="errors['confirm_password']" :error-messages="errorMessages['confirm_password']"></InputField>
+            <InputField type="password" class="col-md-6" :is-required="true"
+              :label="$t('employee.lbl_confirm_password')" placeholder="" v-model="confirm_password"
+              :error-message="errors['confirm_password']" :error-messages="errorMessages['confirm_password']">
+            </InputField>
           </div>
 
           <div class="form-group col-md-4">
             <label for="" class="form-label w-100">{{ $t('employee.lbl_gender') }}</label>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male" :checked="gender == 'male'" />
+              <input class="form-check-input" type="radio" name="gender" v-model="gender" id="male" value="male"
+                :checked="gender == 'male'" />
               <label class="form-check-label" for="male"> {{ $t('customer.lbl_male') }} </label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female" :checked="gender == 'female'" />
+              <input class="form-check-input" type="radio" name="gender" v-model="gender" id="female" value="female"
+                :checked="gender == 'female'" />
               <label class="form-check-label" for="female"> {{ $t('customer.lbl_female') }} </label>
             </div>
 
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other" :checked="gender == 'other'" />
+              <input class="form-check-input" type="radio" name="gender" v-model="gender" id="other" value="other"
+                :checked="gender == 'other'" />
               <label class="form-check-label" for="other"> {{ $t('customer.lbl_other') }} </label>
             </div>
             <p class="mb-0 text-danger">{{ errors.gender }}</p>
@@ -76,8 +94,11 @@
             </div> -->
 
           <div class="form-group col-md-12">
-            <label class="form-label" for="commission_id"> {{ $t('employee.lbl_select_commission') }} </label><span class="text-danger">*</span>
-            <Multiselect id="commission_id" v-model="commission_id" :value="commission_id" :placeholder="$t('employee.lbl_select_commission')" v-bind="multiselectOption" :options="commissions.options" class="form-group"></Multiselect>
+            <label class="form-label" for="commission_id"> {{ $t('employee.lbl_select_commission') }} </label><span
+              class="text-danger">*</span>
+            <Multiselect id="commission_id" v-model="commission_id" :value="commission_id"
+              :placeholder="$t('employee.lbl_select_commission')" v-bind="multiselectOption"
+              :options="commissions.options" class="form-group"></Multiselect>
             <span v-if="errorMessages['commission_id']">
               <ul class="text-danger">
                 <li v-for="err in errorMessages['commission_id']" :key="err">{{ err }}</li>
@@ -87,7 +108,8 @@
           </div>
 
           <div class="col-md-6 form-group" v-if="type == 'staff'">
-            <label class="form-label" for="user_type">{{ $t('employee.lbl_select_user_type') }} {{ type.value }}</label> <span class="text-danger">*</span>
+            <label class="form-label" for="user_type">{{ $t('employee.lbl_select_user_type') }} {{ type.value }}</label>
+            <span class="text-danger">*</span>
             <select class="form-select" :placeholder="$t('employee.lbl_select_user_type')" v-model="user_type">
               <option value="vet">{{ $t('employee.vet') }}</option>
               <option value="trainer">{{ $t('employee.trainer') }}</option>
@@ -107,7 +129,8 @@
 
           <div class="col-md-6 form-group d-none" v-if="type != 'staff'">
             <label class="form-label" for="user_type">{{ $t('employee.lbl_select_user_type') }} </label>
-            <select class="form-select" :placeholder="$t('employee.lbl_select_user_type')" v-model="user_type" :disabled="user_type != 'staff'">
+            <select class="form-select" :placeholder="$t('employee.lbl_select_user_type')" v-model="user_type"
+              :disabled="user_type != 'staff'">
               <option value="vet">{{ $t('employee.vet') }}</option>
               <option value="trainer">{{ $t('employee.trainer') }}</option>
               <option value="groomer">{{ $t('employee.groomer') }}</option>
@@ -124,9 +147,11 @@
             <span class="text-danger">{{ errors.user_type }}</span>
           </div>
           <div class="col-md-6 form-group">
-            <label class="form-label" for="branch">{{ $t('employee.lbl_select_branch') }}</label
-            ><span class="text-danger">*</span>
-            <Multiselect id="branch_id" v-model="branch_id" :value="branch_id" :placeholder="$t('employee.lbl_select_branch')" v-bind="singleSelectOption" :options="branch.options" @select="branchSelect" class="form-group"> </Multiselect>
+            <label class="form-label" for="branch">{{ $t('employee.lbl_select_branch') }}</label><span
+              class="text-danger">*</span>
+            <Multiselect id="branch_id" v-model="branch_id" :value="branch_id"
+              :placeholder="$t('employee.lbl_select_branch')" v-bind="singleSelectOption" :options="branch.options"
+              @select="branchSelect" class="form-group"> </Multiselect>
             <span v-if="errorMessages['branch_id']">
               <ul class="text-danger">
                 <li v-for="err in errorMessages['branch_id']" :key="err">{{ err }}</li>
@@ -150,7 +175,9 @@
 
           <div class="form-group" v-if="type == 'groomer' || type == 'vet'">
             <label class="form-label" for="service">{{ $t('employee.lbl_select_service') }}</label>
-            <Multiselect id="service_id" v-model="service_id" :multiple="true" :value="service_id" :placeholder="$t('employee.lbl_select_service')" v-bind="multiSelectOption" :options="services.options" class="form-group"> </Multiselect>
+            <Multiselect id="service_id" v-model="service_id" :multiple="true" :value="service_id"
+              :placeholder="$t('employee.lbl_select_service')" v-bind="multiSelectOption" :options="services.options"
+              class="form-group"> </Multiselect>
             <span v-if="errorMessages['service_id']">
               <ul class="text-danger">
                 <li v-for="err in errorMessages['service_id']" :key="err">{{ err }}</li>
@@ -159,16 +186,38 @@
             <span class="text-danger">{{ errors.service_id }}</span>
           </div>
           <div v-for="field in customefield" :key="field.id">
-            <FormElement v-model="custom_fields_data" :name="field.name" :label="field.label" :type="field.type" :required="field.required" :options="field.value" :field_id="field.id"></FormElement>
+            <FormElement v-model="custom_fields_data" :name="field.name" :label="field.label" :type="field.type"
+              :required="field.required" :options="field.value" :field_id="field.id"></FormElement>
           </div>
 
-          <InputField class="col-md-6" :label="$t('employee.lbl_about_self')" placeholder="" v-model="about_self" :error-message="errors['about_self']" :error-messages="errorMessages['about_self']"></InputField>
-          <InputField class="col-md-6" :label="$t('employee.lbl_expert')" placeholder="" v-model="expert" :error-message="errors['expert']" :error-messages="errorMessages['expert']"></InputField>
-          <InputField class="col-md-6" :label="$t('employee.lbl_facebook_link')" placeholder="" v-model="facebook_link" :error-message="errors['facebook_link']" :error-messages="errorMessages['facebook_link']"></InputField>
-          <InputField class="col-md-6" :label="$t('employee.lbl_instagram_link')" placeholder="" v-model="instagram_link" :error-message="errors['instagram_link']" :error-messages="errorMessages['instagram_link']"></InputField>
-          <InputField class="col-md-6" :label="$t('employee.lbl_twitter_link')" placeholder="" v-model="twitter_link" :error-message="errors['twitter_link']" :error-messages="errorMessages['twitter_link']"></InputField>
-          <InputField class="col-md-6" :label="$t('employee.lbl_dribbble_link')" placeholder="" v-model="dribbble_link" :error-message="errors['dribbble_link']" :error-messages="errorMessages['dribbble_link']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.lbl_about_self')" placeholder="" v-model="about_self"
+            :error-message="errors['about_self']" :error-messages="errorMessages['about_self']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.lbl_expert')" placeholder="" v-model="expert"
+            :error-message="errors['expert']" :error-messages="errorMessages['expert']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.lbl_facebook_link')" placeholder="" v-model="facebook_link"
+            :error-message="errors['facebook_link']" :error-messages="errorMessages['facebook_link']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.lbl_instagram_link')" placeholder=""
+            v-model="instagram_link" :error-message="errors['instagram_link']"
+            :error-messages="errorMessages['instagram_link']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.lbl_twitter_link')" placeholder="" v-model="twitter_link"
+            :error-message="errors['twitter_link']" :error-messages="errorMessages['twitter_link']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.lbl_dribbble_link')" placeholder="" v-model="dribbble_link"
+            :error-message="errors['dribbble_link']" :error-messages="errorMessages['dribbble_link']"></InputField>
+          <!-- nuevos campos -->
+          <InputField class="col-md-6" :label="$t('Título profesional')" placeholder="" v-model="professional_title"
+            :error-message="errors['professional_title']" :error-messages="errorMessages['professional_title']">
+          </InputField>
+          <InputField class="col-md-6" :label="$t('Número de validación')" placeholder="" v-model="validation_number"
+            :error-message="errors['validation_number']" :error-messages="errorMessages['validation_number']">
+          </InputField>
+          <div class="col-md-6 form-group">
+            <label for="speciality_id">Seleccione una Especialidad:</label>
+            <select class="form-control" id="speciality_id" name="speciality_id" v-model="speciality_id">
+              <option value="" disabled selected>Seleccione una especialidad</option>
+            </select>
 
+          </div>
+          <!-- fin nuevos campos -->
           <div class="form-group col-md-12">
             <label class="form-label" for="address">{{ $t('booking.lbl_address') }}</label>
             <textarea class="form-control" v-model="address" id="address"></textarea>
@@ -180,14 +229,17 @@
             <div class="text-danger">{{ errors.address }}</div>
           </div>
 
-          <InputField class="col-md-6" :label="$t('employee.latitude')" placeholder="" v-model="latitude" :error-message="errors['latitude']" :error-messages="errorMessages['latitude']"></InputField>
-          <InputField class="col-md-6" :label="$t('employee.longitude')" placeholder="" v-model="longitude" :error-message="errors['longitude']" :error-messages="errorMessages['longitude']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.latitude')" placeholder="" v-model="latitude"
+            :error-message="errors['latitude']" :error-messages="errorMessages['latitude']"></InputField>
+          <InputField class="col-md-6" :label="$t('employee.longitude')" placeholder="" v-model="longitude"
+            :error-message="errors['longitude']" :error-messages="errorMessages['longitude']"></InputField>
 
           <div class="form-group mb-0">
             <div class="d-flex justify-content-between align-items-center">
               <label class="form-label mb-0" for="category-status">{{ $t('employee.lbl_status') }}</label>
               <div class="form-check form-switch">
-                <input class="form-check-input" :value="1" name="status" id="category-status" type="checkbox" v-model="status" />
+                <input class="form-check-input" :value="1" name="status" id="category-status" type="checkbox"
+                  v-model="status" />
               </div>
             </div>
           </div>
@@ -201,7 +253,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { EDIT_URL, STORE_URL, UPDATE_URL, BRANCH_LIST, SERVICE_LIST, COMMISSION_LIST } from '../constant/employee'
+import { EDIT_URL, STORE_URL, UPDATE_URL, BRANCH_LIST, SERVICE_LIST, COMMISSION_LIST, SPECIALITIES_URL } from '../constant/employee'
 import { useField, useForm } from 'vee-validate'
 
 import { VueTelInput } from 'vue3-tel-input'
@@ -256,7 +308,7 @@ async function loadTranslations() {
 
 // Llamar a la función para cargar las traducciones
 loadTranslations();
-function getTranslation(key,default_min = null, default_max = null) {
+function getTranslation(key, default_min = null, default_max = null) {
   // Intenta obtener las traducciones del localStorage
   const storedTranslations = localStorage.getItem('translations');
 
@@ -264,10 +316,10 @@ function getTranslation(key,default_min = null, default_max = null) {
     const translationsFromStorage = JSON.parse(storedTranslations);
     // Devuelve la traducción correspondiente si existe
     if (translationsFromStorage[key]) {
-      if(default_min !== null){
+      if (default_min !== null) {
         translationsFromStorage[key].replace(':min', default_min);
       }
-      if(default_max !== null){
+      if (default_max !== null) {
         translationsFromStorage[key].replace(':max', default_max);
       }
       return translationsFromStorage[key].replace(':attribute', '');
@@ -315,6 +367,7 @@ const { getRequest, storeRequest, updateRequest } = useRequest()
 const currentId = useModuleId(() => {
   useSelect({ url: BRANCH_LIST }, { value: 'id', label: 'name' }).then((data) => (branch.value = data))
   useSelect({ url: COMMISSION_LIST }, { value: 'id', label: 'name' }).then((data) => (commissions.value = data))
+  useSelect({ url: SPECIALITIES_URL }, { value: 'id', label: 'name' }).then((data) => (speciality_id.value = data))
   if (currentId.value > 0) {
     getRequest({ url: EDIT_URL, id: currentId.value }).then((res) => {
       if (res.status && res.data) {
@@ -330,7 +383,38 @@ const currentId = useModuleId(() => {
 
 onMounted(() => {
   setFormData(defaultData())
+  loadSpecialities();
 })
+const loadSpecialities = async () => {
+  try {
+    const response = await fetch(SPECIALITIES_URL().path, {
+      method: SPECIALITIES_URL().method,
+    });
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const result = await response.json();
+    console.log(result); // Verifica que los datos sean correctos
+
+    // Asegúrate de que result.data sea un array
+    if (!Array.isArray(result.data)) {
+      console.error('La respuesta no contiene un array en data:', result);
+      return; // Salir si no es un array
+    }
+
+    const select = document.getElementById('speciality_id');
+
+    // Llenar el select con las especialidades
+    result.data.forEach(speciality => {
+      const option = document.createElement('option');
+      option.value = speciality.id; // Asignar el ID como valor
+      option.textContent = speciality.description; // Asignar la descripción como texto
+      select.appendChild(option); // Agregar la opción al select
+    });
+  } catch (error) {
+    console.error('Error fetching specialities:', error);
+  }
+};
+
 
 const branchSelect = () => {
   useSelect({ url: SERVICE_LIST, data: { branch_id: branch_id.value } }, { value: 'id', label: 'name' }).then((data) => (services.value = data))
@@ -390,6 +474,9 @@ const defaultData = () => {
     latitude: '',
     longitude: '',
     user_type: props.type,
+    professional_title: '',
+    validation_number: '',
+    speciality_id: '',
     custom_fields_data: {}
   }
 }
@@ -426,7 +513,10 @@ const setFormData = (data) => {
       user_type: data.user_type,
       address: data.address,
       latitude: data.latitude,
-      longitude: data.longitude
+      longitude: data.longitude,
+      professional_title: data.professional_title,
+      validation_number: data.validation_number,
+      speciality_id: data.speciality_id
     }
   })
 }
@@ -481,7 +571,7 @@ const validationSchema = yup.object({
       }
       return true
     })
-    .min(8, getTranslation('required',8)),
+    .min(8, getTranslation('required', 8)),
   confirm_password: yup
     .string()
     .test('confirm_password', getTranslation('required'), function (value) {
@@ -534,6 +624,9 @@ const { value: user_type } = useField('user_type')
 const { value: address } = useField('address')
 const { value: latitude } = useField('latitude')
 const { value: longitude } = useField('longitude')
+const { value: professional_title } = useField('professional_title')
+const { value: validation_number } = useField('validation_number')
+const { value: speciality_id } = useField('speciality_id')
 
 const errorMessages = ref({})
 

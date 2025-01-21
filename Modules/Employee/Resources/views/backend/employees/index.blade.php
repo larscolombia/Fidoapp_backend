@@ -7,6 +7,7 @@
 
 @push('after-styles')
     <link rel="stylesheet" href="{{ mix('modules/constant/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
 @endpush
 @section('content')
     <div class="card">
@@ -104,7 +105,7 @@
 @push('after-scripts')
     <script src="{{ mix('modules/employee/script.js') }}"></script>
     <script src="{{ asset('js/form-offcanvas/index.js') }}" ></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
     <!-- DataTables Core and Extensions -->
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
     <script type="text/javascript" defer>

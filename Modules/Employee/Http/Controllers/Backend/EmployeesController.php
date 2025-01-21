@@ -473,6 +473,9 @@ class EmployeesController extends Controller
             'instagram_link' => $request->instagram_link,
             'twitter_link' => $request->twitter_link,
             'dribbble_link' => $request->dribbble_link,
+            'professional_title' => $request->professional_title,
+            'validation_number' => $request->validation_number,
+            'speciality_id' => $request->speciality_id
         ];
 
         $data->profile()->updateOrCreate([], $profile);
@@ -617,6 +620,10 @@ class EmployeesController extends Controller
 
         $data['dribbble_link'] = $data->profile->dribbble_link ?? null;
 
+        $data['professional_title'] = $data->profile->professional_title ?? null;
+        $data['validation_number'] = $data->profile->validation_number ?? null;
+        $data['speciality_id'] = $data->profile->speciality_id ?? null;
+
         return response()->json(['data' => $data, 'status' => true]);
     }
 
@@ -650,8 +657,11 @@ class EmployeesController extends Controller
             'instagram_link' => $request->instagram_link,
             'twitter_link' => $request->twitter_link,
             'dribbble_link' => $request->dribbble_link,
+            'professional_title' => $request->professional_title,
+            'validation_number' => $request->validation_number,
+            'speciality_id' => $request->speciality_id
         ];
-
+        Log::info($request->all());
         $data->profile()->updateOrCreate([], $profile);
 
         if ($request->custom_fields_data) {
