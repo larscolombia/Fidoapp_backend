@@ -29,9 +29,9 @@ class EmployeeController extends Controller
     $longitude = $request->input('longitude');
     if (!empty($latitude) && !empty($longitude)) {
         $earthRadius = 6371; // Radius of the Earth in kilometers
-    
+
         $employee = $employee->selectRaw(
-            "users.*, 
+            "users.*,
             (
                 6371 * 2 * ASIN(SQRT(
                     POW(SIN(RADIANS($latitude - users.latitude) / 2), 2) +
@@ -40,7 +40,7 @@ class EmployeeController extends Controller
                 ))
             ) AS distance"
         );
-        
+
         $employee = $employee->orderByRaw('ISNULL(distance), distance ASC');
     }
 
@@ -53,7 +53,7 @@ class EmployeeController extends Controller
             ->orderByDesc('services_count');
     }
     if ($request->has('search')) {
-        $searchTerm = $request->search; 
+        $searchTerm = $request->search;
         $employee = $employee->where(function ($query) use ($searchTerm) {
             $query->where('first_name', 'like', "%{$searchTerm}%")
             ->orWhere('last_name', 'like', "%{$searchTerm}%")
@@ -74,7 +74,7 @@ class EmployeeController extends Controller
         'message' => __('employee.employee_list'),
     ], 200);
 }
-    
+
 
     // public function employeeList(Request $request)
     // {
@@ -85,7 +85,7 @@ class EmployeeController extends Controller
     //     if(!empty($request->type)){
     //         $employee =$employee->role($request->type);
     //     }
-    
+
     //     if (! empty($request->service_ids)) {
     //         $ids = ServiceEmployee::whereIn('service_id', explode(' ', $request->service_ids))->pluck('employee_id');
     //         $employee = $employee->whereIn('id', $ids);
@@ -135,6 +135,12 @@ class EmployeeController extends Controller
 
     public function saveRating(Request $request)
     {
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'review_msg' => 'required|string|max:255',
+            'rating' => 'required|numeric|min:1|max:5',
+            'employee_id' => 'required|exists:users,id'
+        ]);
         $user = auth()->user();
         $rating_data = $request->all();
         $rating_data['user_id'] = $user->id;

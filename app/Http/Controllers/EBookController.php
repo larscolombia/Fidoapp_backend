@@ -293,8 +293,8 @@ class EBookController extends Controller
             $data = $request->validate([
                 'e_book_id' => 'required|exists:e_book,id',
                 'user_id' => 'required|exists:users,id',
-                'review_msg' => 'nullable|string',
-                'rating' => 'nullable|numeric|min:1|max:5'
+                'review_msg' => 'required|string',
+                'rating' => 'required|numeric|min:1|max:5'
             ]);
 
             if (is_null($data['rating'])) {
