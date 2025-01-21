@@ -306,7 +306,7 @@ $notifications_latest = optional($notifications)->take(5);
 @push('after-scripts')
     <script src="{{asset('js/pusher.js')}}"></script>
     <script>
-        var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+        var pusher = new Pusher("{{ config('broadcasting.connections.pusher.key') }}", {
             cluster: 'us2'
         });
         const channel = pusher.subscribe('user-event-notification');
