@@ -379,8 +379,8 @@ class CursoPlataformaController extends Controller
         try {
             $data = $request->validate([
                 'user_id' => 'required|exists:users,id',
-                'review_msg' => 'nullable|string|max:255',
-                'rating' => 'nullable|numeric|min:1|max:5',
+                'review_msg' => 'required|string|max:255',
+                'rating' => 'required|numeric|min:1|max:5',
                 'course_platform_video_id' => 'required|exists:course_platform_videos,id',
             ]);
             if(is_null($data['rating'])){
