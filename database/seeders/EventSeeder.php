@@ -6,7 +6,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Api\EventController;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Http\Requests\Api\Event\StoreRequest;
+use Illuminate\Http\Request;
 
 class EventSeeder extends Seeder
 {
@@ -77,8 +80,28 @@ class EventSeeder extends Seeder
                 'training_id' => null,
             ],
         ];
+        $eventController = new EventController();
 
-        // Insertar datos en la tabla events
-        DB::table('events')->insert($events);
+        // Insertar datos en la tabla events y llamar al método store
+        foreach ($events as $eventData) {
+            // Crear una instancia de Request con los datos del evento
+            $request = Request::create('/events', 'POST', $eventData);
+
+            // Crear una instancia de StoreRequest usando los datos del request
+            $storeRequest = new StoreRequest();
+            $storeRequest->setLaravelSession(app('session')->getId()); // Configurar la sesión si es necesario
+            $storeRequest->replace($request->all()); // Reemplaza los datos del request
+
+            // Llamar al método store del EventController
+            try {
+                // Validar manualmente antes de llamar al store
+                if ($storeRequest->validate()) {
+                    $eventController->store($storeRequest);
+                    \Log::info('Evento creado: '.$eventData['name']);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Error al crear evento: '.$e->getMessage());
+            }
+        }
     }
 }

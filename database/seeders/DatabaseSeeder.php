@@ -66,5 +66,7 @@ class DatabaseSeeder extends Seeder
 
         //cargar wallet
         $this->call(WalletSeeder::class);
+        //cargar evento
+        $this->call(EventSeeder::class);
     }
 }
