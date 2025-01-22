@@ -78,6 +78,6 @@ class DatabaseSeeder extends Seeder
         //blog
         $this->call(BlogSeeder::class);
         //Ebooks
-        $this->call(EbookSeeder::class);
+        $this->call(EBookSeeder::class);
     }
 }
