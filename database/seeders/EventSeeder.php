@@ -99,8 +99,8 @@ class EventSeeder extends Seeder
                 'image' => null,
                 'service_id' => null,
                 'category_id' => null,
-                'duration_id' => 2, // Asegúrate de que este ID exista en la tabla service_duration
-                'training_id' => 2, // Asegúrate de que este ID exista en la tabla training
+                'duration_id' => 1, // Asegúrate de que este ID exista en la tabla service_duration
+                'training_id' => 1, // Asegúrate de que este ID exista en la tabla training
                 'is_seeder' => true
             ],
             [

@@ -20,10 +20,10 @@ class CoursePlatformSeeder extends Seeder
             [
                 'name' => 'Entrenamiento Básico para Perros',
                 'description' => 'Un curso completo que enseña las habilidades básicas de obediencia para perros. Ideal para dueños primerizos.',
-                'url' => 'https://ejemplo.com/curso-entrenamiento-basico',
                 'image' => 'images/cursos_plataforma/dog-trainer-interacting-with-their-pet.jpg', // Asegúrate de que la imagen esté en la ruta correcta
                 'duration' => '40',
                 'price' => 49.99,
+                'difficulty' => 1,
                 'videos' => [
                     [
                         'url' => asset('videos/cursos_plataforma/clase_1.mp4'),
@@ -44,10 +44,10 @@ class CoursePlatformSeeder extends Seeder
             [
                 'name' => 'Cuidado y Bienestar de Mascotas',
                 'description' => 'Aprende sobre la salud y el bienestar de tus mascotas, incluyendo nutrición, ejercicio y cuidados generales.',
-                'url' => 'https://ejemplo.com/curso-cuidado-bienestar',
                 'image' => 'images/cursos_plataforma/close-up-veterinarian-checking-dog.jpg', // Asegúrate de que la imagen esté en la ruta correcta
                 'duration' => '20',
                 'price' => 59.99,
+                'difficulty' => 2,
                 'videos' => [
                     [
                         'url' => asset('videos/cursos_plataforma/clase_3.mp4'),
@@ -68,7 +68,14 @@ class CoursePlatformSeeder extends Seeder
         ];
 
         foreach ($courses as $course) {
-            $coursePlatform = CursoPlataforma::create($course);
+            $coursePlatform = CursoPlataforma::create([
+                'name' => $course['name'],
+                'description' => $course['description'],
+                'difficulty' => $course['difficulty'],
+                'image' => $course['image'],
+                'duration' => $course['duration'],
+                'price' => $course['price']
+            ]);
                // Agregar los videos relacionados al curso
                foreach ($course['videos'] as $video) {
                 CoursePlatformVideo::create(array_merge($video, ['course_platform_id' => $coursePlatform->id]));

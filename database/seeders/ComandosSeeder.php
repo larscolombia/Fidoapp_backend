@@ -19,7 +19,7 @@ class ComandosSeeder extends Seeder
             [
                 'name' => 'saltar',
                 'description' => 'Instrucción para indicar salto',
-                'type' => 'básico',
+                'type' => 'basico',
                 'is_favorite' => false,
                 'category_id' => 1,
                 'pet_id' => 3,
@@ -29,7 +29,7 @@ class ComandosSeeder extends Seeder
             [
                 'name' => 'sentar',
                 'description' => 'Instrucción para que la mascota se siente',
-                'type' => 'básico',
+                'type' => 'basico',
                 'is_favorite' => true,
                 'category_id' => 1,
                 'pet_id' => 1,
@@ -39,7 +39,7 @@ class ComandosSeeder extends Seeder
             [
                 'name' => 'venir',
                 'description' => 'Instrucción para que la mascota venga hacia ti',
-                'type' => 'básico',
+                'type' => 'basico',
                 'is_favorite' => false,
                 'category_id' => 2,
                 'pet_id' => 2,
@@ -49,7 +49,7 @@ class ComandosSeeder extends Seeder
             [
                 'name' => 'quieto',
                 'description' => 'Instrucción para que la mascota permanezca quieta',
-                'type' => 'intermedio',
+                'type' => 'especializado',
                 'is_favorite' => true,
                 'category_id' => 2,
                 'pet_id' => 3,
@@ -59,7 +59,7 @@ class ComandosSeeder extends Seeder
             [
                 'name' => 'rodar',
                 'description' => 'Instrucción para que la mascota ruede',
-                'type' => 'avanzado',
+                'type' => 'especializado',
                 'is_favorite' => false,
                 'category_id' => 3,
                 'pet_id' => 4,
