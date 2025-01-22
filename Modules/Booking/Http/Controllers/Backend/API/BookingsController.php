@@ -74,7 +74,23 @@ class BookingsController extends Controller
         if (!empty($data['id'])) {
             $booking = Booking::updateOrCreate(['id' => $data['id']], $data);
         } else {
-            $booking = Booking::create($data);
+            if(isset($data['is_seeder'])){
+                $booking = Booking::create([
+                    'status' => $data['status'],
+                    'start_date_time' => $data['start_date_time'],
+                    'user_id' => $data['user_id'],
+                    'event_id' => $data['event_id'],
+                    'branch_id' => $data['branch_id'],
+                    'employee_id' => $data['employee_id'],
+                    'system_service_id' => $data['system_service_id'],
+                    'pet_id' => $data['pet_id'],
+                    'booking_type' => $data['booking_type'],
+                    'total_amount' => $data['total_amount'],
+                    'service_amount' => $data['service_amount'],
+                ]);
+            }else{
+                $booking = Booking::create($data);
+            }
         }
 
         switch ($request->booking_type) {
@@ -164,13 +180,14 @@ class BookingsController extends Controller
         }
         if (!is_null($booking->event_id)) {
             $booking_transaction_details = [
-
                 'booking_id' => $booking->id,
                 'total_amount' => $booking->total_amount,
                 'tax_percentage' => 0,
                 'payment_status' => 1,
-                'event_id' => $booking->event_id
             ];
+            if(!isset($data['is_seeder'])){
+                $booking_transaction_details['event_id'] = $booking->event_id;
+            }
 
             $this->getpayment_method($booking_transaction_details);
         }

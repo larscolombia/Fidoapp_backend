@@ -3,13 +3,15 @@
 namespace Database\Seeders;
 
 use Carbon\Carbon;
+use App\Models\Wallet;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\EventController;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Http\Requests\Api\Event\StoreRequest;
-use Illuminate\Http\Request;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class EventSeeder extends Seeder
 {
@@ -29,7 +31,7 @@ class EventSeeder extends Seeder
                 'name' => 'Consulta Médica',
                 'date' => $now->toDateString(), // Fecha actual
                 'end_date' => $now->addDays(5)->toDateString(), // 5 días después
-                'slug' => Str::slug('Consulta Médica'),
+                'slug' => Str::slug('Consulta Medica'),
                 'user_id' => 3, // Asegúrate de que este ID exista en la tabla users
                 'description' => 'Consulta médica para revisión general.',
                 'location' => 'Clínica Central',
@@ -42,6 +44,7 @@ class EventSeeder extends Seeder
                 'category_id' => 1, // Asegúrate de que este ID exista en la tabla categories
                 'duration_id' => null, // Asegúrate de que este ID exista en la tabla service_duration
                 'training_id' => null,
+                'is_seeder' =>true
             ],
             [
                 'name' => 'Entrenamiento Canino',
@@ -59,49 +62,38 @@ class EventSeeder extends Seeder
                 'service_id' => null,
                 'category_id' => null,
                 'duration_id' => 1,
-                'training_id' => 1, // Asegúrate de que este ID exista en la tabla service_training
+                'training_id' => 1,
+                'is_seeder' =>true
             ],
             [
                 'name' => 'Evento Benéfico',
                 'date' => $now->toDateString(),
                 'end_date' => $now->addDays(5)->toDateString(),
-                'slug' => Str::slug('Evento Benéfico'),
+                'slug' => Str::slug('Evento Benefico'),
                 'user_id' => 5,
                 'description' => 'Evento para recaudar fondos para animales necesitados.',
                 'location' => 'Centro Comunitario',
                 'tipo' => 'evento',
                 'status' => true,
-                'pet_id' => null,
+                'pet_id' => 5,
                 'owner_id' => [3],
                 'image' => null,
                 'service_id' => null,
                 'category_id' => null,
                 'duration_id' => null,
                 'training_id' => null,
+                'is_seeder' =>true
             ],
         ];
-        $eventController = new EventController();
-
-        // Insertar datos en la tabla events y llamar al método store
         foreach ($events as $eventData) {
-            // Crear una instancia de Request con los datos del evento
-            $request = Request::create('/events', 'POST', $eventData);
 
-            // Crear una instancia de StoreRequest usando los datos del request
-            $storeRequest = new StoreRequest();
-            $storeRequest->setLaravelSession(app('session')->getId()); // Configurar la sesión si es necesario
-            $storeRequest->replace($request->all()); // Reemplaza los datos del request
+            $request = new Request();
+            $request->merge($eventData);
+            Wallet::where('user_id',$request->user_id)->update(['balance' => 100]);
+            $eventController = new EventController();
 
-            // Llamar al método store del EventController
-            try {
-                // Validar manualmente antes de llamar al store
-                if ($storeRequest->validate()) {
-                    $eventController->store($storeRequest);
-                    \Log::info('Evento creado: '.$eventData['name']);
-                }
-            } catch (\Exception $e) {
-                \Log::error('Error al crear evento: '.$e->getMessage());
-            }
+            // Crear el evento con los datos validados
+            $eventController->storeSeeder($request);
         }
     }
 }

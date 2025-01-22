@@ -711,4 +711,130 @@ class EventController extends Controller
             Log::error('Error:' . $e->getMessage());
         }
     }
+
+
+    public function storeSeeder($request)
+    {
+        $service = null;
+        try {
+            $validatedData = $request;
+            // Verificar si el tipo es "medico" o "entrenamiento"
+            if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
+                // Asignar el tipo de reserva basado en el enum
+                $bookingType = match ($request->input('tipo')) {
+                    'medico' => 'veterinary',
+                    'entrenamiento' => 'training'
+                };
+                $service = $this->service($request, $bookingType);
+                $checkBalance = $this->checkBalance($request, $service);
+                if (!$checkBalance['success']) {
+                    return response()->json(['success' => false, 'error' => 'Insufficient balance', 'amount_service' => $checkBalance['amount']], 400);
+                }
+            }
+            try {
+                $validatedData['date'] = Carbon::createFromFormat('Y-m-d', $validatedData['date'])->format('Y-m-d');
+                $validatedData['end_date'] = Carbon::createFromFormat('Y-m-d', $validatedData['end_date'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $validatedData['date'] = Carbon::now()->format('Y-m-d');
+                $validatedData['end_date'] = Carbon::now()->format('Y-m-d');
+            }
+
+            $eventTime = $request->input('event_time')
+                ? Carbon::createFromFormat('H:i', $request->input('event_time'))->format('H:i') : null;
+
+            if (!file_exists(public_path('images/event'))) {
+                mkdir(public_path('images/event'), 0755, true);
+            }
+
+            $data['image'] = null;
+
+            // Manejar la imagen si se proporciona
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalName();
+                $image->move(public_path('images/event'), $imageName);
+                $imagePath = 'images/event/' . $imageName;
+                $data['image'] = $imagePath;
+            }
+
+            // Crear el evento
+            $event = Event::create([
+                'name'        => $request->input('name'),
+                'date'        => $validatedData['date'],
+                'end_date'    => $validatedData['end_date'],
+                'event_time'  => $eventTime,
+                'slug'        => $request->input('slug'),
+                'user_id'     => $request->input('user_id'),
+                'description' => $request->input('description'),
+                'location'    => $request->input('location'),
+                'tipo'        => $request->input('tipo'),
+                'status'      => $request->input('status'),
+                'image'       => $data['image']
+            ]);
+            $bookingId = null;
+            // Crear los detalles del evento
+            $ownerIds = $request->input('owner_id');
+            $professionalId = ['employee_id' => null];
+            foreach ($ownerIds as $ownerId) {
+                $eventDetail = EventDetail::create([
+                    'event_id' => $event->id,
+                    'pet_id'   => $request->input('pet_id'),
+                    'owner_id' => $ownerId,
+                ]);
+                $professionalUser = User::find($ownerId);
+                if ($professionalUser->user_type == 'vet' || $professionalUser->user_type == 'trainer') {
+                    $professionalId = ['employee_id' => $ownerId];
+                }
+            }
+
+            // Reserva
+            if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
+                // Llamar a bookingCreate y manejar su resultado
+
+                $request->merge($professionalId);
+
+                $bookingData = $this->bookingCreate($request, $validatedData, $event);
+                $dataArray = json_decode($bookingData->getContent(), true);
+                if ($dataArray['status'] === true && $bookingData->getStatusCode() === 200) {
+
+                    $chekcoutController = new CheckoutController();
+                    $booking = ['booking_id' => $dataArray['data']['id']];
+                    $bookingId = $dataArray['data']['id'];
+                    $request->merge($booking);
+                    $chekcoutController->store($request, $service['total_amount']);
+                }
+            }
+            if (!in_array($request->input('user_id'), $ownerIds)) {
+                $ownerIds[] = $request->input('user_id');
+            }
+            // $titleEvent = $event->name;
+            $titleNotificationEvent = 'Nuevo Evento';
+            if ($request->input('tipo') === 'medico') {
+                $titleNotificationEvent = 'Nuevo Evento Médico';
+            }
+            if ($request->input('tipo') === 'entrenamiento') {
+                $titleNotificationEvent = 'Nuevo Evento Entrenamiento';
+            }
+            // Notificación
+            foreach ($ownerIds as $ownerId) {
+                $this->generateNotification($titleNotificationEvent, $event->description, $ownerId);
+            }
+            $this->sendNotification($request->input('user_id'), $request->input('tipo'), $titleNotificationEvent, $event, $ownerIds, $event->description, $bookingId);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Evento creado exitosamente',
+                'data'    =>  [
+                    'event'       => $event,
+                    'detail_event' => $event->detailEvent,
+                ],
+            ], 201);
+        } catch (\Exception $e) {
+            \Log::error('Error:'.$e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el evento: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }
