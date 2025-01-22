@@ -44,7 +44,7 @@ class EventSeeder extends Seeder
                 'category_id' => 1, // Asegúrate de que este ID exista en la tabla categories
                 'duration_id' => null, // Asegúrate de que este ID exista en la tabla service_duration
                 'training_id' => null,
-                'is_seeder' =>true
+                'is_seeder' => true
             ],
             [
                 'name' => 'Entrenamiento Canino',
@@ -63,7 +63,45 @@ class EventSeeder extends Seeder
                 'category_id' => null,
                 'duration_id' => 1,
                 'training_id' => 1,
-                'is_seeder' =>true
+                'is_seeder' => true
+            ],
+            [
+                'name' => 'Chequeo Médico Anual',
+                'date' => $now->toDateString(),
+                'end_date' => $now->addDays(5)->toDateString(),
+                'slug' => Str::slug('Chequeo Medico Anual'),
+                'user_id' => 3,
+                'description' => 'Chequeo médico anual para asegurar el bienestar del animal.',
+                'location' => 'Clínica Veterinaria',
+                'tipo' => 'medico',
+                'status' => true,
+                'pet_id' => 3, // Asegúrate de que este ID exista en la tabla pets
+                'owner_id' => [13],
+                'image' => null,
+                'service_id' => 1, // Asegúrate de que este ID exista en la tabla services
+                'category_id' => 1,
+                'duration_id' => null,
+                'training_id' => null,
+                'is_seeder' => true
+            ],
+            [
+                'name' => 'Curso Avanzado de Entrenamiento',
+                'date' => $now->toDateString(),
+                'end_date' => $now->addDays(5)->toDateString(),
+                'slug' => Str::slug('Curso Avanzado de Entrenamiento'),
+                'user_id' => 4,
+                'description' => "Curso avanzado para perros con habilidades básicas.",
+                'location' => "Centro de Entrenamiento Canino",
+                'tipo' => "entrenamiento",
+                'status' => true,
+                'pet_id' => 4,
+                'owner_id' => [24],
+                'image' => null,
+                'service_id' => null,
+                'category_id' => null,
+                'duration_id' => 2, // Asegúrate de que este ID exista en la tabla service_duration
+                'training_id' => 2, // Asegúrate de que este ID exista en la tabla training
+                'is_seeder' => true
             ],
             [
                 'name' => 'Evento Benéfico',
@@ -82,14 +120,14 @@ class EventSeeder extends Seeder
                 'category_id' => null,
                 'duration_id' => null,
                 'training_id' => null,
-                'is_seeder' =>true
+                'is_seeder' => true
             ],
         ];
         foreach ($events as $eventData) {
 
             $request = new Request();
             $request->merge($eventData);
-            Wallet::where('user_id',$request->user_id)->update(['balance' => 100]);
+            Wallet::where('user_id', $request->user_id)->update(['balance' => 100]);
             $eventController = new EventController();
 
             // Crear el evento con los datos validados

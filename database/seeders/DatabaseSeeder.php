@@ -68,5 +68,16 @@ class DatabaseSeeder extends Seeder
         $this->call(WalletSeeder::class);
         //cargar evento
         $this->call(EventSeeder::class);
+        //categorycomandos
+        $this->call(CategoryComandosSeeder::class);
+        $this->call(ComandosSeeder::class);
+        //herramientas
+        $this->call(TrainingToolsSeeder::class);
+        //cursos
+        $this->call(CoursePlatformSeeder::class);
+        //blog
+        $this->call(BlogSeeder::class);
+        //Ebooks
+        $this->call(EbookSeeder::class);
     }
 }

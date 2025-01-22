@@ -46,8 +46,8 @@ class BlogController extends Controller
         try {
             $data = $request->validate([
                 'user_id' => 'required|exists:users,id',
-                'review_msg' => 'nullable|string|max:255',
-                'rating' => 'nullable|numeric|min:1|max:5',
+                'review_msg' => 'required|string|max:255',
+                'rating' => 'required|numeric|min:1|max:5',
                 'blog_id' => 'required|exists:blogs,id',
             ]);
 
