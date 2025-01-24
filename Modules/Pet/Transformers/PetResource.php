@@ -36,7 +36,7 @@ class PetResource extends JsonResource
             'passport'=> $this->passport,
             'pet_fur' => $this->pet_fur,
             'chip' => $this->chip,
-            'additional_info' => $this->additional_info,
+            'description' => $this->additional_info,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
