@@ -82,7 +82,7 @@
             <div class="container">
                 <div class="d-flex justify-content-center">
                     <a class=" btn btn-primary text-center font-weight-bold " href="{{ asset('apk/app-release.apk') }}"
-                        class="underline hover:text-gray-900">Descargar la apk</a>.
+                        class="underline hover:text-gray-900">¡Descarga la demo! Haz clic aquí</a>.
                     </p>
                 </div>
             </div>
