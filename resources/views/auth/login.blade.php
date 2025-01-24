@@ -3,81 +3,97 @@
         @lang('Login')
     </x-slot>
 
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo />
-            </a>
-        </x-slot>
+    <div class="container-fluid min-vh-100 d-flex flex-column justify-content-center">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12 align-items-center align-content-center">
+                <x-auth-card>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+                    <x-slot name="logo">
+                        <a href="/">
+                            <x-application-logo />
+                        </a>
+                    </x-slot>
 
-        <!-- Social Login -->
-        <x-auth-social-login />
+                    <!-- Session Status -->
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
+
+                    <!-- Social Login -->
+                    <x-auth-social-login />
 
 
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                    <!-- Validation Errors -->
+                    <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ $url ?? route('login') }}">
-            @csrf
+                    <form method="POST" action="{{ $url ?? route('login') }}">
+                        @csrf
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+                        <!-- Email Address -->
+                        <div>
+                            <x-label for="email" :value="__('Email')" />
 
-                <x-input id="email" type="email" name="email" value="" required autofocus />
+                            <x-input id="email" type="email" name="email" value="" required autofocus />
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mt-4">
+                            <x-label for="password" :value="__('Contraseña')" />
+
+                            <x-input id="password" type="password" name="password" required
+                                autocomplete="current-password" />
+                        </div>
+
+                        <!-- Remember Me -->
+                        <div class="mt-4">
+                            <label for="remember_me" class="d-inline-flex">
+                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                <span class="ms-2">{{ __('Recuérdame') }}</span>
+                            </label>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            @if (Route::has('password.request'))
+                                <a class="underline text-sm text-gray-600 hover:text-gray-900"
+                                    href="{{ route('password.request') }}">
+                                    {{ __('¿Olvidaste tu contraseña?') }}
+                                </a>
+                            @endif
+
+                            <x-button>
+                                {{ __('Iniciar sesión') }}
+                            </x-button>
+                        </div>
+
+                    </form>
+
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Contraseña')" />
-
-                <x-input id="password" type="password" name="password" required autocomplete="current-password" />
-            </div>
-
-            <!-- Remember Me -->
-            <div class="mt-4">
-                <label for="remember_me" class="d-inline-flex">
-                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <span class="ms-2">{{ __('Recuérdame') }}</span>
-                </label>
-            </div>
-
-            <div class="d-flex align-items-center justify-content-between mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900"
-                        href="{{ route('password.request') }}">
-                        {{ __('¿Olvidaste tu contraseña?') }}
-                    </a>
+            <x-slot name="extra">
+                @if (Route::has('register'))
+                    <p class="text-center text-gray-600 mt-4">
+                        ¿No tienes una cuenta? <a href="{{ route('register') }}"
+                            class="underline hover:text-gray-900">Registrarse</a>.
+                    </p>
+                    <p class="text-center text-gray-600 mt-4">
                 @endif
+            </x-slot>
 
-                <x-button>
-                    {{ __('Iniciar sesión') }}
-                </x-button>
+            </x-auth-card>
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <a class=" btn btn-primary text-center font-weight-bold " href="{{ asset('apk/app-release.apk') }}"
+                        class="underline hover:text-gray-900">Descargar la apk</a>.
+                    </p>
+                </div>
             </div>
-
-        </form>
-
         </div>
-
-        <x-slot name="extra">
-            @if (Route::has('register'))
-                <p class="text-center text-gray-600 mt-4">
-                    ¿No tienes una cuenta? <a href="{{ route('register') }}"
-                        class="underline hover:text-gray-900">Registrarse</a>.
-                </p>
-            @endif
-        </x-slot>
-    </x-auth-card>
-
+    </div>
+    </div>
 
     <script type="text/javascript">
-      //  window.onload = function() {
-      //      getSelectedOption();
-       // };
+        //  window.onload = function() {
+        //      getSelectedOption();
+        // };
 
         function getSelectedOption() {
             var selectElement = document.getElementById("SelectUser");

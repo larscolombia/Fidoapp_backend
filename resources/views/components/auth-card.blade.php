@@ -1,7 +1,7 @@
-@props(["extra"=>""])
+@props(["extra"=>"","class" => ""])
 
-<div class="container">
-    <div class="row justify-content-center align-items-center vh-100">
+<div class="container ">
+    <div class="row justify-content-center align-items-center {{ $class }}">
         <div class="col-md-5">
             <div class="card">
                 <div class="card-body">

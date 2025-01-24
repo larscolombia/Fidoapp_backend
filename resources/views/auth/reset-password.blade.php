@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <x-auth-card>
+    <x-auth-card class="vh-100">
         <x-slot name="logo">
             <a href="/">
                 <x-application-logo class="w-20 h-20 " />
