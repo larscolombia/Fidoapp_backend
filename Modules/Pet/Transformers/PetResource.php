@@ -23,7 +23,7 @@ class PetResource extends JsonResource
             'breed_id' => $this->breed_id,
             'size' => $this->size,
             'pet_image' => $this->media->pluck('original_url')->first(),
-            'date_of_birth' => $this->date_of_birth,
+            'date_of_birth' => $this->date_of_birth ? $this->date_of_birth->format('d-m-Y') : null,
             'age' => $this->age,
             'gender' => $this->gender,
             'weight' => $this->weight ?? 0,
@@ -37,8 +37,8 @@ class PetResource extends JsonResource
             'pet_fur' => $this->pet_fur,
             'chip' => $this->chip,
             'description' => $this->additional_info,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
+            'created_at' => $this->created_at ? $this->created_at->format('d-m-Y') : null,
+            'updated_at' => $this->updated_at ? $this->updated_at->format('d-m-Y') : null,
             'deleted_by' => $this->deleted_by,
         ];
     }

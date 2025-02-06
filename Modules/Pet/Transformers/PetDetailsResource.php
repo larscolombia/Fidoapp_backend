@@ -64,13 +64,13 @@ class PetDetailsResource extends JsonResource
             'breed_id' => $this->breed_id,
             'size' => $this->size,
             'pet_image' => $this->media->pluck('original_url')->first(),
-            'date_of_birth' => $this->date_of_birth,
+            'date_of_birth' => $this->date_of_birth ? $this->date_of_birth->format('d-m-Y') : null,
             'age' => $this->age,
             'gender' => $this->gender,
-            'weight' => $this->weight,
-            'weight_unit' => $this->weight_unit,
-            'height' => $this->height,
-            'height_unit' => $this->height_unit,
+            'weight' => $this->weight ?? 0,
+            'weight_unit' => $this->weight_unit ?? '',
+            'height' => $this->height ?? 0,
+            'height_unit' => $this->height_unit ?? '',
             'user_id' => $this->user_id,
             'owner' => new OwnerPetResource($this->owner),
             'shared_owners' => SharedOwnerResource::collection($this->sharedOwners),
@@ -92,8 +92,8 @@ class PetDetailsResource extends JsonResource
                        ->orWhere('is_private', 0);
                })->get());
             }),
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
+            'created_at' => $this->created_at ? $this->created_at->format('d-m-Y') : null,
+            'updated_at' => $this->updated_at ? $this->updated_at->format('d-m-Y') : null,
             'deleted_by' => $this->deleted_by,
         ];
     }
