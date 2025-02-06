@@ -1267,7 +1267,7 @@ class UserController extends Controller
         $data = $request->validate([
             'user_id' => ['required', 'exists:users,id']
         ]);
-        $user = User::whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile','profile.speciality')->first();
+        $user = User::with('pets')->whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile','profile.speciality')->first();
         if ($user && $user->profile) {
             $user->profile->tags = !is_null($user->profile->tags) ? explode(',', $user->profile->tags) : [];
         }
