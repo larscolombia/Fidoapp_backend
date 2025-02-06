@@ -2,6 +2,7 @@
 
 namespace Modules\Blog\Transformers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BlogResource extends JsonResource
@@ -26,9 +27,9 @@ class BlogResource extends JsonResource
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
-            'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
-            'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
-            'deleted_at' => $this->deleted_at ? $this->deleted_at->format('Y-m-d H:i:s') : null,
+            'created_at' => $this->created_at ? Carbon::parse($this->created_at)->format('d-m-Y') : null,
+            'updated_at' => $this->updated_at ? Carbon::parse($this->updated_at)->format('d-m-Y') : null,
+            'deleted_at' => $this->deleted_at ? Carbon::parse($this->deleted_at)->format('d-m-Y') : null,
         ];
     }
 }

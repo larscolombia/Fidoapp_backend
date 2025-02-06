@@ -2,10 +2,11 @@
 
 namespace Modules\Blog\Http\Controllers\Backend\API;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\BlogRating;
 use Illuminate\Http\Request;
 use Modules\Blog\Models\Blog;
+use App\Http\Controllers\Controller;
 use Modules\Blog\Transformers\BlogResource;
 
 class BlogController extends Controller
@@ -34,6 +35,8 @@ class BlogController extends Controller
 
         $blog = Blog::findOrFail($id);
         $blog->description = strip_tags($blog->description);
+        $blog->created_at = $blog->created_at ? Carbon::parse($blog->created_at)->format('d-m-Y') : null;
+        $blog->updated_at = $blog->updated_at ? Carbon::parse($blog->updated_at)->format('d-m-Y') : null;
         return response()->json([
             'status' => true,
             'data' => $blog,

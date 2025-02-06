@@ -3,6 +3,7 @@
 namespace Modules\Pet\Transformers;
 
 use Auth;
+use Carbon\Carbon;
 use App\Models\User;
 use Modules\Pet\Transformers\PetNoteResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -64,7 +65,7 @@ class PetDetailsResource extends JsonResource
             'breed_id' => $this->breed_id,
             'size' => $this->size,
             'pet_image' => $this->media->pluck('original_url')->first(),
-            'date_of_birth' => $this->date_of_birth ? $this->date_of_birth->format('d-m-Y') : null,
+            'date_of_birth' => $this->date_of_birth ? Carbon::parse($this->date_of_birth)->format('d-m-Y') : null,
             'age' => $this->age,
             'gender' => $this->gender,
             'weight' => $this->weight ?? 0,
@@ -92,8 +93,8 @@ class PetDetailsResource extends JsonResource
                        ->orWhere('is_private', 0);
                })->get());
             }),
-            'created_at' => $this->created_at ? $this->created_at->format('d-m-Y') : null,
-            'updated_at' => $this->updated_at ? $this->updated_at->format('d-m-Y') : null,
+            'created_at' => $this->created_at ? Carbon::parse($this->created_at)->format('d-m-Y') : null,
+    'updated_at' => $this->updated_at ? Carbon::parse($this->updated_at)->format('d-m-Y') : null,
             'deleted_by' => $this->deleted_by,
         ];
     }

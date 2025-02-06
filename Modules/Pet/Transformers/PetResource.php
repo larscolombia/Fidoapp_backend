@@ -2,6 +2,7 @@
 
 namespace Modules\Pet\Transformers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PetResource extends JsonResource
@@ -23,7 +24,7 @@ class PetResource extends JsonResource
             'breed_id' => $this->breed_id,
             'size' => $this->size,
             'pet_image' => $this->media->pluck('original_url')->first(),
-            'date_of_birth' => $this->date_of_birth ? $this->date_of_birth->format('d-m-Y') : null,
+            'date_of_birth' => $this->date_of_birth ? Carbon::parse($this->date_of_birth)->format('d-m-Y') : null,
             'age' => $this->age,
             'gender' => $this->gender,
             'weight' => $this->weight ?? 0,
@@ -32,13 +33,13 @@ class PetResource extends JsonResource
             'height_unit' => $this->height_unit ?? '',
             'user_id' => $this->user_id,
             'status' => $this->status,
-            'qr_code'=> $this->qr_code,
-            'passport'=> $this->passport,
+            'qr_code' => $this->qr_code,
+            'passport' => $this->passport,
             'pet_fur' => $this->pet_fur,
             'chip' => $this->chip,
             'description' => $this->additional_info,
-            'created_at' => $this->created_at ? $this->created_at->format('d-m-Y') : null,
-            'updated_at' => $this->updated_at ? $this->updated_at->format('d-m-Y') : null,
+            'created_at' => $this->created_at ? Carbon::parse($this->created_at)->format('d-m-Y') : null,
+            'updated_at' => $this->updated_at ? Carbon::parse($this->updated_at)->format('d-m-Y') : null,
             'deleted_by' => $this->deleted_by,
         ];
     }
