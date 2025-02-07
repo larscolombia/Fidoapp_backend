@@ -259,6 +259,8 @@ class EBookController extends Controller
             ->transform(function ($ebook) use ($coin){
                 $ebook->cover_image = !is_null($ebook->cover_image) ? asset($ebook->cover_image) : asset('images/default/default.jpg');
                 $ebook->price = $ebook->price.$coin->symbol;
+                $ebook->language = !is_null($ebook->language) ? $ebook->language : __('EBooks.not_specified') ;
+                $ebook->number_of_pages = !is_null($ebook->number_of_pages) ? $ebook->number_of_pages : __('EBooks.not_specified') ;
                 return $ebook;
             });
         return response()->json([
