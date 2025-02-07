@@ -15,6 +15,9 @@ class BlogResource extends JsonResource
      */
     public function toArray($request)
     {
+        $created_at = !is_null($this->created_at) ? Carbon::parse($this->created_at)->format('d-m-Y') : null;
+        $updated_at = !is_null($this->updated_at) ? Carbon::parse($this->updated_at)->format('d-m-Y') : null;
+        $deleted_at = !is_null($this->deleted_at) ? Carbon::parse($this->deleted_at)->format('d-m-Y') : null;
         return [
             'id' => $this->id,
             'description' =>  strip_tags($this->description),
@@ -27,9 +30,9 @@ class BlogResource extends JsonResource
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at ,
-            'deleted_at' => $this->deleted_at,
+            'created_at' => !is_null($created_at) ? (string)$created_at : null,
+            'updated_at' => !is_null($updated_at) ? (string)$updated_at : null,
+            'deleted_at' => !is_null($deleted_at) ? (string)$deleted_at : null,
         ];
     }
 }
