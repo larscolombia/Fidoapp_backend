@@ -1271,6 +1271,11 @@ class UserController extends Controller
         if ($user && $user->profile) {
             $user->profile->tags = !is_null($user->profile->tags) ? explode(',', $user->profile->tags) : [];
         }
+        if ($user->pets && count($user->pets) > 0) {
+            foreach ($user->pets as $pet) {
+                $pet->pet_public_profile = route('pet_detail.profile_public', ['slug' => $pet->slug]);
+            }
+        }
 
         return response()->json([
             'success' => true,
