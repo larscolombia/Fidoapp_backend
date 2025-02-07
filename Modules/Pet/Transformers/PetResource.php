@@ -35,7 +35,7 @@ class PetResource extends JsonResource
             'status' => $this->status,
             'qr_code' => $this->qr_code,
             'passport' => $this->passport,
-            'pet_fur' => $this->pet_fur,
+            'pet_fur' => !is_null($this->pet_fur) ? $this->pet_fur : __('pet.not specified'),
             'chip' => $this->chip,
             'description' => $this->additional_info,
             'created_at' => $this->created_at ? Carbon::parse($this->created_at)->format('d-m-Y') : null,

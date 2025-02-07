@@ -79,6 +79,7 @@ return [
     'category' => 'Categoría',
     'activity' => 'Actividad',
     'note' => 'Notas',
+    'not specified' => 'Sin especificar',
     'medical_condition' => 'Condición médica',
     'application_date' => 'Fecha de aplicación',
     'reinforcement_date' => 'Fecha de refuerzo',

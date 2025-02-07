@@ -29,7 +29,7 @@ return [
   "back" => "Atrás",
   "number_of_pages" => "Número de páginas",
   "language" => 'Idioma',
-  "not_specified" => 'No especificado',
+  "not_specified" => 'Sin especificar',
   "buy" => 'Compra del libro',
   'Are you sure you want to delete this eBook?' => '¿Estás seguro de que quieres eliminar este libro electrónico?',
 ];
