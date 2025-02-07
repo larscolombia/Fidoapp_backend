@@ -2,9 +2,10 @@
 
 namespace Modules\Blog\Models;
 
+use Carbon\Carbon;
 use App\Models\BaseModel;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Blog extends BaseModel
 {
@@ -30,5 +31,15 @@ class Blog extends BaseModel
         $media = $this->getFirstMediaUrl('blog_image');
 
         return isset($media) && ! empty($media) ? $media : default_feature_image();
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format('d-m-Y') : null;
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format('d-m-Y') : null;
     }
 }

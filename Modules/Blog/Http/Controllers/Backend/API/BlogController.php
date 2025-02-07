@@ -35,8 +35,6 @@ class BlogController extends Controller
 
         $blog = Blog::findOrFail($id);
         $blog->description = strip_tags($blog->description);
-        $blog->created_at = $blog->created_at ? Carbon::parse($blog->created_at)->format('d-m-Y') : null;
-        $blog->updated_at = $blog->updated_at ? Carbon::parse($blog->updated_at)->format('d-m-Y') : null;
         return response()->json([
             'status' => true,
             'data' => $blog,
