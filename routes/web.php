@@ -450,6 +450,7 @@ Route::group(['prefix' => 'app'], function () {
     Route::post('specialities-bulk-action',[SpecialityController::class,'bulk_action'])->name('backend.specialities.title.bulk_action');
 
     Route::get('pet-detail/{slug}',[PetController::class,'profilePublic'])->name('pet_detail.profile_public');
+    Route::get('public-profile/{slug}',[UserController::class,'publicProfile'])->name('user_profile.public_profile');
     route::get('pusher_dev',function(){
         return view('backend.pusher_dev');
     })->name('puser_dev');

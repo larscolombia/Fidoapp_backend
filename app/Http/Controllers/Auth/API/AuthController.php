@@ -7,6 +7,7 @@ use Auth;
 use Hash;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Helpers\Functions;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use App\Models\PermissionRequest;
@@ -31,7 +32,7 @@ class AuthController extends Controller
         $user = $this->registerTrait($request);
         $success['token'] = $user->createToken(setting('app_name'))->plainTextToken;
         $success['name'] = $user->name;
-
+        Functions::generateSlugInUser($user);
         $userResource = new RegisterResource($user);
         $this->createWallet($user);
         return $this->sendResponse($userResource, __('messages.register_successfull'));
@@ -187,7 +188,7 @@ class AuthController extends Controller
                 $input['device_token'] = request('device_token'); // Guarda el token del dispositivo
             }
             $user = User::create($input);
-
+            Functions::generateSlugInUser($user);
             $usertype = $user->user_type;
 
             $user->assignRole($usertype);

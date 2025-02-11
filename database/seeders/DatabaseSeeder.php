@@ -79,5 +79,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BlogSeeder::class);
         //Ebooks
         $this->call(EBookSeeder::class);
+        //slug in user
+        $this->call(InsertSlugInUserSeeder::class);
     }
 }

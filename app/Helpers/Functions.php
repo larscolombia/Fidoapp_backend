@@ -3,12 +3,14 @@
 namespace App\Helpers;
 
 use App\Models\Coin;
+use App\Models\User;
 use Modules\Tax\Models\Tax;
 use Modules\Service\Models\Service;
 use Modules\Service\Models\ServiceDuration;
 use Modules\Service\Http\Controllers\Backend\API\ServiceController;
 use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
 use Modules\Service\Http\Controllers\Backend\API\ServiceDurationController;
+use Illuminate\Support\Str;
 
 class Functions
 {
@@ -36,5 +38,22 @@ class Functions
     {
         $amountFormat = str_replace($symbol, '', $amount);
         return $amountFormat;
+    }
+
+    public static function generateSlugInUser($user)
+    {
+        $baseSlug = Str::slug($user->first_name . ' ' . $user->last_name);
+
+        // Asegurarse de que el slug sea único
+        $slug = $baseSlug;
+        $counter = 1;
+        while (User::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        // Asignar y guardar el slug al usuario
+        $user->slug = $slug;
+        $user->save();
     }
 }

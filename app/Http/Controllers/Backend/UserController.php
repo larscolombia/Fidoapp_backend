@@ -24,6 +24,7 @@ use Yajra\DataTables\DataTables;
 use App\DataTables\UserDataTable;
 use Modules\Service\Models\ServiceEmployee;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\Functions;
 
 class UserController extends Controller
 {
@@ -313,7 +314,7 @@ class UserController extends Controller
         $id = $$module_name_singular->id;
         $$module_name_singular->username = $username;
         $$module_name_singular->save();
-
+        Functions::generateSlugInUser($$module_name_singular);
         event(new UserCreated($$module_name_singular));
 
         Flash::success("<i class='fas fa-check'></i> New '" . Str::singular($module_title) . "' Created")->important();
@@ -457,7 +458,7 @@ class UserController extends Controller
         $data_array['name'] = $request->first_name . ' ' . $request->last_name;
 
         $user_profile->update($data_array);
-
+        Functions::generateSlugInUser($$module_name_singular);
         Flash::success('<i class="fas fa-check"></i> ' . label_case($module_name_singular) . ' Updated Successfully!')->important();
 
         return redirect(route('backend.users.profile', $$module_name_singular->id));
@@ -660,7 +661,7 @@ class UserController extends Controller
         $$module_name_singular = User::findOrFail($id);
 
         $$module_name_singular->update($request->except(['roles', 'permissions']));
-
+        Functions::generateSlugInUser($$module_name_singular);
         if ($id == 1) {
             $user->syncRoles(['admin']);
 
@@ -1181,7 +1182,7 @@ class UserController extends Controller
 
     public function getAllUsersWithProfiles()
     {
-        $users = User::whereNotIn('user_type', ['admin', 'user'])->with('profile','profile.speciality')->get();
+        $users = User::whereNotIn('user_type', ['admin', 'user'])->with('profile', 'profile.speciality')->get();
 
         $result = $users->map(function ($user) {
             return [
@@ -1267,7 +1268,7 @@ class UserController extends Controller
         $data = $request->validate([
             'user_id' => ['required', 'exists:users,id']
         ]);
-        $user = User::with('pets')->whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile','profile.speciality')->first();
+        $user = User::with('pets')->whereNotIn('user_type', ['admin'])->where('id', $data['user_id'])->with('profile', 'profile.speciality')->first();
         if ($user && $user->profile) {
             $user->profile->tags = !is_null($user->profile->tags) ? explode(',', $user->profile->tags) : [];
         }
@@ -1276,7 +1277,7 @@ class UserController extends Controller
                 $pet->pet_public_profile = route('pet_detail.profile_public', ['slug' => $pet->slug]);
             }
         }
-
+        $user->public_profile = route('user_profile.public_profile',$user->slug);
         return response()->json([
             'success' => true,
             'data' => $user
@@ -1310,4 +1311,21 @@ class UserController extends Controller
             'data' => $user
         ], 200); // Código de estado 200 para éxito
     }
+
+    public function publicProfile($slug)
+    {
+        try {
+            // Intentar encontrar el usuario por email
+            $user = User::where('slug', $slug)->firstOrFail();
+            // Retornar la vista con los datos del usuario
+            return view('backend.profile.public_profile', compact('user'));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Si no se encuentra el usuario, retornar una vista de error 404
+            return response()->view('errors.404', [], 404);
+        } catch (\Exception $e) {
+            // Para otros errores, también podemos usar la vista 404 o una vista de error genérica
+            return response()->view('errors.500', [], 500);
+        }
+    }
+
 }

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Backend\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Helpers\Functions;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 
 class UserApiController extends Controller
 {
@@ -19,7 +20,7 @@ class UserApiController extends Controller
     public function store(UserRequest $request)
     {
         $user = User::create($request->all());
-
+        Functions::generateSlugInUser($user);
         return $this->sendResponse(new UserResource($user), __('messages.user_create'));
     }
 
@@ -31,7 +32,7 @@ class UserApiController extends Controller
     public function update(UserRequest $request, User $user)
     {
         $user->update($request->all());
-
+        Functions::generateSlugInUser($user);
         return $this->sendResponse(new UserResource($user), __('messages.user_update'));
     }
 
