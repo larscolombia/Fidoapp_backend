@@ -20,7 +20,7 @@ class EBookSeeder extends Seeder
                 'title' => 'Entrenamiento Canino Positivo Para Principiantes',
                 'author' => 'Juanito Mancilla',
                 'url' => 'https://www.amazon.com/-/es/Juanito-Mancilla/dp/1989638945',
-                'cover_image' => 'images/e_books/entrenamiento_canino_.jpg', // Asegúrate de que la imagen esté en la ruta correcta
+                'cover_image' => 'images/ebooks/entrenamiento_canino_.jpg', // Asegúrate de que la imagen esté en la ruta correcta
                 'description' => 'Presentando cómo puedes entrenar a tu perro de una manera amorosa y amable SIN causarle sufrimiento innecesario ni dolor.
 
 ¿Quieres educar un perro feliz Y bien entrenado? ¿Quieres hacerlo mientras construyes un vínculo duradero con tu perro? ¿Quieres hacer todo esto usando métodos modernos y amables que tanto tú como tu cachorro adorarán?
