@@ -31,7 +31,7 @@ Estoy seguro que, así como cualquier otro amante de los perros, has respondido 
                 'title' => 'Libro Del Cuidado De Mi Perro: Diario De Salud Para Perros',
                 'author' => 'Moulin Ajr',
                 'url' => 'https://www.amazon.com/-/es/Libro-Del-Cuidado-Mi-Perro/dp/B0933KLM7Z',
-                'cover_image' => 'images/e_books/cuidado_del_perro.jpg', // Asegúrate de que la imagen esté en la ruta correcta
+                'cover_image' => 'images/ebooks/cuidado_del_perro.jpg', // Asegúrate de que la imagen esté en la ruta correcta
                 'description' => 'Porque las mascotas son más felices en casa, este diario está dedicado a los dueños que contratan a una niñera para cuidar de su mascota y de su casa mientras usted está fuera. Hay espacio para escribir paseos, golosinas, comidas, citas con el veterinario, etc., así que cuando vuelvas a casa, podrás ver fácilmente lo que la canguro escribió en el libro.',
             ],
         ];
