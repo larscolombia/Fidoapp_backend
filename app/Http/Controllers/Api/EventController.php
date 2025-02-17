@@ -53,7 +53,14 @@ class EventController extends Controller
         $fiveDaysLater = $today->copy()->addDays(5);
 
         // Obtener eventos filtrando por user_id y el rango de fechas
-        $events = Event::where('user_id', $user_id)
+        $events = Event::where(function($query) use($user_id){
+            return $query->where('user_id', $user_id)
+                ->orWhere(function($q) use ($user_id){
+                    return $q->whereHas('detailEvent',function($r) use ($user_id){
+                        return $r->where('owner_id',$user_id);
+                    });
+                });
+        })
             ->whereBetween('updated_at', [$today, $fiveDaysLater])
             ->where(function ($query) {
                 $query->whereHas('booking', function ($q) {
@@ -63,7 +70,7 @@ class EventController extends Controller
                     ->orWhereDoesntHave('booking');
             })
             ->get();
-        $data = $events->map(function ($event) {
+        $data = $events->map(function ($event) use ($user_id) {
             $owners = [];
 
             foreach ($event->detailEvent as $detail) {
@@ -89,6 +96,7 @@ class EventController extends Controller
                 'user_email' => $event->user ? $event->user->email : null,
                 'description' => $event->description,
                 'location' => $event->location,
+                'invited' => $event->user_id == $user_id ? false : true,
                 'status' => $event->status,
                 'booking_status' => !is_null($event->booking) ? $event->booking->status : null,
                 'pet_id' => $event->detailEvent->isNotEmpty() ? $event->detailEvent->first()->pet_id : null,

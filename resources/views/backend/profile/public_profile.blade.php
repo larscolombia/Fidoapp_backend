@@ -73,9 +73,16 @@
             font-style: normal;
             color: #FF4931;
         }
+
+        .text-18 {
+            font-size: 18px;
+            color: #FF4931;
+        }
+
         .border-orange {
             border-color: #FC9214;
         }
+
         .descriptions {
             font-weight: bold;
         }
@@ -120,8 +127,7 @@
     <div class="d-flex align-items-center justify-content-center min-vh-100">
         <div class="container mt-5 mb-5 ">
             <section class="row justify-content-center align-items-center align-content-center">
-                <div
-                    class="col-12 col-lg-6 rounded p-0 position-relative align-items-center align-content-center">
+                <div class="col-12 col-lg-6 rounded p-0 position-relative align-items-center align-content-center">
                     <!-- Imagen del perfil -->
                     <div class="form-group text-center position-relative">
                         <img src="{{ $user->profile_image }}" alt="profile image"
@@ -131,16 +137,27 @@
                     <!-- Contenedor del usuario -->
                     <div class="border container-user position-relative p-3 pt-5 ">
                         <br>
-                        <div>
-                            <img src="{{asset('images/icons/location.svg')}}" alt="location">
-                            <h6 class="text-center mt-5 pt-5">{{$user->address}}</h6>
+                        <div class="">
+                            <p class="text-18 text-center mt-5 pt-5"> <img class="img-fluid me-2"
+                                    src="{{ asset('images/icons/location.svg') }}" alt="location">{{ $user->address }}
+                            </p>
                         </div>
 
-                        <h3 class="text-center ">{{$user->full_name}}</h3>
+                        <h3 class="text-center ">{{ $user->full_name }}</h3>
 
                         <div class="form-group p-3 border-bottom">
-                            <label class="form-label" for="name">Sobre {{$user->full_name}}</label>
-                            <p class="descriptions">{{ $user->full_name }}</p>
+                            <label class="form-label" for="name">Sobre {{ $user->full_name }}</label>
+                            @if ($user->profile)
+                                @if (!is_null($user->profile->about_self))
+                                    <p>{{ $user->profile->about_self }}</p>
+                                @endif
+                                @if (!is_null($user->profile->speciality_id))
+                                    <p>{{ $user->profile->speciality_id }}</p>
+                                @endif
+
+
+                            @endif
+
                         </div>
                     </div>
                 </div>

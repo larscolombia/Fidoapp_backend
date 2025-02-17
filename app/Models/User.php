@@ -114,6 +114,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return $this->hasOne(Subscription::class, 'user_id', 'id')->where('status', config('constant.SUBSCRIPTION_STATUS.ACTIVE'));
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class,'user_id','id');
+    }
+
     public function address()
     {
         return $this->morphOne(Address::class, 'addressable');
