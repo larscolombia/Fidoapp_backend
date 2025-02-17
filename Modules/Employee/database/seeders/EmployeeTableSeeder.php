@@ -37,7 +37,7 @@ class EmployeeTableSeeder extends Seeder
         // echo "Truncate: employees \n";
 
         $employee = [
-           
+
             //Vet
 
             [
@@ -51,12 +51,12 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'vet',
                 'show_in_calender' => 1,
-                'about_self' => 'Experienced in routine surgeries and dental procedures',
-                'expert' => 'Behavior',
+                'about_self' => 'Experimentado en cirugías de rutina y procedimientos dentales',
+                'expert' => 'Comportamiento',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'latitude'=>'50.909698',
-                'longitude'=>'-1.404351'
+                'latitude' => '50.909698',
+                'longitude' => '-1.404351'
             ],
             [
                 'first_name' => 'Dr. Jorge',
@@ -69,8 +69,8 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'vet',
                 'show_in_calender' => 1,
-                'about_self' => 'Dedicated to providing personalized care for each patient',
-                'expert' => 'Cardiology',
+                'about_self' => 'Dedicado a proporcionar atención personalizada a cada paciente',
+                'expert' => 'Cardiología',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -85,12 +85,12 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'vet',
                 'show_in_calender' => 1,
-                'about_self' => 'Experienced in treating a variety of exotic pet diseases',
-                'expert' => 'Dermatology',
+                'about_self' => 'Experimentado en el tratamiento de una variedad de enfermedades de mascotas exóticas',
+                'expert' => 'Dermatología',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'latitude'=>'53.3833318',
-                'longitude'=>'-1.404351'
+                'latitude' => '53.3833318',
+                'longitude' => '-1.404351'
             ],
             [
                 'first_name' => 'Dr. Jose',
@@ -103,12 +103,12 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'vet',
                 'show_in_calender' => 1,
-                'about_self' => 'Compassionate care for pets with chronic conditions',
-                'expert' => 'Emergency and Critical Care',
+                'about_self' => 'Atención compasiva para mascotas con afecciones crónicas',
+                'expert' => 'Urgencias y Cuidados Intensivos',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'latitude'=>'51.063202',
-                'longitude'=>'-1.308000'
+                'latitude' => '51.063202',
+                'longitude' => '-1.308000'
             ],
             [
                 'first_name' => 'Dr. Erik',
@@ -121,12 +121,12 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'vet',
                 'show_in_calender' => 1,
-                'about_self' => 'Caring for pets with various ocular diseases and injuries',
-                'expert' => 'Orthopedic Surgery',
+                'about_self' => 'Cuidando mascotas con diversas enfermedades y lesiones oculares',
+                'expert' => 'Cirugía Ortopédica',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'latitude'=>'50.063202',
-                'longitude'=>'-1.308000'
+                'latitude' => '50.063202',
+                'longitude' => '-1.308000'
             ],
             [
                 'first_name' => 'Dr. Parsa',
@@ -139,8 +139,8 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'vet',
                 'show_in_calender' => 1,
-                'about_self' => 'Experience in acupuncture for pain management and stress reduction',
-                'expert' => 'Nutrition',
+                'about_self' => 'Experiencia en acupuntura para el manejo del dolor y la reducción del estrés',
+                'expert' => 'Nutrición',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -155,13 +155,13 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'vet',
                 'show_in_calender' => 1,
-                'about_self' => 'Dedicated to providing immediate and compassionate care in emergencies',
-                'expert' => 'Anesthesiology',
+                'about_self' => 'Dedicado a proporcionar atención inmediata y compasiva en emergencias',
+                'expert' => 'Anestesiología',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
 
-         
+
 
             // trainer
 
@@ -176,8 +176,8 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'trainer',
                 'show_in_calender' => 1,
-                'about_self' => ' Experienced trainer skilled in advanced obedience and off-leash control..',
-                'expert' => 'Experienced Cat Trainer, Teaching Felines Fun Tricks & Interactive Behavior.',
+                'about_self' => 'Entrenador experimentado, capacitado en obediencia avanzada y control sin correa.',
+                'expert' => 'Entrenador de gatos con experiencia, enseñando trucos divertidos y comportamiento interactivo a los felinos',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -192,8 +192,8 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'trainer',
                 'show_in_calender' => 1,
-                'about_self' =>'Patient and positive trainer specializing in puppy socialization and basic obedience.',
-                'expert' => 'Mastering Leash Training & Off-Leash Control, Ensuring Safe & Enjoyable Walks.',
+                'about_self' => 'Entrenador paciente y positivo, especializado en la socialización de cachorros y obediencia básica.',
+                'expert' => 'Dominando el entrenamiento con correa y el control sin correa, asegurando paseos seguros y agradables',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -208,8 +208,8 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'trainer',
                 'show_in_calender' => 1,
-                'about_self' => 'Compassionate trainer focusing on fear and anxiety management for stressed pets.',
-                'expert' => 'Clicker Training Guru, Utilizing Positive Reinforcement for Precise Behavioral Shaping.',
+                'about_self' => 'Entrenador compasivo enfocado en el manejo del miedo y la ansiedad para mascotas estresadas.',
+                'expert' => 'Gurú del entrenamiento con clicker, utilizando el refuerzo positivo para moldear el comportamiento de manera precisa',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -224,8 +224,8 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'trainer',
                 'show_in_calender' => 1,
-                'about_self' => 'Specialized in service dog training to empower individuals with disabilities and their canine partners.',
-                'expert' => 'Certified Service Dog Trainer, Providing Tailored Training for Assistance and Support Tasks.',
+                'about_self' => 'Especializado en el entrenamiento de perros de servicio para empoderar a personas con discapacidades y sus compañeros caninos.',
+                'expert' => 'Entrenador certificado de perros de servicio, proporcionando entrenamiento personalizado para tareas de asistencia y apoyo',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -240,8 +240,8 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'trainer',
                 'show_in_calender' => 1,
-                'about_self' => 'Dedicated to helping pets overcome behavioral challenges through positive reinforcement.',
-                'expert' => 'Behavior Modification Specialist, Addressing Anxiety & Aggression with Positive Behavior Techniques..',
+                'about_self' => 'Dedicado a ayudar a las mascotas a superar desafíos de comportamiento mediante el refuerzo positivo.',
+                'expert' => 'Especialista en modificación del comportamiento, abordando la ansiedad y la agresión con técnicas de comportamiento positivo.',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -256,13 +256,13 @@ class EmployeeTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'user_type' => 'trainer',
                 'show_in_calender' => 1,
-                'about_self' => 'Experienced in breed-specific training and creative enrichment activities.',
-                'expert' => 'Specializes in Agility Training & Canine Good Citizen (CGC) Certification, Making Training Fun and Engaging.',
+                'about_self' => 'Experimentado en el entrenamiento específico de razas y actividades creativas de enriquecimiento.',
+                'expert' => 'Especializado en entrenamiento de agilidad y certificación de Buen Ciudadano Canino (CGC), haciendo que el entrenamiento sea divertido e interesante',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
 
-          
+
         ];
 
         if (env('IS_DUMMY_DATA')) {
@@ -270,7 +270,7 @@ class EmployeeTableSeeder extends Seeder
             foreach ($employee  as $key => $employee_data) {
 
                 $image = $employee_data['feature_image'] ?? null;
-                $empData = Arr::except($employee_data, [ 'feature_image','about_self','expert']);
+                $empData = Arr::except($employee_data, ['feature_image', 'about_self', 'expert']);
                 $emp = User::create($empData);
                 $emp->assignRole($emp->user_type);
                 if (isset($image)) {
@@ -278,27 +278,26 @@ class EmployeeTableSeeder extends Seeder
                 }
 
                 $branchId = get_pet_center_id();
-                
+
                 BranchEmployee::create([
                     'branch_id' => $branchId,
                     'employee_id' => $emp->id,
                 ]);
 
                 EmployeeCommission::create([
-                  'employee_id' => $emp->id,
-                  'commission_id' => $commission->id,
+                    'employee_id' => $emp->id,
+                    'commission_id' => $commission->id,
                 ]);
 
                 UserProfile::create([
                     'user_id' => $emp->id,
-                    'about_self' => $employee_data['about_self'],   
-                    'expert' => $employee_data['expert']  
+                    'about_self' => $employee_data['about_self'],
+                    'expert' => $employee_data['expert']
                 ]);
-                
+
                 // $this->dummyReview($emp->id);
 
             }
-
         }
 
 
@@ -307,7 +306,7 @@ class EmployeeTableSeeder extends Seeder
     }
     private function attachFeatureImage($model, $publicPath)
     {
-        if(!env('IS_DUMMY_DATA_IMAGE')) return false;
+        if (!env('IS_DUMMY_DATA_IMAGE')) return false;
 
         $file = new \Illuminate\Http\File($publicPath);
 
@@ -315,7 +314,8 @@ class EmployeeTableSeeder extends Seeder
 
         return $media;
     }
-    private function dummyReview($emp_id) {
+    private function dummyReview($emp_id)
+    {
         $employeerating = [
             [
                 'employee_id' => $emp_id,
@@ -359,4 +359,3 @@ class EmployeeTableSeeder extends Seeder
         }
     }
 }
-                     
