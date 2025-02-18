@@ -151,11 +151,19 @@
                                 @if (!is_null($user->profile->about_self))
                                     <p>{{ $user->profile->about_self }}</p>
                                 @endif
+
                                 @if (!is_null($user->profile->speciality_id))
-                                    <p>{{ $user->profile->speciality_id }}</p>
+                                    <p style="font-weight: bold;">Área de especialización</p>
+                                    <p>{{ $user->profile->speciality->description }}</p>
                                 @endif
-
-
+                                <label class="form-label">Correo: {{ $user->email }}</label>
+                                <br>
+                                <label class="form-label">Género:
+                                    {{ $user->gender == 'Male' ? 'Hombre' : 'Mujer' }}</label>
+                                    @if ($user->mobile)
+                                        <br>
+                                        <label class="form-label">Teléfono: {{$user->mobile}}</label>
+                                    @endif
                             @endif
 
                         </div>
