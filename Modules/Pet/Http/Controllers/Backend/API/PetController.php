@@ -543,6 +543,7 @@ class PetController extends Controller
             'qr_code' => $pet->qr_code,
             'pet_image' => $pet->pet_image,
             'pet_fur' => $pet->pet_fur,
+            'public_profile' =>  route('pet_detail.profile_public', ['slug' => $pet->slug]),
             // Agregar descripción de la raza
             'description' => optional($pet->breed)->description, // Usamos optional para evitar errores si breed es null
             // Agregar nombre del tipo de mascota
