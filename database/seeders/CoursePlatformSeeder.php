@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\Functions;
 use App\Models\CursoPlataforma;
 use Illuminate\Database\Seeder;
 use App\Models\CoursePlatformVideo;
@@ -68,6 +69,29 @@ class CoursePlatformSeeder extends Seeder
         ];
 
         foreach ($courses as $course) {
+            $courseDuration = 0;
+
+            // Recorrer cada video del curso
+            foreach ($course['videos'] as &$video) {
+                $videoName = basename($video['video']);
+                $videoPath = public_path($video['video']);
+
+                // Obtener la duración del video
+                $duracionFormato = Functions::getVideoDuration($videoPath);
+
+                // Asignar la duración al video
+                $video['duration'] = $duracionFormato;
+
+                // Sumar la duración del video a la duración total del curso
+                list($hours, $minutes, $seconds) = explode(':', $duracionFormato);
+                $courseDuration += ($hours * 3600) + ($minutes * 60) + $seconds;
+            }
+
+            // Convertir la duración total a formato H:i:s
+            $courseDurationFormat = gmdate("H:i:s", $courseDuration);
+
+            // Asignar la duración total al curso
+            $course['duration'] = $courseDurationFormat;
             $coursePlatform = CursoPlataforma::create([
                 'name' => $course['name'],
                 'description' => $course['description'],

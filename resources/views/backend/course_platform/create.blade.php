@@ -31,13 +31,13 @@
                     @enderror
                 </div> --}}
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
                     <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" required>
                     @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> --}}
                 <!--difficulty-->
                 <div class="mb-3">
                     <label for="difficulty" class="form-label">{{ __('course_platform.difficulty') }}</label>
@@ -75,7 +75,6 @@
                         <div class="video-item mb-2">
                             <input type="file" class="form-control @error('video.*') is-invalid @enderror" name="video[]" accept="video/*" required>
                             <input type="text" name="title[]" class="form-control mt2" placeholder="{{ __('course_platform.video_title') }}" required>
-                            <input type="text"  class="form-control mt-2" name="duration_video[]" placeholder="{{ __('course_platform.duration') }}" required>
                             <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
                             <input type="file" class="form-control @error('thumbnail.*') is-invalid @enderror" name="thumbnail[]" accept="image/*">
                             <div class="video-preview border p-3 d-flex mt-2" style="width: 320px; height: 180px;"></div>
@@ -122,16 +121,16 @@
 
                 // Agregar eventos para pausar después de 10 segundos
                 videoElement.currentTime = 0;
-                videoElement.addEventListener('loadedmetadata', function() {
-                    if (videoElement.duration > 10) {
-                        videoElement.currentTime = 10; // Salta a los 10 segundos si dura más
-                    }
-                });
-                videoElement.addEventListener('timeupdate', function() {
-                    if (videoElement.currentTime >= 10) {
-                        videoElement.pause(); // Pausa el video al llegar a los 10 segundos
-                    }
-                });
+                // videoElement.addEventListener('loadedmetadata', function() {
+                //     if (videoElement.duration > 10) {
+                //         videoElement.currentTime = 10; // Salta a los 10 segundos si dura más
+                //     }
+                // });
+                // videoElement.addEventListener('timeupdate', function() {
+                //     if (videoElement.currentTime >= 10) {
+                //         videoElement.pause(); // Pausa el video al llegar a los 10 segundos
+                //     }
+                // });
 
                 // Agregar el elemento de video al contenedor de previsualización
                 videoPreview.appendChild(videoElement);
@@ -153,7 +152,6 @@
             <div class="video-item mb-2">
                 <input type="file" class="form-control @error('video.*') is-invalid @enderror" name="video[]" accept="video/*" required>
                  <input type="text" name="title[]" class="form-control mt2" placeholder="{{ __('course_platform.video_title') }}" required>
-                <input type="text" class="form-control mt-2" name="duration_video[]" placeholder="{{ __('course_platform.duration') }}" required>
                 <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
                 <input type="file" class="form-control @error('thumbnail.*') is-invalid @enderror" name="thumbnail[]" accept="image/*">
                 <button type="button" class="btn btn-danger mt-2 remove-video-button">Eliminar Video</button>

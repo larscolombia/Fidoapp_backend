@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Log;
 use Http;
 use App\Models\Course;
+use App\Helpers\Functions;
 use Illuminate\Http\Request;
 use App\Models\CursoPlataforma;
 use Yajra\DataTables\DataTables;
 use App\Models\CoursePlatformVideo;
+use App\Jobs\CalculateCourseDuration;
 
 
 class CursoPlataformaController extends Controller
@@ -66,20 +68,20 @@ class CursoPlataformaController extends Controller
             })
             ->editColumn('difficulty', function ($data) {
                 $difficulty = '';
-                if($data->difficulty == 1){
+                if ($data->difficulty == 1) {
                     $difficulty = __('course_platform.beginner');
                 }
-                if($data->difficulty == 2){
+                if ($data->difficulty == 2) {
                     $difficulty = __('course_platform.intermediate');
                 }
-                if($data->difficulty == 3){
+                if ($data->difficulty == 3) {
                     $difficulty = __('course_platform.advanced');
                 }
                 return $difficulty;
             })
-              ->orderColumns(['id'], '-:column $1')
-              ->rawColumns(['action'])
-              ->toJson();
+            ->orderColumns(['id'], '-:column $1')
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
     public function create()
@@ -94,7 +96,6 @@ class CursoPlataformaController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
-            'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
@@ -117,7 +118,7 @@ class CursoPlataformaController extends Controller
             'description' => $request->input('description'),
             'price' => $request->input('price'),
             'image' => $imageName ? 'images/cursos_plataforma/' . $imageName : null,
-            'duration' => $request->input('duration'),
+            'duration' => 1,
             'difficulty' => $request->input('difficulty'),
         ]);
 
@@ -132,7 +133,8 @@ class CursoPlataformaController extends Controller
 
                     // Generar la URL del video
                     $videoUrl = url('videos/cursos_plataforma/' . $videoName);
-
+                    $videoPath = public_path('videos/cursos_plataforma/' . $videoName);
+                    $duracionFormato = Functions::getVideoDuration($videoPath);
                     // Manejar la carga de la miniatura si se proporciona
                     $thumbnailName = null;
                     if ($request->hasFile('thumbnail') && isset($request->file('thumbnail')[$index])) {
@@ -149,13 +151,13 @@ class CursoPlataformaController extends Controller
                         'url' => $videoUrl,
                         'video' => $videoName,
                         'title' => $request->input('title')[$index], // Guardar el título del video
-                        'duration' => $request->input('duration_video')[$index], // Guardar la duración del video
+                        'duration' => $duracionFormato,
                         'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
                     ]);
                 }
             }
         }
-
+        dispatch(new CalculateCourseDuration($curso));
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.created_successfully'));
     }
 
@@ -226,7 +228,6 @@ class CursoPlataformaController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
-            'duration' => 'required|integer|min:0',
             'difficulty' => 'required',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
@@ -253,7 +254,6 @@ class CursoPlataformaController extends Controller
         $curso->name = $request->input('name');
         $curso->description = $request->input('description');
         $curso->price = $request->input('price');
-        $curso->duration = $request->input('duration');
         $curso->difficulty = $request->input('difficulty');
 
         // Guardar los cambios en el curso
@@ -265,6 +265,7 @@ class CursoPlataformaController extends Controller
             if ($request->hasFile('video.' . $index)) {
                 // Si hay un nuevo archivo de video, procesarlo
                 $video = $request->file('video.' . $index);
+                $duracionFormato = null;
                 if ($video) {
                     // Generar un nombre único para cada video
                     $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
@@ -273,6 +274,8 @@ class CursoPlataformaController extends Controller
 
                     // Generar la URL del video
                     $videoUrl = url('videos/cursos_plataforma/' . $videoName);
+                    $videoPath = public_path('videos/cursos_plataforma/' . $videoName);
+                    $duracionFormato = Functions::getVideoDuration($videoPath);
                 }
 
                 // Manejar la carga de la miniatura si se proporciona
@@ -285,19 +288,38 @@ class CursoPlataformaController extends Controller
                     }
                 }
 
-                CoursePlatformVideo::updateOrCreate(
-                    ['id' => $videoId],  // Buscar por ID si existe
-                    [
+                $existingVideo = CoursePlatformVideo::find($videoId);
+
+                if ($existingVideo) {
+                    // Actualizar solo los campos necesarios si el registro existe
+                    $updateData = [
                         'course_platform_id' => $curso->id,
                         'url' => isset($videoUrl) ? $videoUrl : null,
                         'video' => isset($videoName) ? $videoName : null,
-                        'title' => $request->input('title')[$index], // Guardar el título del video
-                        'duration' => $request->input('duration_video')[$index], // Guardar la duración del video
+                        'title' => $request->input('title')[$index],
                         'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
-                    ]
-                );
+                    ];
+
+                    // Agregar duración solo si no es null
+                    if ($duracionFormato !== null) {
+                        $updateData['duration'] = $duracionFormato;
+                    }
+
+                    $existingVideo->update($updateData);
+                } else {
+                    // Si no existe, crear un nuevo registro
+                    CoursePlatformVideo::create([
+                        'id' => $videoId,
+                        'course_platform_id' => $curso->id,
+                        'url' => isset($videoUrl) ? $videoUrl : null,
+                        'video' => isset($videoName) ? $videoName : null,
+                        'title' => $request->input('title')[$index],
+                        'duration' => $duracionFormato, // Aquí no hay problema si es null
+                        'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
+                    ]);
+                }
             } else {
-                // Si no se subió un nuevo archivo, solo actualizar el título y duración
+                // Si no se subió un nuevo archivo, solo actualizar el título
                 $thumbnailName = null;
                 if ($request->hasFile('thumbnail') && isset($request->file('thumbnail')[$index])) {
                     $thumbnail = $request->file('thumbnail')[$index];
@@ -306,11 +328,10 @@ class CursoPlataformaController extends Controller
                         $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
                     }
                 }
-                $defaultThumbnail =  !is_null(CoursePlatformVideo::find($videoId)->thumbnail) ? CoursePlatformVideo::find($videoId)->thumbnail  :asset('images/default/default.jpg');
+                $defaultThumbnail = !is_null(CoursePlatformVideo::find($videoId)) && !is_null(CoursePlatformVideo::find($videoId)->thumbnail) ? CoursePlatformVideo::find($videoId)->thumbnail  : asset('images/default/default.jpg');
                 CoursePlatformVideo::where('id', $videoId)->update([
                     'title' => $request->input('title')[$index],
-                    'duration' => $request->input('duration_video')[$index],
-                    'thumbnail' =>isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : $defaultThumbnail
+                    'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : $defaultThumbnail
                 ]);
             }
         }
@@ -326,7 +347,8 @@ class CursoPlataformaController extends Controller
 
                     // Generar la URL del nuevo video
                     $newVideoUrl = url('videos/cursos_plataforma/' . $newVideoName);
-
+                    $videoPath = public_path('videos/cursos_plataforma/' . $newVideoName);
+                    $duracionFormato = Functions::getVideoDuration($videoPath);
                     // Manejar la carga de miniaturas si se proporciona
                     $newThumbnailName = null;
                     if ($request->hasFile('new_thumbnail') && isset($request->file('new_thumbnail')[$index])) {
@@ -342,13 +364,13 @@ class CursoPlataformaController extends Controller
                         'url' => isset($newVideoUrl) ?  $newVideoUrl : null,
                         'video' => isset($newVideoName) ? $newVideoName : null,
                         'title' => request()->input("title")[$index],  // Título del nuevo video (debe estar en el formulario)
-                        'duration' => request()->input("duration_video")[$index],  // Duración del nuevo video (debe estar en el formulario)
+                        'duration' => $duracionFormato,  // Duración del nuevo video (debe estar en el formulario)
                         'thumbnail' => isset($newThumbnailName) ?  $newThumbnailName : asset('images/default/default.jpg'),
                     ]);
                 }
             }
         }
-
+        dispatch(new CalculateCourseDuration($curso));
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));
     }
 

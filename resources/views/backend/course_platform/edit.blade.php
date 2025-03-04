@@ -29,10 +29,10 @@
                     <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
                 </div>
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
                     <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" required>
-                </div>
+                </div> --}}
 
                 <!--difficulty-->
                 <div class="mb-3">
@@ -75,11 +75,11 @@
                             name="course_platform_id[]"
                             class="form-control mt-2"
                             value="{{ $video->id}}">
-                            <input type="text"
+                            {{-- <input type="text"
                                    name="duration_video[]"
                                    class="form-control mt-2"
                                    value="{{ old("duration_video.{$loop->index}", $video->duration) }}"
-                                   placeholder="{{ __('course_platform.duration') }}" required>
+                                   placeholder="{{ __('course_platform.duration') }}" required> --}}
 
                             <!-- Thumbnail upload -->
                             <label>{{ __('course_platform.thumbnail') }}</label>
@@ -140,11 +140,11 @@ function handleVideoPreview(input) {
 
             // Agregar eventos para pausar después de 10 segundos
             videoElement.currentTime = 0;
-            videoElement.addEventListener('loadedmetadata', function() {
-                if (videoElement.duration > 10) {
-                    videoElement.currentTime = 10;
-                }
-            });
+            // videoElement.addEventListener('loadedmetadata', function() {
+            //     if (videoElement.duration > 10) {
+            //         videoElement.currentTime = 10;
+            //     }
+            // });
             videoElement.addEventListener('timeupdate', function() {
                 if (videoElement.currentTime >= 10) {
                     videoElement.pause();
@@ -206,7 +206,6 @@ document.getElementById('add-video-button').addEventListener('click', function()
         <div class="video-item mb-2">
             <input type="file" class="form-control" name="new_video[]" accept="video/*" required onchange="handleVideoPreview(this)">
             <input type="text" name="title[]" class="form-control mt-2" placeholder="{{ __('course_platform.video_title') }}" required>
-            <input type="text" class="form-control mt-2" name="duration_video[]" placeholder="{{ __('course_platform.duration') }}" required>
 
             <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
             <input type="file" class="form-control" name="new_thumbnail[]" accept="image/*" onchange="handleThumbnailPreview(this)">

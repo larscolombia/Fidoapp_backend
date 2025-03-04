@@ -56,4 +56,14 @@ class Functions
         $user->slug = $slug;
         $user->save();
     }
+
+    public static function getVideoDuration($videoPath)
+    {
+        $getID3 = new \getID3;
+        $file = $getID3->analyze($videoPath);
+        $duration = date('H:i:s.v', $file['playtime_seconds']);
+        $parts = explode(".", $duration);
+        $durationFormat = $parts[0];
+        return $durationFormat;
+    }
 }

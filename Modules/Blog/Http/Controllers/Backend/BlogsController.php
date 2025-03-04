@@ -114,7 +114,13 @@ class BlogsController extends Controller
                 return "<img src='" . $data->blog_image . "'class='avatar avatar-40 img-fluid rounded-pill'>";
             })
             ->editColumn('date', function ($data) {
-                return $data->created_at->format('Y-m-d');
+                // Asegúrate de que $data->created_at sea un objeto Carbon
+                $fecha = Carbon::parse($data->created_at);
+
+                // Formatea la fecha
+                $formattedDate = $fecha->format('Y-m-d');
+
+                return $formattedDate;
             })
             ->orderColumn('date', function ($query, $order) {
                 $query->orderBy('created_at', $order);

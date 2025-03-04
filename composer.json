@@ -17,6 +17,7 @@
     "guzzlehttp/guzzle": "^7.4",
     "hashids/hashids": "^4.1",
     "intervention/image": "^2.7",
+    "james-heinrich/getid3": "^1.9",
     "kreait/laravel-firebase": "^5.10",
     "laracasts/flash": "^3.2",
     "laravel-notification-channels/fcm": "^3.2",

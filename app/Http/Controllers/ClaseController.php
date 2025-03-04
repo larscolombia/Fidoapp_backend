@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Http;
 use Validator;
 use App\Models\Clase;
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CursoPlataforma;
 use Yajra\DataTables\DataTables;
 use App\Models\CoursePlatformVideo;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\CalculateCourseDuration;
 
 
 class ClaseController extends Controller
@@ -75,7 +77,6 @@ class ClaseController extends Controller
             'title' => 'required|string|max:255',
             'video' => 'required|file|mimes:mp4,mov,ogg,avi,wmv,flv,mkv,webm,f4v,3gp,qt',
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
-            'duration' => 'required|integer|min:1',
         ]);
 
         $course = CursoPlataforma::findOrFail($request->route('course'));
@@ -96,6 +97,8 @@ class ClaseController extends Controller
             $video->move(public_path('videos/cursos_plataforma'), $videoName);
             // Generar la URL del video
             $videoUrl = url('videos/cursos_plataforma/' . $videoName);
+            $videoPath = public_path('videos/cursos_plataforma/' . $videoName);
+            $duracionFormato = Functions::getVideoDuration($videoPath);
         }
 
         // Manejar la carga de la miniatura si se proporciona
@@ -114,7 +117,7 @@ class ClaseController extends Controller
             'url' => $videoUrl,
             'video' => $videoName,
             'title' => $request->input('title'),
-            'duration' => $request->input('duration'),
+            'duration' => $duracionFormato,
             'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
         ]);
 
@@ -127,6 +130,8 @@ class ClaseController extends Controller
         //     'course_id' => $course->id,
         // ]);
 
+        //actualizamos la duracion del curso
+        dispatch(new CalculateCourseDuration($course));
         return redirect()->route('backend.course_platform.clases.index', ['course' => $request->route('course')])->with('success', __('clases.created_successfully'));
     }
 
@@ -213,7 +218,7 @@ class ClaseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|string|max:255',
-           'video' => 'sometimes|file|mimes:mp4,mov,ogg,avi,wmv,flv,mkv,webm,f4v,3gp,qt',
+            'video' => 'sometimes|file|mimes:mp4,mov,ogg,avi,wmv,flv,mkv,webm,f4v,3gp,qt',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'duration' => 'sometimes|integer|min:1',
         ]);
@@ -226,6 +231,7 @@ class ClaseController extends Controller
 
         $videoUrl = null;
         $videoName = null;
+        $duracionFormato = null;
         // Manejar la carga del archivo de video
         if ($request->hasFile('video')) {
             $video = $request->file('video');
@@ -233,6 +239,8 @@ class ClaseController extends Controller
             $video->move(public_path('videos/cursos_plataforma'), $videoName);
             // Generar la URL del video
             $videoUrl = url('videos/cursos_plataforma/' . $videoName);
+            $videoPath = public_path('videos/cursos_plataforma/' . $videoName);
+            $duracionFormato = Functions::getVideoDuration($videoPath);
         }
 
         // Manejar la carga de la miniatura si se proporciona
@@ -247,13 +255,15 @@ class ClaseController extends Controller
 
         // Actualizar el modelo con los datos
         $course_platform->update([
-            'title' => $request->input('title',$course_platform->title),
-            'duration' => $request->input('duration',$course_platform->duration),
+            'title' => $request->input('title', $course_platform->title),
+            'duration' => !is_null($duracionFormato) ? $duracionFormato : $course_platform->duration,
             'url' => !is_null($videoUrl) ? $videoUrl : $course_platform->url,
             'video' => !is_null($videoName) ? $videoName :  $course_platform->video,
             'thumbnail' => !is_null($thumbnailName) ? $thumbnailName : $course_platform->thumbnail
         ]);
-
+        //actualizamos la duracion del curso
+        $course = CursoPlataforma::find($course_platform->course_platform_id);
+        dispatch(new CalculateCourseDuration($course));
         return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));
     }
 

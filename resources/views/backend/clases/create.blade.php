@@ -21,13 +21,13 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
                     <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" required>
                     @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> --}}
                 <div class="mb-3">
                     <label for="video" class="form-label">{{ __('clases.video') }}</label>
                     <input type="file" class="form-control @error('video') is-invalid @enderror" id="video" name="video" accept="video/*" required>
