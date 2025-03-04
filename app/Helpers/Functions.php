@@ -66,4 +66,23 @@ class Functions
         $durationFormat = $parts[0];
         return $durationFormat;
     }
+
+    public static function getDurationText($durationString)
+    {
+        // Verificar si la cadena tiene el formato HH:MM:SS
+        $pattern = '/^(\d{2}):(\d{2}):(\d{2})$/';
+        if (!preg_match($pattern, $durationString, $matches)) {
+            return '0 segundos'; // O cualquier otro valor que desees retornar si el formato es incorrecto
+        }
+        // Convertir la cadena "HH:MM:SS" a segundos
+        list($hours, $minutes, $seconds) = explode(':', $durationString);
+        $totalSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
+
+        if ($totalSeconds < 60) {
+            return $totalSeconds . ' segundos';
+        } else {
+            $minutes = $totalSeconds / 60;
+            return number_format($minutes, 2) . ' minutos';
+        }
+    }
 }

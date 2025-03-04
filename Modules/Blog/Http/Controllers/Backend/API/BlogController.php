@@ -3,6 +3,7 @@
 namespace Modules\Blog\Http\Controllers\Backend\API;
 
 use Carbon\Carbon;
+use App\Helpers\Functions;
 use App\Models\BlogRating;
 use Illuminate\Http\Request;
 use Modules\Blog\Models\Blog;
@@ -35,6 +36,7 @@ class BlogController extends Controller
 
         $blog = Blog::findOrFail($id);
         $blog->description = strip_tags($blog->description);
+        $blog->duration_text = Functions::getDurationText($blog->duration);
         return response()->json([
             'status' => true,
             'data' => $blog,

@@ -10,6 +10,7 @@ use Modules\Blog\Models\Blog;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Jobs\CalculateVideoBlogDuration;
 
 class BlogsController extends Controller
 {
@@ -194,7 +195,8 @@ class BlogsController extends Controller
             $data['video'] = $videoName;
         }
         $query = Blog::create($data);
-
+        //llamada al job para generar la duracion automatica
+        dispatch(new CalculateVideoBlogDuration($query));
         storeMediaFile($query, $request->file('blog_image'), 'blog_image');
         $message = __('messages.create_form', ['form' => __($this->module_title)]);
 
@@ -270,7 +272,8 @@ class BlogsController extends Controller
 
         storeMediaFile($query, $request->file('event_image'), 'event_image');
         $message = __('messages.update_form', ['form' => __($this->module_title)]);
-
+        //llamada al job para generar la duracion automatica
+        dispatch(new CalculateVideoBlogDuration($query));
         return response()->json(['message' => $message, 'status' => true], 200);
     }
     public function destroy($id)

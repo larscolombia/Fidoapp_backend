@@ -2,6 +2,7 @@
 
 namespace Modules\Blog\Transformers;
 
+use App\Helpers\Functions;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,6 +19,7 @@ class BlogResource extends JsonResource
         $created_at = !is_null($this->created_at) ? Carbon::parse($this->created_at)->format('d-m-Y') : null;
         $updated_at = !is_null($this->updated_at) ? Carbon::parse($this->updated_at)->format('d-m-Y') : null;
         $deleted_at = !is_null($this->deleted_at) ? Carbon::parse($this->deleted_at)->format('d-m-Y') : null;
+        $durationText = Functions::getDurationText($this->duration);
         return [
             'id' => $this->id,
             'description' =>  strip_tags($this->description),
@@ -26,6 +28,9 @@ class BlogResource extends JsonResource
             'status' => $this->status,
             'video' => $this->video,
             'url_video' => $this->url,
+            'duration' => $this->duration,
+            'duration_text' =>$durationText,
+            'visualizations' => $this->visualizations,
             'blog_image' => $this->getFirstMediaUrl('blog_image'),
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
