@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Http;
 use App\Models\Coin;
+use App\Helpers\Functions;
 use Illuminate\Http\Request;
 use App\Models\CursoPlataforma;
 use App\Models\CoursePlatformVideo;
@@ -31,9 +32,24 @@ class CursoPlataformaController extends Controller
                         'description' => $course->description,
                         'image' => asset($course->image),
                         'duration' => $course->duration,
-                        'price' => $course->price.$coin->symbol,
+                        'duration_text' => Functions::getDurationText($course->duration),
+                        'price' => $course->price . $coin->symbol,
                         'difficulty' => $course->difficulty,
-                        'videos' => $course->videos,
+                        'videos' => $course->videos->map(function ($video) {
+                            return [
+                                'id' => $video->id,
+                                'title' => $video->title,
+                                'thumbnail' => $video->thumbnail,
+                                'duration' => $video->duration,
+                                'duration_text' => Functions::getDurationText($video->duration), // Agregamos el campo duration_text
+                                'course_platform_id' => $video->course_platform_id,
+                                'url' => $video->url,
+                                'video' => $video->video,
+                                'visualizations' => $video->visualizations,
+                                'created_at' => $video->created_at,
+                                'updated_at' => $video->updated_at,
+                            ];
+                        })
                     ];
                 }),
             ],
@@ -120,9 +136,24 @@ class CursoPlataformaController extends Controller
             'description' => $course->description,
             'image' => asset($course->image),
             'duration' => $course->duration,
-            'price' => $course->price.$coin->symbol,
+            'price' => $course->price . $coin->symbol,
             'difficulty' => $course->difficulty,
-            'videos' => $course->videos,
+            'duration_text' => Functions::getDurationText($course->duration),
+            'videos' => $course->videos->map(function ($video) {
+                return [
+                    'id' => $video->id,
+                    'title' => $video->title,
+                    'thumbnail' => $video->thumbnail,
+                    'duration' => $video->duration,
+                    'duration_text' => Functions::getDurationText($video->duration), // Agregamos el campo duration_text
+                    'course_platform_id' => $video->course_platform_id,
+                    'url' => $video->url,
+                    'video' => $video->video,
+                    'visualizations' => $video->visualizations,
+                    'created_at' => $video->created_at,
+                    'updated_at' => $video->updated_at,
+                ];
+            })
         ];
         return response()->json([
             'success' => true,
@@ -383,10 +414,10 @@ class CursoPlataformaController extends Controller
                 'rating' => 'required|numeric|min:1|max:5',
                 'course_platform_video_id' => 'required|exists:course_platform_videos,id',
             ]);
-            if(is_null($data['rating'])){
+            if (is_null($data['rating'])) {
                 $data['rating'] = 1;
             }
-            if($data['rating']>=3){
+            if ($data['rating'] >= 3) {
                 $data['status'] = 1;
             }
             $coursePlatformVideoRating = CoursePlatformVideoRating::create($data);
@@ -424,7 +455,7 @@ class CursoPlataformaController extends Controller
         // Inicializar la consulta
         $query = CoursePlatformVideoRating::query()
             ->where('course_platform_video_id', $data['course_platform_video_id'])
-            ->where('status',1);
+            ->where('status', 1);
 
         // Filtrar por user_id si se proporciona
         if (isset($data['user_id']) && !is_null($data['user_id'])) {
@@ -443,8 +474,8 @@ class CursoPlataformaController extends Controller
         }
 
         $mappedRatings = $coursePlatformVideoRatings->map(function ($rating) {
-            $coursePlatformUserProgress = CoursePlatformUserProgress::where('user_id',$rating->user->id)
-            ->where('course_platform_video_id',$rating->course_platform_video_id)->first();
+            $coursePlatformUserProgress = CoursePlatformUserProgress::where('user_id', $rating->user->id)
+                ->where('course_platform_video_id', $rating->course_platform_video_id)->first();
             return [
                 'id' => $rating->id,
                 'user_id' => $rating->user_id,
@@ -454,7 +485,7 @@ class CursoPlataformaController extends Controller
                 'status' => $rating->status,
                 'user_full_name' => $rating->user->full_name,
                 'user_avatar' => !is_null($rating->user->profile_image) ? asset($rating->user->profile_image) : asset('images/default/default.jpg'),
-                'watched' => !is_null( $coursePlatformUserProgress) ? $coursePlatformUserProgress->watched : false,
+                'watched' => !is_null($coursePlatformUserProgress) ? $coursePlatformUserProgress->watched : false,
                 'created_at' => $rating->created_at,
                 'updated_at' => $rating->updated_at
             ];
