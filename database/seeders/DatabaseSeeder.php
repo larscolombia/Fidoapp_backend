@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ExpiryDate;
 use App\Models\Setting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
@@ -81,5 +82,9 @@ class DatabaseSeeder extends Seeder
         $this->call(EBookSeeder::class);
         //slug in user
         $this->call(InsertSlugInUserSeeder::class);
+        //permission profile
+        $this->call(PermissionProfilesSeeder::class);
+        //expiration
+        $this->call(ExpiryDateSeeder::class);
     }
 }

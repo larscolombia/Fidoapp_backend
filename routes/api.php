@@ -52,6 +52,7 @@ use Modules\Pet\Http\Controllers\Backend\BreedController;
 use App\Http\Controllers\Api\ComandoEquivalenteController;
 use App\Http\Controllers\Api\CoursePlatformUserController;
 use Modules\Pet\Http\Controllers\Backend\API\PetController;
+use App\Http\Controllers\Api\PermissionPetProfileController;
 use App\Http\Controllers\Backend\API\NotificationsController;
 use App\Http\Controllers\Api\HerramientasEntrenamientoController;
 use Modules\Booking\Http\Controllers\Backend\API\BookingsController;
@@ -3715,6 +3716,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Retirar fondos de la wallet
     Route::post('/wallet/withdraw', [WalletController::class, 'withdraw']);
+
+    //Rutas para permisos del perfil de la mascota
+    Route::get('permission-pet-profile',[PermissionPetProfileController::class,'index']);
+    Route::post('permission-pet-profile',[PermissionPetProfileController::class,'updatePermission']);
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 //translations
