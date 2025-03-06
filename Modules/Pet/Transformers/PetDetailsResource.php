@@ -73,6 +73,7 @@ class PetDetailsResource extends JsonResource
             'height' => $this->height ?? 0,
             'height_unit' => $this->height_unit ?? '',
             'user_id' => $this->user_id,
+            'permission_expiration' => $this->permission_pet_profile ? Carbon::parse($this->permission_pet_profile->expiration)->format('d-m-Y') : null,
             'owner' => new OwnerPetResource($this->owner),
             'shared_owners' => SharedOwnerResource::collection($this->sharedOwners),
             'status' => $this->status,

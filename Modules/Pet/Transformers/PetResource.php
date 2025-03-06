@@ -32,6 +32,7 @@ class PetResource extends JsonResource
             'height' => $this->height ?? 0,
             'height_unit' => $this->height_unit ?? '',
             'user_id' => $this->user_id,
+            'permission_expiration' => $this->permission_pet_profile ? Carbon::parse($this->permission_pet_profile->expiration)->format('d-m-Y') : null,
             'status' => $this->status,
             'qr_code' => $this->qr_code,
             'passport' => $this->passport,

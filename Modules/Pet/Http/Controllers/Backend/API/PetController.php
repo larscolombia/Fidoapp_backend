@@ -534,6 +534,7 @@ class PetController extends Controller
             'additional_info' => $pet->additional_info,
             'status' => $pet->status,
             'passport' => $pet->passport,
+            'permission_expiration' => $pet->permission_pet_profile ? Carbon::parse($pet->permission_pet_profile->expiration)->format('d-m-Y') : null,
             'created_by' => $pet->created_by,
             'updated_by' => $pet->updated_by,
             'deleted_by' => $pet->deleted_by,

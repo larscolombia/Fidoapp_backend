@@ -9,10 +9,11 @@ use App\Models\Vacuna;
 use App\Models\BaseModel;
 use App\Models\PetHistory;
 use App\Models\ActivityLevel;
+use App\Models\Antigarrapata;
 use App\Models\Traits\HasSlug;
 use App\Models\Antidesparasitante;
-use App\Models\Antigarrapata;
 use Modules\Booking\Models\Booking;
+use App\Models\PermissionPetProfile;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -119,5 +120,10 @@ class Pet extends BaseModel
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function permission_pet_profile()
+    {
+        return $this->hasOne(PermissionPetProfile::class,'pet_id','id');
     }
 }
