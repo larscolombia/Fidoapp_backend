@@ -54,6 +54,7 @@ class TrainingDiaryController extends Controller
                 'pet_id' => 'required|exists:pets,id',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,bmp,svg',
             ]);
+            \Log::info($data);
             try {
                 $data['date'] = Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y-m-d');
             } catch (\Exception $e) {
@@ -174,7 +175,7 @@ class TrainingDiaryController extends Controller
                 'pet_id' => 'sometimes|exists:pets,id',
                 'image' => 'sometimes|image|mimes:jpg,jpeg,png,gif,bmp,svg',
             ]);
-
+            \Log::info($data);
 
             $trainingDiary = Diario::find($id);
             if (!$trainingDiary) {
