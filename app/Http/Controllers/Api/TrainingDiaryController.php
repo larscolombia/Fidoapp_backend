@@ -52,7 +52,7 @@ class TrainingDiaryController extends Controller
                 'notas' => 'nullable|string|max:255',
                 'category_id' => 'required|integer',
                 'pet_id' => 'required|exists:pets,id',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,bmp,svg',
             ]);
             try {
                 $data['date'] = Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y-m-d');
@@ -112,7 +112,7 @@ class TrainingDiaryController extends Controller
                 'actividad' => $trainingDiary->actividad,
                 'notas' => $trainingDiary->notas,
                 'pet_id' => $trainingDiary->pet_id,
-                'image' =>$trainingDiary->image,
+                'image' => $trainingDiary->image,
                 'created_at' => $trainingDiary->created_at,
                 'updated_at' => $trainingDiary->updated_at
             ];
@@ -172,7 +172,7 @@ class TrainingDiaryController extends Controller
                 'notas' => 'sometimes|string|max:255',
                 'category_id' => 'sometimes|integer',
                 'pet_id' => 'sometimes|exists:pets,id',
-                'image' => 'sometimes|image|mimes:jpg,jpeg,png',
+                'image' => 'sometimes|image|mimes:jpg,jpeg,png,gif,bmp,svg',
             ]);
 
 
@@ -210,16 +210,16 @@ class TrainingDiaryController extends Controller
 
                 // Actualiza el campo de imagen en los datos
                 $data['image'] = $imagePath;
-            }else{
+            } else {
                 $data['image'] = $trainingDiary->image;
             }
 
             $trainingDiary->update([
-                'date' => $data['date'] ,
+                'date' => $data['date'],
                 'actividad' => $request->input('actividad', $trainingDiary->actividad),
-                'notas' => $request->input('notas',$trainingDiary->notas),
-                'category_id' => $request->input('category_id',$trainingDiary->category_id),
-                'pet_id' => $request->input('pet_id',$trainingDiary->pet_id),
+                'notas' => $request->input('notas', $trainingDiary->notas),
+                'category_id' => $request->input('category_id', $trainingDiary->category_id),
+                'pet_id' => $request->input('pet_id', $trainingDiary->pet_id),
                 'image' => $data['image'],
             ]);
 
