@@ -86,5 +86,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionProfilesSeeder::class);
         //expiration
         $this->call(ExpiryDateSeeder::class);
+        //seeder specialityRole
+        $this->call(SpecialityRoleSeeder::class);
     }
 }

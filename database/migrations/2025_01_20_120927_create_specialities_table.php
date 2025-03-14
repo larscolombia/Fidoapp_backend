@@ -30,17 +30,16 @@ return new class extends Migration
             "expert_2": {"description": "Evaluación."},
             "expert_3": {"description": "Consultas."},
             "expert_4": {"description": "Actualización de data del perro."},
-            "expert_5": {"description": "Actualización de vacuna"},
-               }';
+            "expert_5": {"description": "Actualización de vacuna"}
+        }';
 
         // Decodificar el JSON
         $data = json_decode($jsonData, true);
 
         // Preparar los datos para la inserción
-        $insertData = [];
-        foreach ($data as $expert) {
-            $insertData[] = ['description' => $expert['description'], 'created_at' => now(), 'updated_at' => now()];
-        }
+        $insertData = array_map(function ($item) {
+            return ['description' => $item['description'], 'created_at' => now(), 'updated_at' => now()];
+        }, $data);
 
         // Insertar los datos en la tabla 'specialities'
         DB::table('specialities')->insert($insertData);

@@ -14,4 +14,9 @@ class Speciality extends Model
     {
         return $this->hasMany(UserProfile::class,'id','speciality_id');
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class,'rol_id','id');
+    }
 }
