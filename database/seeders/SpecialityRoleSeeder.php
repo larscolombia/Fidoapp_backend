@@ -17,12 +17,12 @@ class SpecialityRoleSeeder extends Seeder
      */
     private array $roleMap = [
         'trainer' => [
-            'Consulta.',
-            'Evaluación.'
+            'Consulta',
+            'Evaluación'
         ],
         'vet' => [
-            'Consultas.',
-            'Actualización de data del perro.',
+            'Consultas',
+            'Actualización de data del perro',
             'Actualización de vacuna'
         ]
     ];

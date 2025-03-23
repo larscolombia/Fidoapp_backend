@@ -26,10 +26,10 @@ return new class extends Migration
     private function insertData()
     {
         $jsonData = '{
-            "expert": {"description": "Consulta."},
-            "expert_2": {"description": "Evaluación."},
-            "expert_3": {"description": "Consultas."},
-            "expert_4": {"description": "Actualización de data del perro."},
+            "expert": {"description": "Consulta"},
+            "expert_2": {"description": "Evaluación"},
+            "expert_3": {"description": "Consultas"},
+            "expert_4": {"description": "Actualización de data del perro"},
             "expert_5": {"description": "Actualización de vacuna"}
         }';
 
