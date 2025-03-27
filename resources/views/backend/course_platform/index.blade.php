@@ -81,6 +81,13 @@
                 orderable: false,
                 searchable: true,
             },
+            {
+                data: 'created_at',
+                name: 'created_at',
+                title: "{{ __('course_platform.created_at') }}",
+                orderable: true,
+                searchable: false,
+            },
         ]
 
         const actionColumn = [{
@@ -102,7 +109,7 @@
                 url: '{{ route('backend.course_platform.index_data') }}',
                 finalColumns,
                 orderColumn: [
-                    [1, "asc"]
+                    [4, "desc"]
                 ],
                 advanceFilter: () => {
                     return {

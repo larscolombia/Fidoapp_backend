@@ -79,7 +79,15 @@ class CursoPlataformaController extends Controller
                 }
                 return $difficulty;
             })
-            ->orderColumns(['id'], '-:column $1')
+            ->editColumn('created_at',function ($data){
+                $diff = timeAgoInt($data->created_at);
+
+                if ($diff < 25) {
+                    return timeAgo($data->created_at);
+                } else {
+                    return customDate($data->created_at);
+                }
+            })
             ->rawColumns(['action'])
             ->toJson();
     }

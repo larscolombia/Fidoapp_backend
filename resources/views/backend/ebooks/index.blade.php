@@ -106,7 +106,7 @@
                 url: '{{ route('backend.ebooks.index_data') }}',
                 finalColumns,
                 orderColumn: [
-                    [1, "asc"]
+                    [3, "desc"]
                 ],
                 advanceFilter: () => {
                     return {

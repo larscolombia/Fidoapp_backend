@@ -61,14 +61,13 @@
             edit-title="{{ __('messages.edit') }} {{ __('pet.lbl_owner') }}">
         </customer-offcanvas>
         <send-push-notification create-title="Send Push Notification"></send-push-notification>
-        <change-password
-            create-title="{{ __('messages.change_password') }}"></change-password>
+        <change-password create-title="{{ __('messages.change_password') }}"></change-password>
         <assign-pet create-title="Assign
             Pet"></assign-pet>
-            <pet-offcanvas create-title="{{ __('messages.create') }} {{ __('pet.title') }}"
-                edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
-            </pet-offcanvas>
-            <pets-offcanvas create-title="{{ __('Create') }} {{ __('pet.title') }}"
+        <pet-offcanvas create-title="{{ __('messages.create') }} {{ __('pet.title') }}"
+            edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
+        </pet-offcanvas>
+        <pets-offcanvas create-title="{{ __('Create') }} {{ __('pet.title') }}"
             edit-title="{{ __('messages.edit') }} {{ __('pet.title') }}">
         </pets-offcanvas>
     </div>
@@ -192,6 +191,11 @@
                 searchable: true,
                 title: "{{ __('customer.lbl_status') }}"
             },
+            {
+                data: 'created_at',
+                name: 'created_at',
+                visible: false,
+            },
 
         ]
 
@@ -215,7 +219,12 @@
                 url: '{{ route("backend.$module_name.index_data") }}',
                 finalColumns,
                 orderColumn: [
-                    [6, 'desc']
+                    @hasPermission("view_owner's_pet")[5, 'desc']
+                    @else[4, 'desc']
+                    @endhasPermission
+
+
+
                 ],
             })
 

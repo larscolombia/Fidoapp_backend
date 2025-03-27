@@ -247,6 +247,17 @@ class PetsController extends Controller
                     return $data->updated_at->isoFormat('llll');
                 }
             })
+            ->editColumn('created_at', function ($data) {
+                $module_name = $this->module_name;
+
+                $diff = Carbon::now()->diffInHours($data->created_at);
+
+                if ($diff < 25) {
+                    return $data->created_at->diffForHumans();
+                } else {
+                    return $data->created_at->isoFormat('llll');
+                }
+            })
             ->filterColumn('user_id', function ($query, $keyword) {
                 if (! empty($keyword)) {
 
@@ -254,7 +265,6 @@ class PetsController extends Controller
                 }
             })
             ->rawColumns(['action', 'status', 'check', 'pet_count'])
-            ->orderColumns(['id'], '-:column $1')
             ->make(true);
     }
 

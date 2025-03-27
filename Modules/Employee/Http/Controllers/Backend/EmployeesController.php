@@ -437,7 +437,17 @@ class EmployeesController extends Controller
                     return $data->updated_at->isoFormat('llll');
                 }
             })
-            ->orderColumns(['id'], '-:column $1');
+            ->editColumn('created_at', function ($data) {
+                $module_name = $this->module_name;
+
+                $diff = Carbon::now()->diffInHours($data->created_at);
+
+                if ($diff < 25) {
+                    return $data->created_at->diffForHumans();
+                } else {
+                    return $data->created_at->isoFormat('llll');
+                }
+            });
 
         // Custom Fields For export
         $customFieldColumns = CustomField::customFieldData($datatable, User::CUSTOM_FIELD_MODEL, null);
@@ -993,14 +1003,24 @@ class EmployeesController extends Controller
                     return $data->created_at->isoFormat('llll');
                 }
             })
+            ->editColumn('created_at', function ($data) {
+                $module_name = $this->module_name;
+
+                $diff = Carbon::now()->diffInHours($data->created_at);
+
+                if ($diff < 25) {
+                    return $data->created_at->diffForHumans();
+                } else {
+                    return $data->created_at->isoFormat('llll');
+                }
+            })
             ->addColumn('enabled', function ($data) {
                 $text = __('rating.no');
                 if ($data->status == 1) {
                     $text = __('rating.yes');
                 }
                 return $text;
-            })
-            ->orderColumns(['id'], '-:column $1');
+            });
 
         return $datatable->rawColumns(array_merge(['action', 'image', 'check', 'employee_id', 'user_id', 'review_msg', 'module', 'rating']))
             ->toJson();

@@ -132,6 +132,13 @@
                 name: 'enabled',
                 title: "{{ __('rating.enabled') }}",
                 width: '5%'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at',
+                title: "{{ __('employee.lbl_updated') }}",
+                width: '5%',
+                visible:false
             }
 
         ]
@@ -157,7 +164,7 @@
                 url: '{{ route('backend.employees.review_data') }}',
                 finalColumns,
                 orderColumn: [
-                    [5, 'desc']
+                    [8, 'desc']
                 ],
                 advanceFilter: () => {
                     return {

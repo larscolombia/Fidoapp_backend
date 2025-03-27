@@ -58,7 +58,8 @@
                     </div>
                     @hasPermission('add_employees')
                         @if ($type != 'pending_employee')
-                            <x-buttons.offcanvas target='#form-offcanvas' title="{{ __('employee.create') }} {{ __($create_title) }}"
+                            <x-buttons.offcanvas target='#form-offcanvas'
+                                title="{{ __('employee.create') }} {{ __($create_title) }}"
                                 class=" d-flex align-items-center gap-1">{{ __('messages.new') }}</x-buttons.offcanvas>
                         @endif
                     @endhasPermission
@@ -89,8 +90,7 @@
 
 
         <employee-slot-mapping-form-offcanvas></employee-slot-mapping-form-offcanvas>
-        <change-password
-            create-title="{{ __('messages.change_password') }}"></change-password>
+        <change-password create-title="{{ __('messages.change_password') }}"></change-password>
 
         <send-push-notification create-title="Send
             Push Notification"></send-push-notification>
@@ -104,7 +104,7 @@
 
 @push('after-scripts')
     <script src="{{ mix('modules/employee/script.js') }}"></script>
-    <script src="{{ asset('js/form-offcanvas/index.js') }}" ></script>
+    <script src="{{ asset('js/form-offcanvas/index.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
     <!-- DataTables Core and Extensions -->
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
@@ -166,6 +166,12 @@
                 width: '15%',
                 visible: false
             },
+            {
+                data: 'created_at',
+                name: 'created_at',
+                width: '15%',
+                visible: false
+            },
         ]
 
         const actionColumn = [{
@@ -189,8 +195,14 @@
             initDatatable({
                 url: '{{ route("backend.$module_name.index_data", ['type' => $type]) }}',
                 finalColumns,
+
                 orderColumn: [
-                    [1, 'asc']
+                    @if (request('employee_type') == null)
+                        [8, 'desc'],
+                    @else
+                        [7, 'desc'],
+                    @endif
+
                 ],
 
             })

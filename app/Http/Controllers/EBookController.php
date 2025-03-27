@@ -108,7 +108,7 @@ class EBookController extends Controller
                     return $data->updated_at->isoFormat('llll');
                 }
             })
-            ->orderColumns(['id'], '-:column $1')
+
             ->rawColumns(['action', 'check'])
             ->toJson();
     }

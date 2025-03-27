@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Coin::updateOrCreate(
             [
-                'symbol' => 'ƒ'
+                'symbol' => '$'
             ],
             [
                 'minimum_recharge' => 1,
