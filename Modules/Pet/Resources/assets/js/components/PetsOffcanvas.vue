@@ -53,7 +53,7 @@
           <flat-pickr v-model="date_of_birth" :config="config" class="form-control" />
         </div>
 
-        <InputField class="col-md-12" type="text" :label="$t('pet.lbl_age')" placeholder="" v-model="age" :error-message="errors['age']" :error-messages="errorMessages['age']"></InputField>
+        <!-- <InputField class="col-md-12" type="text" :label="$t('pet.lbl_age')" placeholder="" v-model="age" :error-message="errors['age']" :error-messages="errorMessages['age']"></InputField> -->
 
         <div class="form-group col-md-4">
           <label for="" class="form-label w-100">{{ $t('customer.lbl_gender') }}</label>

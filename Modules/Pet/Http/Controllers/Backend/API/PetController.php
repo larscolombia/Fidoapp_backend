@@ -278,7 +278,6 @@ class PetController extends Controller
                 'breed_name' => 'sometimes|string',
                 'size' => 'sometimes|string|max:50',
                 'date_of_birth' => 'sometimes|string',
-                'age' => 'sometimes|string|max:50',
                 'gender' => 'sometimes|in:male,female',
                 'weight' => 'sometimes|numeric',
                 'height' => 'sometimes|numeric',
@@ -324,11 +323,9 @@ class PetController extends Controller
             }
 
             $validatedData['breed_id'] = $breed->id;
-            if (!isset($validatedData['age'])) {
-                // Calcular la edad de la mascota
-                if (isset($validatedData['date_of_birth'])) {
-                    $validatedData['age'] = $this->calculateAge($validatedData['date_of_birth']);
-                }
+            // Calcular la edad de la mascota
+            if (isset($validatedData['date_of_birth']) && !is_null($validatedData['date_of_birth'])) {
+                $validatedData['age'] = $this->calculateAge($validatedData['date_of_birth']);
             }
             // Generar el slug automáticamente si no está presente
             $slug = Str::slug($validatedData['name']);
@@ -394,7 +391,6 @@ class PetController extends Controller
                 'breed_name' => 'sometimes|string',
                 'size' => 'sometimes|string|max:50',
                 'date_of_birth' => 'sometimes|string',
-                'age' => 'sometimes|string|max:50',
                 'gender' => 'sometimes|in:male,female',
                 'weight' => 'sometimes|numeric',
                 'height' => 'sometimes|numeric',
@@ -429,6 +425,7 @@ class PetController extends Controller
             try {
                 if (!is_null($validatedData['date_of_birth'])) {
                     $validatedData['date_of_birth'] = str_replace('/', '-', $validatedData['date_of_birth']);
+                    $validatedData['age'] = $this->calculateAge($validatedData['date_of_birth']);
                 }
 
                 $validatedData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $validatedData['date_of_birth'])->format('Y-m-d');
