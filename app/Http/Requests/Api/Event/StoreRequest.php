@@ -36,8 +36,8 @@ class StoreRequest extends FormRequest
             'tipo' => 'required|in:medico,entrenamiento,evento',
             'status' => 'required|boolean',
             'pet_id' => 'required|integer',
-            'owner_id' => 'required|array',
-            'owner_id.*' => 'required|integer|exists:users,id',
+            'owner_id' => 'sometimes|array',
+            'owner_id.*' => 'sometimes|integer|exists:users,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
 
             // Reglas condicionales
@@ -73,6 +73,12 @@ class StoreRequest extends FormRequest
                 if (empty($data['duration_id']) || empty($data['training_id'])) {
                     $validator->errors()->add('duration_id', 'El campo duration_id es requerido cuando tipo es "entrenamiento".');
                     $validator->errors()->add('training_id', 'El campo training_id es requerido cuando tipo es "entrenamiento".');
+                }
+            }
+            // Validación condicional para owner_id
+            if (in_array($data['tipo'], ['medico', 'entrenamiento'])) {
+                if (!isset($data['owner_id']) || !is_array($data['owner_id'])) {
+                    $validator->errors()->add('owner_id', 'El campo owner_id es requerido para tipos "medico" o "entrenamiento".');
                 }
             }
         });

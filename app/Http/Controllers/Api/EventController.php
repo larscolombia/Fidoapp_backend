@@ -182,15 +182,17 @@ class EventController extends Controller
             // Crear los detalles del evento
             $ownerIds = $request->input('owner_id');
             $professionalId = ['employee_id' => null];
-            foreach ($ownerIds as $ownerId) {
-                EventDetail::create([
-                    'event_id' => $event->id,
-                    'pet_id'   => $request->input('pet_id'),
-                    'owner_id' => $ownerId,
-                ]);
-                $professionalUser = User::find($ownerId);
-                if ($professionalUser->user_type == 'vet' || $professionalUser->user_type == 'trainer') {
-                    $professionalId = ['employee_id' => $ownerId];
+            if(!is_null($ownerIds)){
+                foreach ($ownerIds as $ownerId) {
+                    EventDetail::create([
+                        'event_id' => $event->id,
+                        'pet_id'   => $request->input('pet_id'),
+                        'owner_id' => $ownerId,
+                    ]);
+                    $professionalUser = User::find($ownerId);
+                    if ($professionalUser->user_type == 'vet' || $professionalUser->user_type == 'trainer') {
+                        $professionalId = ['employee_id' => $ownerId];
+                    }
                 }
             }
 
@@ -209,8 +211,11 @@ class EventController extends Controller
                     $chekcoutController->store($request, $service['total_amount']);
                 }
             }
-            if (!in_array($request->input('user_id'), $ownerIds)) {
+            if (!is_null($ownerIds) && !in_array($request->input('user_id'), $ownerIds)) {
                 $ownerIds[] = $request->input('user_id');
+            }
+            if(is_null($ownerIds)){
+                $ownerIds = [$request->input('user_id')];
             }
             // $titleEvent = $event->name;
             $titleNotificationEvent = 'Nuevo Evento';
