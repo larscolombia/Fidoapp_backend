@@ -293,7 +293,7 @@ class VeterinaryController extends Controller
                 }
             })
             ->editColumn('start_date_time', function ($data) {
-                return optional($data->veterinary)->date_time;
+                return optional($data->veterinary)->date_time ? Carbon::parse($data->veterinary->date_time)->format('d-m-Y H:i') : '';
             })
             ->orderColumn('start_date_time', function ($query, $order) {
                 $query->orderByRaw('(SELECT date_time FROM booking_veterinary_mapping WHERE booking_id = bookings.id LIMIT 1) ' . $order);
@@ -306,12 +306,12 @@ class VeterinaryController extends Controller
                 }
             })
             ->editColumn('updated_at', function ($data) {
-                $diff = timeAgoInt($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
                 if ($diff < 25) {
-                    return timeAgo($data->updated_at);
+                    return $data->updated_at->diffForHumans();
                 } else {
-                    return customDate($data->updated_at);
+                    return $data->updated_at->isoFormat('llll');
                 }
             })
             // ->editColumn('start_date_time', function ($row) use ($module_name) {

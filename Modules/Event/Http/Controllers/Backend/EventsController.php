@@ -119,8 +119,14 @@ class EventsController extends Controller
                             return "<img src='" . $data->event_image . "'class='avatar avatar-40 img-fluid rounded-pill'>";
                         })
                         ->editColumn('date', function ($data) {
-                            $date = new \DateTime($data->date);
-                            return $date->format('Y-m-d');
+                            $date = Carbon::parse($data->date);
+                            $diff = Carbon::now()->diffInHours($date);
+
+                            if ($diff < 25) {
+                                return $date->diffForHumans();
+                            } else {
+                                return $date->isoFormat('llll');
+                            }
                         })
                         ->editColumn('user_id', function ($data) {
                             $userType = isset($data->user) ? str_replace('day_taker', 'dayCare_taker', $data->user->user_type) : '';

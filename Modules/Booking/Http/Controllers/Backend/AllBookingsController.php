@@ -389,12 +389,13 @@ class AllBookingsController extends Controller
             }, 1)
 
             ->editColumn('updated_at', function ($data) {
-                $diff = timeAgoInt($data->updated_at);
+
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
                 if ($diff < 25) {
-                    return timeAgo($data->updated_at);
+                    return $data->updated_at->diffForHumans();
                 } else {
-                    return customDate($data->updated_at);
+                    return $data->updated_at->isoFormat('llll');
                 }
             })
             ->orderColumn('employee_id', function ($query, $order) {

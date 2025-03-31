@@ -146,6 +146,7 @@
             initDatatable({
                 url: '{{ route('backend.lost_pet_data') }}',
                 finalColumns,
+                orderColumn: [5,'desc']
             })
 
         })

@@ -49,7 +49,7 @@ class DayCareController extends Controller
         $statusList = $this->statusList();
 
         $booking = Booking::find(request()->booking_id);
-        
+
         $date = $booking->start_date_time ?? date('Y-m-d');
 
         return view('booking::backend.daycare.index', compact('module_action', 'statusList', 'date'));
@@ -133,7 +133,7 @@ class DayCareController extends Controller
         $query = Booking::query()->where('booking_type','daycare')->branch()->with('user', 'daycare', 'payment', 'pet','employee');
 
         if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
-           
+
             $query;
 
         } else {
@@ -277,7 +277,7 @@ class DayCareController extends Controller
             ->editColumn('drop_date_time', function ($data) {
                 $daycareDate = optional($data->daycare)->date;
                 $dropoffTime = optional($data->daycare)->dropoff_time;
-            
+
                 if ($daycareDate === null || $dropoffTime === null) {
                     return '-'; // You can return any default value or error message.
                 } else {
@@ -304,7 +304,7 @@ class DayCareController extends Controller
             ->editColumn('pick_date_time', function ($data) {
                 $daycareDate = optional($data->daycare)->date;
                 $pickUpTime = optional($data->daycare)->pickup_time;
-            
+
                 if ($daycareDate === null || $pickUpTime === null) {
                     return '-'; // You can return any default value or error message.
                 } else {
@@ -327,17 +327,17 @@ class DayCareController extends Controller
                     });
                 }
             })
-              
+
             ->editColumn('updated_at', function ($data) {
-                $diff = timeAgoInt($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
                 if ($diff < 25) {
-                    return timeAgo($data->updated_at);
+                    return $data->updated_at->diffForHumans();
                 } else {
-                    return customDate($data->updated_at);
+                    return $data->updated_at->isoFormat('llll');
                 }
             })
-         
+
             // ->orderColumn('service_amount', function ($query, $order) {
             //     $query->orderBy(new Expression('(SELECT SUM(service_price) FROM booking_services WHERE booking_id = bookings.id)'), $order);
             // }, 1)

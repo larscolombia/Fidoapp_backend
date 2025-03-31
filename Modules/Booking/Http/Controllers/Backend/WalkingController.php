@@ -49,14 +49,14 @@ class WalkingController extends Controller
      * @return Response
      */
     public function index(Request $request)
-    {  
+    {
 
         $module_action = 'List';
 
         $statusList = $this->statusList();
 
         $booking = Booking::find(request()->booking_id);
-        
+
         $date = $booking->start_date_time ?? date('Y-m-d');
 
         return view('booking::backend.walking.index', compact('module_action', 'statusList', 'date'));
@@ -123,7 +123,7 @@ class WalkingController extends Controller
         $module_action = 'List';
         $create_title = __('booking.walking_booking');
         $type=$request->type;
-    
+
 
         $filter = [
             'status' => $request->status,
@@ -137,7 +137,7 @@ class WalkingController extends Controller
     public function booking_request_datatable(Request $request)
     {
         $module_action = 'List';
-     
+
         $type=$request->type;
 
         $module_title = 'booking.walking_booking_request';
@@ -169,7 +169,7 @@ class WalkingController extends Controller
                 $query->where('employee_id', null);
             }else{
 
-                $query->whereNotNull('employee_id'); 
+                $query->whereNotNull('employee_id');
             }
 
         } else {
@@ -186,7 +186,7 @@ class WalkingController extends Controller
 
                 $query->whereIn('id', $bookingIds);
 
-        
+
             }else{
 
                 $query->where('employee_id', auth()->id());
@@ -236,7 +236,7 @@ class WalkingController extends Controller
                 return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
             })
             ->addColumn('action', function ($data) use ($module_name,$booking_type) {
-        
+
                 return view('booking::backend.walking.datatable.action_column', compact('module_name', 'data','booking_type'));
             })
             ->editColumn('status', function ($data) use ($booking_status, $booking_colors) {
@@ -260,7 +260,7 @@ class WalkingController extends Controller
             ->editColumn('employee_id', function ($data) {
                 return view('booking::backend.walking.datatable.employee_id', compact('data'));
             })
-            
+
             ->editColumn('start_date_time', function ($data) {
                 return customDate(optional($data->walking)->date_time);
             })
@@ -350,15 +350,15 @@ class WalkingController extends Controller
             })
 
             ->editColumn('updated_at', function ($data) {
-                $diff = timeAgoInt($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
                 if ($diff < 25) {
-                    return timeAgo($data->updated_at);
+                    return $data->updated_at->diffForHumans();
                 } else {
-                    return customDate($data->updated_at);
+                    return $data->updated_at->isoFormat('llll');
                 }
             })
-   
+
             // ->orderColumn('service_amount', function ($query, $order) {
             //     $query->orderBy(new Expression('(SELECT SUM(service_price) FROM booking_services WHERE booking_id = bookings.id)'), $order);
             // }, 1)
@@ -412,7 +412,7 @@ class WalkingController extends Controller
 
         return response()->json(['status' => true, 'message' => $message]);
     }
-    
+
     public function accept_booking($id) {
 
       $employee_id=auth()->id();
@@ -430,9 +430,9 @@ class WalkingController extends Controller
            $earning_data = $this->commissionData($payment);
 
            $booking->commission()->save(new CommissionEarning($earning_data['commission_data']));
-   
+
        }
-  
+
        BookingRequestMapping::where('booking_id', $id)->update(['status' => 1]);
 
        $booking=Booking::where('id',$id)->with('user','systemservice','employee')->first();
@@ -453,7 +453,7 @@ class WalkingController extends Controller
         'booking_date_and_time' => DateTime::createFromFormat('Y-m-d H:i', $booking->start_date_time),
         'latitude' =>  null,
         'longitude' => null,
-        
+
      ];
 
         if(isset($notify_type)) {
@@ -463,7 +463,7 @@ class WalkingController extends Controller
                 \Log::error($e->getMessage());
             }
         }
-    
+
 
         $message = __('booking.booking_accepted');
 
@@ -475,5 +475,5 @@ class WalkingController extends Controller
 
     }
 
-    
+
 }

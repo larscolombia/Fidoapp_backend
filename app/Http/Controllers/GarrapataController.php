@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Antigarrapata;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 use Modules\Pet\Models\Pet;
+use Illuminate\Http\Request;
+use App\Models\Antigarrapata;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
 
 class GarrapataController extends Controller
 {
@@ -27,7 +28,8 @@ class GarrapataController extends Controller
         ]);
     }
 
-    public function mascotas () {
+    public function mascotas()
+    {
         $pets = Pet::with('user')->get();
         return view('backend.antigarrapatas.mascotas', compact('pets'));
     }
@@ -52,7 +54,7 @@ class GarrapataController extends Controller
                 $buttonText = '';
                 $routeName = 'backend.mascotas.antigarrapatas.index';
                 $buttonText = __('antigarrapata.View Antigarrapatas');
-            
+
                 $return = '<a href="';
                 $return .= route($routeName, ['pet' => $pet->id]);
                 $return .= '" class="btn btn-primary">';
@@ -64,13 +66,15 @@ class GarrapataController extends Controller
             ->make(true);
     }
 
-    public function index($pet) {
+    public function index($pet)
+    {
         $antigarrapatas = Antigarrapata::with('pet')->where('pet_id', $pet);
 
         return view('backend.antigarrapatas.index', compact('pet', 'antigarrapatas'));
     }
 
-    public function antigarrapatas_data (DataTables $datatable, Request $request, $pet) {
+    public function antigarrapatas_data(DataTables $datatable, Request $request, $pet)
+    {
         $antigarrapatas = Antigarrapata::with('pet')->where('pet_id', $pet);
         return $datatable->eloquent($antigarrapatas)
             ->addColumn('pet_type', function ($antigarrapata) {
@@ -80,10 +84,12 @@ class GarrapataController extends Controller
                 return $antigarrapata->antigarrapata_name;
             })
             ->addColumn('fecha_aplicacion', function ($antigarrapata) {
-                return $antigarrapata->fecha_aplicacion;
+                $date = Carbon::parse($antigarrapata->fecha_aplicacion);
+                return $date->isoFormat('dddd, D [de] MMMM [de] YYYY');
             })
             ->addColumn('fecha_refuerzo_antigarrapata', function ($antigarrapata) {
-                return $antigarrapata->fecha_refuerzo_antigarrapata;
+                $date = Carbon::parse($antigarrapata->fecha_refuerzo_antigarrapata);
+                return $date->isoFormat('dddd, D [de] MMMM [de] YYYY');
             })
             ->addColumn('action', function ($data) {
                 return view('backend.antigarrapatas.action_column', compact('data'));
@@ -116,7 +122,7 @@ class GarrapataController extends Controller
 
         // Redirigir con un mensaje de éxito
         return redirect()->route('backend.mascotas.antigarrapatas.index', ['pet' => $pet->id])
-                        ->with('success', __('Antigarrapata creada exitosamente.'));
+            ->with('success', __('Antigarrapata creada exitosamente.'));
     }
 
     public function show(Pet $pet, Antigarrapata $antigarrapata)
@@ -143,7 +149,7 @@ class GarrapataController extends Controller
         $antigarrapata->save();
 
         return redirect()->route('backend.mascotas.antigarrapatas.index', ['pet' => $pet->id])
-                        ->with('success', __('Antigarrapata actualizada exitosamente.'));
+            ->with('success', __('Antigarrapata actualizada exitosamente.'));
     }
 
     public function destroy(Antigarrapata $antigarrapata)
@@ -151,6 +157,6 @@ class GarrapataController extends Controller
         $antigarrapata->delete();
 
         return redirect()->route('backend.mascotas.antigarrapatas.index', ['pet' => $antigarrapata->pet->id])
-                        ->with('success', __('Antigarrapata eliminada exitosamente.'));
+            ->with('success', __('Antigarrapata eliminada exitosamente.'));
     }
 }

@@ -50,7 +50,7 @@ class GroomingController extends Controller
         $statusList = $this->statusList();
 
         $booking = Booking::find(request()->booking_id);
-        
+
         $date = $booking->start_date_time ?? date('Y-m-d');
 
         return view('booking::backend.grooming.index', compact('module_action', 'statusList', 'date'));
@@ -133,9 +133,9 @@ class GroomingController extends Controller
 
         $query = Booking::query()->where('booking_type','grooming')->branch()->with('user', 'grooming', 'pet','employee','payment');
 
-        
+
         if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
-           
+
             $query;
 
         } else {
@@ -143,8 +143,8 @@ class GroomingController extends Controller
             $query->where('employee_id', auth()->id());
 
         }
-      
-        $filter = $request->filter;    
+
+        $filter = $request->filter;
 
         if (isset($filter)) {
 
@@ -154,7 +154,7 @@ class GroomingController extends Controller
             }
             if (isset($filter['booking_date'])) {
                 echo $filter['booking_date'];
-              
+
                 try {
                     $startDate = explode(' to ', $filter['booking_date'])[0];
                     $endDate = explode(' to ', $filter['booking_date'])[1];
@@ -167,8 +167,8 @@ class GroomingController extends Controller
                 $query->where('user_id', $filter['user_id']);
             }
             if (isset($filter['employee_id'])) {
-               
-                $query->where('employee_id', $filter['employee_id']);        
+
+                $query->where('employee_id', $filter['employee_id']);
             }
             // if (isset($filter['service_id'])) {
             //     $query->whereHas('services', function ($q) use ($filter) {
@@ -177,7 +177,7 @@ class GroomingController extends Controller
             // }
         }
 
-     
+
 
         $booking_status = Constant::getAllConstant()->where('type', 'BOOKING_STATUS');
         $booking_colors = Constant::getAllConstant()->where('type', 'BOOKING_STATUS_COLOR');
@@ -307,15 +307,15 @@ class GroomingController extends Controller
                 }
             })
             ->editColumn('updated_at', function ($data) {
-                $diff = timeAgoInt($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
                 if ($diff < 25) {
-                    return timeAgo($data->updated_at);
+                    return $data->updated_at->diffForHumans();
                 } else {
-                    return customDate($data->updated_at);
+                    return $data->updated_at->isoFormat('llll');
                 }
             })
-          
+
 
             // ->editColumn('start_date_time', function ($row) use ($module_name) {
             //     return "<a href='".route('backend.grooming.index', ['booking_id' => $row->id])."'>$row->start_date_time</a>";
@@ -339,7 +339,7 @@ class GroomingController extends Controller
                     // });
                 }
             })
-          
+
             ->filterColumn('user_id', function ($query, $keyword) {
                 if (! empty($keyword)) {
                     $query->whereHas('user', function ($q) use ($keyword) {

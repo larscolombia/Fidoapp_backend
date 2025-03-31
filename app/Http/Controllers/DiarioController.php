@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Diario;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Modules\Pet\Models\Pet;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -80,13 +81,21 @@ class DiarioController extends Controller
     public function diarios_data(DataTables $datatable, Request $request, $pet)
     {
         $diarios = Diario::with('pet')->where('pet_id', $pet);
-        
+
         return $datatable->eloquent($diarios)
             ->addColumn('mascota', function ($diario) {
                 return $diario->pet->name;
             })
             ->addColumn('date', function ($diario) {
-                return $diario->date;
+                $date = Carbon::parse($diario->date);
+                $diff = Carbon::now()->diffInHours($date);
+
+                if ($diff < 25) {
+                    return $date->diffForHumans();
+                } else {
+                    return $date->isoFormat('llll');
+                }
+
             })
             ->addColumn('activity', function ($diario) {
                 return isset($diario->actividad) ? $diario->actividad : 'N/A';

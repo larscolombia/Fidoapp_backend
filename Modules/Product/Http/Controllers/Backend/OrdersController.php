@@ -47,7 +47,6 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         $export_import = false;
-
         $locations = Location::where('status', 1)->latest()->get();
 
         return view('product::backend.order.index_datatable', compact('export_import', 'locations'));
@@ -88,60 +87,61 @@ class OrdersController extends Controller
         });
 
         return $datatable->eloquent($orders)
-              ->addColumn('check', function ($row) {
-                  return '<input type="checkbox" class="form-check-input select-table-row "  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" onclick="dataTableRowCheck('.$row->id.')">';
-              })
-              ->addColumn('action', function ($data) {
-                  return view('product::backend.order.columns.action_column', compact('data'));
-              })
-              ->editColumn('order_code', function ($data) {
-                  return setting('inv_prefix').$data->orderGroup->order_code;
-              })
-              ->editColumn('customer_name', function ($data) {
-                  return view('product::backend.order.columns.customer_column', compact('data'));
-              })
-              ->editColumn('placed_on', function ($data) {
-                  return customDate($data->created_at);
-              })
-          
+            ->addColumn('check', function ($row) {
+                return '<input type="checkbox" class="form-check-input select-table-row "  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
+            })
+            ->addColumn('action', function ($data) {
+                return view('product::backend.order.columns.action_column', compact('data'));
+            })
+            ->editColumn('order_code', function ($data) {
+                return setting('inv_prefix') . $data->orderGroup->order_code;
+            })
+            ->editColumn('customer_name', function ($data) {
+                return view('product::backend.order.columns.customer_column', compact('data'));
+            })
+            ->editColumn('placed_on', function ($data) {
+                return customDate($data->created_at);
+            })
 
-              ->editColumn('total_amount', function ($data) {
+
+            ->editColumn('total_amount', function ($data) {
                 return \Currency::format($data->orderGroup->grand_total_amount);
-            })  
+            })
 
             ->orderColumn('total_amount', function ($query, $order) {
                 $query->select('orders.*')
                     ->leftJoin('order_groups', 'order_groups.id', '=', 'orders.id')
                     ->orderBy('order_groups.grand_total_amount', $order);
             }, 1)
-              ->editColumn('payment', function ($data) {
-                  return view('product::backend.order.columns.payment_column', compact('data'));
-              })
-              ->editColumn('status', function ($data) {
-                  return view('product::backend.order.columns.status_column', compact('data'));
-              })
-              ->editColumn('location', function ($data) {
-                  return $data->location ? $data->location->name : 'N/A';
-              })
-              ->filterColumn('customer_name', function ($query, $keyword) {
-                  if (! empty($keyword)) {
-                      $query->whereHas('user', function ($q) use ($keyword) {
-                          $q->where('first_name', 'like', '%'.$keyword.'%');
-                          $q->orWhere('last_name', 'like', '%'.$keyword.'%');
-                      });
-                  }
-              })
-              ->editColumn('updated_at', function ($data) {
-                  $diff = Carbon::now()->diffInHours($data->updated_at);
-                  if ($diff < 25) {
-                      return $data->updated_at->diffForHumans();
-                  } else {
-                      return $data->updated_at->isoFormat('llll');
-                  }
-              })
-              ->orderColumns(['id'], '-:column $1')
-              ->rawColumns(['action', 'check'])
-              ->toJson();
+            ->editColumn('payment', function ($data) {
+                return view('product::backend.order.columns.payment_column', compact('data'));
+            })
+            ->editColumn('status', function ($data) {
+                return view('product::backend.order.columns.status_column', compact('data'));
+            })
+            ->editColumn('location', function ($data) {
+                return $data->location ? $data->location->name : 'N/A';
+            })
+            ->filterColumn('customer_name', function ($query, $keyword) {
+                if (! empty($keyword)) {
+                    $query->whereHas('user', function ($q) use ($keyword) {
+                        $q->where('first_name', 'like', '%' . $keyword . '%');
+                        $q->orWhere('last_name', 'like', '%' . $keyword . '%');
+                    });
+                }
+            })
+            ->editColumn('updated_at', function ($data) {
+                $diff = Carbon::now()->diffInHours($data->updated_at);
+
+                if ($diff < 25) {
+                    return $data->updated_at->diffForHumans();
+                } else {
+                    return $data->updated_at->isoFormat('llll');
+                }
+            })
+            ->orderColumns(['id'], '-:column $1')
+            ->rawColumns(['action', 'check'])
+            ->toJson();
     }
 
     /**
@@ -170,7 +170,7 @@ class OrdersController extends Controller
         OrderUpdate::create([
             'order_id' => $order->id,
             'user_id' => auth()->user()->id,
-            'note' => 'Payment status updated to '.ucwords(str_replace('_', ' ', $request->status)).'.',
+            'note' => 'Payment status updated to ' . ucwords(str_replace('_', ' ', $request->status)) . '.',
         ]);
 
         // todo::['mail notification']
@@ -197,15 +197,15 @@ class OrdersController extends Controller
         OrderUpdate::create([
             'order_id' => $order->id,
             'user_id' => auth()->user()->id,
-            'note' => 'Delivery status updated to '.ucwords(str_replace('_', ' ', $request->status)).'.',
+            'note' => 'Delivery status updated to ' . ucwords(str_replace('_', ' ', $request->status)) . '.',
         ]);
 
-        $order_prefix_data=Setting::where('name','inv_prefix')->first();
+        $order_prefix_data = Setting::where('name', 'inv_prefix')->first();
         $order_prefix = $order_prefix_data ? $order_prefix_data->val : '';
 
         $notify_type = null;
 
-        $status=$request->status;
+        $status = $request->status;
 
         switch ($status) {
             case 'processing':
@@ -213,7 +213,7 @@ class OrdersController extends Controller
                 break;
             case 'delivered':
                 $notify_type = 'order_delivered';
-                break;    
+                break;
             case 'cancelled':
                 $notify_type = 'order_cancelled';
                 break;
@@ -221,15 +221,15 @@ class OrdersController extends Controller
 
         try {
             $notification_data = [
-              
+
                 'id' => $order->id,
-                'order_code'=> $order_prefix . optional($order->orderGroup)->order_code,
+                'order_code' => $order_prefix . optional($order->orderGroup)->order_code,
                 'user_id' => $order->user_id,
-                'user_name' => optional($order->user)->first_name.' '.optional($order->user)->last_name  ?? default_user_name(),
+                'user_name' => optional($order->user)->first_name . ' ' . optional($order->user)->last_name  ?? default_user_name(),
                 'order_date' => $order->updated_at->format('d/m/Y'),
                 'order_time' => $order->updated_at->format('h:i A'),
-            ];   
-               
+            ];
+
             $this->sendNotificationOnOrderUpdate($notify_type, $notification_data);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
@@ -299,7 +299,7 @@ class OrdersController extends Controller
             foreach ($carts as $cart) {
                 $productVariationStock = $cart->product_variation->product_variation_stock ? $cart->product_variation->product_variation_stock->stock_qty : 0;
                 if ($cart->qty > $productVariationStock) {
-                    $message = $cart->product_variation->product->name.' is out of stock';
+                    $message = $cart->product_variation->product->name . ' is out of stock';
 
                     return response()->json(['message' => $message, 'status' => false]);
                 }
@@ -382,7 +382,7 @@ class OrdersController extends Controller
             $orderGroup->save();
 
 
-            $order_prefix_data=Setting::where('name','inv_prefix')->first();
+            $order_prefix_data = Setting::where('name', 'inv_prefix')->first();
             $order_prefix = $order_prefix_data ? $order_prefix_data->val : '';
 
 
@@ -390,14 +390,13 @@ class OrdersController extends Controller
                 $notification_data = [
 
                     'id' => $order->id,
-                    'order_code'=> $order_prefix . optional($order->orderGroup)->order_code,
+                    'order_code' => $order_prefix . optional($order->orderGroup)->order_code,
                     'user_id' => $order->user_id,
-                    'user_name' => optional($order->user)->first_name.' '.optional($order->user)->last_name  ?? default_user_name(),
-            
+                    'user_name' => optional($order->user)->first_name . ' ' . optional($order->user)->last_name  ?? default_user_name(),
+
                 ];
 
-            $this->sendNotificationOnOrderUpdate('order_placed', $notification_data);
-
+                $this->sendNotificationOnOrderUpdate('order_placed', $notification_data);
             } catch (\Exception $e) {
                 \Log::error($e->getMessage());
             }

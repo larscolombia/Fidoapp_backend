@@ -393,12 +393,12 @@ class BookingsController extends Controller
                 }
             })
             ->editColumn('updated_at', function ($data) {
-                $diff = timeAgoInt($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
                 if ($diff < 25) {
-                    return timeAgo($data->updated_at);
+                    return $data->updated_at->diffForHumans();
                 } else {
-                    return customDate($data->updated_at);
+                    return $data->updated_at->isoFormat('llll');
                 }
             })
             ->editColumn('dropoff_date_time', function ($row) use ($module_name) {

@@ -128,7 +128,8 @@ class ReportsController extends Controller
         $coin = Coin::first();
         return $datatable->eloquent($query)
             ->editColumn('start_date_time', function ($data) {
-                return customDate($data->date);
+                $date = Carbon::parse($data->date);
+                return $date->isoFormat('llll');
             })
             ->editColumn('total_booking', function ($data) {
                 return $data->total_booking;
@@ -254,7 +255,8 @@ class ReportsController extends Controller
         return $datatable->eloquent($query)
 
             ->editColumn('start_date_time', function ($data) {
-                return customDate($data->start_date_time);
+                $date = Carbon::parse($data->start_date_time);
+                return $date->isoFormat('llll');
             })
             ->editColumn('id', function ($data) {
                 return setting('booking_invoice_prifix') . $data->id;
@@ -355,7 +357,12 @@ class ReportsController extends Controller
         $coin = Coin::first();
         return $datatable->eloquent($query)
             ->editColumn('payment_date', function ($data) {
-                return customDate($data->payment_date ?? '-');
+                if(!is_null($data->payment_date)){
+                    $date = Carbon::parse($data->payment_date);
+                    return $date->isoFormat('llll');
+                }
+                return '-';
+               // return customDate($data->payment_date ?? '-');
             })
             ->editColumn('first_name', function ($data) {
                 return $data->employee->full_name;
@@ -619,7 +626,13 @@ class ReportsController extends Controller
                 return  $data->amount . $coin->symbol;
             })
             ->editColumn('created_at', function ($data) {
-                return \Carbon\Carbon::parse($data->created_at)->format('d-m-Y'); // Formato d-m-Y
+                $diff = Carbon::now()->diffInHours($data->created_at);
+
+                if ($diff < 25) {
+                    return $data->created_at->diffForHumans();
+                } else {
+                    return $data->created_at->isoFormat('llll');
+                }
             })
             ->filterColumn('description', function ($query, $keyword) {
                 $query->whereRaw("description LIKE ?", ["%{$keyword}%"]);

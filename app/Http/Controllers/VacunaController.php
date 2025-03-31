@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Vacuna;
-use Illuminate\Http\Request;
 use Modules\Pet\Models\Pet;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 USE Illuminate\Support\Facades\Log;
@@ -84,10 +85,12 @@ class VacunaController extends Controller
                 return $vacuna->vacuna_name;
             })
             ->addColumn('fecha_aplication', function ($vacuna) {
-                return $vacuna->fecha_aplicacion;
+                $date = Carbon::parse($vacuna->fecha_aplicacion);
+                return $date->isoFormat('dddd, D [de] MMMM [de] YYYY');
             })
             ->addColumn('fecha_refuerzo_vacuna', function ($vacuna) {
-                return $vacuna->fecha_refuerzo_vacuna;
+                $date = Carbon::parse($vacuna->fecha_refuerzo_vacuna);
+                return $date->isoFormat('dddd, D [de] MMMM [de] YYYY');
             })
             ->addColumn('action', function ($data) {
                 return view('backend.vacunas.action_columns', compact('data'));

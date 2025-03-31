@@ -654,8 +654,9 @@ class PetsController extends Controller
             })
 
             ->editColumn('lost_date', function ($data) {
-                $formattedDate = Carbon::parse($data->lost_date)->format('d-m-Y');
-                return $formattedDate;
+
+                $formattedDate = Carbon::parse($data->lost_date);
+                return $formattedDate->isoFormat('llll');
             })
 
             ->addColumn('action', function ($data) {

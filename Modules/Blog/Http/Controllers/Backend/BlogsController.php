@@ -116,12 +116,14 @@ class BlogsController extends Controller
             })
             ->editColumn('date', function ($data) {
                 // Asegúrate de que $data->created_at sea un objeto Carbon
-                $fecha = Carbon::parse($data->created_at);
+                $date = Carbon::parse($data->created_at);
+                $diff = Carbon::now()->diffInHours($date);
 
-                // Formatea la fecha
-                $formattedDate = $fecha->format('Y-m-d');
-
-                return $formattedDate;
+                if ($diff < 25) {
+                    return $date->diffForHumans();
+                } else {
+                    return $date->isoFormat('llll');
+                }
             })
             ->orderColumn('date', function ($query, $order) {
                 $query->orderBy('created_at', $order);

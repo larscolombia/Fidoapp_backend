@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Log;
 use Http;
+use Carbon\Carbon;
 use App\Models\Course;
 use App\Helpers\Functions;
 use Illuminate\Http\Request;
@@ -80,12 +81,12 @@ class CursoPlataformaController extends Controller
                 return $difficulty;
             })
             ->editColumn('created_at',function ($data){
-                $diff = timeAgoInt($data->created_at);
+                $diff = Carbon::now()->diffInHours($data->created_at);
 
                 if ($diff < 25) {
-                    return timeAgo($data->created_at);
+                    return $data->created_at->diffForHumans();
                 } else {
-                    return customDate($data->created_at);
+                    return $data->created_at->isoFormat('llll');
                 }
             })
             ->rawColumns(['action'])
