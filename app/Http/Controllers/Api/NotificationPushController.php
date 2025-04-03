@@ -41,7 +41,7 @@ class NotificationPushController extends Controller
 
     public function sendNotificationDev()
     {
-        $message = CloudMessage::withTarget('token', 'cDlseZnmQE6VGOs0PzNIxp:APA91bGBWYYM80VN53cTwIRpLrEmJ8YGGWVm9DBIPAKVsF4QB8LyzIlDKpqVn0AHUVQ5Sf6vrYqF4RmlszYa3byqXza4DsSoVaW-WHf-cdpZ6IowOAhdQ1E')
+        $message = CloudMessage::withTarget('token', 'dzTNXtf-TwGPdpIvUQ7XM7:APA91bFlPcWvssjrFf1C_nzv8Sbr6rRO2N4DSYisfp6ln_zVe-TFVYHTHEHl7uy3cOVfyxJPnXW42Tz05s3xDG4Gmh9Cnb46UBU1ASXu8-4I7fH2Jrdrms8')
             ->withNotification([
                 'title' => 'titulo de prueba',
                 'body' => 'cuerpo de prueba',
