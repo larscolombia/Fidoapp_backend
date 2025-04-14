@@ -126,18 +126,18 @@ class EventController extends Controller
         try {
             $validatedData = $request->validated();
             // Verificar si el tipo es "medico" o "entrenamiento"
-            if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
-                // Asignar el tipo de reserva basado en el enum
-                $bookingType = match ($request->input('tipo')) {
-                    'medico' => 'veterinary',
-                    'entrenamiento' => 'training'
-                };
-                $service = $this->service($request, $bookingType);
-                $checkBalance = $this->checkBalance($request, $service);
-                if (!$checkBalance['success']) {
-                    return response()->json(['success' => false, 'error' => 'Insufficient balance', 'amount_service' => $checkBalance['amount']], 400);
-                }
-            }
+            // if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
+            //     // Asignar el tipo de reserva basado en el enum
+            //     $bookingType = match ($request->input('tipo')) {
+            //         'medico' => 'veterinary',
+            //         'entrenamiento' => 'training'
+            //     };
+            //     $service = $this->service($request, $bookingType);
+            //     $checkBalance = $this->checkBalance($request, $service);
+            //     if (!$checkBalance['success']) {
+            //         return response()->json(['success' => false, 'error' => 'Insufficient balance', 'amount_service' => $checkBalance['amount']], 400);
+            //     }
+            // }
             try {
                 $validatedData['date'] = Carbon::createFromFormat('Y-m-d', $validatedData['date'])->format('Y-m-d');
                 $validatedData['end_date'] = Carbon::createFromFormat('Y-m-d', $validatedData['end_date'])->format('Y-m-d');
@@ -197,20 +197,20 @@ class EventController extends Controller
             }
 
             // Reserva
-            if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
-                // Llamar a bookingCreate y manejar su resultado
+            // if (in_array($request->input('tipo'), ['medico', 'entrenamiento'])) {
+            //     // Llamar a bookingCreate y manejar su resultado
 
-                $request->merge($professionalId);
-                $bookingData = $this->bookingCreate($request, $validatedData, $event);
-                $dataArray = json_decode($bookingData->getContent(), true);
-                if ($dataArray['status'] === true && $bookingData->getStatusCode() === 200) {
-                    $chekcoutController = new CheckoutController();
-                    $booking = ['booking_id' => $dataArray['data']['id']];
-                    $bookingId = $dataArray['data']['id'];
-                    $request->merge($booking);
-                    $chekcoutController->store($request, $service['total_amount']);
-                }
-            }
+            //     $request->merge($professionalId);
+            //     $bookingData = $this->bookingCreate($request, $validatedData, $event);
+            //     $dataArray = json_decode($bookingData->getContent(), true);
+            //     if ($dataArray['status'] === true && $bookingData->getStatusCode() === 200) {
+            //         $chekcoutController = new CheckoutController();
+            //         $booking = ['booking_id' => $dataArray['data']['id']];
+            //         $bookingId = $dataArray['data']['id'];
+            //         $request->merge($booking);
+            //         $chekcoutController->store($request, $service['total_amount']);
+            //     }
+            // }
             if (!is_null($ownerIds) && !in_array($request->input('user_id'), $ownerIds)) {
                 $ownerIds[] = $request->input('user_id');
             }
@@ -447,22 +447,22 @@ class EventController extends Controller
                     $booking->save();
                     if (!$data['confirm']) {
                         //buscamos la operacion del cliente
-                        $setting = Setting::where('name', 'str_payment_method')->first();
-                        $payment = Payment::create([
-                            'amount' => $booking->total_amount,
-                            'description' =>  __('booking.refund_for_event') . $eventDetail->event->name,
-                            'user_id' => $booking->user_id,
-                            'payment_method_id' => !is_null($setting) ? $setting->id : 19,
-                            'status' => false
-                        ]);
-                        if ($payment) {
-                            //actualizar wallet del usuario
-                            $wallet = Wallet::where('user_id', $booking->user_id)->first();
-                            if ($wallet) {
-                                $wallet->balance = $wallet->balance + $payment->amount;
-                                $wallet->save();
-                            }
-                        }
+                        // $setting = Setting::where('name', 'str_payment_method')->first();
+                        // $payment = Payment::create([
+                        //     'amount' => $booking->total_amount,
+                        //     'description' =>  __('booking.refund_for_event') . $eventDetail->event->name,
+                        //     'user_id' => $booking->user_id,
+                        //     'payment_method_id' => !is_null($setting) ? $setting->id : 19,
+                        //     'status' => false
+                        // ]);
+                        // if ($payment) {
+                        //     //actualizar wallet del usuario
+                        //     $wallet = Wallet::where('user_id', $booking->user_id)->first();
+                        //     if ($wallet) {
+                        //         $wallet->balance = $wallet->balance + $payment->amount;
+                        //         $wallet->save();
+                        //     }
+                        // }
                         $message = __('messages.reject_event');
                     } else {
                         $message = __('messages.accept_event');

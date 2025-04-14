@@ -91,10 +91,10 @@ class CoursePlatformUserController extends Controller
             ]);
             //buscamos el curso
             $coursePlatform = CursoPlataforma::findOrFail($data['course_platform_id']);
-            $checkBalance = $this->checkBalance($request, $coursePlatform->price);
-            if (!$checkBalance['success']) {
-                return response()->json(['success' => false, 'error' => 'Insufficient balance'], 400);
-            }
+            //$checkBalance = $this->checkBalance($request, $coursePlatform->price);
+            // if (!$checkBalance['success']) {
+            //     return response()->json(['success' => false, 'error' => 'Insufficient balance'], 400);
+            // }
             $existSubscription = CoursePlatformUserSubscription::where('course_platform_id', $data['course_platform_id'])
                 ->where('user_id', $data['user_id'])->first();
             if ($existSubscription) {
@@ -104,8 +104,8 @@ class CoursePlatformUserController extends Controller
                     'data' => $existSubscription
                 ], 400);
             }
-            $chekcoutController = new CheckoutController();
-            $chekcoutController->store($request, $coursePlatform->price);
+            // $chekcoutController = new CheckoutController();
+            // $chekcoutController->store($request, $coursePlatform->price);
             $subscription = CoursePlatformUserSubscription::create($data);
 
             //notify
