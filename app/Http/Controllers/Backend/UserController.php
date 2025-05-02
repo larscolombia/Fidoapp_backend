@@ -1152,10 +1152,11 @@ class UserController extends Controller
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
 
-        $user = Auth::user(); // Get the currently authenticated user
+        $user = auth()->user(); // Get the currently authenticated user
 
         $user_id = $user->id; // Retrieve the user's ID
         \Log::info($user_id);
+        \Log::info(auth()->user());
         $data = User::findOrFail($user_id);
 
         $request_data = $request->only('old_password', 'new_password', 'confirm_password');
