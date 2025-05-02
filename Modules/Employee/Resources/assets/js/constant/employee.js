@@ -5,7 +5,7 @@ export const UPDATE_URL = (id) => {return {path: `${MODULE}/${id}`, method: 'POS
 export const BRANCH_LIST = () => {return {path: `employees/index_list`, method: 'GET'}}
 export const SERVICE_LIST = ({branch_id = '', category_id = '', employee_id = '' }) => {return {path: `service/index_list?branch_id=${branch_id}&employee_id=${employee_id}&category_id=${category_id}`, method: 'GET'}}
 export const COMMISSION_LIST = () => {return {path: `commissions/index_list`, method: 'GET'}}
-export const CHANGE_PASSWORD_URL = () => {return {path: `${MODULE}/change-password/`, method: 'POST'}}
+export const CHANGE_PASSWORD_URL = () => {return {path: `${MODULE}/change-password`, method: 'POST'}}
 export const SPECIALITIES_URL = () => {return {path: `/api/specialities`, method: 'GET'}}
 export const SEND_PUSH_NOTIFICATION = () => {return {path: `${MODULE}/send-push-notification`, method: 'POST'}}
 
