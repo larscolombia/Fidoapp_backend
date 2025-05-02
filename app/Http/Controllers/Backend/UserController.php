@@ -1154,9 +1154,8 @@ class UserController extends Controller
         $user = Auth::user(); // Get the currently authenticated user
 
         $user_id = $user->id; // Retrieve the user's ID
-        Log::info('desde clave');
-        Log::info(auth()->user());
-        $data = User::findOrFail(auth()->user()->id);
+
+        $data = User::findOrFail($user_id);
 
         $request_data = $request->only('old_password', 'new_password', 'confirm_password');
 
