@@ -261,6 +261,6 @@ return [
     'event_update' => 'Se ha actualizado la información del evento',
     'success_buy_fidocoins' => 'Has realizado una recarga de :amount',
     'old_password_mismatch' => 'La contraseña antigua no coincide',
-    'new_password_mismatch' => 'La nueva contraseña no coincide',
+    'new_password_mismatch' => 'La nueva contraseña es igual a la anterior',
     'password_mismatch' => 'La contraseña no coincide',
 ];
