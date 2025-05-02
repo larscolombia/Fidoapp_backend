@@ -270,6 +270,7 @@ Route::group(['prefix' => 'app'], function () {
                 Route::post('information', [UserController::class, 'updateData'])->name('information');
 
                 Route::post('change-password', [UserController::class, 'change_password'])->name('change_password');
+                Route::post('change-password/', [UserController::class, 'change_password']);
             });
             Route::resource('users', UserController::class);
         });
