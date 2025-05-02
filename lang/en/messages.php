@@ -210,5 +210,8 @@ return [
     'view' => 'View',
     'add' => 'Add',
     'edit' => 'Edit',
-    'more' => 'More'
+    'more' => 'More',
+    'old_password_mismatch' => 'Old password mismatch',
+    'new_password_mismatch' => 'New password mismatch',
+    'password_mismatch' => 'Password mismatch',
 ];

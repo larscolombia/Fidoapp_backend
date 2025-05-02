@@ -260,4 +260,7 @@ return [
     'reject_event' => 'El :profesional :nombre ha rechazado el evento :evento',
     'event_update' => 'Se ha actualizado la información del evento',
     'success_buy_fidocoins' => 'Has realizado una recarga de :amount',
+    'old_password_mismatch' => 'La contraseña antigua no coincide',
+    'new_password_mismatch' => 'La nueva contraseña no coincide',
+    'password_mismatch' => 'La contraseña no coincide',
 ];
