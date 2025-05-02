@@ -1151,10 +1151,11 @@ class UserController extends Controller
         if (env('IS_DEMO')) {
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
+
         $user = Auth::user(); // Get the currently authenticated user
 
         $user_id = $user->id; // Retrieve the user's ID
-
+        \Log::info($request->all());
         $data = User::findOrFail($user_id);
 
         $request_data = $request->only('old_password', 'new_password', 'confirm_password');
