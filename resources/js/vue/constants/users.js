@@ -11,4 +11,4 @@ export const EMPLOYEE_STORE = () => {return {path: `employees`, method: 'POST'}}
 export const INFORMATION_STORE = () => {return {path: `users/information`, method: 'POST'}}
 export const GET_URL = () => {return {path: `my-info`, method: 'GET'}}
 
-export const CHANGE_PASSWORD_URL = () => {return {path: `/users/change-password/`, method: 'POST'}}
+export const CHANGE_PASSWORD_URL = () => {return {path: `/app/users/change-password/`, method: 'POST'}}
