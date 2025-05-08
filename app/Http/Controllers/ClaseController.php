@@ -75,6 +75,7 @@ class ClaseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'url_youtube' => 'nullable|max:255',
             'video' => 'required|file|mimes:mp4,mov,ogg,avi,wmv,flv,mkv,webm,f4v,3gp,qt',
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
         ]);
@@ -115,6 +116,7 @@ class ClaseController extends Controller
         CoursePlatformVideo::create([
             'course_platform_id' => $course->id,
             'url' => $videoUrl,
+            'url_youtube' => $request->input('url_youtube'),
             'video' => $videoName,
             'title' => $request->input('title'),
             'duration' => $duracionFormato,
@@ -182,9 +184,9 @@ class ClaseController extends Controller
         return false;
     }
 
-    public function show($id)
+    public function show($courseId, $claseId)
     {
-        $clase = CoursePlatformVideo::with('coursePlatform')->findOrFail($id);
+        $clase = CoursePlatformVideo::with('coursePlatform')->findOrFail($claseId);
 
         // Extraer el ID del video de la URL
         $videoId = $this->getVideoId($clase->url);
@@ -195,12 +197,12 @@ class ClaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $courseId, $claseId
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($courseId, $claseId)
     {
-        $clase = CoursePlatformVideo::with('coursePlatform')->findOrFail($id);
+        $clase = CoursePlatformVideo::with('coursePlatform')->findOrFail($claseId);
         return view('backend.clases.edit', compact('clase'));
     }
 
@@ -214,10 +216,11 @@ class ClaseController extends Controller
         return null;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id,$claseId)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|string|max:255',
+            'url_youtube' => 'sometimes|max:255',
             'video' => 'sometimes|file|mimes:mp4,mov,ogg,avi,wmv,flv,mkv,webm,f4v,3gp,qt',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'duration' => 'sometimes|integer|min:1',
@@ -227,7 +230,7 @@ class ClaseController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $course_platform = CoursePlatformVideo::findOrFail($id);
+        $course_platform = CoursePlatformVideo::findOrFail($claseId);
 
         $videoUrl = null;
         $videoName = null;
@@ -256,11 +259,13 @@ class ClaseController extends Controller
         // Actualizar el modelo con los datos
         $course_platform->update([
             'title' => $request->input('title', $course_platform->title),
+            'url_youtube' => $request->input('url_youtube'),
             'duration' => !is_null($duracionFormato) ? $duracionFormato : $course_platform->duration,
             'url' => !is_null($videoUrl) ? $videoUrl : $course_platform->url,
             'video' => !is_null($videoName) ? $videoName :  $course_platform->video,
             'thumbnail' => !is_null($thumbnailName) ? $thumbnailName : $course_platform->thumbnail
         ]);
+
         //actualizamos la duracion del curso
         $course = CursoPlataforma::find($course_platform->course_platform_id);
         dispatch(new CalculateCourseDuration($course));

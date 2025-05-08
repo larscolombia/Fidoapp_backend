@@ -90,7 +90,8 @@
                         <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
                         <div class="video-item mb-2">
                             <input type="file" class="form-control @error('video.*') is-invalid @enderror" name="video[]" accept="video/*" required>
-                            <input type="text" name="title[]" class="form-control mt2" placeholder="{{ __('course_platform.video_title') }}" required>
+                            <input type="text" name="title[]" class="form-control mt-2" placeholder="{{ __('course_platform.video_title') }}" required>
+                            <input type="url" name="url_youtube[]" class="form-control mt-2" placeholder="{{ __('course_platform.url_youtube') }}" >
                             <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
                             <input type="file" class="form-control @error('thumbnail.*') is-invalid @enderror" name="thumbnail[]" accept="image/*">
                             <div class="video-preview border p-3 d-flex mt-2" style="width: 320px; height: 180px;"></div>
@@ -167,8 +168,9 @@
             <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
             <div class="video-item mb-2">
                 <input type="file" class="form-control @error('video.*') is-invalid @enderror" name="video[]" accept="video/*" required>
-                 <input type="text" name="title[]" class="form-control mt2" placeholder="{{ __('course_platform.video_title') }}" required>
-                <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
+                 <input type="text" name="title[]" class="form-control mt-2" placeholder="{{ __('course_platform.video_title') }}" required>
+                <input type="url" name="url_youtube[]" class="form-control mt-2" placeholder="{{ __('course_platform.url_youtube') }}" >
+                 <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
                 <input type="file" class="form-control @error('thumbnail.*') is-invalid @enderror" name="thumbnail[]" accept="image/*">
                 <button type="button" class="btn btn-danger mt-2 remove-video-button">Eliminar Video</button>
                 <div class="video-preview border p-3 d-flex mt-2" style="width: 320px; height: 180px;"></div>

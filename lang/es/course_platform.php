@@ -38,4 +38,5 @@ return [
     'buy_title' => 'Compra de curso',
     'created_at' => 'Creado',
     'currency' => 'Moneda',
+    'url_youtube' => 'Enlace de youtube',
 ];

@@ -29,6 +29,13 @@
                     @enderror
                 </div> --}}
                 <div class="mb-3">
+                    <label for="url_youtube" class="form-label">{{ __('course_platform.url_youtube') }}</label>
+                    <input type="url" class="form-control @error('url_youtube') is-invalid @enderror" id="url_youtube" name="url_youtube" value="{{ old('url_youtube') }}" required>
+                    @error('url_youtube')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
                     <label for="video" class="form-label">{{ __('clases.video') }}</label>
                     <input type="file" class="form-control @error('video') is-invalid @enderror" id="video" name="video" accept="video/*" required>
                     @error('video')

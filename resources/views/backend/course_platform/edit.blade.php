@@ -92,6 +92,7 @@
                             name="course_platform_id[]"
                             class="form-control mt-2"
                             value="{{ $video->id}}">
+                            <input type="url"  value="{{ old("url_youtube.{$loop->index}", $video->url_youtube) }}" name="url_youtube[]" class="form-control mt-2" placeholder="{{ __('course_platform.url_youtube') }}" >
                             {{-- <input type="text"
                                    name="duration_video[]"
                                    class="form-control mt-2"
@@ -223,7 +224,7 @@ document.getElementById('add-video-button').addEventListener('click', function()
         <div class="video-item mb-2">
             <input type="file" class="form-control" name="new_video[]" accept="video/*" required onchange="handleVideoPreview(this)">
             <input type="text" name="title[]" class="form-control mt-2" placeholder="{{ __('course_platform.video_title') }}" required>
-
+ <input type="url" name="url_youtube[]" class="form-control mt-2" placeholder="{{ __('course_platform.url_youtube') }}" >
             <label class="mt-2">{{ __('course_platform.thumbnail') }}</label>
             <input type="file" class="form-control" name="new_thumbnail[]" accept="image/*" onchange="handleThumbnailPreview(this)">
 

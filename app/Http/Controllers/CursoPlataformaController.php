@@ -118,6 +118,7 @@ class CursoPlataformaController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'difficulty' => 'required',
             'currency_id' => 'required',
+            'url_youtube.*' => 'nullable|max:255',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
             'title.*' => 'required|string|max:255', // Validación para el título del video
@@ -171,6 +172,7 @@ class CursoPlataformaController extends Controller
                     CoursePlatformVideo::create([
                         'course_platform_id' => $curso->id,
                         'url' => $videoUrl,
+                        'url_youtube' => $request->input('url_youtube')[$index],
                         'video' => $videoName,
                         'title' => $request->input('title')[$index], // Guardar el título del video
                         'duration' => $duracionFormato,
@@ -254,6 +256,7 @@ class CursoPlataformaController extends Controller
             'difficulty' => 'required',
             'currency_id' => 'required',
             // Validación para cada video
+            'url_youtube.*' => 'sometimes|max:255',
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
             'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
             'title.*' => 'required|string|max:255', // Validación para el título del video
@@ -321,6 +324,7 @@ class CursoPlataformaController extends Controller
                         'url' => isset($videoUrl) ? $videoUrl : null,
                         'video' => isset($videoName) ? $videoName : null,
                         'title' => $request->input('title')[$index],
+                        'url_youtube' => $request->input('url_youtube')[$index],
                         'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
                     ];
 
@@ -338,6 +342,7 @@ class CursoPlataformaController extends Controller
                         'url' => isset($videoUrl) ? $videoUrl : null,
                         'video' => isset($videoName) ? $videoName : null,
                         'title' => $request->input('title')[$index],
+                        'url_youtube' => $request->input('url_youtube')[$index],
                         'duration' => $duracionFormato, // Aquí no hay problema si es null
                         'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : asset('images/default/default.jpg'),
                     ]);
@@ -355,6 +360,7 @@ class CursoPlataformaController extends Controller
                 $defaultThumbnail = !is_null(CoursePlatformVideo::find($videoId)) && !is_null(CoursePlatformVideo::find($videoId)->thumbnail) ? CoursePlatformVideo::find($videoId)->thumbnail  : asset('images/default/default.jpg');
                 CoursePlatformVideo::where('id', $videoId)->update([
                     'title' => $request->input('title')[$index],
+                    'url_youtube' => $request->input('url_youtube')[$index],
                     'thumbnail' => isset($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : $defaultThumbnail
                 ]);
             }
@@ -387,6 +393,7 @@ class CursoPlataformaController extends Controller
                         'course_platform_id' => $curso->id,
                         'url' => isset($newVideoUrl) ?  $newVideoUrl : null,
                         'video' => isset($newVideoName) ? $newVideoName : null,
+                        'url_youtube' => $request->input('url_youtube')[$index],
                         'title' => request()->input("title")[$index],  // Título del nuevo video (debe estar en el formulario)
                         'duration' => $duracionFormato,  // Duración del nuevo video (debe estar en el formulario)
                         'thumbnail' => isset($newThumbnailName) ?  $newThumbnailName : asset('images/default/default.jpg'),
