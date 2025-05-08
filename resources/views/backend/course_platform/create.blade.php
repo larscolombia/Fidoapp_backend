@@ -60,15 +60,31 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
-                    <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
+               <div class="d-lg-flex justify-content-lg-between">
+                <div class="mb-3 col-lg-6">
+                    <label for="price" class="form-label ">{{ __('course_platform.price') }}</label>
                     <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required>
                     @error('price')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
+                <!--currency-->
 
+                <div class="mb-3 col-lg-5">
+                    <label for="currency_id" class="form-label">{{ __('course_platform.currency') }}</label>
+                    <select class="form-control" name="currency_id" id="currency_id" required>
+                        <option value="">{{__('course_platform.select')}}</option>
+                        @foreach ($currencies as $currency)
+                        <option value="{{$currency->id}}" @selected($currency->id == old('currency_id'))>{{$currency->currency_name}} ({{$currency->currency_symbol}})</option>
+                        @endforeach
+                    </select>
+                    @error('currency_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!--endcurrency-->
+               </div>
                     <div class="mb-3" id="video-container">
                         <fieldset>
                         <label for="video" class="form-label">{{ __('course_platform.video') }}</label>

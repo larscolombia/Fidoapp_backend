@@ -3,6 +3,7 @@
 namespace Modules\Currency\Models;
 
 use App\Models\BaseModel;
+use App\Models\CursoPlataforma;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -68,5 +69,10 @@ class Currency extends BaseModel
         static::deleted(function () {
             self::flushCache();
         });
+    }
+
+    public function coursePlatforms()
+    {
+        return $this->hasMany(CursoPlataforma::class,'currency_id','id');
     }
 }

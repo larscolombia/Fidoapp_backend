@@ -12,6 +12,7 @@ use App\Models\CursoPlataforma;
 use Yajra\DataTables\DataTables;
 use App\Models\CoursePlatformVideo;
 use App\Jobs\CalculateCourseDuration;
+use Modules\Currency\Models\Currency;
 
 
 class CursoPlataformaController extends Controller
@@ -65,7 +66,16 @@ class CursoPlataformaController extends Controller
                 return $data->name;
             })
             ->editColumn('price', function ($data) {
-                return $data->price;
+                $currencySymbol = null;
+                if(is_null($data->currency_id)){
+                    $currency = Currency::first();
+                    if($currency){
+                        $currencySymbol = $currency->currency_symbol;
+                    }
+                }else{
+                    $currencySymbol = $data->currency->currency_symbol;
+                }
+                return $currencySymbol.$data->price;
             })
             ->editColumn('difficulty', function ($data) {
                 $difficulty = '';
@@ -95,7 +105,8 @@ class CursoPlataformaController extends Controller
 
     public function create()
     {
-        return view('backend.course_platform.create');
+        $currencies = Currency::all();
+        return view('backend.course_platform.create',compact('currencies'));
     }
 
     public function store(Request $request)
@@ -106,6 +117,7 @@ class CursoPlataformaController extends Controller
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'difficulty' => 'required',
+            'currency_id' => 'required',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
             'title.*' => 'required|string|max:255', // Validación para el título del video
@@ -129,6 +141,7 @@ class CursoPlataformaController extends Controller
             'image' => $imageName ? 'images/cursos_plataforma/' . $imageName : null,
             'duration' => 1,
             'difficulty' => $request->input('difficulty'),
+            'currency_id' => $request->input('currency_id'),
         ]);
 
         // Manejar la carga de archivos de video
@@ -226,7 +239,8 @@ class CursoPlataformaController extends Controller
     public function edit($id)
     {
         $course_platform = CursoPlataforma::findOrFail($id);
-        return view('backend.course_platform.edit', compact('course_platform'));
+        $currencies = Currency::all();
+        return view('backend.course_platform.edit', compact('course_platform','currencies'));
     }
 
     public function update(Request $request, $id)
@@ -238,6 +252,7 @@ class CursoPlataformaController extends Controller
             'price' => 'required|numeric|between:0,99999999999999999999999999999999.99',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,tiff,tif,bmp,webp',
             'difficulty' => 'required',
+            'currency_id' => 'required',
             // Validación para cada video
             'video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
             'new_video.*' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-msvideo,video/x-flv,video/x-matroska,video/x-ms-wmv,video/3gpp,video/3gpp2,video/mpeg,video/mp2t',
@@ -264,7 +279,7 @@ class CursoPlataformaController extends Controller
         $curso->description = $request->input('description');
         $curso->price = $request->input('price');
         $curso->difficulty = $request->input('difficulty');
-
+        $curso->currency_id = $request->input('currency_id');
         // Guardar los cambios en el curso
         $curso->save();
 

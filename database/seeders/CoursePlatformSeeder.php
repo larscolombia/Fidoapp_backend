@@ -24,6 +24,7 @@ class CoursePlatformSeeder extends Seeder
                 'image' => 'images/cursos_plataforma/dog-trainer-interacting-with-their-pet.jpg', // Asegúrate de que la imagen esté en la ruta correcta
                 'duration' => '40',
                 'price' => 49.99,
+                'currency_id' => 1,
                 'difficulty' => 1,
                 'videos' => [
                     [
@@ -48,6 +49,7 @@ class CoursePlatformSeeder extends Seeder
                 'image' => 'images/cursos_plataforma/close-up-veterinarian-checking-dog.jpg', // Asegúrate de que la imagen esté en la ruta correcta
                 'duration' => '20',
                 'price' => 59.99,
+                'currency_id' => 1,
                 'difficulty' => 2,
                 'videos' => [
                     [

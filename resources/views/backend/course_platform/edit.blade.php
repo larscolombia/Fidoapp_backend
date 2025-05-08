@@ -23,11 +23,28 @@
                     <input type="url" class="form-control" id="url" name="url" value="{{ $course_platform->url }}" placeholder="{{ __('course_platform.enter_url') }}" required>
                     <div id="video-preview" class="mt-3"></div>
                 </div> --}}
+                <div class="d-lg-flex justify-content-lg-between">
+                    <div class="mb-3 col-lg-6">
+                        <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
+                        <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
+                    </div>
 
-                <div class="mb-3">
-                    <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
-                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" required>
-                </div>
+                        <!--currency-->
+
+                        <div class="mb-3 col-lg-5">
+                            <label for="currency_id" class="form-label">{{ __('course_platform.currency') }}</label>
+                            <select class="form-control" name="currency_id" id="currency_id" required>
+                                <option value="">{{__('course_platform.select')}}</option>
+                                @foreach ($currencies as $currency)
+                                <option value="{{$currency->id}}" @selected($currency->id == old('currency_id',$course_platform->currency_id))>{{$currency->currency_name}} ({{$currency->currency_symbol}})</option>
+                                @endforeach
+                            </select>
+                            @error('currency_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--endcurrency-->
+                   </div>
 
                 {{-- <div class="mb-3">
                     <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>

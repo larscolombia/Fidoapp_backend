@@ -36,5 +36,6 @@ return [
     'buy_course' => 'Compra del curso ',
     'buy' => 'Compra del curso',
     'buy_title' => 'Compra de curso',
-    'created_at' => 'Creado'
+    'created_at' => 'Creado',
+    'currency' => 'Moneda',
 ];

@@ -36,11 +36,21 @@
                     @endif
                 </div>
             </div>
+            <div class="d-lg-flex justify-content-lg-between">
+                <div class="mb-3 col-lg-6">
+                    <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
+                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" readonly>
+                </div>
 
-            <div class="mb-3">
-                <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
-                <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ $course_platform->price }}" placeholder="{{ __('course_platform.enter_price') }}" readonly>
+                <div class="mb-3 col-lg-5">
+                    <label for="currency_id" class="form-label">{{ __('course_platform.currency') }}</label>
+                   <input type="text" class="form-control" value="{{$course_platform->currency->currency_name}} ({{$course_platform->currency->currency_symbol}})" readonly>
+                    @error('currency_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
             </div>
+            <!--endcurrency-->
+           </div>
 
             <div class="mb-3">
                 <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
