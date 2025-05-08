@@ -84,8 +84,8 @@ class NewRegistration extends Notification
 
         $text = 'Registration Completed! | New registration completed for <strong>'.$user->name.'</strong>';
 
-        $url_backend = route('backend.users.profile', $user->id);
-        $url_frontend = route('frontend.users.profile', $user->id);
+        // $url_backend = route('backend.users.profile', $user->id);
+        // $url_frontend = route('frontend.users.profile', $user->id);
 
         return [
             'title' => 'Registration Completed!',
@@ -93,8 +93,8 @@ class NewRegistration extends Notification
             'type' => 'created', // created, published, viewed,
             'icon' => 'fas fa-user',
             'text' => $text,
-            'url_backend' => $url_backend,
-            'url_frontend' => $url_frontend,
+            // 'url_backend' => $url_backend,
+            // 'url_frontend' => $url_frontend,
         ];
     }
 

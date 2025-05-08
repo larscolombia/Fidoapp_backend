@@ -185,10 +185,12 @@ class NotificationsController extends Controller
 
         $new_booking_count = isset($user->unreadNotifications) ? $user->unreadNotifications->where('data.type', 'booking_added')->count() : 0;
 
+        $new_user_count = isset($user->unreadNotifications) ? $user->unreadNotifications->where('data.type', 'new_user')->count() : 0;
+
         return response()->json([
             'status' => true,
             'type' => $type,
-            'data' => view("backend.$module_name.list", compact('notifications', 'new_booking_count', 'all_unread_count', 'user'))->render(),
+            'data' => view("backend.$module_name.list", compact('notifications', 'new_booking_count', 'all_unread_count', 'user','new_user_count'))->render(),
         ]);
     }
 

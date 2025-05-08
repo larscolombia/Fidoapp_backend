@@ -72,6 +72,23 @@
                     </div>
                   </a>
                 </div>
+                @elseif ($notification->data['data']['notification_group']=='new_user')
+
+                <div class="me-3 mt-1">
+                    <div class="d-flex p-2">
+                        <div class="mr-3">
+                            <button type="button" class="btn btn-soft-primary btn-icon rounded-pill">
+                                {{ strtoupper(substr($notification->data['data']['user_name'], 0, 1)) }}
+                            </button>
+                        </div>
+                        <div class="list-style-detail p-3 pt-0">
+                            <p class="text-body mb-1"> Nuevo registro de usuario</p>
+                            <p><span class="text-black">{{ ($notification->data['data']['user_name']) }}</span></p>
+
+                        </div>
+                    </div>
+                </div>
+
                 @else
                    <div class="dropdown-item-1 float-none p-3 list-unstyled iq-sub-card  {{ $notification->read_at ? '':'notify-list-bg'}} ">
                      <a href="{{ route('backend.orders.show', ['id' => $notification->data['data']['id']]) }}" class="">

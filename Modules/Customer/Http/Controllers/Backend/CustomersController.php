@@ -266,7 +266,6 @@ class CustomersController extends Controller
             return response()->json(['message' => __('messages.permission_denied'), 'status' => false], 200);
         }
         $data = User::findOrFail($id);
-
         $data->delete();
 
         $message = __('messages.delete_form', ['form' => __('customer.singular_title')]);

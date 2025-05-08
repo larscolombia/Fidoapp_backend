@@ -64,6 +64,9 @@
                                 if($notificationGroupText === 'Booking'){
                                     $notificationGroupText = 'Reserva';
                                 }
+                                if($notificationGroupText === 'New_user'){
+                                    $notificationGroupText = 'Nuevo usuario';
+                                }
                             @endphp
                             <td>
                                 <span class="{{$span_class}}">{{ $notificationGroupText }}</span>

@@ -54,6 +54,8 @@ function sendNotification($data)
 
             $order = isset($data['order']) ? $data['order'] : null;
 
+            $user = isset($data['user']) ? $data['user'] : null;
+
             if (isset($booking) && $booking != null) {
 
                 $data['id'] = $booking['id'];
@@ -82,6 +84,17 @@ function sendNotification($data)
                 $data['order_time'] = $order['order_time'];
                 $data['site_url'] = env('APP_URL');
                 unset($data['order']);
+
+            } else if(isset($user) && $user != null){
+                $createdAt = Carbon::parse($user['created_at']);
+                $data['notification_group'] = 'new_user';
+                $data['id'] = $user['id'];
+                $data['user_id'] = $user['id'];
+                $data['user_name'] = $user['first_name'].' ' .$user['last_name'];
+                $data['user_date'] = $createdAt->format('d-m-Y');
+                $data['user_time'] = $createdAt->format('H:i');
+                $data['site_url'] = env('APP_URL');
+                unset($data['user']);
             }
 
             switch ($mailTo) {

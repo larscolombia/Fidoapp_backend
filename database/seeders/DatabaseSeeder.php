@@ -88,5 +88,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ExpiryDateSeeder::class);
         //seeder specialityRole
         $this->call(SpecialityRoleSeeder::class);
+        //Notificacion por usuario nuevo
+        $this->call(NotificationUserRegisterTemplateSeeder::class);
     }
 }

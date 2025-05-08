@@ -32,7 +32,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     use HasFactory;
     use HasRoles;
     use Notifiable;
-    use SoftDeletes;
+    // use SoftDeletes;
     use HasHashedMediaTrait;
     use UserPresenter;
     use HasApiTokens;

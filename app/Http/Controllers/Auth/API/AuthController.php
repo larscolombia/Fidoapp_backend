@@ -7,6 +7,7 @@ use Auth;
 use Hash;
 use App\Models\User;
 use App\Models\Wallet;
+use App\trait\UserTrait;
 use App\Helpers\Functions;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ use Modules\Commission\Models\EmployeeCommission;
 class AuthController extends Controller
 {
     use AuthTrait;
+    use UserTrait;
 
     public function register(Request $request)
     {
@@ -35,6 +37,7 @@ class AuthController extends Controller
         Functions::generateSlugInUser($user);
         $userResource = new RegisterResource($user);
         $this->createWallet($user);
+        $this->sendNotificationUser('new_user',$user);
         return $this->sendResponse($userResource, __('messages.register_successfull'));
     }
 
