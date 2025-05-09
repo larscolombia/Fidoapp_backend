@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Traits;
+namespace App\Trait;
 use App\Jobs\BulkNotification;
 
-trait UserTrait
+trait UserNotification
 {
     protected function sendNotificationUser($type, $user)
     {
