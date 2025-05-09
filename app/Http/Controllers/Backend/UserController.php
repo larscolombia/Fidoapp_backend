@@ -1216,7 +1216,7 @@ class UserController extends Controller
         $query = User::with('rating'); // Cargar la relación 'rating'
 
         // Si 'user_type' está presente y no está vacío, agregar una cláusula where
-        if (isset($data['user_type']) && !empty($data['user_type'])) {
+        if (isset($data['user_type']) && !empty($data['user_type']) && $data['user_type'] != 'all') {
             $query->where('user_type', $data['user_type']);
         } else {
             // Excluir 'admin' si 'user_type' no se pasa
