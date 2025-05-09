@@ -1,6 +1,6 @@
 <?php
 
-namespace App\trait;
+namespace App\Trait;
 use App\Jobs\BulkNotification;
 
 trait UserTrait

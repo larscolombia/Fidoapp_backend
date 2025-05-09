@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth\Trait;
 
 use App\Events\Auth\UserLoginSuccess;
 use App\Events\Frontend\UserRegistered;
