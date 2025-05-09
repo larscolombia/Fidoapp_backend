@@ -104,6 +104,7 @@ trait AuthTrait
             'last_name' => ['required', 'string', 'max:191'],
             'email' => ['required', 'string', 'email', 'max:191', 'unique:users'],
             'password' => ['required', Rules\Password::defaults()],
+            'gender' => ['required'],
             'device_token' => ['nullable','string'],
         ]);
 
@@ -114,6 +115,7 @@ trait AuthTrait
             'email' => $request->email,
             'mobile' => $request->mobile,
             'address' => $request->address,
+            'gender' => $request->gender,
             'password' => Hash::make($request->password),
             'user_type' => $request->user_type,
             'device_token' => $request->device_token
