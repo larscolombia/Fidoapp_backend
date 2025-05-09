@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Password;
 use Modules\Commission\Models\Commission;
 use App\Http\Resources\SocialLoginResource;
 use Modules\Employee\Models\BranchEmployee;
-use App\Http\Controllers\Auth\Traits\AuthTrait;
+use App\Http\Controllers\Auth\Trait\AuthTrait;
 use Modules\Commission\Models\EmployeeCommission;
 
 class AuthController extends Controller
