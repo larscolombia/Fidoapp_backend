@@ -7,7 +7,7 @@ use Auth;
 use Hash;
 use App\Models\User;
 use App\Models\Wallet;
-use App\trait\UserTrait;
+use App\Traits\UserTrait;
 use App\Helpers\Functions;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Password;
 use Modules\Commission\Models\Commission;
 use App\Http\Resources\SocialLoginResource;
 use Modules\Employee\Models\BranchEmployee;
-use App\Http\Controllers\Auth\Trait\AuthTrait;
+use App\Http\Controllers\Auth\Traits\AuthTrait;
 use Modules\Commission\Models\EmployeeCommission;
 
 class AuthController extends Controller
