@@ -25,7 +25,7 @@ class LoginResource extends JsonResource
             'email' => $this->email,
             'user_role' => $this->getRoleNames() ?? [],
             'api_token' => $this->api_token,
-            'profile_image' => $this->avatar,
+            'profile_image' => !is_null($this->avatar) ? $this->avatar : asset('images/default/default.jpg'),
             'user_type' => $this->user_type,
             'login_type' => $this->login_type,
             'gender' => $this->gender,
