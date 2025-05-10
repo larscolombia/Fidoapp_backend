@@ -23,7 +23,7 @@ class UserNotificationController extends Controller
                     'id' => $notification->id,
                     'user_id' => $notification->user_id,
                     'user_full_name' => optional($notification->sender)->full_name ?? default_user_name(),
-                    'user_avatar' => !is_null($notification->sender) ? optional($notification->sender)->media->pluck('original_url')->first() :  asset('images/default/default.jpg'),
+                    'user_avatar' => !is_null($notification->sender) && !is_null(optional($notification->sender)->media->pluck('original_url')->first()) ? optional($notification->sender)->media->pluck('original_url')->first() :  asset('images/default/default.jpg'),
                     'type' => $notification->type,
                     'title' => $notification->title,
                     'description' => $notification->description,
