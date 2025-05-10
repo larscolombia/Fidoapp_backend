@@ -31,7 +31,7 @@ class LoginResource extends JsonResource
             'gender' => $this->gender,
             'address' => $this->address,
             'player_id' => $this->player_id,
-            'profile_image' => $this->media->pluck('original_url')->first(),
+            'profile_image' => !is_null($this->media->pluck('original_url')->first()) ? $this->media->pluck('original_url')->first() : asset('images/default/default.jpg'),
             'device_token' => $this->device_token,
         ];
     }
