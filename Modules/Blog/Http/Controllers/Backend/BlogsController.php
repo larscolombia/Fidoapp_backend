@@ -183,7 +183,7 @@ class BlogsController extends Controller
         $data = $request->except('blog_image');
         if ($request->hasFile('video')) {
             if (!file_exists(public_path('videos/blog'))) {
-                mkdir(public_path('videos/blog'), 0755, true);
+                mkdir(public_path('videos/blog'), 0777, true);
             }
             $video = $request->file('video');
             $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
@@ -244,43 +244,43 @@ class BlogsController extends Controller
      */
     public function update(Request $request, $id)
     {
-       try{
- $query = Blog::findOrFail($id);
+        try {
+            $query = Blog::findOrFail($id);
 
-        $data = $request->except('event_image');
-        if ($request->hasFile('video')) {
-            if (!file_exists(public_path('videos/blog'))) {
-                mkdir(public_path('videos/blog'), 0755, true);
-            }
-            // Verificar si ya existe un video asociado
-            if ($query->video) {
-                // Eliminar el video anterior
-                $oldVideoPath = public_path('videos/blog/' . $query->video);
-                if (file_exists($oldVideoPath)) {
-                    unlink($oldVideoPath);
+            $data = $request->except('event_image');
+            if ($request->hasFile('video')) {
+                if (!file_exists(public_path('videos/blog'))) {
+                    mkdir(public_path('videos/blog'), 0777, true);
                 }
+                // Verificar si ya existe un video asociado
+                if ($query->video) {
+                    // Eliminar el video anterior
+                    $oldVideoPath = public_path('videos/blog/' . $query->video);
+                    if (file_exists($oldVideoPath)) {
+                        unlink($oldVideoPath);
+                    }
+                }
+                $video = $request->file('video');
+                $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+                // Mover el video a la carpeta correspondiente
+                $video->move(public_path('videos/blog'), $videoName);
+
+                // Generar la URL del video
+                $videoUrl = url('videos/blog/' . $videoName);
+                //agregar a data
+                $data['url'] = $videoUrl;
+                $data['video'] = $videoName;
             }
-            $video = $request->file('video');
-            $videoName = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
-            // Mover el video a la carpeta correspondiente
-            $video->move(public_path('videos/blog'), $videoName);
+            $query->update($data);
 
-            // Generar la URL del video
-            $videoUrl = url('videos/blog/' . $videoName);
-            //agregar a data
-            $data['url'] = $videoUrl;
-            $data['video'] = $videoName;
+            storeMediaFile($query, $request->file('event_image'), 'event_image');
+            $message = __('messages.update_form', ['form' => __($this->module_title)]);
+            //llamada al job para generar la duracion automatica
+            dispatch(new CalculateVideoBlogDuration($query));
+            return response()->json(['message' => $message, 'status' => true], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error:' . $e->getMessage(), 'status' => true], 500);
         }
-        $query->update($data);
-
-        storeMediaFile($query, $request->file('event_image'), 'event_image');
-        $message = __('messages.update_form', ['form' => __($this->module_title)]);
-        //llamada al job para generar la duracion automatica
-        dispatch(new CalculateVideoBlogDuration($query));
-        return response()->json(['message' => $message, 'status' => true], 200);
-       }catch(\Exception $e){
-        return response()->json(['message' => 'Error:'.$e->getMessage(), 'status' => true], 500);
-       }
     }
     public function destroy($id)
     {
