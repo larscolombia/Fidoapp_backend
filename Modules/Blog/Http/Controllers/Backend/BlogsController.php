@@ -244,7 +244,8 @@ class BlogsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $query = Blog::findOrFail($id);
+       try{
+ $query = Blog::findOrFail($id);
 
         $data = $request->except('event_image');
         if ($request->hasFile('video')) {
@@ -277,6 +278,9 @@ class BlogsController extends Controller
         //llamada al job para generar la duracion automatica
         dispatch(new CalculateVideoBlogDuration($query));
         return response()->json(['message' => $message, 'status' => true], 200);
+       }catch(\Exception $e){
+        return response()->json(['message' => 'Error:'.$e->getMessage(), 'status' => true], 500);
+       }
     }
     public function destroy($id)
     {
