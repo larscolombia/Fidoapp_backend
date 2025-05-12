@@ -279,7 +279,7 @@ class BlogsController extends Controller
             dispatch(new CalculateVideoBlogDuration($query));
             return response()->json(['message' => $message, 'status' => true], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Error:' . $e->getMessage(), 'status' => true], 500);
+            return response()->json(['message' => 'Error:' . $e->getMessage(), 'status' => false], 500);
         }
     }
     public function destroy($id)
