@@ -456,3 +456,8 @@ Route::group(['prefix' => 'app'], function () {
         return view('backend.pusher_dev');
     })->name('puser_dev');
 });
+Route::get('phpInit' , function(){
+
+  return phpinfo();
+
+});
