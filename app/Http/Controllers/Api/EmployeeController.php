@@ -130,7 +130,7 @@ class EmployeeController extends Controller
                 'user_id' => $rating->user_id,
                 'created_at' => $rating->created_at,
                 'user_full_name' => optional($rating->user)->full_name ?? default_user_name(),
-                'user_avatar' => !is_null(optional($rating->user)->media->pluck('original_url')->first()) ? optional($rating->user)->media->pluck('original_url')->first() : asset('images/default/default.jpg'),
+                'user_avatar' => !is_null(optional($rating->user)->media) && !is_null(optional($rating->user)->media->pluck('original_url')->first()) ? optional($rating->user)->media->pluck('original_url')->first() : asset('images/default/default.jpg'),
             ];
         });
         // Respuesta exitosa
