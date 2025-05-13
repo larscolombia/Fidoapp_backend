@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\SharedOwnerController;
 |
 */
 use App\Http\Controllers\Api\ActivityLevelController;
+use App\Http\Controllers\Api\DiaryCategoryController;
 use App\Http\Controllers\Api\TrainingDiaryController;
 use App\Http\Controllers\Api\GoogleCalendarController;
 use App\Http\Controllers\Backend\API\BranchController;
@@ -2295,6 +2296,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     * }
     */
     Route::get('get-diary', [TrainingDiaryController::class, 'getDiario']);
+
+    Route::get('diary-categories',[DiaryCategoryController::class,'getCategory']);
     /**
      * Obtener la lista de reservas.
      * Método HTTP: GET

@@ -90,5 +90,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SpecialityRoleSeeder::class);
         //Notificacion por usuario nuevo
         $this->call(NotificationUserRegisterTemplateSeeder::class);
+        //categorias del diario
+        $this->call(DiaryCategorySeeder::class);
     }
 }

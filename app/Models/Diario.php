@@ -25,6 +25,6 @@ class Diario extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class,'category_id');
+        return $this->belongsTo(DiaryCategory::class,'category_id');
     }
 }
