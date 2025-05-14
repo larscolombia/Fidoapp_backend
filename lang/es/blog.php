@@ -10,5 +10,6 @@ return [
     'lbl_blog_name' => 'Nombre del Blog',
     'lbl_tags' => "Etiquetas",
     'lbl_description' => 'Descripción',
+    'lbl_duration' => 'Duración',
     'lbl_status' => 'Estado',
 ];
