@@ -15,8 +15,15 @@ return new class extends Migration
     {
         Schema::create('diary_categories', function (Blueprint $table) {
             $table->id();
+            $table->string('slug');
             $table->string('name');
+            $table->string('parent_id')->nullable();
+            $table->string('status')->default('active');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

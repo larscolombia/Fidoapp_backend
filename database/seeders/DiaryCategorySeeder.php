@@ -14,27 +14,47 @@ class DiaryCategorySeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+     public function run()
     {
-          $categories = [
+        $categories = [
             [
-                'name' => 'Actividad',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'name'        => 'Actividad',
+                'slug'        => 'actividad',
+                'parent_id'   => null,
+                'status'      => 'active',
+                'created_by'  => null,
+                'updated_by'  => null,
+                'deleted_by'  => null,
+                'created_at'  => Carbon::now(),
+                'updated_at'  => Carbon::now(),
+                'deleted_at'  => null,
             ],
             [
-                'name' => 'Informe médico',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'name'        => 'Informe médico',
+                'slug'        => 'informe-medico',
+                'parent_id'   => null,
+                'status'      => 'active',
+                'created_by'  => null,
+                'updated_by'  => null,
+                'deleted_by'  => null,
+                'created_at'  => Carbon::now(),
+                'updated_at'  => Carbon::now(),
+                'deleted_at'  => null,
             ],
             [
-                'name' => 'Entrenamiento',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'name'        => 'Entrenamiento',
+                'slug'        => 'entrenamiento',
+                'parent_id'   => null,
+                'status'      => 'active',
+                'created_by'  => null,
+                'updated_by'  => null,
+                'deleted_by'  => null,
+                'created_at'  => Carbon::now(),
+                'updated_at'  => Carbon::now(),
+                'deleted_at'  => null,
             ],
         ];
 
-        // Inserción en la base de datos
         DB::table('diary_categories')->insert($categories);
     }
 }

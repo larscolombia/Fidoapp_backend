@@ -9,11 +9,14 @@ class DiaryCategory extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'slug',
         'name',
+        'parent_id',
+        'status',
     ];
 
     public function diario()
     {
-        return $this->hasMany(Diario::class,'id','category_id');
+        return $this->hasMany(Diario::class, 'id', 'category_id');
     }
 }
