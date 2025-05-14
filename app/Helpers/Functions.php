@@ -97,15 +97,23 @@ class Functions
         list($hours, $minutes, $seconds) = explode(':', $durationString);
         $totalSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
 
-        if ($totalSeconds < 60) {
-            return $totalSeconds . ' segundos';
-        } else {
-            $totalMinutes = floor($totalSeconds / 60);
-            $remainingSeconds = $totalSeconds % 60;
-            // Convertir segundos a fracción decimal de minuto
-            $decimalSeconds = $remainingSeconds / 60;
-            $minutesDecimal = $totalMinutes + $decimalSeconds;
-            return number_format($minutesDecimal, 2) . ' minutos';
+        if ($totalSeconds === 0) {
+            return '0 segundos';
         }
+
+        $totalMinutes = floor($totalSeconds / 60);
+        $remainingSeconds = $totalSeconds % 60;
+
+        $parts = [];
+
+        if ($totalMinutes > 0) {
+            $parts[] = $totalMinutes . ' ' . ($totalMinutes === 1 ? 'minuto' : 'minutos');
+        }
+
+        if ($remainingSeconds > 0) {
+            $parts[] = $remainingSeconds . ' ' . ($remainingSeconds === 1 ? 'segundo' : 'segundos');
+        }
+
+        return implode(' ', $parts);
     }
 }
