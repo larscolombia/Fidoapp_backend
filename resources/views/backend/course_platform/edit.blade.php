@@ -73,7 +73,7 @@
                         <img src="{{ asset($course_platform->image) }}" alt="Imagen del Curso" class="img-thumbnail mt-2" style="width: 200px;">
                     @endif
                 </div>
-
+{{--
                 <div class="mb-3" id="video-container">
                     <!-- Loop through existing videos if any -->
                     @foreach($course_platform->videos as $video)
@@ -100,7 +100,7 @@
                                    placeholder="{{ __('course_platform.duration') }}" required> --}}
 
                             <!-- Thumbnail upload -->
-                            <label>{{ __('course_platform.thumbnail') }}</label>
+                            {{-- <label>{{ __('course_platform.thumbnail') }}</label>
                             <input type="file"
                                    class="form-control @error("thumbnail.*") is-invalid @enderror"
                                    name="thumbnail[]"
@@ -121,16 +121,16 @@
                             <!-- Button to remove video -->
                             <button type="button" class="btn btn-danger mt-4 remove-video-button">Eliminar Video</button>
                         </fieldset>
-                    @endforeach
-                </div>
+                    @endforeach --}}
+                {{-- </div> --}}
 
 
                 <!-- Button to add more videos -->
-                <div class ="mb-3">
+                {{-- <div class ="mb-3">
                     <button type ="button"
                             class ="btn btn-secondary my-3"
                             id ="add-video-button">{{ __('course_platform.add_video') }}</button>
-                </div>
+                </div> --}}
 
                 <button type="submit" class="btn btn-primary">{{ __('course_platform.update') }}</button>
             </form>

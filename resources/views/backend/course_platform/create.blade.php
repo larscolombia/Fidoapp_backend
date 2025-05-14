@@ -85,7 +85,7 @@
                 </div>
                 <!--endcurrency-->
                </div>
-                    <div class="mb-3" id="video-container">
+                    {{-- <div class="mb-3" id="video-container">
                         <fieldset>
                         <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
                         <div class="video-item mb-2">
@@ -97,11 +97,11 @@
                             <div class="video-preview border p-3 d-flex mt-2" style="width: 320px; height: 180px;"></div>
                         </div>
                     </fieldset>
-                    </div>
+                    </div> --}}
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <button type="button" class="btn btn-secondary my-3" id="add-video-button">{{ __('course_platform.add_video') }}</button>
-                    </div>
+                    </div> --}}
 
 
 
@@ -119,7 +119,7 @@
 
 @push('after-scripts')
 <script src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
-<script>
+{{-- <script>
     // Función para manejar la vista previa del video
     function handleVideoPreview(input) {
         const files = input.files; // Obtener todos los archivos seleccionados
@@ -198,5 +198,5 @@
     initialFileInput.addEventListener('change', function() {
         handleVideoPreview(initialFileInput); // Llama a la función de vista previa para el primer input
     });
-</script>
+</script> --}}
 @endpush

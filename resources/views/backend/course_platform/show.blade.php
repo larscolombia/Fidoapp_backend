@@ -21,7 +21,7 @@
                 <div id="video-preview" class="mt-3"></div>
             </div> --}}
 
-            <div class="mb-3">
+            {{-- <div class="mb-3">
                 <label for="video" class="form-label">{{ __('course_platform.video') }}</label>
                 <input type="file" class="form-control" id="video" name="video" accept="video/*" multiple>
                 <div id="video-preview" class="mt-3 border p-3 d-flex" style="width: 320px; height: 180px;">
@@ -35,7 +35,7 @@
 
                     @endif
                 </div>
-            </div>
+            </div> --}}
             <div class="d-lg-flex justify-content-lg-between">
                 <div class="mb-3 col-lg-6">
                     <label for="price" class="form-label">{{ __('course_platform.price') }}</label>
@@ -52,10 +52,10 @@
             <!--endcurrency-->
            </div>
 
-            <div class="mb-3">
+            {{-- <div class="mb-3">
                 <label for="duration" class="form-label">{{ __('course_platform.duration') }}</label>
                 <input type="text" class="form-control" id="duration" name="duration" value="{{ $course_platform->duration }}" placeholder="{{ __('course_platform.enter_duration') }}" readonly>
-            </div>
+            </div> --}}
 
             <!--difficulty-->
             <div class="mb-3">
