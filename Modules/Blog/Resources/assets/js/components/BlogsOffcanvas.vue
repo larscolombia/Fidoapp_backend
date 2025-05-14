@@ -62,7 +62,7 @@
         <div class="form-group">
           <label class="form-label" for="duration">{{ $t('blog.lbl_duration') }}</label>
           <!-- Add Quill editor here -->
-         <input type="time" class="form-control" v-model="duration" id="duration" name="duration">
+         <input type="time" step="1"  class="form-control" v-model="duration" id="duration" name="duration">
           <span class="text-danger">{{ errors.duration }}</span>
         </div>
         <div class="form-group">

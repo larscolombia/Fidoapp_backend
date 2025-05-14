@@ -57,8 +57,8 @@
                     @enderror
                 </div>
                       <div class="mb-3">
-                    <label for="duration" class="form-label">{{ __('course_platform.duration') }} (Hora:Minutos)</label>
-                    <input type="time" class="form-control @error('duration') is-invalid @enderror" id="duration"
+                    <label for="duration" class="form-label">{{ __('course_platform.duration') }} </label>
+                    <input type="time" step="1"  class="form-control @error('duration') is-invalid @enderror" id="duration"
                         name="duration" value="{{ old('duration') }}" required>
                     @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
