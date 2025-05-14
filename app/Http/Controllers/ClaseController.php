@@ -138,7 +138,7 @@ class ClaseController extends Controller
     //     return redirect()->route('backend.course_platform.clases.index', ['course' => $request->route('course')])->with('success', __('clases.created_successfully'));
     // }
 
-      public function store(Request $request, $course)
+    public function store(Request $request, $course)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
@@ -165,6 +165,11 @@ class ClaseController extends Controller
             $thumbnail = $request->file('thumbnail');
             if ($thumbnail) {
                 $thumbnailName = time() . '_' . uniqid() . '.' . $thumbnail->getClientOriginalExtension();
+                $destinationPath = public_path('thumbnails/cursos_plataforma');
+
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true); // true para crear directorios recursivamente
+                }
                 $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
             }
         }
@@ -328,7 +333,7 @@ class ClaseController extends Controller
     //     return redirect()->route('backend.course_platform.index')->with('success', __('course_platform.updated_successfully'));
     // }
 
-       public function update(Request $request, $id,$claseId)
+    public function update(Request $request, $id, $claseId)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|string|max:255',
@@ -350,6 +355,11 @@ class ClaseController extends Controller
             $thumbnail = $request->file('thumbnail');
             if ($thumbnail) {
                 $thumbnailName = time() . '_' . uniqid() . '.' . $thumbnail->getClientOriginalExtension();
+                 $destinationPath = public_path('thumbnails/cursos_plataforma');
+
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true); // true para crear directorios recursivamente
+                }
                 $thumbnail->move(public_path('thumbnails/cursos_plataforma'), $thumbnailName);
             }
         }
