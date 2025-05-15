@@ -27,7 +27,7 @@ class BlogResource extends JsonResource
             'tags' => $this->tags,
             'status' => $this->status,
             'video' => $this->video,
-            'url_video' => $this->url,
+            'url_video' => $this->video,
             'duration' => $this->duration,
             'duration_text' =>$durationText,
             'visualizations' => $this->visualizations,

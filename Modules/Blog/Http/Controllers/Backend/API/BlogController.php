@@ -36,6 +36,7 @@ class BlogController extends Controller
 
         $blog = Blog::findOrFail($id);
         $blog->description = strip_tags($blog->description);
+        $blog->url_video = strip_tags($blog->video);
         $blog->duration_text = Functions::getDurationText($blog->duration);
         return response()->json([
             'status' => true,
