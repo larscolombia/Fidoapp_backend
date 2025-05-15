@@ -196,7 +196,7 @@ return [
     'added_by_me' => 'Agregado por mí',
     'assign_by_admin' => 'Asignado por el administrador',
     'accept_booking' => '¿Deseas aceptar esta reserva?',
-    'account_not_verify' => 'La verificación de tu cuenta está pendiente de aprobación por parte del administrador. Por favor, contacta al administrador.',
+    'account_not_verify' => 'La verificación de tu cuenta está pendiente de aprobación por parte del administrador.',
     'service_inactive' => 'Este servicio está inactivo. Por favor, contacta a tu administración.',
     'create_pet_note' => 'Notas de mascotas guardadas exitosamente',
     'delete_notes' => 'Notas eliminadas exitosamente',
