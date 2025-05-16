@@ -147,17 +147,17 @@ class AuthController extends Controller
                 $value = $request->username;
             }
 
-            $trashed_user_data = User::where($key, $value)->whereNotNull('login_type')->withTrashed()->first();
+            // $trashed_user_data = User::where($key, $value)->whereNotNull('login_type')->withTrashed()->first();
 
-            if ($trashed_user_data != null && $trashed_user_data->trashed()) {
-                if ($request->login_type === 'google') {
-                    $message = __('validation.unique', ['attribute' => 'email']);
-                } else {
-                    $message = __('validation.unique', ['attribute' => 'username']);
-                }
+            // if ($trashed_user_data != null && $trashed_user_data->trashed()) {
+            //     if ($request->login_type === 'google') {
+            //         $message = __('validation.unique', ['attribute' => 'email']);
+            //     } else {
+            //         $message = __('validation.unique', ['attribute' => 'username']);
+            //     }
 
-                return $this->sendError($message, 400);
-            }
+            //     return $this->sendError($message, 400);
+            // }
 
             if ($request->login_type === 'mobile' && $user_data == null) {
                 $otp_response = [
