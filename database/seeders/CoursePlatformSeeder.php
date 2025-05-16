@@ -28,17 +28,17 @@ class CoursePlatformSeeder extends Seeder
                 'difficulty' => 1,
                 'videos' => [
                     [
-                        'url' => asset('videos/cursos_plataforma/clase_1.mp4'),
-                        'video' => 'videos/cursos_plataforma/clase_1.mp4',
-                        'title' => 'Seguir la pelota',
-                        'duration' => '6',
+                        'url' => 'https://www.youtube.com/watch?v=5qFTKHGO4ws',
+                        'video' => 'https://www.youtube.com/watch?v=5qFTKHGO4ws',
+                        'title' => 'Cómo ENTRENAR a tu PERRO PASO a PASO (Todas las razas)',
+                        'duration' => '00:07:38',
                         'thumbnail' => 'thumbnails/cursos_plataforma/seguir_la_pelota.png',
                     ],
                     [
-                        'url' => asset('videos/cursos_plataforma/clase_2.mp4'),
-                        'video' => 'videos/cursos_plataforma/clase_2.mp4',
-                        'title' => 'Saludar',
-                        'duration' => '8:00',
+                        'url' => 'https://www.youtube.com/watch?v=z1cz4c36w_o',
+                        'video' => 'https://www.youtube.com/watch?v=z1cz4c36w_o',
+                        'title' => 'La PRIMERA ORDEN que DEBES ENSEÑAR a un PERRO - MartGon',
+                        'duration' => '00:08:26',
                         'thumbnail' => 'thumbnails/cursos_plataforma/saludar.png',
                     ],
                 ]
@@ -53,17 +53,17 @@ class CoursePlatformSeeder extends Seeder
                 'difficulty' => 2,
                 'videos' => [
                     [
-                        'url' => asset('videos/cursos_plataforma/clase_3.mp4'),
-                        'video' => 'videos/cursos_plataforma/clase_3.mp4',
-                        'title' => 'Chequeo general',
-                        'duration' => '12:00',
+                        'url' => 'https://www.youtube.com/watch?v=2nAdPho0Nw4',
+                        'video' => 'https://www.youtube.com/watch?v=2nAdPho0Nw4',
+                        'title' => 'Cuidados necesarios para mantener la salud y el bienestar de las mascotas',
+                        'duration' => '00:03:23',
                         'thumbnail' => 'thumbnails/cursos_plataforma/chequeo_general.png',
                     ],
                     [
-                        'url' => asset('videos/cursos_plataforma/clase_4.mp4'),
-                        'video' => 'videos/cursos_plataforma/clase_4.mp4',
-                        'title' => 'Corte de pelo canino',
-                        'duration' => '8:00',
+                        'url' => 'https://www.youtube.com/watch?v=aZSDuIzog-Q&pp=ygUfQ3VpZGFkbyB5IEJpZW5lc3RhciBkZSBNYXNjb3Rhcw%3D%3D',
+                        'video' => 'https://www.youtube.com/watch?v=aZSDuIzog-Q&pp=ygUfQ3VpZGFkbyB5IEJpZW5lc3RhciBkZSBNYXNjb3Rhcw%3D%3D',
+                        'title' => 'Los 5 dominios de bienestar animal',
+                        'duration' => '00:01:33',
                         'thumbnail' => 'thumbnails/cursos_plataforma/corte_pelo.png',
                     ],
                 ]
@@ -76,16 +76,10 @@ class CoursePlatformSeeder extends Seeder
             // Recorrer cada video del curso
             foreach ($course['videos'] as &$video) {
                 $videoName = basename($video['video']);
-                $videoPath = public_path($video['video']);
-
-                // Obtener la duración del video
-                $duracionFormato = Functions::getVideoDuration($videoPath);
-
-                // Asignar la duración al video
-                $video['duration'] = $duracionFormato;
+                $duration = $video['duration'];
 
                 // Sumar la duración del video a la duración total del curso
-                list($hours, $minutes, $seconds) = explode(':', $duracionFormato);
+                list($hours, $minutes, $seconds) = explode(':', $duration);
                 $courseDuration += ($hours * 3600) + ($minutes * 60) + $seconds;
             }
 

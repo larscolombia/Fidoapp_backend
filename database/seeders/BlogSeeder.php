@@ -18,6 +18,7 @@ class BlogSeeder extends Seeder
         $blogs = [
             [
                 'name' => 'Guía Completa para el Cuidado de Mascotas',
+                'platform_id' => 1,
                 'description' => 'En este blog, exploraremos los aspectos esenciales del cuidado de mascotas, desde la alimentación adecuada hasta la importancia del ejercicio y la atención veterinaria regular.',
                 'tags' => 'cuidado, mascotas, salud',
                 'status' => true,
@@ -27,6 +28,7 @@ class BlogSeeder extends Seeder
             ],
             [
                 'name' => 'Los Mejores Consejos para Entrenar a tu Perro',
+                'platform_id' => 1,
                 'description' => 'Descubre los mejores consejos y técnicas para entrenar a tu perro de manera efectiva y positiva. Aprende a usar comandos básicos y refuerzos positivos.',
                 'tags' => 'entrenamiento, perros, consejos',
                 'status' => true,

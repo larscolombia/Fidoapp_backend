@@ -74,10 +74,12 @@ class DatabaseSeeder extends Seeder
         $this->call(ComandosSeeder::class);
         //herramientas
         $this->call(TrainingToolsSeeder::class);
+        //Plataforma
+        $this->call(PlatformSeeder::class);
         //cursos
         $this->call(CoursePlatformSeeder::class);
         //blog
-        $this->call(BlogSeeder::class);
+        //$this->call(BlogSeeder::class);
         //Ebooks
         $this->call(EBookSeeder::class);
         //slug in user
