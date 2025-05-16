@@ -379,6 +379,8 @@ class AuthController extends Controller
 
             $user_data = User::find($user->id);
             if ($request->has('profile_image')) {
+                Log::info('imagen de perfil:');
+                Log::info($request->file('profile_image'));
                 storeMediaFile($user_data, $request->file('profile_image'), 'profile_image');
             }
 
