@@ -37,7 +37,7 @@ class AuthController extends Controller
         Functions::generateSlugInUser($user);
         $userResource = new RegisterResource($user);
         $this->createWallet($user);
-        $this->sendNotificationUser('new_user',$user);
+        $this->sendNotificationUser('new_user', $user);
         return $this->sendResponse($userResource, __('messages.register_successfull'));
     }
 
@@ -379,8 +379,6 @@ class AuthController extends Controller
 
             $user_data = User::find($user->id);
             if ($request->has('profile_image')) {
-                Log::info('imagen de perfil:');
-                Log::info($request->file('profile_image'));
                 storeMediaFile($user_data, $request->file('profile_image'), 'profile_image');
             }
 
@@ -412,7 +410,7 @@ class AuthController extends Controller
                 $user_profile->dribbble_link = $request->dribbble_link;
             }
 
-            if($request->has('speciality_id')){
+            if ($request->has('speciality_id')) {
                 $user_profile->speciality_id = $request->speciality_id;
             }
 
@@ -422,10 +420,10 @@ class AuthController extends Controller
                 $tagsString = $request->tags;
                 $cleanedTagsString = str_replace('\"', '', $tagsString);
                 $cleanedTagsString = str_replace('\\', '', $cleanedTagsString);
-                $cleanedTagsString = str_replace('[','',$cleanedTagsString);
-                $cleanedTagsString = str_replace(']','',$cleanedTagsString);
+                $cleanedTagsString = str_replace('[', '', $cleanedTagsString);
+                $cleanedTagsString = str_replace(']', '', $cleanedTagsString);
                 $cleanedTagsString = str_replace("\"", '', $cleanedTagsString);
-                $user_profile->tags =$cleanedTagsString;
+                $user_profile->tags = $cleanedTagsString;
             }
 
             if ($request->has('professional_title')) {
@@ -475,8 +473,19 @@ class AuthController extends Controller
                 $user_data['validation_number'] = $user->profile->validation_number ?? null;
                 $user_data['pdf'] = !is_null($user->profile) && !is_null($user->profile->pdf) ? asset($user->profile->pdf) : null;
                 $user_data['speciality_id'] = !is_null($user->profile) && !is_null($user->profile->speciality) ? $user->profile->speciality->description :  null;
-                // Otros campos de datos del perfil
-                // ...
+                // Campos adicionales que faltaban
+                $user_data['id'] = $user->id;
+                $user_data['first_name'] = $user->first_name;
+                $user_data['last_name'] = $user->last_name;
+                $user_data['mobile'] = $user->mobile;
+                $user_data['email'] = $user->email;
+                $user_data['api_token'] = $user->api_token;
+                $user_data['user_type'] = $user->user_type;
+                $user_data['login_type'] = $user->login_type;
+                $user_data['gender'] = $user->gender;
+                $user_data['address'] = $user->address;
+                $user_data['player_id'] = $user->player_id;
+                $user_data['device_token'] = $user->device_token;
 
                 unset($user_data['roles']);
                 unset($user_data['media']);
