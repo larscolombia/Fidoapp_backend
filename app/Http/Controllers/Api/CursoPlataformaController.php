@@ -26,7 +26,10 @@ class CursoPlataformaController extends Controller
             'message' => 'Cursos de la plataforma recuperados exitosamente',
             'data' => [
                 'courses' => $courses->map(function ($course) use ($coin) {
-                    $totalDuration = $course->videos->sum('duration');
+                    $totalDuration = $course->videos->sum(function ($video) {
+                        list($hours, $minutes, $seconds) = explode(':', $video->duration);
+                        return ($hours * 3600) + ($minutes * 60) + $seconds;
+                    });
                     return [
                         'id' => $course->id,
                         'name' => $course->name,
