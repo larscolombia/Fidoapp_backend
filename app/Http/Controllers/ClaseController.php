@@ -370,7 +370,7 @@ class ClaseController extends Controller
             'duration' => $request->input('duration', $course_platform->duration),
             'url' => $request->input('video', $course_platform->video),
             'video' => $request->input('video', $course_platform->video),
-            'thumbnail' => !is_null($thumbnailName) ? $thumbnailName : $course_platform->thumbnail
+            'thumbnail' => !is_null($thumbnailName) ? 'thumbnails/cursos_plataforma/' . $thumbnailName : $course_platform->thumbnail
         ]);
         return redirect()->route('backend.course_platform.clases.index', ['course' => $request->route('course')])->with('success', __('clases.updated_successfully'));
     }
