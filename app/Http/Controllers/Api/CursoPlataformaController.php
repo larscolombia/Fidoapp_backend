@@ -30,13 +30,14 @@ class CursoPlataformaController extends Controller
                         list($hours, $minutes, $seconds) = explode(':', $video->duration);
                         return ($hours * 3600) + ($minutes * 60) + $seconds;
                     });
+                    $formatDuration = gmdate('H:i:s', $totalDuration);
                     return [
                         'id' => $course->id,
                         'name' => $course->name,
                         'description' => $course->description,
                         'image' => asset($course->image),
-                        'duration' => $totalDuration,
-                        'duration_text' => Functions::getDurationText($totalDuration),
+                        'duration' => $formatDuration,
+                        'duration_text' => Functions::getDurationText($formatDuration),
                         'price' => $course->price . $coin->symbol,
                         'difficulty' => $course->difficulty,
                         'videos' => $course->videos->map(function ($video) {
