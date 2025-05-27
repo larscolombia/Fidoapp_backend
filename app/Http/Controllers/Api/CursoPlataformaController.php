@@ -51,8 +51,8 @@ class CursoPlataformaController extends Controller
                                 'url' => $video->url,
                                 'video' => $video->video,
                                 'visualizations' => $video->visualizations,
-                                'created_at' => $video->created_at,
-                                'updated_at' => $video->updated_at,
+                                'created_at' => \Carbon\Carbon::parse($video->created_at)->format('d-m-Y'),
+                                'updated_at' => \Carbon\Carbon::parse($video->updated_at)->format('d-m-Y'),
                             ];
                         })
                     ];
