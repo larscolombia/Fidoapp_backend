@@ -26,20 +26,21 @@ class CursoPlataformaController extends Controller
             'message' => 'Cursos de la plataforma recuperados exitosamente',
             'data' => [
                 'courses' => $courses->map(function ($course) use ($coin) {
+                    $totalDuration = $course->videos->sum('duration');
                     return [
                         'id' => $course->id,
                         'name' => $course->name,
                         'description' => $course->description,
                         'image' => asset($course->image),
-                        'duration' => $course->duration,
-                        'duration_text' => Functions::getDurationText($course->duration),
+                        'duration' => $totalDuration,
+                        'duration_text' => Functions::getDurationText($totalDuration),
                         'price' => $course->price . $coin->symbol,
                         'difficulty' => $course->difficulty,
                         'videos' => $course->videos->map(function ($video) {
                             return [
                                 'id' => $video->id,
                                 'title' => $video->title,
-                                'thumbnail' => $video->thumbnail,
+                                'thumbnail' => asset($video->thumbnail),
                                 'duration' => $video->duration,
                                 'duration_text' => Functions::getDurationText($video->duration), // Agregamos el campo duration_text
                                 'course_platform_id' => $video->course_platform_id,
