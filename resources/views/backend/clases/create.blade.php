@@ -56,11 +56,10 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="mb-3">
+                      <div class="mb-3">
                     <label for="duration" class="form-label">{{ __('course_platform.duration') }} </label>
-                    <input type="text" class="form-control @error('duration') is-invalid @enderror" id="duration"
-                        name="duration" value="{{ old('duration','00:00:00') }}" placeholder="HH:MM:SS"
-                        pattern="^[0-9]+:[0-5][0-9]:[0-5][0-9]$" required>
+                    <input type="time" step="1"  class="form-control @error('duration') is-invalid @enderror" id="duration"
+                        name="duration" value="{{ old('duration') }}" required>
                     @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -96,8 +95,6 @@
 
 @push('after-styles')
     <link rel="stylesheet" href='{{ mix('modules/product/style.css') }}'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/jquery.inputmask.min.js"></script>
 @endpush
 
 @push('after-scripts')
