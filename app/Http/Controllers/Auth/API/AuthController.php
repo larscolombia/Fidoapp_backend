@@ -297,7 +297,7 @@ class AuthController extends Controller
 
         return $response == Password::RESET_LINK_SENT
             ? response()->json(['message' => __($response), 'status' => true], 200)
-            : response()->json(['message' => __($response), 'status' => false], 400);
+            : response()->json(['message' => __($response), 'status' => false], 200);
     }
 
     public function changePassword(Request $request)

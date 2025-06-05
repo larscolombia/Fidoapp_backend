@@ -25,7 +25,7 @@ trait AuthTrait
         $remember = $request->remember_me;
 
 
-           if (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1], $remember)) {
+           if (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1, 'user_type' => 'admin'], $remember)) {
                event(new UserLoginSuccess($request, auth()->user()));
 
                 return true;
