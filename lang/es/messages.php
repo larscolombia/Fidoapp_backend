@@ -139,6 +139,7 @@ return [
     'user' => 'usuario',
     'register_before_login' => 'Por favor, registre su cuenta antes de iniciar sesión.',
     'permission_denied' => 'Permiso denegado, estás en modo demostración.',
+    'permission_user_denied' => 'No tienes permisos para acceder a este sitio.',
     'unauthorised' => 'No autorizado',
     'verification_link' => 'enlace-de-verificación-enviado',
     'setting_save' => 'La configuración se ha guardado.',

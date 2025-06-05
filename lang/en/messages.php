@@ -135,6 +135,7 @@ return [
     'user' => 'user',
     'register_before_login' => 'Please register your account before login.',
     'permission_denied' => 'Permission denied you are in demo mode.',
+    'permission_user_denied' => 'You do not have permission to access this site.',
     'unauthorised' => 'Unauthorised',
     'verification_link' => 'verification-link-sent',
     'setting_save' => 'Settings has been saved.',

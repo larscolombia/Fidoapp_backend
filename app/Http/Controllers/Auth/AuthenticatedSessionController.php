@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Auth\Trait\AuthTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +31,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $isActive=$this->checkService($request);
+        $isActive = $this->checkService($request);
 
-        if($isActive==1){
+        if ($isActive == 1) {
 
             $isLogin = $this->loginTrait($request);
 
@@ -42,17 +43,22 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
 
+            $isNotAdmin = User::where('email', $request->email)->where('user_type', '!=', 'admin')->first();
+            if ($isNotAdmin) {
+                return back()->withErrors([
+                    'email' => __('messages.permission_user_denied'),
+                ])->onlyInput('email');
+            }
+
             return back()->withErrors([
                 'email' => __('messages.not_matched'),
             ])->onlyInput('email');
-
-        }else{
+        } else {
 
             $message = __('messages.service_inactive');
             return back()->withErrors([
                 'custom_message' => $message,
             ]);
-
         }
     }
 
