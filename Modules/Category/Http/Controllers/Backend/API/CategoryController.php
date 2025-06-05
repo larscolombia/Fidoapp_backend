@@ -115,7 +115,7 @@ class CategoryController extends Controller
             ]);
 
             // Iniciar la consulta de categorías
-            $category = Category::where('status', 1)->with('services')->has('services');
+            $category = Category::where('status', 1);
 
             // Filtrar por tipo
             if ($request->has('type') && $data['type'] != '') {
@@ -123,7 +123,8 @@ class CategoryController extends Controller
                     $category = $category->where(function ($query) use ($data) {
                         $query->where('type', $data['type'])
                             ->orWhere('type', 'video-consultancy');
-                    });
+                    })->has('services');
+
                 } else {
                     $category = $category->where('type', $data['type']);
                 }
