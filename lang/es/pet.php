@@ -30,6 +30,7 @@ return [
     'pet_name' => 'Nombre de la Mascota',
     'pet_breed' => 'Raza de la Mascota',
     'pet_kg' => 'kg',
+    'pet_lbs' => 'lbs',
     'pet_g' => 'g',
     'pet_mg' => 'mg',
     'pet_cm' => 'cm',

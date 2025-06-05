@@ -28,6 +28,7 @@ return [
     'pet_g' => 'g',
     'pet_mg' => 'mg',
     'pet_cm' => 'cm',
+    'pet_lbs' => 'lbs',
     'pet_m' => 'm',
     'pet_ft' => 'ft',
     'list' => "'s Pet List",

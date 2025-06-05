@@ -81,8 +81,9 @@
               <label class="form-label" for="weight_unit">{{ $t('pet.lbl_weight_unit') }}</label>
               <select class="form-select" v-model="weight_unit">
                 <option value="kg">kg</option>
-                <option value="g">g</option>
-                <option value="mg">mg</option>
+                 <option value="lbs">{{ $t('pet.pet_lbs') }}</option>
+                <!-- <option value="g">g</option>
+                <option value="mg">mg</option> -->
               </select>
             </div>
           </div>
