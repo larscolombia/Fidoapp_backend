@@ -103,7 +103,7 @@ class BreedController extends Controller
         if(!empty($request->type)){
 
             $query = Breed::where('pettype_id',$request->type);
-           
+
           }else{
             $query = Breed::query();
         }
@@ -116,23 +116,23 @@ class BreedController extends Controller
                             return view('pet::backend.breed.action_column', compact('data'));
                         })
 
-                      
+
                         ->editColumn('pettype_id', function ($data) {
                             $image = "<img src='" . optional($data->pettype)->pettype_image . "' class='avatar avatar-40 img-fluid rounded-pill'>";
                              $pettype = optional($data->pettype)->name ?? '-';
-    
+
                              return "<div>" . $image  . "   " . $pettype . "</div>";
                         })
                         ->editColumn('description', function ($data) {
-                            return $data->description ?? '-'; 
+                            return $data->description ?? '-';
                         })
-                        
+
                         ->editColumn('status', function ($row) {
                             $checked = '';
                             if ($row->status) {
                                 $checked = 'checked="checked"';
                             }
-            
+
                             return '
                             <div class="form-check form-switch ">
                                 <input type="checkbox" data-url="'.route('backend.pet.breed.update_status', $row->id).'" data-token="'.csrf_token().'" class="switch-status-change form-check-input"  id="datatable-row-'.$row->id.'"  name="status" value="'.$row->id.'" '.$checked.'>
@@ -261,8 +261,8 @@ class BreedController extends Controller
     }
 
     public function get () {
-        $breeds = Breed::where('slug', 'dog')->get();
-        
+        $breeds = Breed::where('slug', 'dog')->orderBy('name','asc')->get();
+
         return response()->json([
             'success' => true,
             'message' => __('messages.breeds_retrieved_successfully'),
