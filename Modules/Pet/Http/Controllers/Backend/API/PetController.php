@@ -85,7 +85,7 @@ class PetController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $breed = Breed::where('status', 1);
+        $breed = Breed::where('status', 1)->orderBy('name','asc');
 
         if ($request->has('search')) {
             $breed->where('name', 'like', "%{$request->search}%")

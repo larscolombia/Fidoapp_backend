@@ -261,7 +261,7 @@ class BreedController extends Controller
     }
 
     public function get () {
-        $breeds = Breed::where('slug', 'dog')->orderByDesc('name')->get();
+        $breeds = Breed::where('slug', 'dog')->get();
 
         return response()->json([
             'success' => true,
