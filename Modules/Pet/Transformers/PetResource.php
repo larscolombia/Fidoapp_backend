@@ -24,7 +24,7 @@ class PetResource extends JsonResource
             'breed_id' => $this->breed_id,
             'size' => $this->size,
             'pet_image' => $this->media->pluck('original_url')->first(),
-            'date_of_birth' => $this->date_of_birth ? Carbon::parse($this->date_of_birth)->format('d-m-Y') : null,
+            'date_of_birth' => $this->date_of_birth ? Carbon::parse($this->date_of_birth)->format('Y-m-d') : null,
             'age' => $this->age,
             'gender' => $this->gender,
             'weight' => $this->weight ?? 0,
