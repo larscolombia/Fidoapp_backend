@@ -80,10 +80,14 @@ class TrainerController extends Controller
             'employee_id' => 'required'
         ]);
         $employeeId = $request['employee_id'];
-        // Obtener todas las mascotas que tienen reservas asociadas
-        $pets = Pet::with(['bookings.employee' => function ($query) use ($employeeId) {
+
+        // Obtener solo las mascotas que tienen reservas asociadas con el employee_id
+        $pets = Pet::whereHas('bookings', function ($query) use ($employeeId) {
             $query->where('employee_id', $employeeId);
-        }])
+        })
+            ->with(['bookings' => function ($query) use ($employeeId) {
+                $query->where('employee_id', $employeeId);
+            }])
             ->distinct()
             ->get();
 

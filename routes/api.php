@@ -3304,7 +3304,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('/get-pets-assigned-to-the-trainer', [TrainerController::class, 'getPetsAssignedToTheTrainer']);
 
-     Route::get('/trainer-pets', [TrainerController::class, 'trainerPets']);
+     Route::get('trainer-pets', [TrainerController::class, 'trainerPets']);
     /**
      * Obtener la lista de todos los chips.
      *
