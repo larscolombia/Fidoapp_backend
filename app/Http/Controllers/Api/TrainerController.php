@@ -74,6 +74,26 @@ class TrainerController extends Controller
         }
     }
 
+    public function trainerPets(Request $request)
+    {
+        $request->validate([
+            'employee_id' => 'required'
+        ]);
+        $employeeId = $request['employee_id'];
+        // Obtener todas las mascotas que tienen reservas asociadas
+        $pets = Pet::with(['bookings.employee' => function ($query) use ($employeeId) {
+            $query->where('employee_id', $employeeId);
+        }])
+            ->distinct()
+            ->get();
+
+        // Retornar la respuesta en formato JSON
+        return response()->json([
+            'data' => $pets,
+            'success' => true
+        ]);
+    }
+
     public function getUserSocialNetwork(Request $request)
     {
         try {
