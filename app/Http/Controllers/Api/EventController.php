@@ -19,6 +19,7 @@ use Modules\Service\Models\Service;
 use App\Http\Controllers\Controller;
 use Kreait\Firebase\Contract\Messaging;
 use Modules\Service\Models\ServiceDuration;
+use Modules\Service\Models\ServiceTraining;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Requests\Api\Event\StoreRequest;
 use App\Http\Requests\Api\Event\UpdateRequest;
@@ -630,7 +631,7 @@ class EventController extends Controller
             }
         }
         if ($request->input('training_id') && $bookingType == 'training') {
-            $training = Service::find($request->input('training_id'));
+            $training = ServiceTraining::find($request->input('training_id'));
         }
         // Crear el array de datos de la reserva
         $bookingData = [
