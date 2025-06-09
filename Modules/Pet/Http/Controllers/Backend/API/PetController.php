@@ -94,7 +94,8 @@ class PetController extends Controller
         if ($request->has('pettype_id')) {
             $breed->where('pettype_id', $request->pettype_id);
         }
-        $breed = $breed->paginate($perPage);
+        //$breed = $breed->paginate($perPage);
+        $breed = $breed->get();
         $items = BreedResource::collection($breed);
 
 
