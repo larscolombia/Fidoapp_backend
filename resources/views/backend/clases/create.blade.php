@@ -95,6 +95,7 @@
 
 @push('after-styles')
     <link rel="stylesheet" href='{{ mix('modules/product/style.css') }}'>
+     <link rel="stylesheet" href='{{ mix('modules/course_platform/style.css') }}'>
 @endpush
 
 @push('after-scripts')
