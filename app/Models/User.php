@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Presenters\UserPresenter;
 use App\Models\Traits\HasHashedMediaTrait;
+use App\Notifications\ResetPasswordNotification;
 use App\Trait\CustomFieldsTrait;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -309,5 +310,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function routeNotificationForFcm()
     {
         return $this->device_token;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

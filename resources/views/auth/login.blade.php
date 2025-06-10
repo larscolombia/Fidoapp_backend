@@ -30,7 +30,7 @@
 
                         <!-- Email Address -->
                         <div>
-                            <x-label for="email" :value="__('Email')" />
+                            <x-label for="email" :value="__('Correo')" />
 
                             <x-input id="email" type="email" name="email" value="" required autofocus />
                         </div>

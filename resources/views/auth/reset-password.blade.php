@@ -17,28 +17,28 @@
 
             <!-- Email Address -->
             <div>
-                <x-label for="email" :value="__('Email')" />
+                <x-label for="email" :value="__('auth.email')" />
 
                 <x-input id="email" class="" type="email" name="email" :value="old('email', $request->email)" required autofocus />
             </div>
 
             <!-- Password -->
             <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+                <x-label for="password" :value="__('auth.password')" />
 
                 <x-input id="password" class="" type="password" name="password" required />
             </div>
 
             <!-- Confirm Password -->
             <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
+                <x-label for="password_confirmation" :value="__('auth.confirm_password')" />
 
                 <x-input id="password_confirmation" class="" type="password" name="password_confirmation" required />
             </div>
 
             <div class="d-flex align-items-center justify-content-end mt-4">
                 <x-button>
-                    {{ __('Reset Password') }}
+                    {{ __('auth.reset_password') }}
                 </x-button>
             </div>
         </form>
